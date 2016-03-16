@@ -9,7 +9,7 @@
   <!-- Specifies what type of application is -->
   <display-name>Servlet 2.4 Web Application</display-name>
 
-<!-- Configure ContextLoaderListener to use AnnotationConfigWebApplicationContext
+  <!-- Configure ContextLoaderListener to use AnnotationConfigWebApplicationContext
        instead of the default XmlWebApplicationContext -->
   <context-param>
       <param-name>contextClass</param-name>
