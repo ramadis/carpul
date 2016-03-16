@@ -9,7 +9,7 @@ public class HelloWorldController {
 	
 	public HelloWorldController() {
 		// TODO Auto-generated constructor stub
-		System.out.println("Inicializando WebConfig...");
+		System.out.println("Inicializando HelloWorldController...");
 	}
 	
 	@RequestMapping("/")
