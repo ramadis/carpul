@@ -16,9 +16,13 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugin</groupId>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-eclipse-plugin</artifactId>
         <version>${maven-eclipse-plugin.version}</version>
+	<configuration>
+	  <downloadSources>true</downloadSources>
+	  <downloadJavadocs>true</downloadJavadocs>
+	</configuration>
       </plugin>
     </plugins>
   </build>
