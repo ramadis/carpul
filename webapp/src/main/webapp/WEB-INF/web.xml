@@ -9,35 +9,33 @@
   <!-- Specifies what type of application is -->
   <display-name>Servlet 2.4 Web Application</display-name>
 
-  <!-- Configure ContextLoaderListener to use AnnotationConfigWebApplicationContext
+<!-- Configure ContextLoaderListener to use AnnotationConfigWebApplicationContext
        instead of the default XmlWebApplicationContext -->
   <context-param>
-   	<param-name>contextClass</param-name>
-   	<param-value>
-   		org.springframework.web.context.support.AnnotationConfigWebApplicationContext
-   	</param-value>
+      <param-name>contextClass</param-name>
+      <param-value>
+          org.springframework.web.context.support.AnnotationConfigWebApplicationContext
+      </param-value>
   </context-param>
-  
+
   <!-- Bootstrap the root application context as usual using ContextLoaderListener -->
   <listener>
-  	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+      <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
-
 
   <!-- Declare a Spring MVC DispatcherServlet as usual -->
   <servlet>
     <servlet-name>dispatcher</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    <!-- Don't know why (error otherwise), but this must be above load-on-startup -->
+    <!-- Configure DispatcherServlet to use AnnotationConfigWebApplicationContext
+         instead of the default XmlWebApplicationContext -->
     <init-param>
-    	<param-name>contextClass</param-name>
-    	<param-value>
-    		org.springframework.web.context.support.AnnotationConfigWebApplicationContext
-    	</param-value>
+        <param-name>contextClass</param-name>
+        <param-value>
+            org.springframework.web.context.support.AnnotationConfigWebApplicationContext
+        </param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
-    <!-- Configure DispatcherServlet to use AnnotationConfigWebApplicationContext
-     	 instead of the default XmlWebApplicationContext -->
   </servlet>
   
   <!-- Map all requests for / to the dispatcher servlet -->

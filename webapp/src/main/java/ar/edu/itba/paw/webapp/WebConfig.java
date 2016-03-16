@@ -13,6 +13,10 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 public class WebConfig {
 	
+	public WebConfig() {
+		System.out.println("Inicializando WebConfig...");
+	}
+	
 	@Bean
 	public ViewResolver viewResolver() {
 		final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();

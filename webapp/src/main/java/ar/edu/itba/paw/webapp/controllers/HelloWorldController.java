@@ -7,7 +7,12 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HelloWorldController {
 	
-	@RequestMapping()
+	public HelloWorldController() {
+		// TODO Auto-generated constructor stub
+		System.out.println("Inicializando WebConfig...");
+	}
+	
+	@RequestMapping("/")
 	public ModelAndView helloWorld() {
 		final ModelAndView mav = new ModelAndView("helloWorld");
 		mav.addObject("greeting", "Hello PAW!");
