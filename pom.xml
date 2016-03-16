@@ -10,9 +10,10 @@
   <packaging>pom</packaging>
   <name>paw</name>
     <properties>
-    <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
-    <org.springframework.version>4.2.5.RELEASE</org.springframework.version>
-  </properties>
+	  <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
+	  <org.springframework.version>4.2.5.RELEASE</org.springframework.version>
+	  <servlet-api.version>2.5</servlet-api.version>
+	</properties>
   <build>
     <plugins>
       <plugin>
@@ -33,6 +34,11 @@
         <artifactId>spring-webmvc</artifactId>
         <version>${org.springframework.version}</version>
       </dependency>
+      <dependency>
+	    <groupId>javax.servlet</groupId>
+	    <artifactId>servlet-api</artifactId>
+	    <version>${servlet-api.version}</version>
+	  </dependency>
     </dependencies>
   </dependencyManagement>
 </project>
