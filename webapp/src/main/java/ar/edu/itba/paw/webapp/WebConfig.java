@@ -9,7 +9,6 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 import ar.edu.itba.paw.interfaces.UserService;
-import ar.edu.itba.paw.services.UserServiceImpl;
 
 @ComponentScan({"ar.edu.itba.paw.webapp.controllers", "ar.edu.itba.paw.services"}) /* array de strings */
 @EnableWebMvc
