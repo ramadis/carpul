@@ -8,14 +8,13 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
-@ComponentScan({"ar.edu.itba.paw.webapp.controllers"})
+import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.services.UserServiceImpl;
+
+@ComponentScan({"ar.edu.itba.paw.webapp.controllers", "ar.edu.itba.paw.services"}) /* array de strings */
 @EnableWebMvc
 @Configuration
 public class WebConfig {
-	
-	public WebConfig() {
-		System.out.println("Inicializando WebConfig...");
-	}
 	
 	@Bean
 	public ViewResolver viewResolver() {

@@ -2,9 +2,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>HelloWorldJSP</title>
 </head>
 <body>
 <h1>${greeting}</h1>
+<h2>Username = ${user.username}</h2>
 </body>
 </html>
