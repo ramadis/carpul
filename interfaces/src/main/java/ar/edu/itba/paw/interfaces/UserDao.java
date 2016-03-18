@@ -2,13 +2,12 @@ package ar.edu.itba.paw.interfaces;
 
 import ar.edu.itba.paw.models.User;
 
-public interface UserService {
+public interface UserDao {
 	/**
-	 * Registers a new user
+	 * Creates a new user
 	 * @param username The user's username
 	 * @param password The user's password
-	 * @return The registered user
+	 * @return The created user
 	 */
-	User register(String username, String password);
+	User create(String username, String password);
 }
-
