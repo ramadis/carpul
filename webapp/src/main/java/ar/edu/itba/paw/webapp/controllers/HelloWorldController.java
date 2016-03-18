@@ -11,7 +11,7 @@ import ar.edu.itba.paw.interfaces.UserService;
 public class HelloWorldController {
 	
 	
-	@Autowired /* "enchufame un UserService --> el que tengas" */
+	@Autowired
 	private UserService us;
 	
 	@RequestMapping("/")
