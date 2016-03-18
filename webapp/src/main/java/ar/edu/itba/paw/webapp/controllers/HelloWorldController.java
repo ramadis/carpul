@@ -9,8 +9,7 @@ import ar.edu.itba.paw.interfaces.UserService;
 
 @Controller
 public class HelloWorldController {
-	
-	
+
 	@Autowired
 	private UserService us;
 	

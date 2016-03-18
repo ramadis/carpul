@@ -9,6 +9,7 @@
     <module>interfaces</module>
     <module>services</module>
     <module>models</module>
+    <module>persistence</module>
   </modules>
   <packaging>pom</packaging>
   <name>paw</name>
