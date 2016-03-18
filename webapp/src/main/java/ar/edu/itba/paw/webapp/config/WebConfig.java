@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp;
+package ar.edu.itba.paw.webapp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -14,7 +14,7 @@ import ar.edu.itba.paw.interfaces.UserService;
 @EnableWebMvc
 @Configuration
 public class WebConfig {
-	
+
 	@Bean
 	public ViewResolver viewResolver() {
 		final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
