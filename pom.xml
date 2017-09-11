@@ -7,6 +7,28 @@
   <packaging>pom</packaging>
   <name>carpul</name>
   <modules>
-    <module>carpul</module>
+    <module>webapp</module>
   </modules>
+  <properties>
+    <org.springframework.version>4.2.5.RELEASE</org.springframework.version>
+    <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
+  </properties>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-webmvc</artifactId>
+        <version>${org.springframework.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-eclipse-plugin</artifactId>
+        <version>${maven-eclipse-plugin.version}</version>
+      </plugin>
+    </plugins>
+  </build>
 </project>
