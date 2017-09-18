@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.config;
 
-import org.hsqldb.jdbc.JDBCDriver;
 import org.postgresql.Driver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
