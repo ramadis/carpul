@@ -25,7 +25,19 @@ public class UserDaoJdbc implements UserDao {
 		/* TODO: export table name as a private final String */
 		this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("users");
 		/* TODO: export table creation as a private final String */
-		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS users (username varchar (100), password varchar (100))");
+		
+		String query = "CREATE TABLE IF NOT EXISTS users (" +
+					    "\"id\" serial," +
+					    "\"username\" varchar(100)," +
+					    "\"password\" varchar(100)," +
+					    "\"first_name\" varchar(100)," +
+					    "\"last_name\" varchar(100)," +
+					    "\"session_token\" varchar(100)," +
+					    "\"birthdate\" date," +
+					    "\"deleted\" boolean DEFAULT 'False'," +
+					    "PRIMARY KEY (\"id\"));";
+
+		jdbcTemplate.execute(query);
 	}
 
 	public User create(String username, String password) {
