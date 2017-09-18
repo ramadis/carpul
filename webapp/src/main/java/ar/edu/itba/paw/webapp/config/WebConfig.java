@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.config;
 
 import org.hsqldb.jdbc.JDBCDriver;
+import org.postgresql.Driver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -33,10 +34,10 @@ public class WebConfig {
 	@Bean
 	public DataSource dataSource() {
 		final SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
-		dataSource.setDriverClass(JDBCDriver.class);
-		dataSource.setUrl("jdbc:hsqldb:mem:paw");
-		dataSource.setUsername("hq");
-		dataSource.setPassword("");
+		dataSource.setDriverClass(Driver.class);
+		dataSource.setUrl("jdbc:postgresql:pawdb");
+		dataSource.setUsername("root");
+		dataSource.setPassword("root");
 
 		return dataSource;
 	}
