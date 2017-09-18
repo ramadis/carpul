@@ -13,9 +13,10 @@
   </modules>
   <packaging>pom</packaging>
   <name>paw</name>
-    <properties>
+  <properties>
 	  <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
 	  <org.springframework.version>4.2.5.RELEASE</org.springframework.version>
+    <org.postgresql>9.4-1200-jdbc41</org.postgresql>
 	  <servlet-api.version>2.5</servlet-api.version>
       <jstl.version>1.2</jstl.version>
       <org.hsqldb.version>2.3.1</org.hsqldb.version>
@@ -55,6 +56,11 @@
         <groupId>org.springframework</groupId>
         <artifactId>spring-jdbc</artifactId>
         <version>${org.springframework.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>${org.postgresql}</version>
       </dependency>
       <dependency>
         <groupId>org.hsqldb</groupId>
