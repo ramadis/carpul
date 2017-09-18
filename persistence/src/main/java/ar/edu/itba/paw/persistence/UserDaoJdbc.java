@@ -8,6 +8,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +24,6 @@ public class UserDaoJdbc implements UserDao {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 		/* TODO: export table name as a private final String */
 		this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("users");
-
 		/* TODO: export table creation as a private final String */
 		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS users (username varchar (100), password varchar (100))");
 	}
@@ -35,5 +36,15 @@ public class UserDaoJdbc implements UserDao {
 		jdbcInsert.execute(args);
 
 		return new User(username, password);
+	}
+	
+	public User findById(final String userId) {
+		User user = new User();
+		this.jdbcTemplate.query("SELECT * FROM users WHERE username = \'" + userId + "\' LIMIT 1", (final ResultSet rs) -> {
+			user.setUsername(rs.getString("username"));
+			user.setPassword(rs.getString("password"));
+		});
+
+		return user;
 	}
 }
