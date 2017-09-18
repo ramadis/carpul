@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,6 +29,13 @@ public class UserController {
 		return mav;
 	}
 	
+	@RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
+	public ModelAndView getUserView(@PathVariable("userId") final String userId) {
+		final ModelAndView mav = new ModelAndView("userProfile");
+		User user = us.findById(userId);
+		mav.addObject("user", user);
+		return mav;
+	}
 	
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
 	public String registerUser(@ModelAttribute("userForm") User user,

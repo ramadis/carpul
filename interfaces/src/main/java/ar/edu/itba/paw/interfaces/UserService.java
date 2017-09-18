@@ -10,5 +10,7 @@ public interface UserService {
 	 * @return The registered user
 	 */
 	User register(String username, String password);
+	
+	User findById(String userId);
 }
 
