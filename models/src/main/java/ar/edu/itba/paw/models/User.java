@@ -1,12 +1,16 @@
 package ar.edu.itba.paw.models;
 
 public class User {
-	private final String username;
-	private final String password;
+	private String username;
+	private String password;
 
-	public User(final String username, final String password) {
+	public User(String username, String password) {
 		this.username = username;
 		this.password = password;
+	}
+
+	public User() {
+		this.username = this.password = "";
 	}
 
 	public String getUsername() {
@@ -15,6 +19,15 @@ public class User {
 
 	public String getPassword() {
 		return password;
+	}
+	
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	@Override
