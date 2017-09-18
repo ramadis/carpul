@@ -7,6 +7,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 --%>
 
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
@@ -15,7 +17,18 @@
 </head>
 <body>
     <h1>Registrar usuario</h1>
-<h1>${user}</h1>
-<h1>${password}</h1>
+    <form:form method="post" modelAttribute="userForm" action="${registerUserURI}">
+        <spring:bind path="username">
+            <form:input path="username" type="text" />
+            <form:errors path="username" />
+        </spring:bind>
+
+        <spring:bind path="password">
+            <form:input path="password" type="text" />
+            <form:errors path="password" />
+        </spring:bind>
+
+        <button type="submit">Registrar usuario</button>
+    </form:form>
 </body>
 </html>

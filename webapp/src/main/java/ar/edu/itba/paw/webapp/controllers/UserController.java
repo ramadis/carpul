@@ -2,11 +2,16 @@ package ar.edu.itba.paw.webapp.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.models.User;
 
 @Controller
 public class UserController {
@@ -15,10 +20,21 @@ public class UserController {
 	private UserService us;
 	
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
-	public ModelAndView helloWorld() {
+	public ModelAndView registerUserView(Model model) {
+		User user = new User("asdf", "asdf");
+		model.addAttribute("userForm", user);
 		final ModelAndView mav = new ModelAndView("userRegister");
-		//mav.addObject("greeting", "Hello PAW!");
-		//mav.addObject("user", us.register("Juan", "pawrulz!"));
+		mav.addObject("registerUserURI", "/webapp/user");
 		return mav;
+	}
+	
+	
+	@RequestMapping(value = "/user", method = RequestMethod.POST)
+	public String registerUser(@ModelAttribute("userForm") User user,
+			BindingResult result, Model model,
+			final RedirectAttributes redirectAttribute) {
+		us.register(user.getUsername(), user.getPassword());
+		System.out.println(user.getUsername());
+		return "redirect:/";
 	}
 }
