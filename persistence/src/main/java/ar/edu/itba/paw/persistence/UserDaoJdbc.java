@@ -23,9 +23,9 @@ public class UserDaoJdbc implements UserDao {
 	public UserDaoJdbc(final DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 		/* TODO: export table name as a private final String */
-		this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("users");
+		this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("users").usingColumns("username", "password");
 		/* TODO: export table creation as a private final String */
-		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS users (username varchar (100), password varchar (100))");
+		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS users (id serial PRIMARY KEY, username varchar (100), password varchar (100))");
 	}
 
 	public User create(String username, String password) {

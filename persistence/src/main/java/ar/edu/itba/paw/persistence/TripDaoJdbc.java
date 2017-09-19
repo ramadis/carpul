@@ -27,8 +27,8 @@ public class TripDaoJdbc implements TripDao {
 		/* TODO: export table name as a private final String */
 		this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("trips");
 		/* TODO: export table creation as a private final String */
-		//jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips_users (id serial PRIMARY KEY, trip_id integer, user_id integer)");
-		//jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips (username varchar (100), password varchar (100))");
+		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips_users (id serial PRIMARY KEY, trip_id integer, user_id integer)");
+		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips (id serial PRIMARY KEY, driver_id integer, eta varchar(100), etd varchar(100))");
 	}
 	
 	public Trip create(Trip trip) {
@@ -43,21 +43,25 @@ public class TripDaoJdbc implements TripDao {
 	
 	public List<Trip> findByPassenger(final Integer passengerId) {
 		List<Trip> trips = new ArrayList<>();
-		/*this.jdbcTemplate.query("SELECT * FROM trips JOIN trips_users ON trips.id = trips_users.trip_id WHERE trips.id = " + passengerId, (final ResultSet rs) -> {
+		this.jdbcTemplate.query("SELECT * FROM trips JOIN trips_users ON trips.id = trips_users.trip_id WHERE trips.id = " + passengerId, (final ResultSet rs) -> {
 			while (rs.next()) {
 				Trip trip = new Trip();
+				
+				trip.setId(rs.getInt("id"));
+				trip.setEtd(rs.getString("etd"));
+				trip.setEta(rs.getString("eta"));
+				trip.addPassenger(rs.getInt("user_id"));
+				/*
 				trip.setId(rs.getInt("id"));
 				trip.setDriver_id(rs.getInt("driver_id"));
 				trip.setCar_id(rs.getInt("car_id"));
-				trip.setEtd(rs.getString("etd"));
-				trip.setEta(rs.getString("eta"));
 				trip.setDeparture_location(rs.getString("departure_location"));
 				trip.setArrival_location(rs.getString("arrival_location"));
 				trip.setCost(rs.getDouble("cost"));
-	            
+	            */
 				trips.add(trip);
 	        }
-		});*/
+		});
 
 		return trips;
 	}
