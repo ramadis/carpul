@@ -26,6 +26,7 @@ public class UserController {
 		model.addAttribute("userForm", user);
 		final ModelAndView mav = new ModelAndView("userRegister");
 		mav.addObject("registerUserURI", "/webapp/user");
+		mav.addObject("loginUserURI", "/webapp/login");
 		return mav;
 	}
 	
@@ -52,7 +53,6 @@ public class UserController {
 			BindingResult result, Model model,
 			final RedirectAttributes redirectAttribute) {
 		us.register(user.getUsername(), user.getPassword());
-		System.out.println(user.getUsername());
-		return "redirect:/";
+		return "redirect:/user/" + user.getUsername();
 	}
 }

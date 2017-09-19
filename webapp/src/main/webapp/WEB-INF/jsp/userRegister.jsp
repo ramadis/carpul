@@ -125,7 +125,6 @@
           <span>carpul</span>
           <span class="catchphrase">Who are you?</span>
           <span class="catchphrase-description">Share something about you.</span>
-          <span class="catchphrase-description">It's a pleasure to meet you!</span>
 
         </div>
           <div class="field-container">
@@ -139,7 +138,7 @@
             </spring:bind>
           </div>
           <div class="actions">
-            <a href="${registerUserURI}" class="create-account">Login</a>
+            <a href="${loginUserURI}" class="create-account">Login</a>
             <button type="submit" class="login-button">Create account</button>
           </div>
     </form:form>
