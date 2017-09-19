@@ -4,8 +4,9 @@ import java.util.List;
 
 import ar.edu.itba.paw.models.Trip;
 
-public interface TripDao {
-	Trip create(Trip trip);
-	Trip findById (String tripId);
+public interface TripService {
+	Trip register(Trip trip);
+	Trip findById(String tripId);
 	List<Trip> findByPassenger(Integer passengerId);
 }
+

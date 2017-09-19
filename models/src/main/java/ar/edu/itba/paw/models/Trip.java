@@ -10,6 +10,12 @@ public class Trip {
 	private String departure_location;
 	private String arrival_location;
 	
+	public Trip() {}
+	
+	public Trip(String etd, String eta) {
+		this.etd = etd;
+		this.eta = eta;
+	}
 
 	public Integer getId() {
 		return id;
