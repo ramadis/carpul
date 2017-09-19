@@ -27,4 +27,8 @@ public class TripServiceImpl implements TripService {
 	public Trip findById(final String tripId) {
 		return tripDao.findById(tripId);
 	}
+	
+	public List<Trip> findAll() {
+		return tripDao.findAll();
+	}
 }

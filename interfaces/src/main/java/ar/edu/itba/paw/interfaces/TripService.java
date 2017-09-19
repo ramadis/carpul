@@ -8,5 +8,6 @@ public interface TripService {
 	Trip register(Trip trip);
 	Trip findById(String tripId);
 	List<Trip> findByPassenger(Integer passengerId);
+	List<Trip> findAll();
 }
 

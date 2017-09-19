@@ -36,4 +36,14 @@ public class SearchController {
 		mav.addObject("trips", trips);
 		return mav;
 	}
+	
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	public ModelAndView searchAllView() {
+		
+		List<Trip> trips = ts.findAll();
+
+		final ModelAndView mav = new ModelAndView("search/index");
+		mav.addObject("trips", trips);
+		return mav;
+	}
 }

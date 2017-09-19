@@ -45,13 +45,36 @@ public class TripDaoJdbc implements TripDao {
 		List<Trip> trips = new ArrayList<>();
 		this.jdbcTemplate.query("SELECT * FROM trips JOIN trips_users ON trips.id = trips_users.trip_id WHERE trips.id = " + passengerId, (final ResultSet rs) -> {
 			do {
-				System.out.println("asdf");
 				Trip trip = new Trip();
 				
 				trip.setId(rs.getInt("id"));
 				trip.setEtd(rs.getString("etd"));
 				trip.setEta(rs.getString("eta"));
 				trip.addPassenger(rs.getInt("user_id"));
+				/*
+				trip.setId(rs.getInt("id"));
+				trip.setDriver_id(rs.getInt("driver_id"));
+				trip.setCar_id(rs.getInt("car_id"));
+				trip.setDeparture_location(rs.getString("departure_location"));
+				trip.setArrival_location(rs.getString("arrival_location"));
+				trip.setCost(rs.getDouble("cost"));
+	            */
+				trips.add(trip);
+	        } while(rs.next());
+		});
+
+		return trips;
+	}
+	
+	public List<Trip> findAll() {
+		List<Trip> trips = new ArrayList<>();
+		this.jdbcTemplate.query("SELECT * FROM trips", (final ResultSet rs) -> {
+			do {
+				Trip trip = new Trip();
+				
+				trip.setId(rs.getInt("id"));
+				trip.setEtd(rs.getString("etd"));
+				trip.setEta(rs.getString("eta"));
 				/*
 				trip.setId(rs.getInt("id"));
 				trip.setDriver_id(rs.getInt("driver_id"));
