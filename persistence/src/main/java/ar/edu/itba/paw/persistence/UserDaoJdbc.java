@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 
 import java.sql.ResultSet;
-import java.util.HashMap;
 import java.util.Map;
 
 @Repository
@@ -36,18 +35,16 @@ public class UserDaoJdbc implements UserDao {
 					    "\"birthdate\" date," +
 					    "\"deleted\" boolean DEFAULT 'False'," +
 					    "PRIMARY KEY (\"id\"));";
+		
 
 		jdbcTemplate.execute(query);
 	}
 
-	public User create(String username, String password) {
-		final Map<String, Object> args = new HashMap<String, Object>();
-		args.put("username", username);
-		args.put("password", password);
-
+	public User create(User user) {
+	
+		final Map<String, Object> args = user.getParams();
 		jdbcInsert.execute(args);
-
-		return new User(username, password);
+		return user;
 	}
 	
 	public User findById(final String userId) {
@@ -55,6 +52,8 @@ public class UserDaoJdbc implements UserDao {
 		this.jdbcTemplate.query("SELECT * FROM users WHERE username = \'" + userId + "\' LIMIT 1", (final ResultSet rs) -> {
 			user.setUsername(rs.getString("username"));
 			user.setPassword(rs.getString("password"));
+			user.setFirstName(rs.getString("first_name"));
+			user.setLastName(rs.getString("last_name"));
 		});
 
 		return user;

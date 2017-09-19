@@ -136,6 +136,14 @@
               <label class="field-label" for="password">Password</label>
               <input class="field" path="password" type="text" name="password"/>
             </spring:bind>
+            <spring:bind path="first_name">
+              <label class="field-label" for="first_name">Nombre</label>
+              <input class="field" path="first_name" type="text" name="first_name"/>
+            </spring:bind>
+            <spring:bind path="last_name">
+              <label class="field-label" for="last_name">Apellido</label>
+              <input class="field" path="last_name" type="text" name="last_name"/>
+            </spring:bind>
           </div>
           <div class="actions">
             <a href="${loginUserURI}" class="create-account">Login</a>

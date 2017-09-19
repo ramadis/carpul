@@ -1,13 +1,16 @@
 package ar.edu.itba.paw.models;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class User {
+	private Integer id;
 	private String username;
 	private String password;
-	private String firstName;
-	private String lastName;
-	private String sessionToken;
+	private String first_name;
+	private String last_name;
+	private String session_token;
 	private Date birthdate;
 	private Boolean deleted;
 	
@@ -15,29 +18,46 @@ public class User {
 		this.username = username;
 		this.password = password;
 	}
+	
+	public Map getParams() {
+		Map<String, Object> map = new HashMap<>();
+		map.put("username", username);
+		map.put("password", password);
+		map.put("first_name", first_name);
+		map.put("last_name", last_name);
+		return map;
+	}
 
 	public String getFirstName() {
-		return firstName;
+		return first_name;
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+	
+	public void setId( Integer id) {
+		this.id = id;
 	}
 
 	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+		this.first_name = firstName;
 	}
 
 	public String getLastName() {
-		return lastName;
+		return last_name;
 	}
 
 	public void setLastName(String lastName) {
-		this.lastName = lastName;
+		this.last_name = lastName;
 	}
 
 	public String getSessionToken() {
-		return sessionToken;
+		return session_token;
 	}
 
 	public void setSessionToken(String sessionToken) {
-		this.sessionToken = sessionToken;
+		this.session_token = sessionToken;
 	}
 
 	public Date getBirthdate() {

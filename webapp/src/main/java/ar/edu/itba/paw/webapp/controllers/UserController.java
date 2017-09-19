@@ -22,7 +22,7 @@ public class UserController {
 	
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public ModelAndView registerUserView(Model model) {
-		User user = new User("asdf", "asdf");
+		User user = new User();
 		model.addAttribute("userForm", user);
 		final ModelAndView mav = new ModelAndView("userRegister");
 		mav.addObject("registerUserURI", "/webapp/user");
@@ -52,7 +52,7 @@ public class UserController {
 	public String registerUser(@ModelAttribute("userForm") User user,
 			BindingResult result, Model model,
 			final RedirectAttributes redirectAttribute) {
-		us.register(user.getUsername(), user.getPassword());
+		us.register(user);
 		return "redirect:/user/" + user.getUsername();
 	}
 }
