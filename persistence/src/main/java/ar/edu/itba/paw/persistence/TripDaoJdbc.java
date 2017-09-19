@@ -44,7 +44,8 @@ public class TripDaoJdbc implements TripDao {
 	public List<Trip> findByPassenger(final Integer passengerId) {
 		List<Trip> trips = new ArrayList<>();
 		this.jdbcTemplate.query("SELECT * FROM trips JOIN trips_users ON trips.id = trips_users.trip_id WHERE trips.id = " + passengerId, (final ResultSet rs) -> {
-			while (rs.next()) {
+			do {
+				System.out.println("asdf");
 				Trip trip = new Trip();
 				
 				trip.setId(rs.getInt("id"));
@@ -60,7 +61,7 @@ public class TripDaoJdbc implements TripDao {
 				trip.setCost(rs.getDouble("cost"));
 	            */
 				trips.add(trip);
-	        }
+	        } while(rs.next());
 		});
 
 		return trips;
