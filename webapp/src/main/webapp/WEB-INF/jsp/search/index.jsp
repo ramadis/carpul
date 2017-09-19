@@ -10,9 +10,13 @@
   </head>
   <body>
     <c:if test="${not empty trips}">
-      <c:forEach items="${trips}" var="trips">
-         ${trips.etd}
-         ${trips.eta}
+      <c:forEach items="${trips}" var="trip">
+        ${trip.id}
+        ${trip.etd}
+        ${trip.eta}
+        <c:forEach items="${trip.passengerIds}" var="passengerId">
+          ${passengerId}
+        </c:forEach>
       </c:forEach>
     </c:if>
   </body>

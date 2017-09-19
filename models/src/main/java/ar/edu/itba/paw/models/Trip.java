@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Trip {
 	private Integer id;
 	private Integer driver_id;
@@ -9,12 +12,35 @@ public class Trip {
 	private Double cost;
 	private String departure_location;
 	private String arrival_location;
+	private final List<User> passengers = new ArrayList<>();
+	private final List<Integer> passengerIds = new ArrayList<>();
+	private User driver;
 	
 	public Trip() {}
 	
 	public Trip(String etd, String eta) {
 		this.etd = etd;
 		this.eta = eta;
+	}
+	
+	public void addPassenger(User p) {
+		passengers.add(p);
+	}
+	
+	public List<Integer> getPassengerIds() {
+		return passengerIds;
+	}
+	
+	public void addPassenger(Integer p) {
+		passengerIds.add(p);
+	}
+	
+	public void setDriver(User driver) {
+		this.driver = driver;
+	}
+	
+	public User getDriver() {
+		return driver;
 	}
 
 	public Integer getId() {

@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ar.edu.itba.paw.interfaces.TripService;
+import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.Trip;
 
 @Controller
@@ -21,12 +22,16 @@ public class SearchController {
 
 	@Autowired
 	private TripService ts;
+	private UserService us;
 	
 	@RequestMapping(value = "/search/{passengerId}", method = RequestMethod.GET)
 	public ModelAndView searchView(@PathVariable("passengerId") final Integer passengerId) {
 		
 		List<Trip> trips = ts.findByPassenger(passengerId);
-		trips.add(new Trip("afd", "asdf"));
+		
+		trips.forEach((Trip trip) -> {
+			//trip.setDriver(us.findById(trip.getDriver_id().toString()));
+		});
 		final ModelAndView mav = new ModelAndView("search/index");
 		mav.addObject("trips", trips);
 		return mav;
