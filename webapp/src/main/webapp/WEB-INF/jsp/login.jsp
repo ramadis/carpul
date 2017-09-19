@@ -119,14 +119,13 @@
   </head>
   <body>
 
-    <form:form method="post" modelAttribute="userForm" action="${registerUserURI}" class="user-form">
+    <form:form method="post" modelAttribute="userForm" action="${loginUserURI}" class="user-form">
         <div class="top-border"></div>
         <div class="text-container">
           <span>carpul</span>
-          <span class="catchphrase">Who are you?</span>
-          <span class="catchphrase-description">Share something about you.</span>
-          <span class="catchphrase-description">It's a pleasure to meet you!</span>
-
+          <span class="catchphrase">Have we met yet?</span>
+          <span class="catchphrase-description">Create an account or login</span>
+          <span class="catchphrase-description"> to start travelling to amazing places</span>
         </div>
           <div class="field-container">
             <spring:bind path="username">
@@ -139,8 +138,8 @@
             </spring:bind>
           </div>
           <div class="actions">
-            <a href="${registerUserURI}" class="create-account">Login</a>
-            <button type="submit" class="login-button">Create account</button>
+            <a href="${registerUserURI}" class="create-account">Create account</a>
+            <button type="submit" class="login-button">Login</button>
           </div>
     </form:form>
   </body>
