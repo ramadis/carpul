@@ -1,0 +1,43 @@
+.navbar {
+	background: white;
+	border-top: 5px solid #e36f4a;
+}
+
+body {
+	background: #f4f4f4;
+}
+
+.destination {
+	height: 45px;
+	border: 1px solid darkgray;
+	border-right: 0;
+	border-left: 0;
+	padding: 0 30px;
+}
+
+.top-section {
+	padding: 0 30px;
+	height: 60px;
+}
+
+.destination-container {
+	margin-right: 15px;
+}
+
+.user-info {
+	margin: 0 50px;
+}
+
+.user-image {
+	width: 85px;
+	height: 85px;
+	border-radius: 100%;
+	background: #000;
+}
+
+.pool-info {
+	height: 325px;
+	min-width: 400px;
+	max-width: 800px;
+	background: red;
+}
