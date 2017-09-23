@@ -3,13 +3,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
+
+
 <html>
   <head>
     <meta charset="utf-8">
     <title>Carpul - Log in</title>
     <link href="<c:url value='/static/css/css.css' />" rel="stylesheet" type="text/css" />
   </head>
-  <body>
+  <body class="flex-center">
 
     <form:form method="post" modelAttribute="userForm" action="${loginUserURI}" class="user-form">
         <div class="top-border"></div>
