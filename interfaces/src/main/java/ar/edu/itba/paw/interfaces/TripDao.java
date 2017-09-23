@@ -10,4 +10,5 @@ public interface TripDao {
 	List<Trip> findByPassenger(Integer passengerId);
 	List<Trip> findAll();
 	void reserveTrip(Integer tripId);
+	void unreserveTrip(Integer tripId);
 }

@@ -24,6 +24,10 @@ public class TripServiceImpl implements TripService {
 		tripDao.reserveTrip(tripId);
 	}
 	
+	public void unreserve(Integer tripId) {
+		tripDao.unreserveTrip(tripId);
+	}
+	
 	public List<Trip> findByPassenger(final Integer passengerId) {
 		return tripDao.findByPassenger(passengerId);
 	}

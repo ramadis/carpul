@@ -48,6 +48,11 @@ public class TripDaoJdbc implements TripDao {
 		return;
 	}
 	
+	public void unreserveTrip(Integer tripId) {
+		jdbcTemplate.update("DELETE FROM trips_users WHERE trip_id = ? AND user_id = ?", new Object[] { tripId, new Integer(1)});
+		return;
+	}
+	
 	public List<Trip> findByPassenger(final Integer passengerId) {
 		List<Trip> trips = new ArrayList<>();
 		this.jdbcTemplate.query("SELECT * FROM trips JOIN trips_users ON trips.id = trips_users.trip_id WHERE trips.id = ?", new Object[] {passengerId}, (final ResultSet rs) -> {
