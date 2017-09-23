@@ -19,16 +19,18 @@ import java.util.Map;
 public class TripDaoJdbc implements TripDao {
 
 	private final JdbcTemplate jdbcTemplate;
-	private final SimpleJdbcInsert jdbcInsert;
+	private final SimpleJdbcInsert jdbcInsertTrips;
+	private final SimpleJdbcInsert jdbcInsertRelation;
 
 	@Autowired
 	public TripDaoJdbc(final DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 		/* TODO: export table name as a private final String */
-		this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("trips");
+		this.jdbcInsertTrips = new SimpleJdbcInsert(jdbcTemplate).withTableName("trips");
+		this.jdbcInsertRelation = new SimpleJdbcInsert(jdbcTemplate).withTableName("trips_users");
 		/* TODO: export table creation as a private final String */
 		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips_users (id serial PRIMARY KEY, trip_id integer, user_id integer)");
-		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips (id serial PRIMARY KEY, driver_id integer, eta varchar(100), etd varchar(100))");
+		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips (id serial PRIMARY KEY, driver_id integer, reserved boolean, eta varchar(100), etd varchar(100))");
 	}
 	
 	public Trip create(Trip trip) {
@@ -39,6 +41,14 @@ public class TripDaoJdbc implements TripDao {
 		//jdbcInsert.execute(args);
 		return null;
 		//return new Trip(username, password);
+	}
+	
+	public void reserveTrip(Trip t) {
+		final Map<String, Object> args = new HashMap<String, Object>();
+		args.put("trip_id", t.getId());
+		args.put("user_id", 1);
+		this.jdbcInsertRelation.execute(args);
+		return;
 	}
 	
 	public List<Trip> findByPassenger(final Integer passengerId) {

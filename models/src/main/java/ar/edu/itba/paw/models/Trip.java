@@ -10,6 +10,7 @@ public class Trip {
 	private String etd;
 	private String eta;
 	private Double cost;
+	private Boolean reserved;
 	private String departure_location;
 	private String arrival_location;
 	private final List<User> passengers = new ArrayList<>();
@@ -31,8 +32,20 @@ public class Trip {
 		return passengerIds;
 	}
 	
+	public void toggleReserve() {
+		reserved = !reserved;
+	}
+	
 	public void addPassenger(Integer p) {
 		passengerIds.add(p);
+	}
+	
+	public void setReserved(Boolean r) {
+		reserved = r;
+	}
+	
+	public Boolean getReserved() {
+		return reserved;
 	}
 	
 	public void setDriver(User driver) {
