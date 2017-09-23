@@ -19,6 +19,10 @@ body {
 	flex-direction: column;
 }
 
+.inline-block {
+	display: inline-block;
+}
+
 .user-form {
 	position: relative;
 	padding: 40px 45px;

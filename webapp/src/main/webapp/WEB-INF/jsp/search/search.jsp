@@ -78,12 +78,16 @@
                       <span class="bold black">$200</span>
                       /each
                     </span>
-                    <c:if test="${not trip.reserved}">
-                      <button class="login-button">Reserve</button>
-                    </c:if>
-                    <c:if test="${trip.reserved}">
-                      <button class="login-button main-color">Drop reservation</button>
-                    </c:if>
+                      <c:if test="${not trip.reserved}">
+                        <form:form class="inline-block" method="post" action="reserve/${trip.id}">
+                          <button class="login-button">Reserve</button>
+                        </form:form>
+                      </c:if>
+                      <c:if test="${trip.reserved}">
+                        <form:form class="inline-block" method="post" action="unreserve/${trip.id}">
+                          <button class="login-button main-color">Drop reservation</button>
+                        </form:form>
+                      </c:if>
                   </div>
                 </div>
 

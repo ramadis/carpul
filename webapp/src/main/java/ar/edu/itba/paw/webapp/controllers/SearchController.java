@@ -49,4 +49,12 @@ public class SearchController {
 		mav.addObject("to", to);
 		return mav;
 	}
+	
+	@RequestMapping(value = "/reserve/{tripId}", method = RequestMethod.POST)
+	public ModelAndView reserveTrip(@PathVariable("tripId") final Integer tripId) {
+		System.out.println(tripId);
+
+		final ModelAndView mav = new ModelAndView("search/search");
+		return mav;
+	}
 }
