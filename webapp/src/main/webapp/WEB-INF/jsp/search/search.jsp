@@ -1,0 +1,115 @@
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Carpul - Busqueda de viajes</title>
+    <link href="<c:url value='/static/css/css.css' />" rel="stylesheet" type="text/css" />
+    <link href="<c:url value='/static/css/pool_list.css' />" rel="stylesheet" type="text/css" />
+  </head>
+  <body >
+    <div class="navbar">
+      <div class="top-section flex align-center">
+        <img src="<c:url value='/static/images/logo.png' />" alt=""></img>
+        <div class="actions">
+          <a href="<c:url value='/user' />" class="create-account bold m-r-10" >Create account</a>
+          <a href="<c:url value='/login' />" class="login-button" >Login</a>
+        </div>
+      </div>
+      <div class="destination flex align-center">
+        <div class="destination-container">
+          <span class="bold m-r-5">From</span>
+          <span class="clear">${from}</span>
+        </div>
+        <div class="destination-container">
+          <span class="bold m-r-5">To</span>
+          <span class="clear">${to}</span>
+        </div>
+        <div class="destination-container">
+          <span class="bold m-r-5">On</span>
+          <select name="on" class="clear">
+            <option value="0">This weekend</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="list-container">
+      <span class="list-subtitle">These are the options to go to ${to} this weekend</span>
+
+      <c:if test="${not empty trips}">
+        <c:forEach items="${trips}" var="trip">
+          <!-- aca va el ng-repeat -->
+          <div class="pool-item flex-center">
+            <div class="user-info flex space-around align-center column h-150">
+              <div class="user-image">
+
+              </div>
+              <div class="user-name">
+                Mariana
+              </div>
+              <span class="user-rating">
+                ★★★★★
+              </span>
+            </div>
+
+            <div class="pool-info">
+              <!-- aca iría el mapa arre -->
+              <div class="map-container">
+                <img src="https://puu.sh/xH5mj/28cb5c7eb2.png" style="width: 100%; height: 100%;"></img>
+              </div>
+              <div class="bg-white">
+                <div class="price-container flex space-between align-center">
+                  <span class="clear gray sz-13">
+                    Leave from
+                    <span class="bold black"> ${from}</span>
+                    at
+                    <span class="bold black"> ${trip.etd}</span>
+                    arrive on
+                    <span class="bold black"> ${to}</span>
+                    at
+                    <span class="bold black"> ${trip.eta}</span>
+                  </span>
+                  <div>
+                    <span class="price gray">
+                      <span class="bold black">$200</span>
+                      /each
+                    </span>
+                    <c:if test="${not trip.reserved}">
+                      <button class="login-button">Reserve</button>
+                    </c:if>
+                    <c:if test="${trip.reserved}">
+                      <button class="login-button main-color">Drop reservation</button>
+                    </c:if>
+                  </div>
+                </div>
+
+                <div class="pool-features flex space-between align-center">
+                  <div class="features-container">
+                  </div>
+                  <div class="seats-container">
+                    <span class="seats bold gray">
+                      <img class="seats-icon" src="<c:url value='/static/images/seats.png' />"></img>
+                      3 available
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          ${trip.id}
+          
+          <c:forEach items="${trip.passengerIds}" var="passengerId">
+            ${passengerId}
+          </c:forEach>
+        </c:forEach>
+      </c:if>
+
+      
+
+    </div>
+  </body>
+</html>

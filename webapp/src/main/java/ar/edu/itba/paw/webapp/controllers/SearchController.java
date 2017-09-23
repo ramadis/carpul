@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -38,12 +39,14 @@ public class SearchController {
 	}
 	
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	public ModelAndView searchAllView() {
+	public ModelAndView searchAllView(@RequestParam("from") String from, @RequestParam("to") String to) {
 		
 		List<Trip> trips = ts.findAll();
 
-		final ModelAndView mav = new ModelAndView("search/index");
+		final ModelAndView mav = new ModelAndView("search/search");
 		mav.addObject("trips", trips);
+		mav.addObject("from", from);
+		mav.addObject("to", to);
 		return mav;
 	}
 }
