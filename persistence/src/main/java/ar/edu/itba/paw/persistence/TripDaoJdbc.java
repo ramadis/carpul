@@ -30,7 +30,7 @@ public class TripDaoJdbc implements TripDao {
 		this.jdbcInsertRelation = new SimpleJdbcInsert(jdbcTemplate).withTableName("trips_users");
 		/* TODO: export table creation as a private final String */
 		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips_users (id serial PRIMARY KEY, trip_id integer, user_id integer)");
-		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips (id serial PRIMARY KEY, driver_id integer, reserved boolean, eta varchar(100), etd varchar(100))");
+		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips (id serial PRIMARY KEY, driver_id integer, cost real, eta varchar(100), etd varchar(100))");
 	}
 	
 	public Trip create(Trip trip) {
@@ -50,21 +50,22 @@ public class TripDaoJdbc implements TripDao {
 	
 	public List<Trip> findByPassenger(final Integer passengerId) {
 		List<Trip> trips = new ArrayList<>();
-		this.jdbcTemplate.query("SELECT * FROM trips JOIN trips_users ON trips.id = trips_users.trip_id WHERE trips.id = " + passengerId, (final ResultSet rs) -> {
+		this.jdbcTemplate.query("SELECT * FROM trips JOIN trips_users ON trips.id = trips_users.trip_id WHERE trips.id = ?", new Object[] {passengerId}, (final ResultSet rs) -> {
 			do {
 				Trip trip = new Trip();
 				
 				trip.setId(rs.getInt("id"));
 				trip.setEtd(rs.getString("etd"));
 				trip.setEta(rs.getString("eta"));
-				trip.addPassenger(rs.getInt("user_id"));
+				//trip.addPassenger(rs.getInt("user_id"));
+				trip.setCost(rs.getDouble("cost"));
+				trip.setReserved(passengerId.equals(rs.getInt("trips_users.user_id")));
+				
 				/*
-				trip.setId(rs.getInt("id"));
 				trip.setDriver_id(rs.getInt("driver_id"));
 				trip.setCar_id(rs.getInt("car_id"));
 				trip.setDeparture_location(rs.getString("departure_location"));
 				trip.setArrival_location(rs.getString("arrival_location"));
-				trip.setCost(rs.getDouble("cost"));
 	            */
 				trips.add(trip);
 	        } while(rs.next());
@@ -75,13 +76,16 @@ public class TripDaoJdbc implements TripDao {
 	
 	public List<Trip> findAll() {
 		List<Trip> trips = new ArrayList<>();
-		this.jdbcTemplate.query("SELECT * FROM trips", (final ResultSet rs) -> {
+		Integer passengerId = 1; // Should get the logged user
+		this.jdbcTemplate.query("SELECT * FROM trips LEFT OUTER JOIN trips_users ON trips.id = trips_users.trip_id", (final ResultSet rs) -> {
 			do {
 				Trip trip = new Trip();
 				
 				trip.setId(rs.getInt("id"));
 				trip.setEtd(rs.getString("etd"));
 				trip.setEta(rs.getString("eta"));
+				trip.setCost(rs.getDouble("cost"));
+				trip.setReserved(passengerId.equals(rs.getInt("user_id")));
 				/*
 				trip.setId(rs.getInt("id"));
 				trip.setDriver_id(rs.getInt("driver_id"));
