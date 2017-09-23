@@ -9,5 +9,6 @@ public interface TripService {
 	Trip findById(String tripId);
 	List<Trip> findByPassenger(Integer passengerId);
 	List<Trip> findAll();
+	void reserve(Integer tripId);
 }
 

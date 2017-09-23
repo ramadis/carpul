@@ -43,11 +43,8 @@ public class TripDaoJdbc implements TripDao {
 		//return new Trip(username, password);
 	}
 	
-	public void reserveTrip(Trip t) {
-		final Map<String, Object> args = new HashMap<String, Object>();
-		args.put("trip_id", t.getId());
-		args.put("user_id", 1);
-		this.jdbcInsertRelation.execute(args);
+	public void reserveTrip(Integer tripId) {
+		jdbcTemplate.update("INSERT INTO trips_users (trip_id, user_id) VALUES (?,?)", new Object[] { tripId, new Integer(1)});
 		return;
 	}
 	

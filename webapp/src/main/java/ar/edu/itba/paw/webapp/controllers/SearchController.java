@@ -51,10 +51,8 @@ public class SearchController {
 	}
 	
 	@RequestMapping(value = "/reserve/{tripId}", method = RequestMethod.POST)
-	public ModelAndView reserveTrip(@PathVariable("tripId") final Integer tripId) {
-		System.out.println(tripId);
-
-		final ModelAndView mav = new ModelAndView("search/search");
-		return mav;
+	public String reserveTrip(@PathVariable("tripId") final Integer tripId) {
+		ts.reserve(tripId);
+		return "redirect:/search";
 	}
 }
