@@ -14,10 +14,7 @@ public class HelloWorldController {
 	private UserService us;
 	
 	@RequestMapping("/")
-	public ModelAndView helloWorld() {
-		final ModelAndView mav = new ModelAndView("helloWorld");
-		mav.addObject("greeting", "Hello PAW!");
-		mav.addObject("user", us.register("Juan", "pawrulz!"));
-		return mav;
+	public String helloWorld() {
+		return "redirect:/search?from=Buenos Aires&to=Pinamar";
 	}
 }
