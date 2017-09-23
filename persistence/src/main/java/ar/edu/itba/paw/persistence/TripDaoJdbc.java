@@ -82,7 +82,7 @@ public class TripDaoJdbc implements TripDao {
 	public List<Trip> findAll() {
 		List<Trip> trips = new ArrayList<>();
 		Integer passengerId = 1; // Should get the logged user
-		this.jdbcTemplate.query("SELECT * FROM trips LEFT OUTER JOIN trips_users ON trips.id = trips_users.trip_id", (final ResultSet rs) -> {
+		this.jdbcTemplate.query("SELECT * FROM trips LEFT OUTER JOIN trips_users ON trips.id = trips_users.trip_id ORDER BY trips.id", (final ResultSet rs) -> {
 			do {
 				Trip trip = new Trip();
 				
