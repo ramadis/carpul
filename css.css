@@ -114,7 +114,7 @@ body {
 }
 
 .bold {
-	font-size: 700;
+	font-weight: 700;
 }
 
 .flex {
@@ -139,4 +139,32 @@ body {
 
 .column {
 	flex-direction: column;
+}
+
+.gray {
+	color: #868686;
+}
+
+.black {
+	color: #000;
+}
+
+.bg-white {
+	background: white;
+}
+
+.space-between {
+	justify-content: space-between;
+}
+
+.sz-13 {
+	font-size: 13px;
+}
+
+.h-150 {
+	height: 150px;
+}
+
+.space-around {
+	justify-content: space-around;
 }

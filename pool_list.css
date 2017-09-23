@@ -35,9 +35,47 @@ body {
 	background: #000;
 }
 
+.map-container {
+	height: 200px;
+}
+
 .pool-info {
-	height: 325px;
-	min-width: 400px;
-	max-width: 800px;
+	width: 650px;
 	background: red;
+	border-radius: 5px;
+	overflow: hidden;
+}
+
+.price-container {
+	height: 50px;
+	border-bottom: 1px solid lightgray;
+}
+
+.pool-features {
+	height: 50px;
+}
+
+.price-container,
+.pool-features {
+	padding: 0 20px;
+}
+
+.list-subtitle {
+	color: #868686;
+	text-align: center;
+	display: block;
+	margin: 20px 0;
+	font-size: 20px;
+}
+
+.seats {
+	display: block;
+	align-items: center;
+	display: flex;
+	width: 120px;
+	justify-content: space-around;
+}
+
+.seats-icon {
+	height: 20px;
 }
