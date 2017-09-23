@@ -51,14 +51,14 @@ public class SearchController {
 	}
 	
 	@RequestMapping(value = "/reserve/{tripId}", method = RequestMethod.POST)
-	public String reserveTrip(@PathVariable("tripId") final Integer tripId) {
+	public String reserveTrip(@PathVariable("tripId") final Integer tripId, @RequestParam("from") String from, @RequestParam("to") String to) {
 		ts.reserve(tripId);
-		return "redirect:/user/1";
+		return "redirect:/search?from=" + from + "&to=" + to;
 	}
 	
 	@RequestMapping(value = "/unreserve/{tripId}", method = RequestMethod.POST)
-	public String unreserveTrip(@PathVariable("tripId") final Integer tripId) {
+	public String unreserveTrip(@PathVariable("tripId") final Integer tripId, @RequestParam("from") String from, @RequestParam("to") String to) {
 		ts.unreserve(tripId);
-		return "redirect:/user/1";
+		return "redirect:/search?from=" + from + "&to=" + to;
 	}
 }

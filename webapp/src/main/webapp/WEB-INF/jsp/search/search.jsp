@@ -75,16 +75,16 @@
                   </span>
                   <div>
                     <span class="price gray">
-                      <span class="bold black">$200</span>
+                      <span class="bold black">$${trip.cost}</span>
                       /each
                     </span>
                       <c:if test="${not trip.reserved}">
-                        <form:form class="inline-block" method="post" action="reserve/${trip.id}">
+                        <form:form class="inline-block" method="post" action="reserve/${trip.id}?from=${from}&to=${to}">
                           <button class="login-button">Reserve</button>
                         </form:form>
                       </c:if>
                       <c:if test="${trip.reserved}">
-                        <form:form class="inline-block" method="post" action="unreserve/${trip.id}">
+                        <form:form class="inline-block" method="post" action="unreserve/${trip.id}?from=${from}&to=${to}">
                           <button class="login-button main-color">Drop reservation</button>
                         </form:form>
                       </c:if>
