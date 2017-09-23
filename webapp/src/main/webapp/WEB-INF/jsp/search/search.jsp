@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <title>Carpul - Busqueda de viajes</title>
     <link href="<c:url value='/static/css/css.css' />" rel="stylesheet" type="text/css" />
     <link href="<c:url value='/static/css/pool_list.css' />" rel="stylesheet" type="text/css" />
@@ -52,7 +52,12 @@
                 Mariana
               </div>
               <span class="user-rating">
-                ★★★★★
+                <img src="<c:url value='/static/images/star.png' />"/>
+                <img src="<c:url value='/static/images/star.png' />"/>
+                <img src="<c:url value='/static/images/star.png' />"/>
+                <img src="<c:url value='/static/images/star.png' />"/>
+                <img src="<c:url value='/static/images/star.png' />"/>
+
               </span>
             </div>
 
@@ -85,7 +90,7 @@
                       </c:if>
                       <c:if test="${trip.reserved}">
                         <form:form class="inline-block" method="post" action="unreserve/${trip.id}?from=${from}&to=${to}">
-                          <button class="login-button main-color">Drop reservation</button>
+                          <button class="login-button main-color">Unreserve</button>
                         </form:form>
                       </c:if>
                   </div>
