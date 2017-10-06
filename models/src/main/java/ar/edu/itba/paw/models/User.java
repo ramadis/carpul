@@ -3,6 +3,7 @@ package ar.edu.itba.paw.models;
 public class User {
 	private String username;
 	private String password;
+	private Integer id;
 
 	public User(String username, String password) {
 		this.username = username;
@@ -11,6 +12,14 @@ public class User {
 
 	public User() {
 		this.username = this.password = "";
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getUsername() {

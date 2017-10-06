@@ -14,6 +14,8 @@ import org.springframework.web.servlet.view.JstlView;
 
 import javax.sql.DataSource;
 
+
+
 @ComponentScan({
 		"ar.edu.itba.paw.webapp.controllers",
 		"ar.edu.itba.paw.services",
@@ -43,9 +45,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	public DataSource dataSource() {
 		final SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
 		dataSource.setDriverClass(Driver.class);
-		dataSource.setUrl("jdbc:postgresql://10.16.1.110:5432/paw-2017b-6");
-		dataSource.setUsername("paw-2017b-6");
-		dataSource.setPassword("giCaed7e");
+		//dataSource.setUrl("jdbc:postgresql://10.16.1.110:5432/paw-2017b-6");
+		//dataSource.setUsername("paw-2017b-6");
+		//dataSource.setPassword("giCaed7e");
+		dataSource.setUrl("jdbc:postgresql:pawdb");
+		dataSource.setUsername("root");
+		dataSource.setPassword("root");
 
 		return dataSource;
 	}

@@ -1,6 +1,10 @@
 package ar.edu.itba.paw.webapp.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,10 +19,12 @@ import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.User;
 
 @Controller
-public class UserController {
+public class UserController extends AuthController {
 
 	@Autowired
 	private UserService us;
+	
+	final static Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public ModelAndView registerUserView(Model model) {
@@ -35,14 +41,16 @@ public class UserController {
 		User user = new User("asdf", "asdf");
 		model.addAttribute("userForm", user);
 		final ModelAndView mav = new ModelAndView("login");
-		mav.addObject("loginUserURI", "/webapp/login");
-		mav.addObject("registerUserURI", "/webapp/user");
+		mav.addObject("loginUserURI", "/login");
+		mav.addObject("registerUserURI", "/user");
 		return mav;
 	}
 	
 	@RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
-	public ModelAndView getUserView(@PathVariable("userId") final String userId) {
+	public ModelAndView getUserView(@PathVariable("userId") final Integer userId) {
 		final ModelAndView mav = new ModelAndView("userProfile");
+		User loggedUser = user();
+		if (loggedUser.getId() != userId) return new ModelAndView("login");
 		User user = us.findById(userId);
 		mav.addObject("user", user);
 		return mav;

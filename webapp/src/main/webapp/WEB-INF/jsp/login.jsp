@@ -13,7 +13,7 @@
   </head>
   <body class="flex-center">
 
-    <form:form method="post" modelAttribute="userForm" action="${loginUserURI}" class="user-form">
+    <form:form method="post" modelAttribute="userForm" action="/webapp${loginUserURI}" class="user-form">
         <div class="top-border"></div>
         <div class="text-container">
           <span>carpul</span>
@@ -32,7 +32,7 @@
             </spring:bind>
           </div>
           <div class="actions">
-            <a href="${registerUserURI}" class="create-account">Create account</a>
+            <a href="<c:url value='${registerUserURI}'/>" class="create-account">Create account</a>
             <button type="submit" class="login-button">Login</button>
           </div>
     </form:form>

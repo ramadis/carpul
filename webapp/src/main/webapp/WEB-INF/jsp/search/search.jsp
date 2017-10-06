@@ -15,8 +15,18 @@
       <div class="top-section flex align-center">
         <img src="<c:url value='/static/images/logo.png' />" alt=""></img>
         <div class="actions">
-          <a href="<c:url value='/user' />" class="create-account bold m-r-10" >Create account</a>
-          <a href="<c:url value='/login' />" class="login-button" >Login</a>
+          <c:if test="${empty user}">
+            <a href="<c:url value='/user' />" class="create-account bold m-r-10" >Create account</a>
+          </c:if>
+          <c:if test="${not empty user}">
+            <a href="<c:url value='/logout' />" class="create-account bold m-r-10" >Logout</a>
+          </c:if>
+          <c:if test="${empty user}">
+            <a href="<c:url value='/login' />" class="login-button" >Login</a>
+          </c:if>
+          <c:if test="${not empty user}">
+            <a href="<c:url value='/user/${user.id}' />" class="login-button" >Profile</a>
+          </c:if>
         </div>
       </div>
       <div class="destination flex align-center">
@@ -110,14 +120,14 @@
             </div>
           </div>
           ${trip.id}
-          
+
           <c:forEach items="${trip.passengerIds}" var="passengerId">
             ${passengerId}
           </c:forEach>
         </c:forEach>
       </c:if>
 
-      
+
 
     </div>
   </body>

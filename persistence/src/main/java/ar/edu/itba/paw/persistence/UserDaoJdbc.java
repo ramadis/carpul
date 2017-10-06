@@ -34,15 +34,27 @@ public class UserDaoJdbc implements UserDao {
 		args.put("password", password);
 
 		jdbcInsert.execute(args);
-
+		
 		return new User(username, password);
 	}
 	
-	public User findById(final String userId) {
+	public User getByUsername(String username) {
 		User user = new User();
-		this.jdbcTemplate.query("SELECT * FROM users WHERE username = \'" + userId + "\' LIMIT 1", (final ResultSet rs) -> {
+		this.jdbcTemplate.query("SELECT * FROM users WHERE username = \'" + username + "\' LIMIT 1", (final ResultSet rs) -> {
 			user.setUsername(rs.getString("username"));
 			user.setPassword(rs.getString("password"));
+			user.setId(rs.getInt("id"));
+		});
+		
+		return user;
+	}
+	
+	public User findById(final Integer userId) {
+		User user = new User();
+		this.jdbcTemplate.query("SELECT * FROM users WHERE id = \'" + userId + "\' LIMIT 1", (final ResultSet rs) -> {
+			user.setUsername(rs.getString("username"));
+			user.setPassword(rs.getString("password"));
+			user.setId(rs.getInt("id"));
 		});
 
 		return user;

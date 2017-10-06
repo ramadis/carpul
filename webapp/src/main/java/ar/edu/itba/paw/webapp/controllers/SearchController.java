@@ -19,7 +19,7 @@ import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.Trip;
 
 @Controller
-public class SearchController {
+public class SearchController extends AuthController {
 
 	@Autowired
 	private TripService ts;
@@ -47,6 +47,8 @@ public class SearchController {
 		mav.addObject("trips", trips);
 		mav.addObject("from", from);
 		mav.addObject("to", to);
+		System.out.println(user());
+		mav.addObject("user", user());
 		return mav;
 	}
 	

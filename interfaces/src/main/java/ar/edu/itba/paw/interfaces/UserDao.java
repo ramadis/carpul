@@ -10,5 +10,6 @@ public interface UserDao {
 	 * @return The created user
 	 */
 	User create(String username, String password);
-	User findById (String userId);
+	User findById (Integer userId);
+	User getByUsername(String username);
 }

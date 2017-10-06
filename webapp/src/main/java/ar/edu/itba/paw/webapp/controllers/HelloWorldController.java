@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.UserService;
 
 @Controller
-public class HelloWorldController {
+public class HelloWorldController extends AuthController {
 
 	@Autowired
 	private UserService us;

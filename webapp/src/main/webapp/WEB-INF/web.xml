@@ -23,7 +23,10 @@
        specified for component-scanning -->
   <context-param>
       <param-name>contextConfigLocation</param-name>
-      <param-value>ar.edu.itba.paw.webapp.config.WebConfig</param-value>
+      <param-value>
+      	ar.edu.itba.paw.webapp.config.WebConfig,
+      	ar.edu.itba.paw.webapp.config.WebAuth
+      </param-value>
   </context-param>
 
   <!-- Bootstrap the root application context as usual using ContextLoaderListener -->
@@ -47,7 +50,7 @@
          and fully-qualified @Configuration classes -->
     <init-param>
       <param-name>contextConfigLocation</param-name>
-      <param-value>ar.edu.itba.paw.webapp.config.WebConfig</param-value>
+      <param-value />
   	</init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
@@ -56,5 +59,14 @@
   <servlet-mapping>
     <servlet-name>dispatcher</servlet-name>
     <url-pattern>/</url-pattern>
-  </servlet-mapping>  
+  </servlet-mapping>
+  
+  <filter>
+ 	<filter-name>springSecurityFilterChain</filter-name>
+ 	<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+ </filter>
+ <filter-mapping>
+ 	<filter-name>springSecurityFilterChain</filter-name>
+ 	<url-pattern>/*</url-pattern>
+ </filter-mapping>
 </web-app>

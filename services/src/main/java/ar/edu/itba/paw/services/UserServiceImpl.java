@@ -17,7 +17,11 @@ public class UserServiceImpl implements UserService {
 		return userDao.create(username, password);
 	}
 	
-	public User findById(final String userId) {
+	public User findById(final Integer userId) {
 		return userDao.findById(userId);
+	}
+	
+	public User getByUsername(String username) {
+		return userDao.getByUsername(username);
 	}
 }
