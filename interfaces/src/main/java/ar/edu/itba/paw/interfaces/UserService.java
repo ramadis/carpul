@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.interfaces;
 
+import java.util.List;
+
+import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 
 public interface UserService {
@@ -14,5 +17,9 @@ public interface UserService {
 	User getByUsername(String username);
 	
 	User findById(Integer userId);
+	
+	List<Trip> getUserTrips(User user);
+	
+	List<Trip> getReservedTrips(User user);
 }
 

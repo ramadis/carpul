@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.UserDao;
+import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -47,6 +50,35 @@ public class UserDaoJdbc implements UserDao {
 		});
 		
 		return user;
+	}
+	
+	public List<Trip> getUserTrips(User user) {
+		List<Trip> trips = new ArrayList<>();
+		this.jdbcTemplate.query("SELECT * FROM trips WHERE trips.driver_id = ?", new Object[] {user.getId()}, (final ResultSet rs) -> {
+			do {
+				Trip trip = new Trip();
+				
+				trip.setId(rs.getInt("id"));
+				trip.setEtd(rs.getString("etd"));
+				trip.setEta(rs.getString("eta"));
+				//trip.addPassenger(rs.getInt("user_id"));
+				trip.setCost(rs.getDouble("cost"));
+				trip.setDriver_id(rs.getInt("driver_id"));
+				
+				/*
+				trip.setCar_id(rs.getInt("car_id"));
+				trip.setDeparture_location(rs.getString("departure_location"));
+				trip.setArrival_location(rs.getString("arrival_location"));
+	            */
+				trips.add(trip);
+	        } while(rs.next());
+		});
+
+		return trips;
+	}
+	
+	public List<Trip> getReservedTrips(User user) {
+		return null;
 	}
 	
 	public User findById(final Integer userId) {

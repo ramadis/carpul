@@ -48,9 +48,10 @@ public class UserController extends AuthController {
 	
 	@RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
 	public ModelAndView getUserView(@PathVariable("userId") final Integer userId) {
-		final ModelAndView mav = new ModelAndView("userProfile");
+		final ModelAndView mav = new ModelAndView("user/profile");
 		User loggedUser = user();
 		if (loggedUser.getId() != userId) return new ModelAndView("login");
+		mav.addObject("trips", us.getUserTrips(loggedUser));
 		User user = us.findById(userId);
 		mav.addObject("user", user);
 		return mav;
