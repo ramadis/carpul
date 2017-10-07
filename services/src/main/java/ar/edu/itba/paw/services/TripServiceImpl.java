@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.models.Trip;
+import ar.edu.itba.paw.models.User;
 
 @Service
 public class TripServiceImpl implements TripService {
@@ -16,8 +17,8 @@ public class TripServiceImpl implements TripService {
 	@Autowired
 	private TripDao tripDao;
 
-	public Trip register(final Trip trip) {
-		return tripDao.create(trip);
+	public Trip register(final Trip trip, final User driver) {
+		return tripDao.create(trip, driver);
 	}
 	
 	public void reserve(Integer tripId) {
