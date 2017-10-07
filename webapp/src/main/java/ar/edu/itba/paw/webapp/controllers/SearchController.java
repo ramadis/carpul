@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
 
 @Controller
@@ -50,6 +51,13 @@ public class SearchController extends AuthController {
 		System.out.println(user());
 		mav.addObject("user", user());
 		return mav;
+	}
+	
+	@RequestMapping(value = "/search", method = RequestMethod.POST)
+	public String searchRedirect(@ModelAttribute("searchForm") Search search,
+			BindingResult result, Model model,
+			final RedirectAttributes redirectAttribute) {
+		return "redirect:/search?from=" + search.getFrom() + "&to=" + search.getTo();
 	}
 	
 	@RequestMapping(value = "/reserve/{tripId}", method = RequestMethod.POST)
