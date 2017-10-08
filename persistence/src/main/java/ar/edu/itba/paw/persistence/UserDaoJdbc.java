@@ -21,32 +21,38 @@ public class UserDaoJdbc implements UserDao {
 
 	private final JdbcTemplate jdbcTemplate;
 	private final SimpleJdbcInsert jdbcInsert;
-
+	
+	public void loadResultIntoUser(ResultSet rs, User user) {
+		try {
+			user.setUsername(rs.getString("username"));
+			user.setPassword(rs.getString("password"));
+			user.setFirst_name(rs.getString("first_name"));
+			user.setLast_name(rs.getString("last_name"));
+			user.setPhone_number(rs.getString("phone_number"));
+			user.setId(rs.getInt("id"));
+		} catch (Exception e) {}
+	}
+	
 	@Autowired
 	public UserDaoJdbc(final DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 		/* TODO: export table name as a private final String */
 		this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("users").usingColumns("username", "password");
 		/* TODO: export table creation as a private final String */
-		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS users (id serial PRIMARY KEY, username varchar (100), password varchar (100))");
+		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS users (id serial PRIMARY KEY, first_name varchar (100), phone_number varchar (100), last_name varchar (100), username varchar (100), password varchar (100))");
 	}
 
-	public User create(String username, String password) {
-		final Map<String, Object> args = new HashMap<String, Object>();
-		args.put("username", username);
-		args.put("password", password);
-
-		jdbcInsert.execute(args);
+	public User create(User user) {		
+		jdbcTemplate.update("INSERT INTO users (username, password, first_name, last_name, phone_number) VALUES (?,?,?,?,?)",
+				new Object[] { user.getUsername(), user.getPassword(), user.getFirst_name(), user.getLast_name(), user.getPhone_number() });
 		
-		return new User(username, password);
+		return user;
 	}
 	
 	public User getByUsername(String username) {
 		User user = new User();
 		this.jdbcTemplate.query("SELECT * FROM users WHERE username = \'" + username + "\' LIMIT 1", (final ResultSet rs) -> {
-			user.setUsername(rs.getString("username"));
-			user.setPassword(rs.getString("password"));
-			user.setId(rs.getInt("id"));
+			this.loadResultIntoUser(rs, user);
 		});
 		
 		return user;
@@ -83,10 +89,8 @@ public class UserDaoJdbc implements UserDao {
 	
 	public User findById(final Integer userId) {
 		User user = new User();
-		this.jdbcTemplate.query("SELECT * FROM users WHERE id = \'" + userId + "\' LIMIT 1", (final ResultSet rs) -> {
-			user.setUsername(rs.getString("username"));
-			user.setPassword(rs.getString("password"));
-			user.setId(rs.getInt("id"));
+		this.jdbcTemplate.query("SELECT * FROM users WHERE id = ? LIMIT 1", new Object[] {user.getId()}, (final ResultSet rs) -> {
+			this.loadResultIntoUser(rs, user);
 		});
 
 		return user;

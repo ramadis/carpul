@@ -3,15 +3,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.auth.Model;
+import ar.edu.itba.paw.webapp.auth.Provider;
+import ar.edu.itba.paw.webapp.auth.Service;
 
 @Controller
 public abstract class AuthController {
@@ -19,7 +24,7 @@ public abstract class AuthController {
 
 	@Autowired
 	private UserService us;
-	
+		
 	@ModelAttribute
 	public User user() {
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();

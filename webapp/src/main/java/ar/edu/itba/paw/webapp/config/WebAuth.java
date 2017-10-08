@@ -30,7 +30,6 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
-		
 		http.authenticationProvider(authProvider)
 			.userDetailsService(userDetailsService)
 			.sessionManagement()

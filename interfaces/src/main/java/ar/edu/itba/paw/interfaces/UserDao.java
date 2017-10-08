@@ -12,7 +12,7 @@ public interface UserDao {
 	 * @param password The user's password
 	 * @return The created user
 	 */
-	User create(String username, String password);
+	User create(User user);
 	User findById (Integer userId);
 	User getByUsername(String username);
 	List<Trip> getUserTrips(User user);

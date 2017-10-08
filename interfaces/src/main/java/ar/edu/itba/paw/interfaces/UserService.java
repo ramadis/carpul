@@ -12,7 +12,7 @@ public interface UserService {
 	 * @param password The user's password
 	 * @return The registered user
 	 */
-	User register(String username, String password);
+	User register(User user);
 	
 	User getByUsername(String username);
 	
