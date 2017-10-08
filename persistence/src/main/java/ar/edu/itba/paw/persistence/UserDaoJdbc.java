@@ -87,16 +87,21 @@ public class UserDaoJdbc implements UserDao {
 	public List<Trip> getReservedTrips(User user) {
 		List<Trip> trips = new ArrayList<>();
 		
-		this.jdbcTemplate.query("SELECT * FROM trips JOIN trips_users ON trip_id = trips.id WHERE user_id = ?", new Object[] {user.getId()}, (final ResultSet rs) -> {
+		this.jdbcTemplate.query("SELECT * FROM trips JOIN trips_users ON trip_id = trips.id JOIN users ON users.id = driver_id WHERE user_id = ?", new Object[] {user.getId()}, (final ResultSet rs) -> {
 			do {
 				Trip trip = new Trip();
 				
 				trip.setId(rs.getInt("id"));
 				trip.setEtd(rs.getString("etd"));
 				trip.setEta(rs.getString("eta"));
-				//trip.addPassenger(rs.getInt("user_id"));
 				trip.setCost(rs.getDouble("cost"));
-				trip.setDriver_id(rs.getInt("driver_id"));
+				
+				User driver = new User();
+				driver.setId(rs.getInt("driver_id"));
+				driver.setFirst_name(rs.getString("first_name"));
+				driver.setLast_name(rs.getString("last_name"));
+				driver.setPhone_number(rs.getString("phone_number"));
+				trip.setDriver(driver);
 				
 				/*
 				trip.setCar_id(rs.getInt("car_id"));

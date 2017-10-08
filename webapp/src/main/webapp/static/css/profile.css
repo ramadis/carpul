@@ -3,3 +3,60 @@
   display: block;
   position: static;
 }
+
+.profile-container {
+  width: 100%;
+  display: flex;
+}
+
+.reviews-container {
+  flex-grow: 2;
+}
+
+.destinys-container {
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.destinys-container h3 {
+  font-size: 25px;
+  font-weight: 100;
+  margin: 0;
+  color: rgba(0,0,0,.8);
+  margin-bottom: 30px;
+}
+
+.destiny-list {
+  padding: 0;
+}
+
+.destiny-list li span {
+  display: block;
+}
+
+.destiny-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  color: white;
+  margin-top: 20px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  padding: 20px;
+  width: 20vw;
+  height: 20vw;
+  background: url('../images/cabin.jpg');
+  background-size: cover;
+  background-color: rgba(0,0,0,.2);
+  background-blend-mode: darken;
+}
+
+.destiny-item .uptitle {
+  font-size: 15px;
+  font-weight: 100;
+}
+
+.destiny-name {
+  font-size: 20px;
+  font-weight: 900;
+}

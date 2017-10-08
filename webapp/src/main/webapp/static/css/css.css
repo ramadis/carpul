@@ -19,6 +19,10 @@ body {
 	flex-direction: column;
 }
 
+.no-bullets {
+	list-style-type: none;
+}
+
 .inline-block {
 	display: inline-block;
 }
@@ -182,4 +186,8 @@ body {
 
 .space-around {
 	justify-content: space-around;
+}
+
+.no-margin {
+	margin: 0;
 }

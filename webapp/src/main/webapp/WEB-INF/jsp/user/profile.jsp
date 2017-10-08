@@ -16,6 +16,8 @@
   <link href="<c:url value='/static/css/css.css' />" rel="stylesheet" type="text/css" />
   <link href="<c:url value='/static/css/pool_list.css' />" rel="stylesheet" type="text/css" />
   <link href="<c:url value='/static/css/profile_hero.css' />" rel="stylesheet" type="text/css" />
+  <link href="<c:url value='/static/css/profile.css' />" rel="stylesheet" type="text/css" />
+
 <title>Carpul | ${user.first_name} ${user.last_name} is awesome</title>
 </head>
 <body>
@@ -51,7 +53,30 @@
   <div class="profile-hero-catchphrase">
     <span>So, this is your place. Feel like home.</span>
   </div>
-  <div class="profile-hero-border" />
+  <div class="profile-hero-border"></div>
+
+  <section class="profile-container">
+    <section class="reviews-container">
+    </section>
+
+    <section class="destinys-container">
+      <h3>What's next?</h3>
+
+      <a class="no-margin login-button" href="<c:url value='/trip' />">Driving somewhere? Add a new destiny</a>
+
+      <c:if test="${not empty reservations}">
+        <ul class="no-bullets destiny-list">
+          <c:forEach items="${reservations}" var="reservation">
+            <li class="destiny-item">
+              <span class="uptitle">Travel with ${reservation.driver.first_name} (${reservation.driver.phone_number}) to</span>
+              <span class="destiny-name">La Plata</span>
+              ${reservation.etd} - ${reservation.eta} for $${reservation.cost}
+            </li>
+          </c:forEach>
+        </ul>
+      </c:if>
+    </section>
+  </section>
 
   <c:if test="${not empty trips}">
     <ul>
@@ -61,14 +86,6 @@
     </ul>
   </c:if>
 
-  <c:if test="${not empty reservations}">
-    <span>reservations</span>
-    <ul>
-      <c:forEach items="${reservations}" var="reservation">
-        <li>${reservation.etd} - ${reservation.eta} for $${reservation.cost}</li>
-      </c:forEach>
-    </ul>
-  </c:if>
-  <a class="login-button" href="<c:url value='/trip' />">Add destiny</a>
+
 </body>
 </html>
