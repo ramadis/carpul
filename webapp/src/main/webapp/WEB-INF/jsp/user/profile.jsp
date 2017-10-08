@@ -49,7 +49,7 @@
     </div>
   </div>
   <div class="profile-hero-catchphrase">
-    <span>Where are you going next?</span>
+    <span>So, this is your place. Feel like home.</span>
   </div>
   <div class="profile-hero-border" />
 
@@ -57,6 +57,15 @@
     <ul>
       <c:forEach items="${trips}" var="trip">
         <li>${trip.etd} - ${trip.eta} for $${trip.cost}</li>
+      </c:forEach>
+    </ul>
+  </c:if>
+
+  <c:if test="${not empty reservations}">
+    <span>reservations</span>
+    <ul>
+      <c:forEach items="${reservations}" var="reservation">
+        <li>${reservation.etd} - ${reservation.eta} for $${reservation.cost}</li>
       </c:forEach>
     </ul>
   </c:if>

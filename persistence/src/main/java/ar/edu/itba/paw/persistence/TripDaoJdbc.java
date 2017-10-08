@@ -79,7 +79,7 @@ public class TripDaoJdbc implements TripDao {
 	
 	public List<Trip> findAll(User user) {
 		List<Trip> trips = new ArrayList<>();
-		this.jdbcTemplate.query("SELECT first_name, trips.*, temp.reserved as is_reserved FROM trips JOIN users ON trips.driver_id = users.id LEFT OUTER JOIN (SELECT id as reserved, trip_id as relation_trip_id FROM trips_users WHERE user_id = ?) as temp ON relation_trip_id = trips.id WHERE driver_id <> ?", new Object[] { user.getId(), user.getId() }, (final ResultSet rs) -> {
+		this.jdbcTemplate.query("SELECT first_name, last_name, trips.*, temp.reserved as is_reserved FROM trips JOIN users ON trips.driver_id = users.id LEFT OUTER JOIN (SELECT id as reserved, trip_id as relation_trip_id FROM trips_users WHERE user_id = ?) as temp ON relation_trip_id = trips.id WHERE driver_id <> ?", new Object[] { user.getId(), user.getId() }, (final ResultSet rs) -> {
 			do {
 				Trip trip = new Trip();
 				
@@ -90,7 +90,9 @@ public class TripDaoJdbc implements TripDao {
 				trip.setReserved(rs.getInt("is_reserved") != 0);
 				
 				User driver = new User();
+				driver.setId(rs.getInt("driver_id"));
 				driver.setFirst_name(rs.getString("first_name"));
+				driver.setLast_name(rs.getString("last_name"));
 				trip.setDriver(driver);
 				
 				/*

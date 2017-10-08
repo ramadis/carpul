@@ -56,7 +56,7 @@
           <div class="pool-item flex-center">
             <div class="user-info flex space-around align-center column h-150">
               <div class="user-image">
-
+                <img src="https://ui-avatars.com/api/?rounded=true&size=85&background=e36f4a&color=fff&name=${trip.driver.first_name} ${trip.driver.last_name}" alt="">
               </div>
               <div class="user-name">
                 ${trip.driver.first_name}
