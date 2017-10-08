@@ -59,7 +59,7 @@
 
               </div>
               <div class="user-name">
-                Mariana
+                ${trip.driver.first_name}
               </div>
               <span class="user-rating">
                 <img src="<c:url value='/static/images/star.png' />"/>

@@ -26,29 +26,15 @@ public class SearchController extends AuthController {
 	private TripService ts;
 	private UserService us;
 	
-	@RequestMapping(value = "/search/{passengerId}", method = RequestMethod.GET)
-	public ModelAndView searchView(@PathVariable("passengerId") final Integer passengerId) {
-		
-		List<Trip> trips = ts.findByPassenger(passengerId);
-		
-		trips.forEach((Trip trip) -> {
-			//trip.setDriver(us.findById(trip.getDriver_id().toString()));
-		});
-		final ModelAndView mav = new ModelAndView("search/index");
-		mav.addObject("trips", trips);
-		return mav;
-	}
-	
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public ModelAndView searchAllView(@RequestParam("from") String from, @RequestParam("to") String to) {
 		
-		List<Trip> trips = ts.findAll();
+		List<Trip> trips = ts.findAll(user());
 
 		final ModelAndView mav = new ModelAndView("search/search");
 		mav.addObject("trips", trips);
 		mav.addObject("from", from);
 		mav.addObject("to", to);
-		System.out.println(user());
 		mav.addObject("user", user());
 		return mav;
 	}
@@ -62,13 +48,13 @@ public class SearchController extends AuthController {
 	
 	@RequestMapping(value = "/reserve/{tripId}", method = RequestMethod.POST)
 	public String reserveTrip(@PathVariable("tripId") final Integer tripId, @RequestParam("from") String from, @RequestParam("to") String to) {
-		ts.reserve(tripId);
+		ts.reserve(tripId, user());
 		return "redirect:/search?from=" + from + "&to=" + to;
 	}
 	
 	@RequestMapping(value = "/unreserve/{tripId}", method = RequestMethod.POST)
 	public String unreserveTrip(@PathVariable("tripId") final Integer tripId, @RequestParam("from") String from, @RequestParam("to") String to) {
-		ts.unreserve(tripId);
+		ts.unreserve(tripId, user());
 		return "redirect:/search?from=" + from + "&to=" + to;
 	}
 }

@@ -53,8 +53,7 @@ public class UserController extends AuthController {
 		User loggedUser = user();
 		if (loggedUser.getId() != userId) return new ModelAndView("login");
 		mav.addObject("trips", us.getUserTrips(loggedUser));
-		User user = us.findById(userId);
-		mav.addObject("user", user);
+		mav.addObject("user", loggedUser);
 		return mav;
 	}
 	

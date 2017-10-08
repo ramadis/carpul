@@ -37,7 +37,7 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
 			.and().authorizeRequests()
 				.antMatchers("/login").anonymous()
 				.antMatchers("/user").anonymous()
-				.antMatchers("/search").permitAll()
+				.antMatchers("/").permitAll()
 				.antMatchers("/**").authenticated()
 			.and().formLogin()
 				.loginPage("/login")

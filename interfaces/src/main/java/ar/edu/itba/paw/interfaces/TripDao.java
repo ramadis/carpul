@@ -9,7 +9,7 @@ public interface TripDao {
 	Trip create(Trip trip, User driver);
 	Trip findById (String tripId);
 	List<Trip> findByPassenger(Integer passengerId);
-	List<Trip> findAll();
-	void reserveTrip(Integer tripId);
-	void unreserveTrip(Integer tripId);
+	List<Trip> findAll(User user);
+	void reserveTrip(Integer tripId, User user);
+	void unreserveTrip(Integer tripId, User user);
 }

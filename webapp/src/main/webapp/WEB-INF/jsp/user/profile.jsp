@@ -16,12 +16,12 @@
   <link href="<c:url value='/static/css/css.css' />" rel="stylesheet" type="text/css" />
   <link href="<c:url value='/static/css/pool_list.css' />" rel="stylesheet" type="text/css" />
   <link href="<c:url value='/static/css/profile_hero.css' />" rel="stylesheet" type="text/css" />
-<title>HelloWorldJSP</title>
+<title>Carpul | ${user.first_name} ${user.last_name} is awesome</title>
 </head>
 <body>
   <div class="navbar">
     <div class="top-section flex align-center">
-      <img src="<c:url value='/static/images/logo.png' />" alt=""></img>
+      <a href="<c:url value='/' />"> <img src="<c:url value='/static/images/logo.png' />" alt=""></img></a>
       <div class="actions">
         <c:if test="${empty user}">
           <a href="<c:url value='/user' />" class="create-account bold m-r-10" >Create account</a>
@@ -41,9 +41,9 @@
 
   <div class="profile-hero-container">
     <div class="profile-hero-alignment">
-      <img src="https://ui-avatars.com/api/?rounded=true&size=100" alt="">
+      <img src="https://ui-avatars.com/api/?rounded=true&size=100&background=e36f4a&color=fff&name=${user.first_name} ${user.last_name}" alt="">
       <div class="profile-user-container">
-        <span class="profile-user-name">${user.username}</span>
+        <span class="profile-user-name">${user.first_name}</span>
         <span class="profile-user-created">Have been sharing adventures for 2 years</span>
       </div>
     </div>

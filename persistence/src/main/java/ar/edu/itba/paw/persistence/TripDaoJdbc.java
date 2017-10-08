@@ -32,7 +32,7 @@ public class TripDaoJdbc implements TripDao {
 		this.jdbcInsertRelation = new SimpleJdbcInsert(jdbcTemplate).withTableName("trips_users");
 		/* TODO: export table creation as a private final String */
 		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips_users (id serial PRIMARY KEY, trip_id integer, user_id integer)");
-		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips (id serial PRIMARY KEY, driver_id integer, cost real, eta varchar(100), etd varchar(100))");
+		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips (id serial PRIMARY KEY, seats integer, driver_id integer, cost real, eta varchar(100), etd varchar(100))");
 	}
 	
 	public Trip create(Trip trip, User driver) {
@@ -41,13 +41,13 @@ public class TripDaoJdbc implements TripDao {
 		return trip;
 	}
 	
-	public void reserveTrip(Integer tripId) {
-		jdbcTemplate.update("INSERT INTO trips_users (trip_id, user_id) VALUES (?,?)", new Object[] { tripId, new Integer(1)});
+	public void reserveTrip(Integer tripId, User user) {
+		jdbcTemplate.update("INSERT INTO trips_users (trip_id, user_id) VALUES (?,?)", new Object[] { tripId, user.getId()});
 		return;
 	}
 	
-	public void unreserveTrip(Integer tripId) {
-		jdbcTemplate.update("DELETE FROM trips_users WHERE trip_id = ? AND user_id = ?", new Object[] { tripId, new Integer(1)});
+	public void unreserveTrip(Integer tripId, User user) {
+		jdbcTemplate.update("DELETE FROM trips_users WHERE trip_id = ? AND user_id = ?", new Object[] { tripId, user.getId()});
 		return;
 	}
 	
@@ -77,10 +77,9 @@ public class TripDaoJdbc implements TripDao {
 		return trips;
 	}
 	
-	public List<Trip> findAll() {
+	public List<Trip> findAll(User user) {
 		List<Trip> trips = new ArrayList<>();
-		Integer passengerId = 1; // Should get the logged user
-		this.jdbcTemplate.query("SELECT * FROM trips LEFT OUTER JOIN trips_users ON trips.id = trips_users.trip_id ORDER BY trips.id", (final ResultSet rs) -> {
+		this.jdbcTemplate.query("SELECT first_name, trips.*, temp.reserved as is_reserved FROM trips JOIN users ON trips.driver_id = users.id LEFT OUTER JOIN (SELECT id as reserved, trip_id as relation_trip_id FROM trips_users WHERE user_id = ?) as temp ON relation_trip_id = trips.id WHERE driver_id <> ?", new Object[] { user.getId(), user.getId() }, (final ResultSet rs) -> {
 			do {
 				Trip trip = new Trip();
 				
@@ -88,14 +87,16 @@ public class TripDaoJdbc implements TripDao {
 				trip.setEtd(rs.getString("etd"));
 				trip.setEta(rs.getString("eta"));
 				trip.setCost(rs.getDouble("cost"));
-				trip.setReserved(passengerId.equals(rs.getInt("user_id")));
+				trip.setReserved(rs.getInt("is_reserved") != 0);
+				
+				User driver = new User();
+				driver.setFirst_name(rs.getString("first_name"));
+				trip.setDriver(driver);
+				
 				/*
-				trip.setId(rs.getInt("id"));
-				trip.setDriver_id(rs.getInt("driver_id"));
 				trip.setCar_id(rs.getInt("car_id"));
 				trip.setDeparture_location(rs.getString("departure_location"));
 				trip.setArrival_location(rs.getString("arrival_location"));
-				trip.setCost(rs.getDouble("cost"));
 	            */
 				trips.add(trip);
 	        } while(rs.next());

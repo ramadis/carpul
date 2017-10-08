@@ -9,8 +9,8 @@ public interface TripService {
 	Trip register(Trip trip, User driver);
 	Trip findById(String tripId);
 	List<Trip> findByPassenger(Integer passengerId);
-	List<Trip> findAll();
-	void reserve(Integer tripId);
-	void unreserve(Integer tripId);
+	List<Trip> findAll(User user);
+	void reserve(Integer tripId, User user);
+	void unreserve(Integer tripId, User user);
 }
 

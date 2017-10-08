@@ -60,6 +60,7 @@ public class UserDaoJdbc implements UserDao {
 	
 	public List<Trip> getUserTrips(User user) {
 		List<Trip> trips = new ArrayList<>();
+		System.out.println("El driver_id es " + user.getId());
 		this.jdbcTemplate.query("SELECT * FROM trips WHERE trips.driver_id = ?", new Object[] {user.getId()}, (final ResultSet rs) -> {
 			do {
 				Trip trip = new Trip();

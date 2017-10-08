@@ -21,12 +21,12 @@ public class TripServiceImpl implements TripService {
 		return tripDao.create(trip, driver);
 	}
 	
-	public void reserve(Integer tripId) {
-		tripDao.reserveTrip(tripId);
+	public void reserve(Integer tripId, User user) {
+		tripDao.reserveTrip(tripId, user);
 	}
 	
-	public void unreserve(Integer tripId) {
-		tripDao.unreserveTrip(tripId);
+	public void unreserve(Integer tripId, User user) {
+		tripDao.unreserveTrip(tripId, user);
 	}
 	
 	public List<Trip> findByPassenger(final Integer passengerId) {
@@ -37,7 +37,7 @@ public class TripServiceImpl implements TripService {
 		return tripDao.findById(tripId);
 	}
 	
-	public List<Trip> findAll() {
-		return tripDao.findAll();
+	public List<Trip> findAll(User user) {
+		return tripDao.findAll(user);
 	}
 }
