@@ -34,7 +34,28 @@
   display: block;
 }
 
+.destiny-unreserve-button {
+  position: absolute;
+  top: 10;
+  right: 10;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: 900;
+  color: white;
+  background: transparent;
+  transition: 0.1s ease-out background;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.destiny-unreserve-button:hover {
+  background-color: #e36f4a;
+}
+
 .destiny-item {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -57,6 +78,6 @@
 }
 
 .destiny-name {
-  font-size: 20px;
+  font-size: 25px;
   font-weight: 900;
 }

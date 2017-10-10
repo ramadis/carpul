@@ -22,20 +22,8 @@
 </head>
 <body>
   <%@ include file="/WEB-INF/jsp/common/navbar.jsp" %>
-
-  <div class="profile-hero-container">
-    <div class="profile-hero-alignment">
-      <img src="https://ui-avatars.com/api/?rounded=true&size=100&background=e36f4a&color=fff&name=${user.first_name} ${user.last_name}" alt="">
-      <div class="profile-user-container">
-        <span class="profile-user-name">${user.first_name}</span>
-        <span class="profile-user-created">Have been sharing adventures for 2 years</span>
-      </div>
-    </div>
-  </div>
-  <div class="profile-hero-catchphrase">
-    <span>So, this is your place. Feel like home.</span>
-  </div>
-  <div class="profile-hero-border"></div>
+  <c:set var="hero_message" value="So, this is your place. Feel like home."/>
+  <%@ include file="/WEB-INF/jsp/common/hero.jsp" %>
 
   <section class="profile-container">
     <section class="reviews-container">
@@ -49,10 +37,13 @@
       <c:if test="${not empty reservations}">
         <ul class="no-bullets destiny-list">
           <c:forEach items="${reservations}" var="reservation">
-            <li class="destiny-item">
-              <span class="uptitle">Travel with ${reservation.driver.first_name} (${reservation.driver.phone_number}) to</span>
-              <span class="destiny-name">La Plata</span>
-              ${reservation.etd} - ${reservation.eta} for $${reservation.cost}
+            <li class="destiny-item" data-id="${reservation.id}">
+              <form:form class="inline-block" method="post" action="../unreserve/${reservation.id}">
+                <span class="uptitle">Travel with ${reservation.driver.first_name} (${reservation.driver.phone_number}) to</span>
+                <span class="destiny-name">La Plata</span>
+                <span>${reservation.etd} - ${reservation.eta} for $${reservation.cost}</span>
+                <button class="destiny-unreserve-button">Unreserve</button>
+              </form:form>
             </li>
           </c:forEach>
         </ul>

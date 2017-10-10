@@ -15,39 +15,9 @@
     <link href="<c:url value='/static/css/profile.css' />" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <div class="navbar">
-      <div class="top-section flex align-center">
-        <img src="<c:url value='/static/images/logo.png' />" alt=""></img>
-        <div class="actions">
-          <c:if test="${empty user}">
-            <a href="<c:url value='/user' />" class="create-account bold m-r-10" >Create account</a>
-          </c:if>
-          <c:if test="${not empty user}">
-            <a href="<c:url value='/logout' />" class="create-account bold m-r-10" >Logout</a>
-          </c:if>
-          <c:if test="${empty user}">
-            <a href="<c:url value='/login' />" class="login-button" >Login</a>
-          </c:if>
-          <c:if test="${not empty user}">
-            <a href="<c:url value='/user/${user.id}' />" class="login-button" >Profile</a>
-          </c:if>
-        </div>
-      </div>
-    </div>
-
-    <div class="profile-hero-container">
-      <div class="profile-hero-alignment">
-        <img src="https://ui-avatars.com/api/?rounded=true&size=100" alt="">
-        <div class="profile-user-container">
-          <span class="profile-user-name">${user.username}</span>
-          <span class="profile-user-created">Have been sharing adventures for 2 years</span>
-        </div>
-      </div>
-    </div>
-    <div class="profile-hero-catchphrase">
-      <span>Where are you going next?</span>
-    </div>
-    <div class="profile-hero-border" />
+    <%@ include file="/WEB-INF/jsp/common/navbar.jsp" %>
+    <c:set var="hero_message" value="Where are you going next?"/>
+    <%@ include file="/WEB-INF/jsp/common/hero.jsp" %>
 
     <div class="profile-form-container">
       <form:form method="post" modelAttribute="tripForm" action="/webapp/trip">

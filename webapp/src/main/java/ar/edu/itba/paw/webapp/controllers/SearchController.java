@@ -18,6 +18,7 @@ import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
+import ar.edu.itba.paw.models.User;
 
 @Controller
 public class SearchController extends AuthController {
@@ -47,14 +48,16 @@ public class SearchController extends AuthController {
 	}
 	
 	@RequestMapping(value = "/reserve/{tripId}", method = RequestMethod.POST)
-	public String reserveTrip(@PathVariable("tripId") final Integer tripId, @RequestParam("from") String from, @RequestParam("to") String to) {
-		ts.reserve(tripId, user());
-		return "redirect:/search?from=" + from + "&to=" + to;
+	public String reserveTrip(@PathVariable("tripId") final Integer tripId) {
+		User loggedUser = user();
+		ts.reserve(tripId, loggedUser);
+		return "redirect:/user/" + loggedUser.getId();
 	}
 	
 	@RequestMapping(value = "/unreserve/{tripId}", method = RequestMethod.POST)
-	public String unreserveTrip(@PathVariable("tripId") final Integer tripId, @RequestParam("from") String from, @RequestParam("to") String to) {
-		ts.unreserve(tripId, user());
-		return "redirect:/search?from=" + from + "&to=" + to;
+	public String unreserveTrip(@PathVariable("tripId") final Integer tripId) {
+		User loggedUser = user();
+		ts.unreserve(tripId, loggedUser);
+		return "redirect:/user/" + loggedUser.getId();
 	}
 }

@@ -31,7 +31,7 @@ public class TripController extends AuthController {
 	@RequestMapping(value = "/trip", method = RequestMethod.GET)
 	public ModelAndView createTripView(Model model) {
 		Trip trip = new Trip();
-		User loggedUser = new User();
+		User loggedUser = user();
 		model.addAttribute("user", loggedUser);
 		model.addAttribute("tripForm", trip);
 		final ModelAndView mav = new ModelAndView("trips/trips");

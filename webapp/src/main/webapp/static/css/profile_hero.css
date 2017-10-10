@@ -20,7 +20,7 @@
 	align-items: center;
 	background-image: url('../images/hero-profile.jpg');
 	background-size: cover;
-	padding-left: 50px;
+	padding-left: 25px;
 }
 
 .profile-user-container {
@@ -39,6 +39,8 @@
 .profile-hero-catchphrase {
 	width: 100%;
 	padding: 15px;
+	background: white;
+	padding-left: 30px;
 	font-size: 20px;
 	color: #949494;
 }
