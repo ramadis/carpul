@@ -1,10 +1,17 @@
 .navbar {
 	background: white;
+}
+
+.orange-border {
 	border-top: 5px solid #e36f4a;
 }
 
 body {
 	background: #f4f4f4;
+}
+
+.pool-item {
+	margin-top: 20px;
 }
 
 .destination {

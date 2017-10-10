@@ -19,25 +19,7 @@
   <link href="<c:url value='/static/css/home.css' />" rel="stylesheet" type="text/css" />
 </head>
 <body>
-  <div class="navbar">
-    <div class="top-section flex align-center">
-      <img src="<c:url value='/static/images/logo.png' />" alt=""></img>
-      <div class="actions">
-        <c:if test="${empty user}">
-          <a href="<c:url value='/user' />" class="create-account bold m-r-10" >Create account</a>
-        </c:if>
-        <c:if test="${not empty user}">
-          <a href="<c:url value='/logout' />" class="create-account bold m-r-10" >Logout</a>
-        </c:if>
-        <c:if test="${empty user}">
-          <a href="<c:url value='/login' />" class="login-button" >Login</a>
-        </c:if>
-        <c:if test="${not empty user}">
-          <a href="<c:url value='/user/${user.id}' />" class="login-button" >Profile</a>
-        </c:if>
-      </div>
-    </div>
-  </div>
+  <%@ include file="/WEB-INF/jsp/common/navbar.jsp" %>
 
   <div class="home-hero-container flex-center">
     <div class="home-content-container">
