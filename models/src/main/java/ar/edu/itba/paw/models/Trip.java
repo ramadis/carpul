@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.models;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,14 @@ public class Trip {
 	private Integer car_id;
 	private String etd;
 	private String eta;
+	private String from_city;
+	private String to_city;
 	private Double cost;
+	private Integer seats;
+	private Integer occupied_seats;
+	private Integer available_seats;
+	private Timestamp created;
+	private String time_since_reserved;
 	private Boolean reserved;
 	private String departure_location;
 	private String arrival_location;
@@ -139,5 +147,67 @@ public class Trip {
 	@Override
 	public String toString() {
 		return "Trip = " + id;
+	}
+
+	public Timestamp getCreated() {
+		return created;
+	}
+
+	public void setCreated(Timestamp created) {
+		this.created = created;
+	}
+
+	public String getTime_since_reserved() {
+		return time_since_reserved;
+	}
+
+	public void setTime_since_reserved(String time_since_reserved) {
+		this.time_since_reserved = time_since_reserved;
+	}
+
+	public Integer getSeats() {
+		return seats;
+	}
+
+	public void setSeats(Integer seats) {
+		this.seats = seats;
+	}
+	
+	
+	public String getFrom_city() {
+		if (from_city == null || from_city.length() <= 1) return from_city;
+		String cap = from_city.substring(0, 1).toUpperCase() + from_city.substring(1);
+		return cap;
+	}
+
+	public void setFrom_city(String from_city) {
+		this.from_city = from_city.toLowerCase();
+	}
+
+	public String getTo_city() {
+		if (to_city == null || to_city.length() <= 1) return to_city;
+		String cap = to_city.substring(0, 1).toUpperCase() + to_city.substring(1);
+		return cap;
+	}
+
+	public void setTo_city(String to_city) {
+		this.to_city = to_city.toLowerCase();
+	}
+
+	public Integer getAvailable_seats() {
+		return available_seats;
+	}
+
+	public void setAvailable_seats(Integer available_seats) {
+		this.available_seats = available_seats;
+	}
+
+	public Integer getOccupied_seats() {
+		return occupied_seats;
+	}
+
+	public void setOccupied_seats(Integer occupied_seats) {
+		this.available_seats = this.seats - occupied_seats;
+		this.occupied_seats = occupied_seats;
 	}
 }

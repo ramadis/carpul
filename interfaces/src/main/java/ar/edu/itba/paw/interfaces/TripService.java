@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.User;
 public interface TripService {
 	Trip register(Trip trip, User driver);
 	Trip findById(String tripId);
+	List<Trip> findByRoute(User user, String from, String to);
 	List<Trip> findByPassenger(Integer passengerId);
 	List<Trip> findAll(User user);
 	void reserve(Integer tripId, User user);

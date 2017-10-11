@@ -30,7 +30,7 @@ public class SearchController extends AuthController {
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public ModelAndView searchAllView(@RequestParam("from") String from, @RequestParam("to") String to) {
 		
-		List<Trip> trips = ts.findAll(user());
+		List<Trip> trips = ts.findByRoute(user(), from.toLowerCase(), to.toLowerCase());
 
 		final ModelAndView mav = new ModelAndView("search/search");
 		mav.addObject("trips", trips);

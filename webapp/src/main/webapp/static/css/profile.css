@@ -15,7 +15,9 @@
 
 .destinys-container {
   box-sizing: border-box;
+  min-width: 370px;
   padding: 20px;
+  padding-top: 40px;
 }
 
 .destinys-container h3 {
@@ -28,10 +30,12 @@
 
 .destiny-list {
   padding: 0;
+  margin-top: 40px;
 }
 
 .destiny-list li span {
   display: block;
+  margin-top: 2px;
 }
 
 .destiny-unreserve-button {
@@ -72,12 +76,30 @@
   background-blend-mode: darken;
 }
 
-.destiny-item .uptitle {
-  font-size: 15px;
+.destiny-cost {
+  font-size: 17px;
   font-weight: 100;
 }
 
+.destiny-time {
+  font-size: 12px;
+}
+
 .destiny-name {
-  font-size: 25px;
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.destiny-item .driver {
+  display: flex;
+  font-size: 13px;
+}
+
+.destiny-item .driver .driver-info {
+  margin-left: 10px;
+}
+
+
+.destiny-item .driver .driver-name {
   font-weight: 900;
 }

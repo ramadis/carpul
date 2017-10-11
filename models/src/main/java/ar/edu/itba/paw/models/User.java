@@ -1,11 +1,17 @@
 package ar.edu.itba.paw.models;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
+
 public class User {
 	private String username;
 	private String password;
 	private String first_name;
 	private String last_name;
 	private String phone_number;
+	private String days_since_creation;
+	private Timestamp created;
 	private Integer id;
 
 	public String getFirst_name() {
@@ -69,5 +75,25 @@ public class User {
 	@Override
 	public String toString() {
 		return "User = " + username;
+	}
+
+	public Timestamp getCreated() {
+		return created;
+	}
+	
+	public void setCreated(Timestamp created) {
+		this.created = created;
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+		Long  ms = now.getTime() - created.getTime();
+		Integer days = (int) (ms / (1000*60*60*24));
+		this.setDays_since_creation(days.toString());
+	}
+
+	public String getDays_since_creation() {
+		return days_since_creation;
+	}
+
+	public void setDays_since_creation(String days_since_creation) {
+		this.days_since_creation = days_since_creation;
 	}
 }

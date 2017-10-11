@@ -30,7 +30,7 @@
     </section>
 
     <section class="destinys-container">
-      <h3>What's next?</h3>
+      <h3>What's next</h3>
 
       <a class="no-margin login-button" href="<c:url value='/trip' />">Driving somewhere? Add a new destiny</a>
 
@@ -38,11 +38,21 @@
         <ul class="no-bullets destiny-list">
           <c:forEach items="${reservations}" var="reservation">
             <li class="destiny-item" data-id="${reservation.id}">
-              <form:form class="inline-block" method="post" action="../unreserve/${reservation.id}">
-                <span class="uptitle">Travel with ${reservation.driver.first_name} (${reservation.driver.phone_number}) to</span>
-                <span class="destiny-name">La Plata</span>
-                <span>${reservation.etd} - ${reservation.eta} for $${reservation.cost}</span>
+              <form:form class="inline-block no-margin" method="post" action="../unreserve/${reservation.id}">
+                <span class="destiny-cost"><span class="bold" style="display: inline;">$${reservation.cost}</span> or less</span>
+                <span class="destiny-name">${reservation.to_city}</span>
+                <span class="destiny-time">Depart from ${reservation.from_city} on {Sunday} at ${reservation.etd}</span>
+                <span class="destiny-time">Arrive on ${reservation.to_city} on {Sunday} at ${reservation.eta}</span>
                 <button class="destiny-unreserve-button">Unreserve</button>
+                <hr>
+                <div class="driver">
+                  <img width="50" height="50" src="https://ui-avatars.com/api/?rounded=true&size=150&background=e36f4a&color=fff&name=${reservation.driver.first_name} ${reservation.driver.last_name}" alt="">
+                  <div class="driver-info">
+                    <span class="driver-name">${reservation.driver.first_name} ${reservation.driver.last_name}</span>
+                    <span>${reservation.driver.phone_number}</span>
+                  </div>
+                </div>
+
               </form:form>
             </li>
           </c:forEach>

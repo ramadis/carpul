@@ -40,4 +40,8 @@ public class TripServiceImpl implements TripService {
 	public List<Trip> findAll(User user) {
 		return tripDao.findAll(user);
 	}
+	
+	public List<Trip> findByRoute(User user, String from, String to) {
+		return tripDao.findByRoute(user, from, to);
+	}
 }
