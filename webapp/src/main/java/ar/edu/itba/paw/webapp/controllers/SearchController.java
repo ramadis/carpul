@@ -16,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ar.edu.itba.paw.interfaces.TripService;
-import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
@@ -26,7 +25,6 @@ public class SearchController extends AuthController {
 
 	@Autowired
 	private TripService ts;
-	private UserService us;
 	
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public ModelAndView searchAllView(@RequestParam("from") String from, @RequestParam("to") String to) {

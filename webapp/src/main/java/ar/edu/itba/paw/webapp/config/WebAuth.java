@@ -2,7 +2,6 @@ package ar.edu.itba.paw.webapp.config;
 
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,15 +12,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 import ar.edu.itba.paw.webapp.auth.Provider;
 import ar.edu.itba.paw.webapp.auth.Service;
-import org.slf4j.Logger;
 
 @Configuration
 @EnableWebSecurity
 @ComponentScan({"ar.edu.itba.paw.webapp.auth"})
 public class WebAuth extends WebSecurityConfigurerAdapter {
 
-    static Logger logger = LoggerFactory.getLogger(WebConfig.class);
-    
 	@Autowired
 	Provider authProvider;
 	
@@ -57,7 +53,6 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
 			.and().csrf()
 				.disable()
 			;
-		logger.debug("Spring Security configured, up 'n running");
 	}
 	
 	@Override

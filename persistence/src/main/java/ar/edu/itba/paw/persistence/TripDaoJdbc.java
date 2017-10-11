@@ -6,7 +6,6 @@ import ar.edu.itba.paw.models.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -14,30 +13,23 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public class TripDaoJdbc implements TripDao {
 
 	private final JdbcTemplate jdbcTemplate;
-	private final SimpleJdbcInsert jdbcInsertTrips;
-	private final SimpleJdbcInsert jdbcInsertRelation;
 
 	@Autowired
 	public TripDaoJdbc(final DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 		/* TODO: export table name as a private final String */
-		this.jdbcInsertTrips = new SimpleJdbcInsert(jdbcTemplate).withTableName("trips");
-		this.jdbcInsertRelation = new SimpleJdbcInsert(jdbcTemplate).withTableName("trips_users");
 		/* TODO: export table creation as a private final String */
 		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips_users (id serial PRIMARY KEY, created timestamp, trip_id integer, user_id integer)");
 		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips (id serial PRIMARY KEY, to_city varchar(100), from_city varchar(100), created timestamp, seats integer, driver_id integer, cost real, eta varchar(100), etd varchar(100))");
 	}
 	
 	public Trip create(Trip trip, User driver) {
-		final Map<String, Object> args = new HashMap<String, Object>();
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		jdbcTemplate.update("INSERT INTO trips (from_city, to_city, created, seats, driver_id, cost, eta, etd) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", new Object[] { trip.getFrom_city(), trip.getTo_city(), now, trip.getSeats(), driver.getId(), trip.getCost(), trip.getEta(), trip.getEtd()});
 		return trip;

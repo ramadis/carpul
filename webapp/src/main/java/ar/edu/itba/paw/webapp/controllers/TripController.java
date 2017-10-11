@@ -1,10 +1,6 @@
 package ar.edu.itba.paw.webapp.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +12,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ar.edu.itba.paw.interfaces.TripService;
-import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 
@@ -25,8 +20,6 @@ public class TripController extends AuthController {
 
 	@Autowired
 	private TripService us;
-	
-	final static Logger logger = LoggerFactory.getLogger(TripController.class);
 	
 	@RequestMapping(value = "/trip", method = RequestMethod.GET)
 	public ModelAndView createTripView(Model model) {

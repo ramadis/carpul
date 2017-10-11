@@ -1,11 +1,6 @@
 package ar.edu.itba.paw.webapp.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,8 +19,6 @@ public class UserController extends AuthController {
 
 	@Autowired
 	private UserService us;
-	
-	final static Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public ModelAndView registerUserView(Model model) {
@@ -69,7 +62,6 @@ public class UserController extends AuthController {
 			BindingResult result, Model model,
 			final RedirectAttributes redirectAttribute) {
 		us.register(user);
-		User registeredUser = us.getByUsername(user.getUsername());
 		return "redirect:/login";
 	}
 }
