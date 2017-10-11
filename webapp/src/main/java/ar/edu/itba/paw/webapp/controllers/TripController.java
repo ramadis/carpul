@@ -38,6 +38,14 @@ public class TripController extends AuthController {
 		return mav;
 	}
 	
+	@RequestMapping(value = "/trip/{tripId}", method = RequestMethod.DELETE)
+	public String deleteTrip(@PathVariable("tripId") final Integer tripId) {
+		User loggedUser = user();
+		us.delete(tripId, loggedUser);
+		return "redirect:/user/" + loggedUser.getId();
+	}
+	
+	
 	@RequestMapping(value = "/trip", method = RequestMethod.POST)
 	public String createTrip(@ModelAttribute("tripForm") Trip trip,
 			BindingResult result, Model model,

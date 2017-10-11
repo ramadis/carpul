@@ -1,8 +1,3 @@
-.profile-form-container {
-  width: 500px;
-  display: block;
-  position: static;
-}
 
 .profile-container {
   width: 100%;
@@ -11,6 +6,23 @@
 
 .reviews-container {
   flex-grow: 2;
+}
+
+.new-trip-form {
+  width: 500px;
+  margin-top: 20px;
+}
+
+.new-trip-form .actions {
+  margin-top: 20px;
+}
+
+.new-trip-form h3 {
+  font-size: 25px;
+  font-weight: 100;
+  margin: 0;
+  color: rgba(0,0,0,.8);
+  margin-bottom: 20px;
 }
 
 .destinys-container {
@@ -78,6 +90,10 @@
 
 .trip-item {
   height: auto;
+}
+
+.trip-item .driver {
+  margin-top: 10px;
 }
 
 .destiny-cost {

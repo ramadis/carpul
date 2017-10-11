@@ -41,6 +41,10 @@ public class TripServiceImpl implements TripService {
 		return tripDao.findAll(user);
 	}
 	
+	public void delete(Integer tripId, User user) {
+		tripDao.delete(tripId, user);
+	}
+	
 	public List<Trip> findByRoute(User user, String from, String to) {
 		return tripDao.findByRoute(user, from, to);
 	}

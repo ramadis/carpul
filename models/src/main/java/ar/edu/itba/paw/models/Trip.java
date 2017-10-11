@@ -41,6 +41,10 @@ public class Trip {
 		return passengerIds;
 	}
 	
+	public List<User> getPassengers() {
+		return passengers;
+	}
+	
 	public void toggleReserve() {
 		reserved = !reserved;
 	}
@@ -209,7 +213,8 @@ public class Trip {
 
 	public void setOccupied_seats(Integer occupied_seats) {
 		this.available_seats = this.seats - occupied_seats;
-		this.cost_per_person = this.cost / occupied_seats;
+		if (occupied_seats == 0) this.cost_per_person = this.cost;
+		else this.cost_per_person = this.cost / occupied_seats;
 		this.occupied_seats = occupied_seats;
 	}
 

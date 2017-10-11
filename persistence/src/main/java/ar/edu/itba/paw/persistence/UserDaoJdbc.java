@@ -83,7 +83,14 @@ public class UserDaoJdbc implements UserDao {
 			do {
 				Trip trip = new Trip();
 				loadResultIntoTrip(rs, trip);
-				
+				this.jdbcTemplate.query("SELECT * FROM users JOIN trips_users on users.id = trips_users.user_id WHERE trip_id = ?", new Object[] { trip.getId()}, (final ResultSet rs2) -> {
+					do {
+						User passenger = new User();
+						loadResultIntoUser(rs2, passenger);
+						trip.addPassenger(passenger);
+					}while (rs2.next());
+				});
+				trip.setOccupied_seats(trip.getPassengers().size());
 				/*
 				trip.setCar_id(rs.getInt("car_id"));
 				trip.setDeparture_location(rs.getString("departure_location"));

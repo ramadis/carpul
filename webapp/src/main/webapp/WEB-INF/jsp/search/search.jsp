@@ -33,12 +33,16 @@
     </div>
 
     <div class="list-container">
-      <span class="list-subtitle">These are the options to go to ${to} this weekend</span>
 
       <c:if test="${not empty trips}">
+        <span class="list-subtitle">These are the options to go to ${to} this weekend</span>
         <c:forEach items="${trips}" var="trip">
           <%@ include file="search_item.jsp" %>
         </c:forEach>
+      </c:if>
+
+      <c:if test="${empty trips}">
+        <span class="list-subtitle">Sorry, no adventure to ${to} at this time :(</span>
       </c:if>
 
 

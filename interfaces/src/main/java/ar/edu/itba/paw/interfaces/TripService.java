@@ -12,6 +12,7 @@ public interface TripService {
 	List<Trip> findByPassenger(Integer passengerId);
 	List<Trip> findAll(User user);
 	void reserve(Integer tripId, User user);
+	void delete(Integer tripId, User user);
 	void unreserve(Integer tripId, User user);
 }
 

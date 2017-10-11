@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import ar.edu.itba.paw.interfaces.UserService;
@@ -24,7 +25,12 @@ public abstract class AuthController {
 
 	@Autowired
 	private UserService us;
-		
+	
+	@ExceptionHandler(value = Exception.class)
+    public String redirectToErrorPage(){
+        return "redirect:/errors";
+    }
+	
 	@ModelAttribute
 	public User user() {
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
