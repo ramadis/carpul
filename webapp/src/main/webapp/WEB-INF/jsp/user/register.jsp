@@ -22,23 +22,23 @@
           <div class="field-container">
             <spring:bind path="first_name">
               <label class="field-label" for="first_name">First name</label>
-              <input class="field" path="first_name" type="text" name="first_name"/>
+              <input required class="field" path="first_name" type="text" name="first_name"/>
             </spring:bind>
             <spring:bind path="last_name">
               <label class="field-label" for="last_name">Last name</label>
-              <input class="field" path="last_name" type="text" name="last_name"/>
+              <input required class="field" path="last_name" type="text" name="last_name"/>
             </spring:bind>
             <spring:bind path="phone_number">
               <label class="field-label" for="phone_number">Phone number</label>
-              <input class="field" path="phone_number" type="text" name="phone_number"/>
+              <input required class="field" path="phone_number" type="text" name="phone_number"/>
             </spring:bind>
             <spring:bind path="username">
                 <label class="field-label" for="username">Username</label>
-                <input class="field" name="username" path="username" type="text" />
+                <input required class="field" name="username" path="username" type="text" />
             </spring:bind>
             <spring:bind path="password">
-              <label class="field-label" for="password">Password</label>
-              <input class="field" path="password" type="text" name="password"/>
+              <label class="field-label" for="password">Password (At least 6 chars)</label>
+              <input required class="field" pattern=".{6,}" path="password" type="text" name="password"/>
             </spring:bind>
           </div>
           <div class="actions">

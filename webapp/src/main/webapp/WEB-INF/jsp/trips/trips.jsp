@@ -11,6 +11,7 @@
     <link href="<c:url value='/static/css/pool_list.css' />" rel="stylesheet" type="text/css" />
     <link href="<c:url value='/static/css/profile_hero.css' />" rel="stylesheet" type="text/css" />
     <link href="<c:url value='/static/css/profile.css' />" rel="stylesheet" type="text/css" />
+    <link href="<c:url value='/static/css/trip-form.css' />" rel="stylesheet" type="text/css" />
   </head>
   <body>
     <%@ include file="/WEB-INF/jsp/common/navbar.jsp" %>
@@ -23,32 +24,32 @@
         <div class="field-container">
           <spring:bind path="from_city">
               <label class="field-label" for="from_city">Departure city</label>
-              <input class="field" name="from_city" path="from_city" min=0 type="text" />
+              <form:input required class="field" name="from_city" path="from_city" min="0" type="text" />
           </spring:bind>
 
           <spring:bind path="to_city">
               <label class="field-label" for="to_city">Arrival city</label>
-              <input class="field" name="to_city" path="to_city" min=0 type="text" />
+              <form:input required class="field" name="to_city" path="to_city" min="0" type="text" />
           </spring:bind>
 
           <spring:bind path="seats">
               <label class="field-label" for="seats">Amount of free seats</label>
-              <input min=1 class="field" name="seats" path="seats" type="number" />
+              <form:input required min="1" class="field" name="seats" path="seats" type="number" />
           </spring:bind>
 
           <spring:bind path="cost">
               <label class="field-label" for="cost">Total cost</label>
-              <input class="field" name="cost" path="cost" min=0 type="number" />
+              <span class="cost-field"><form:input required class="field" name="cost" path="cost" min="0" type="number" /></span>
           </spring:bind>
 
           <spring:bind path="etd">
             <label class="field-label" for="etd">Estimated time of departure</label>
-            <input class="field" path="etd" type="text" name="etd"/>
+            <form:input required class="field" path="etd" type="text" name="etd"/>
           </spring:bind>
 
           <spring:bind path="eta">
             <label class="field-label" for="eta">Estimated time of arrival</label>
-            <input class="field" path="eta" type="text" name="eta"/>
+            <form:input class="field" path="eta" type="text" name="eta"/>
           </spring:bind>
         </div>
         <div class="actions">
