@@ -12,6 +12,6 @@
   </head>
   <body class="flex-center">
     <h1 class="error-title">So... this is awkward.</h1>
-    <h1 class="error-subtitle">(yep, his is a ${error} error page)</h1>
+    <h1 class="error-subtitle">(yep, this is a ${error} error page)</h1>
   </body>
 </html>

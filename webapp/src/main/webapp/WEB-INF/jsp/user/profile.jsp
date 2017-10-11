@@ -26,36 +26,48 @@
   <%@ include file="/WEB-INF/jsp/common/hero.jsp" %>
 
   <section class="profile-container">
-    <section class="reviews-container">
-    </section>
+    <c:if test="${not empty reservations or not empty trips}">
+      <section class="reviews-container">
+      </section>
 
-    <section class="destinys-container">
-      <h3>What's next</h3>
+      <section class="destinys-container">
+        <h3>What's next</h3>
 
-      <a class="no-margin login-button" href="<c:url value='/' />">Going somewhere? Find a trip</a>
+        <a class="no-margin login-button" href="<c:url value='/' />">Going somewhere? Find a trip</a>
 
-      <c:if test="${not empty reservations}">
-        <ul class="no-bullets destiny-list">
-          <c:forEach items="${reservations}" var="reservation">
-            <%@ include file="destiny.jsp" %>
-          </c:forEach>
-        </ul>
-      </c:if>
-    </section>
+        <c:if test="${not empty reservations}">
+          <ul class="no-bullets destiny-list">
+            <c:forEach items="${reservations}" var="reservation">
+              <%@ include file="destiny.jsp" %>
+            </c:forEach>
+          </ul>
+        </c:if>
+      </section>
 
-    <section class="destinys-container">
-      <h3>You're driving</h3>
+      <section class="destinys-container">
+        <h3>You're driving</h3>
 
-      <a class="no-margin login-button" href="<c:url value='/trip' />">Take some people to a new destiny</a>
+        <a class="no-margin login-button" href="<c:url value='/trip' />">Take some people to a new destiny</a>
 
-      <c:if test="${not empty trips}">
-        <ul class="no-bullets destiny-list">
-          <c:forEach items="${trips}" var="trip">
-            <%@ include file="trip.jsp" %>
-          </c:forEach>
-        </ul>
-      </c:if>
-    </section>
+        <c:if test="${not empty trips}">
+          <ul class="no-bullets destiny-list">
+            <c:forEach items="${trips}" var="trip">
+              <%@ include file="trip.jsp" %>
+            </c:forEach>
+          </ul>
+        </c:if>
+      </section>
+    </c:if>
+
+    <c:if test="${empty reservations and empty trips}">
+      <div class="empty-profile">
+        <h3 class="empty-title">Seems like you don't have much to do here yet.</h3>
+        <h4 class="empty-subtitle">Why not starting right now?</h4>
+        <a class="no-margin login-button empty-button" href="<c:url value='/trip' />">Take some people to a new destiny</a>
+        <a class="no-margin login-button empty-button" href="<c:url value='/' />">Find somewhere incredible to travel cheap</a>
+      </div>
+
+    </c:if>
   </section>
 
 

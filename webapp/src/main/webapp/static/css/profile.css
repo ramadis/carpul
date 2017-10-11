@@ -123,3 +123,27 @@
 .destiny-item .driver .driver-name {
   font-weight: 900;
 }
+
+.empty-profile {
+  text-align: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.empty-title, .empty-subtitle {
+  font-size: 25px;
+  font-weight: 100;
+  margin: 0;
+  color: rgba(0,0,0,.8);
+}
+
+.empty-subtitle {
+  margin: 10px 0;
+  font-size: 20px;
+}
+
+.empty-button {
+  display: inline-block;
+  margin-top: 10px;
+  width: auto;
+}
