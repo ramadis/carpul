@@ -107,6 +107,8 @@ public class TripDaoJdbc implements TripDao {
 					trip.setOccupied_seats(rs2.getInt("amount"));
 				});
 				
+				if (trip.getAvailable_seats() < 1) continue;
+				
 				User driver = new User();
 				driver.setId(rs.getInt("driver_id"));
 				driver.setFirst_name(rs.getString("first_name"));
