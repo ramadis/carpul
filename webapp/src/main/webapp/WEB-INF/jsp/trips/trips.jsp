@@ -24,27 +24,27 @@
         <div class="field-container">
           <spring:bind path="from_city">
               <label class="field-label" for="from_city">Departure city</label>
-              <form:input required class="field" name="from_city" path="from_city" min="0" type="text" />
+              <form:input required="required" class="field" name="from_city" path="from_city" min="0" type="text" />
           </spring:bind>
 
           <spring:bind path="to_city">
               <label class="field-label" for="to_city">Arrival city</label>
-              <form:input required class="field" name="to_city" path="to_city" min="0" type="text" />
+              <form:input required="required" class="field" name="to_city" path="to_city" min="0" type="text" />
           </spring:bind>
 
           <spring:bind path="seats">
               <label class="field-label" for="seats">Amount of free seats</label>
-              <form:input required min="1" class="field" name="seats" path="seats" type="number" />
+              <form:input required="required" min="1" class="field" name="seats" path="seats" type="number" />
           </spring:bind>
 
           <spring:bind path="cost">
               <label class="field-label" for="cost">Total cost</label>
-              <span class="cost-field"><form:input required class="field" name="cost" path="cost" min="0" type="number" /></span>
+              <span class="cost-field"><form:input required="required" class="field" name="cost" path="cost" min="0" type="number" /></span>
           </spring:bind>
 
           <spring:bind path="etd">
             <label class="field-label" for="etd">Estimated time of departure</label>
-            <form:input required class="field" path="etd" type="text" name="etd"/>
+            <form:input required="required" class="field" path="etd" type="text" name="etd"/>
           </spring:bind>
 
           <spring:bind path="eta">
