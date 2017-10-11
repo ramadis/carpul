@@ -76,6 +76,10 @@
   background-blend-mode: darken;
 }
 
+.trip-item {
+  height: auto;
+}
+
 .destiny-cost {
   font-size: 17px;
   font-weight: 100;

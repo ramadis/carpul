@@ -1,6 +1,6 @@
 <div class="navbar orange-border">
   <div class="top-section flex align-center">
-    <a href="<c:url value='/' />"><img src="<c:url value='/static/images/logo.png' />" alt=""></img></a>
+    <a href="<c:url value='/' />"><img width="100" src="<c:url value='/static/images/logo.png' />" alt=""></img></a>
     <div class="actions">
       <c:if test="${empty user}">
         <a href="<c:url value='/user' />" class="create-account bold m-r-10" >Create account</a>

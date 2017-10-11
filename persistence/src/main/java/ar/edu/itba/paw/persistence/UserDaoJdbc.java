@@ -44,6 +44,7 @@ public class UserDaoJdbc implements UserDao {
 			trip.setEtd(rs.getString("etd"));
 			trip.setEta(rs.getString("eta"));
 			trip.setCost(rs.getDouble("cost"));
+			trip.setSeats(rs.getInt("seats"));
 			trip.setFrom_city(rs.getString("from_city"));
 			trip.setTo_city(rs.getString("to_city"));
 		} catch (Exception e) {}
@@ -81,13 +82,7 @@ public class UserDaoJdbc implements UserDao {
 		this.jdbcTemplate.query("SELECT * FROM trips WHERE trips.driver_id = ?", new Object[] {user.getId()}, (final ResultSet rs) -> {
 			do {
 				Trip trip = new Trip();
-				
-				trip.setId(rs.getInt("id"));
-				trip.setEtd(rs.getString("etd"));
-				trip.setEta(rs.getString("eta"));
-				//trip.addPassenger(rs.getInt("user_id"));
-				trip.setCost(rs.getDouble("cost"));
-				trip.setDriver_id(rs.getInt("driver_id"));
+				loadResultIntoTrip(rs, trip);
 				
 				/*
 				trip.setCar_id(rs.getInt("car_id"));
@@ -109,6 +104,9 @@ public class UserDaoJdbc implements UserDao {
 				Trip trip = new Trip();
 				loadResultIntoTrip(rs, trip);
 
+				this.jdbcTemplate.query("SELECT count(*) as amount FROM trips_users WHERE trip_id = ?", new Object[] { trip.getId()}, (final ResultSet rs2) -> {
+					trip.setOccupied_seats(rs2.getInt("amount"));
+				});
 				
 				User driver = new User();
 				loadResultIntoUser(rs, driver);

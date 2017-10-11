@@ -32,42 +32,33 @@
     <section class="destinys-container">
       <h3>What's next</h3>
 
-      <a class="no-margin login-button" href="<c:url value='/trip' />">Driving somewhere? Add a new destiny</a>
+      <a class="no-margin login-button" href="<c:url value='/' />">Going somewhere? Find a trip</a>
 
       <c:if test="${not empty reservations}">
         <ul class="no-bullets destiny-list">
           <c:forEach items="${reservations}" var="reservation">
-            <li class="destiny-item" data-id="${reservation.id}">
-              <form:form class="inline-block no-margin" method="post" action="../unreserve/${reservation.id}">
-                <span class="destiny-cost"><span class="bold" style="display: inline;">$${reservation.cost}</span> or less</span>
-                <span class="destiny-name">${reservation.to_city}</span>
-                <span class="destiny-time">Depart from ${reservation.from_city} on {Sunday} at ${reservation.etd}</span>
-                <span class="destiny-time">Arrive on ${reservation.to_city} on {Sunday} at ${reservation.eta}</span>
-                <button class="destiny-unreserve-button">Unreserve</button>
-                <hr>
-                <div class="driver">
-                  <img width="50" height="50" src="https://ui-avatars.com/api/?rounded=true&size=150&background=e36f4a&color=fff&name=${reservation.driver.first_name} ${reservation.driver.last_name}" alt="">
-                  <div class="driver-info">
-                    <span class="driver-name">${reservation.driver.first_name} ${reservation.driver.last_name}</span>
-                    <span>${reservation.driver.phone_number}</span>
-                  </div>
-                </div>
+            <%@ include file="destiny.jsp" %>
+          </c:forEach>
+        </ul>
+      </c:if>
+    </section>
 
-              </form:form>
-            </li>
+    <section class="destinys-container">
+      <h3>You're driving</h3>
+
+      <a class="no-margin login-button" href="<c:url value='/trip' />">Take some people to a new destiny</a>
+
+      <c:if test="${not empty trips}">
+        <ul class="no-bullets destiny-list">
+          <c:forEach items="${trips}" var="trip">
+            <%@ include file="trip.jsp" %>
           </c:forEach>
         </ul>
       </c:if>
     </section>
   </section>
 
-  <c:if test="${not empty trips}">
-    <ul>
-      <c:forEach items="${trips}" var="trip">
-        <li>${trip.etd} - ${trip.eta} for $${trip.cost}</li>
-      </c:forEach>
-    </ul>
-  </c:if>
+
 
 
 </body>

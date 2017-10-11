@@ -21,6 +21,7 @@ public class Trip {
 	private Boolean reserved;
 	private String departure_location;
 	private String arrival_location;
+	private Double cost_per_person;
 	private final List<User> passengers = new ArrayList<>();
 	private final List<Integer> passengerIds = new ArrayList<>();
 	private User driver;
@@ -208,6 +209,15 @@ public class Trip {
 
 	public void setOccupied_seats(Integer occupied_seats) {
 		this.available_seats = this.seats - occupied_seats;
+		this.cost_per_person = this.cost / occupied_seats;
 		this.occupied_seats = occupied_seats;
+	}
+
+	public Double getCost_per_person() {
+		return cost_per_person;
+	}
+
+	public void setCost_per_person(Double cost_per_person) {
+		this.cost_per_person = cost_per_person;
 	}
 }
