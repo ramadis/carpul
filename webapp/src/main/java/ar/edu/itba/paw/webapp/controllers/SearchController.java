@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,21 @@ public class SearchController extends AuthController {
 		mav.addObject("from", from);
 		mav.addObject("to", to);
 		mav.addObject("user", user());
+		return mav;
+	}
+	
+	@RequestMapping(value = "/search/{tripId}", method = RequestMethod.GET)
+	public ModelAndView searchAllView(@PathVariable("tripId") final Integer tripId, @RequestParam("from") String from, @RequestParam("to") String to) {
+		
+		List<Trip> trips = new ArrayList<>();
+		trips.add(ts.findById(tripId));
+
+		final ModelAndView mav = new ModelAndView("search/search");
+		mav.addObject("trips", trips);
+		mav.addObject("user", user());
+		mav.addObject("from", from);
+		mav.addObject("to", to);
+		mav.addObject("is_searching", true);
 		return mav;
 	}
 	

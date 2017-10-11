@@ -51,7 +51,13 @@ public class UserController extends AuthController {
 	public ModelAndView getUserView(@PathVariable("userId") final Integer userId) {
 		final ModelAndView mav = new ModelAndView("user/profile");
 		User loggedUser = user();
-		if (loggedUser.getId() != userId) return new ModelAndView("login");
+		if (loggedUser.getId() != userId) {
+			User user = us.getById(userId);
+			final ModelAndView mav_other = new ModelAndView("user/profile-other");
+			mav_other.addObject("user", user);
+			mav_other.addObject("trips", us.getUserTrips(user));
+			return mav_other;
+		}
 		mav.addObject("trips", us.getUserTrips(loggedUser));
 		mav.addObject("reservations", us.getReservedTrips(loggedUser));
 		mav.addObject("user", loggedUser);

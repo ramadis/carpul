@@ -76,6 +76,15 @@ public class UserDaoJdbc implements UserDao {
 		return user;
 	}
 	
+	public User getById(Integer id) {
+		User user = new User();
+		this.jdbcTemplate.query("SELECT * FROM users WHERE id = ? LIMIT 1", new Object[] {id}, (final ResultSet rs) -> {
+			this.loadResultIntoUser(rs, user);
+		});
+		
+		return user;
+	}
+	
 	public List<Trip> getUserTrips(User user) {
 		List<Trip> trips = new ArrayList<>();
 		System.out.println("El driver_id es " + user.getId());

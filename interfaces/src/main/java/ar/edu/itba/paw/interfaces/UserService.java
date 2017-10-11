@@ -14,6 +14,8 @@ public interface UserService {
 	 */
 	User register(User user);
 	
+	User getById(Integer id);
+	
 	User getByUsername(String username);
 	
 	User findById(Integer userId);

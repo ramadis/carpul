@@ -1,3 +1,8 @@
+<c:set var="url" value=""/>
+<c:if test="${is_searching}">
+  <c:set var="url" value="../"/>
+</c:if>
+
 <div class="pool-item flex-center">
   <div class="user-info flex space-around align-center column h-150">
     <div class="user-image">
@@ -37,8 +42,9 @@
             <span class="bold black">$${trip.cost_per_person}</span>
             /each
           </span>
+
             <c:if test="${not trip.reserved}">
-              <form:form class="inline-block" method="post" action="reserve/${trip.id}?from=${from}&to=${to}">
+              <form:form class="inline-block" method="post" action="${url}reserve/${trip.id}?from=${from}&to=${to}">
                 <button class="login-button">Reserve</button>
               </form:form>
             </c:if>

@@ -33,7 +33,7 @@ public class TripServiceImpl implements TripService {
 		return tripDao.findByPassenger(passengerId);
 	}
 	
-	public Trip findById(final String tripId) {
+	public Trip findById(final Integer tripId) {
 		return tripDao.findById(tripId);
 	}
 	

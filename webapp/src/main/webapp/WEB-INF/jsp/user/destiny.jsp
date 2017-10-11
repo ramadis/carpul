@@ -8,10 +8,12 @@
     <hr>
     <div class="driver">
       <img width="50" height="50" src="https://ui-avatars.com/api/?rounded=true&size=150&background=e36f4a&color=fff&name=${reservation.driver.first_name} ${reservation.driver.last_name}" alt="">
-      <div class="driver-info">
-        <span class="driver-name">${reservation.driver.first_name} ${reservation.driver.last_name}</span>
-        <span>${reservation.driver.phone_number}</span>
-      </div>
+      <a href="<c:url value='/user/${reservation.driver.id - 1}' />">
+        <div class="driver-info">
+          <span class="driver-name">${reservation.driver.first_name} ${reservation.driver.last_name}</span>
+          <span>${reservation.driver.phone_number}</span>
+        </div>
+      </a>
     </div>
   </form:form>
 </li>

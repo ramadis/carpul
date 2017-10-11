@@ -13,6 +13,7 @@ public interface UserDao {
 	 * @return The created user
 	 */
 	User create(User user);
+	User getById(Integer id);
 	User findById (Integer userId);
 	User getByUsername(String username);
 	List<Trip> getUserTrips(User user);

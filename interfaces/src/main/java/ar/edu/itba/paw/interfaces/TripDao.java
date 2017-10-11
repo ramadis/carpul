@@ -7,7 +7,7 @@ import ar.edu.itba.paw.models.User;
 
 public interface TripDao {
 	Trip create(Trip trip, User driver);
-	Trip findById (String tripId);
+	Trip findById (Integer tripId);
 	List<Trip> findByPassenger(Integer passengerId);
 	List<Trip> findAll(User user);
 	List<Trip> findByRoute(User user, String from, String to);

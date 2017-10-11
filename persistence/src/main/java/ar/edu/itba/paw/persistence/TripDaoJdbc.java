@@ -162,12 +162,29 @@ public class TripDaoJdbc implements TripDao {
 		return trips;
 	}
 	
-	public Trip findById(final String tripId) {
+	public Trip findById(final Integer tripId) {
 		Trip trip = new Trip();
-		/*this.jdbcTemplate.query("SELECT * FROM trips WHERE id = \'" + tripId + "\' LIMIT 1", (final ResultSet rs) -> {
-			trip.setUsername(rs.getString("username"));
-			trip.setPassword(rs.getString("password"));
-		});*/
+		this.jdbcTemplate.query("SELECT * FROM trips LEFT OUTER JOIN users ON driver_id = users.id  WHERE trips.id = ? LIMIT 1", new Object[] {tripId}, (final ResultSet rs) -> {
+			trip.setId(rs.getInt("id"));
+			trip.setCreated(rs.getTimestamp("created"));
+			trip.setEtd(rs.getString("etd"));
+			trip.setEta(rs.getString("eta"));
+			trip.setCost(rs.getDouble("cost"));
+			trip.setSeats(rs.getInt("seats"));
+			trip.setFrom_city(rs.getString("from_city"));
+			trip.setTo_city(rs.getString("to_city"));
+			
+			this.jdbcTemplate.query(" SELECT count(*) as amount FROM trips_users WHERE trip_id = ?", new Object[] { tripId }, (final ResultSet rs2) -> {
+				trip.setOccupied_seats(rs2.getInt("amount"));
+			});
+			
+			User driver = new User();
+			driver.setId(rs.getInt("driver_id"));
+			driver.setFirst_name(rs.getString("first_name"));
+			driver.setLast_name(rs.getString("last_name"));
+			driver.setPhone_number(rs.getString("phone_number"));
+			trip.setDriver(driver);
+		});
 
 		return trip;
 	}
