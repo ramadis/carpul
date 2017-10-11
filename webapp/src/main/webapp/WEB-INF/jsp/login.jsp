@@ -23,7 +23,7 @@
         </div>
           <div class="field-container">
             <spring:bind path="username">
-                <label class="field-label" for="username">Email</label>
+                <label class="field-label" for="username">Username</label>
                 <input class="field" name="username" path="username" type="text" />
             </spring:bind>
             <spring:bind path="password">

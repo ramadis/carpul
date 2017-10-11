@@ -38,7 +38,7 @@ public class TripController extends AuthController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/trip/{tripId}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "delete/trip/{tripId}", method = RequestMethod.POST)
 	public String deleteTrip(@PathVariable("tripId") final Integer tripId) {
 		User loggedUser = user();
 		us.delete(tripId, loggedUser);

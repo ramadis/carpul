@@ -39,7 +39,7 @@ public class TripDaoJdbc implements TripDao {
 	public Trip create(Trip trip, User driver) {
 		final Map<String, Object> args = new HashMap<String, Object>();
 		Timestamp now = new Timestamp(System.currentTimeMillis());
-		jdbcTemplate.update("INSERT INTO trips (from_city, to_city, created, seats, driver_id, cost, eta, etd) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", new Object[] { trip.getFrom_city(), trip.getTo_city(), now, new Integer(4), driver.getId(), trip.getCost(), trip.getEta(), trip.getEtd()});
+		jdbcTemplate.update("INSERT INTO trips (from_city, to_city, created, seats, driver_id, cost, eta, etd) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", new Object[] { trip.getFrom_city(), trip.getTo_city(), now, trip.getSeats(), driver.getId(), trip.getCost(), trip.getEta(), trip.getEtd()});
 		return trip;
 	}
 	
