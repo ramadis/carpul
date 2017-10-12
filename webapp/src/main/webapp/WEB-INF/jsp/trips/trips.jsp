@@ -19,7 +19,7 @@
     <%@ include file="/WEB-INF/jsp/common/hero.jsp" %>
 
     <div class="profile-form-container flex-center">
-      <form:form method="post" class="new-trip-form" modelAttribute="tripForm" action="/webapp/trip">
+      <form:form method="post" class="new-trip-form" modelAttribute="tripForm" action="trip">
         <h3>Add a new trip</h3>
         <div class="field-container">
           <spring:bind path="from_city">

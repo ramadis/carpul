@@ -165,6 +165,12 @@ public class TripDaoJdbc implements TripDao {
 			trip.setSeats(rs.getInt("seats"));
 			trip.setFrom_city(rs.getString("from_city"));
 			trip.setTo_city(rs.getString("to_city"));
+			trip.setDriver_id(rs.getInt("driver_id"));
+			
+			this.jdbcTemplate.query(" SELECT id FROM trips_users WHERE trip_id = ? AND user_id = ?", new Object[] { tripId, trip.getDriver_id() }, (final ResultSet rs2) -> {
+				
+				trip.setReserved(rs2.next());
+			});
 			
 			this.jdbcTemplate.query(" SELECT count(*) as amount FROM trips_users WHERE trip_id = ?", new Object[] { tripId }, (final ResultSet rs2) -> {
 				trip.setOccupied_seats(rs2.getInt("amount"));

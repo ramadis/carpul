@@ -19,27 +19,27 @@ public class UserController extends AuthController {
 
 	@Autowired
 	private UserService us;
-	
+
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public ModelAndView registerUserView(Model model) {
 		User user = new User("asdf", "asdf");
 		model.addAttribute("userForm", user);
 		final ModelAndView mav = new ModelAndView("user/register");
-		mav.addObject("registerUserURI", "/webapp/user");
-		mav.addObject("loginUserURI", "/webapp/login");
+		mav.addObject("registerUserURI", "user");
+		mav.addObject("loginUserURI", "login");
 		return mav;
 	}
-	
+
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView loginView(Model model) {
 		User user = new User();
 		model.addAttribute("userForm", user);
 		final ModelAndView mav = new ModelAndView("login");
-		mav.addObject("loginUserURI", "/login");
-		mav.addObject("registerUserURI", "/user");
+		mav.addObject("loginUserURI", "login");
+		mav.addObject("registerUserURI", "user");
 		return mav;
 	}
-	
+
 	@RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
 	public ModelAndView getUserView(@PathVariable("userId") final Integer userId) {
 		final ModelAndView mav = new ModelAndView("user/profile");
@@ -56,7 +56,7 @@ public class UserController extends AuthController {
 		mav.addObject("user", loggedUser);
 		return mav;
 	}
-	
+
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
 	public String registerUser(@ModelAttribute("userForm") User user,
 			BindingResult result, Model model,

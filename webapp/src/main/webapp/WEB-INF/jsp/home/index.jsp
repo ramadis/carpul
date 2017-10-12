@@ -30,7 +30,7 @@
 
       <h2 class="subtitle">Are you ready? Where next?</h2>
 
-      <form:form method="post" modelAttribute="searchForm" action="/webapp/search">
+      <form:form method="post" modelAttribute="searchForm" action="search">
         <div class="searchbar">
           <spring:bind path="from">
             <label class="searchbar-label" for="from">From</label>

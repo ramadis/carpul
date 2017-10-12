@@ -13,7 +13,7 @@
   </head>
   <body class="flex-center">
 
-    <form:form method="post" modelAttribute="userForm" action="/webapp${loginUserURI}" class="user-form">
+    <form:form method="post" modelAttribute="userForm" action="${loginUserURI}" class="user-form">
         <div class="top-border"></div>
         <div class="text-container">
           <span>carpul</span>
