@@ -25,6 +25,14 @@
   margin-bottom: 20px;
 }
 
+.new-trip-form h2 {
+  font-size: 16px;
+  font-weight: 100;
+  margin: 0;
+  color: rgba(0,0,0,.8);
+  margin-bottom: 20px;
+}
+
 .destinys-container {
   box-sizing: border-box;
   min-width: 370px;
@@ -32,7 +40,13 @@
   padding-top: 40px;
 }
 
-.destinys-container h3 {
+.reviews-container {
+  padding: 20px;
+  padding-top: 40px;
+  padding-left: 30px;
+}
+
+.destinys-container h3, .reviews-container h3 {
   font-size: 25px;
   font-weight: 100;
   margin: 0;
@@ -86,6 +100,23 @@
   background-size: cover;
   background-color: rgba(0,0,0,.2);
   background-blend-mode: darken;
+}
+
+.past-item {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.review-button {
+  margin-top: 20px;
+  display: block;
+  max-width: 130px;
+  cursor: pointer;
+}
+
+.review-button:hover {
+  background-color: #e36f4a;
 }
 
 .trip-item {

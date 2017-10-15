@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.models.Search;
 
 @Controller
-public class HelloWorldController extends AuthController {
+public class HomeController extends AuthController {
 	@RequestMapping("/")
 	public ModelAndView home(Model model) {
 		Search search = new Search();

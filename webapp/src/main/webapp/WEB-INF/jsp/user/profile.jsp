@@ -17,6 +17,7 @@
   <link href="<c:url value='/static/css/pool_list.css' />" rel="stylesheet" type="text/css" />
   <link href="<c:url value='/static/css/profile_hero.css' />" rel="stylesheet" type="text/css" />
   <link href="<c:url value='/static/css/profile.css' />" rel="stylesheet" type="text/css" />
+  <link href="<c:url value='/static/css/review_item.css' />" rel="stylesheet" type="text/css" />
 
 <title>Carpul | ${user.first_name} ${user.last_name} is awesome</title>
 </head>
@@ -26,8 +27,21 @@
   <%@ include file="/WEB-INF/jsp/common/hero.jsp" %>
 
   <section class="profile-container">
-    <c:if test="${not empty reservations or not empty trips}">
+    <c:if test="${not empty reservations or not empty trips or not empty reviews}">
+
       <section class="reviews-container">
+        <c:if test="${not empty reviews}">
+          <h3>People are talking about you</h3>
+
+          <ul class="no-bullets destiny-list">
+            <c:forEach items="${reviews}" var="review">
+              <%@ include file="../review/item.jsp" %>
+            </c:forEach>
+          </ul>
+        </c:if>
+        <c:if test="${empty reviews}">
+          <h3>People are not talking about you yet :(</h3>
+        </c:if>
       </section>
 
       <section class="destinys-container">
@@ -38,7 +52,7 @@
         <c:if test="${not empty reservations}">
           <ul class="no-bullets destiny-list">
             <c:forEach items="${reservations}" var="reservation">
-              <%@ include file="destiny.jsp" %>
+              <%@ include file="trip-past.jsp" %>
             </c:forEach>
           </ul>
         </c:if>

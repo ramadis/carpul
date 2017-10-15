@@ -28,7 +28,7 @@
             </spring:bind>
             <spring:bind path="password">
               <label class="field-label" for="password">Password</label>
-              <input class="field" path="password" type="text" name="password"/>
+              <input class="field" path="password" type="password" name="password"/>
             </spring:bind>
           </div>
           <div class="actions">

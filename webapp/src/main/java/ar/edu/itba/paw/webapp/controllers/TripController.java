@@ -27,7 +27,7 @@ public class TripController extends AuthController {
 		User loggedUser = user();
 		model.addAttribute("user", loggedUser);
 		model.addAttribute("tripForm", trip);
-		final ModelAndView mav = new ModelAndView("trips/trips");
+		final ModelAndView mav = new ModelAndView("trips/add");
 		return mav;
 	}
 	

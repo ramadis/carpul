@@ -1,0 +1,75 @@
+.review-item-container {
+  display: flex;
+}
+
+.review-item-container img {
+  margin-right: 10px;
+}
+
+.review-meta {
+  font-size: 12px;
+  color: #ADADAD;
+}
+
+.review-message {
+  color: #5a5a5a;
+}
+
+.review-item-container .inline {
+  display: inline;
+}
+
+.stars-1 {
+  background: url('../images/star.png');
+  background-repeat: no-repeat;
+  background-position: 0 top;
+  height: 12px;
+  width: 100px;
+  margin-bottom: 5px;
+}
+
+.stars-2 {
+  background: url('../images/star.png'),url('../images/star.png');
+  background-repeat: no-repeat, no-repeat;
+  background-position: 0 top,
+                     12px top;
+  height: 12px;
+  width: 100px;
+  margin-bottom: 5px;
+}
+
+.stars-3 {
+  background: url('../images/star.png'),url('../images/star.png'),url('../images/star.png');
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: 0 top,
+                     12px top,
+                     24px top;
+  height: 12px;
+  width: 100px;
+  margin-bottom: 5px;
+}
+
+.stars-4 {
+  background: url('../images/star.png'),url('../images/star.png'),url('../images/star.png'),url('../images/star.png');
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-position: 0 top,
+                     12px top,
+                     24px top,
+                     36px top;
+  height: 12px;
+  width: 100px;
+  margin-bottom: 5px;
+}
+
+.stars-5 {
+  background: url('../images/star.png'),url('../images/star.png'),url('../images/star.png'),url('../images/star.png'),url('../images/star.png');
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  background-position: 0 top,
+                     12px top,
+                     24px top,
+                     36px top,
+                     48px top;
+  height: 12px;
+  width: 100px;
+  margin-bottom: 5px;
+}

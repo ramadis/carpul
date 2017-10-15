@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import ar.edu.itba.paw.interfaces.ReviewService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.User;
 
@@ -19,11 +20,13 @@ public class UserController extends AuthController {
 
 	@Autowired
 	private UserService us;
+	
+	@Autowired
+	private ReviewService rs;
 
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public ModelAndView registerUserView(Model model) {
-		User user = new User("asdf", "asdf");
-		model.addAttribute("userForm", user);
+		model.addAttribute("userForm", new User());
 		final ModelAndView mav = new ModelAndView("user/register");
 		mav.addObject("registerUserURI", "user");
 		mav.addObject("loginUserURI", "login");
@@ -43,15 +46,18 @@ public class UserController extends AuthController {
 	@RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
 	public ModelAndView getUserView(@PathVariable("userId") final Integer userId) {
 		final ModelAndView mav = new ModelAndView("user/profile");
+		User user = us.getById(userId);
 		User loggedUser = user();
+		
+		// Handle profile != to loggedUser
 		if (loggedUser.getId() != userId) {
-			User user = us.getById(userId);
 			final ModelAndView mav_other = new ModelAndView("user/profile-other");
 			mav_other.addObject("user", user);
 			mav_other.addObject("trips", us.getUserTrips(user));
 			return mav_other;
 		}
 		mav.addObject("trips", us.getUserTrips(loggedUser));
+		mav.addObject("reviews", rs.getReviews(user));
 		mav.addObject("reservations", us.getReservedTrips(loggedUser));
 		mav.addObject("user", loggedUser);
 		return mav;
