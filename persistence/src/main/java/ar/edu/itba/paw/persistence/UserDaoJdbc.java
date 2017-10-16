@@ -37,8 +37,8 @@ public class UserDaoJdbc implements UserDao {
 		try {
 			trip.setId(rs.getInt("id"));
 			trip.setCreated(rs.getTimestamp("created"));
-			trip.setEtd(rs.getString("etd"));
-			trip.setEta(rs.getString("eta"));
+			trip.setEtd(rs.getTimestamp("etd"));
+			trip.setEta(rs.getTimestamp("eta"));
 			trip.setCost(rs.getDouble("cost"));
 			trip.setSeats(rs.getInt("seats"));
 			trip.setFrom_city(rs.getString("from_city"));

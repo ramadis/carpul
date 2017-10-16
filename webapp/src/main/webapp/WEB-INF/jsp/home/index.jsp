@@ -17,6 +17,10 @@
   <link href="<c:url value='/static/css/css.css' />" rel="stylesheet" type="text/css" />
   <link href="<c:url value='/static/css/pool_list.css' />" rel="stylesheet" type="text/css" />
   <link href="<c:url value='/static/css/home.css' />" rel="stylesheet" type="text/css" />
+  <link href="<c:url value='/static/css/datetime.component.css' />" rel="stylesheet" type="text/css" />
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="<c:url value='/static/js/datetime.component.js' />" charset="utf-8"></script>
 </head>
 <body>
   <%@ include file="/WEB-INF/jsp/common/navbar.jsp" %>
@@ -34,17 +38,18 @@
         <div class="searchbar">
           <spring:bind path="from">
             <label class="searchbar-label" for="from">From</label>
-            <input class="searchbar-input" placeholder="Origin" path="from" type="text" name="from" value="" tabindex="0">
+            <input class="searchbar-input" placeholder="Origin" path="from" type="text" name="from" value="" tabindex="0"/>
           </spring:bind>
 
           <spring:bind path="to">
             <label class="searchbar-label" for="to">To</label>
-            <input class="searchbar-input" placeholder="Destination" path="to" type="text" name="to" value="" tabindex="0">
+            <input class="searchbar-input" placeholder="Destination" path="to" type="text" name="to" value="" tabindex="0"/>
           </spring:bind>
 
           <spring:bind path="when">
             <label class="searchbar-label" for="when">On</label>
-            <input class="searchbar-input" placeholder="Time range" path="when" type="text" name="when" value="" tabindex="0">
+            <input class="searchbar-input" id="when" placeholder="Time range" type="text" value="" tabindex="0"/>
+            <form:input class="searchbar-input hide" path="when" type="text" name="when" value="" tabindex="0"/>
           </spring:bind>
 
           <button type="submit" class="login-button searchbar-button" name="button">Search</button>
@@ -52,5 +57,8 @@
       </form:form>
     </div>
   </div>
+
+  <script src="<c:url value='/static/js/search_time.js' />" charset="utf-8"></script>
+
 </body>
 </html>

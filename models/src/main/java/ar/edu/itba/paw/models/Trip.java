@@ -8,8 +8,12 @@ public class Trip {
 	private Integer id;
 	private Integer driver_id;
 	private Integer car_id;
-	private String etd;
-	private String eta;
+	
+	//TODO: Remove those ugly temp properties
+	private Long etd_temp;
+	private Timestamp etd;
+	private Timestamp eta;
+	private Long eta_temp;
 	private String from_city;
 	private String to_city;
 	private Double cost;
@@ -27,11 +31,6 @@ public class Trip {
 	private User driver;
 	
 	public Trip() {}
-	
-	public Trip(String etd, String eta) {
-		this.etd = etd;
-		this.eta = eta;
-	}
 	
 	public void addPassenger(User p) {
 		passengers.add(p);
@@ -96,26 +95,6 @@ public class Trip {
 
 	public void setCar_id(Integer car_id) {
 		this.car_id = car_id;
-	}
-
-
-	public String getEtd() {
-		return etd;
-	}
-
-
-	public void setEtd(String etd) {
-		this.etd = etd;
-	}
-
-
-	public String getEta() {
-		return eta;
-	}
-
-
-	public void setEta(String eta) {
-		this.eta = eta;
 	}
 
 
@@ -224,5 +203,43 @@ public class Trip {
 
 	public void setCost_per_person(Double cost_per_person) {
 		this.cost_per_person = cost_per_person;
+	}
+
+	public Timestamp getEtd() {
+		return etd;
+	}
+
+	public void setEtd(Timestamp etd) {
+		this.etd = etd;
+	}
+	
+	public void setEtd(Integer etd) {
+		this.etd = new Timestamp(etd);
+	}
+
+	public Timestamp getEta() {
+		return eta;
+	}
+
+	public void setEta(Timestamp eta) {
+		this.eta = eta;
+	}
+
+	public Long getEtd_temp() {
+		return etd_temp;
+	}
+
+	public void setEtd_temp(Long etd_temp) {
+		this.setEtd(new Timestamp(etd_temp));
+		this.etd_temp = etd_temp;
+	}
+
+	public Long getEta_temp() {
+		return eta_temp;
+	}
+
+	public void setEta_temp(Long eta_temp) {
+		this.setEta(new Timestamp(eta_temp));
+		this.eta_temp = eta_temp;
 	}
 }

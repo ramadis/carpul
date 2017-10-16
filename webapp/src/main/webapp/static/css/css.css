@@ -25,6 +25,10 @@ input[readonly] {
 	padding-left: 0;
 }
 
+.hide {
+	display: none;
+}
+
 body {
 	background: #e36f4a;
 	flex-direction: column;

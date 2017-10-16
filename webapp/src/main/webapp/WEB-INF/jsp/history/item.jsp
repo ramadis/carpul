@@ -13,7 +13,7 @@
         <c:set var="message" value="unreserved"/>
         <c:set var="validation_message" value="Bummer :("/>
     </c:if>
-    <span class="review-message">${history.related.first_name} just ${message} your trip to ${history.trip.to_city} on ${history.trip.etd}. ${validation_message} </span>
+    <span class="review-message">${history.related.first_name} just ${message} your trip to ${history.trip.to_city} on <fmt:formatDate value="${history.trip.etd}" pattern="dd/MM/yyyy"/>. ${validation_message} </span>
     <span class="review-meta">Happened on <fmt:formatDate value="${date}" pattern="dd/MM/yyyy HH:mm"/></span>
 
   </div>

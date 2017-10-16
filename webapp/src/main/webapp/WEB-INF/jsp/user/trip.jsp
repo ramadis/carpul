@@ -7,8 +7,8 @@
       <span class="destiny-cost">Earning <span class="bold" style="display: inline;">$${trip.cost}</span></span>
     </c:if>
     <span class="destiny-name">${trip.to_city}</span>
-    <span class="destiny-time">Depart from ${trip.from_city} on {Sunday} at ${trip.etd}</span>
-    <span class="destiny-time">Arrive on ${trip.to_city} on {Sunday} at ${trip.eta}</span>
+    <span class="destiny-time">Depart from ${trip.from_city} on <fmt:formatDate value="${trip.etd}" pattern="dd/MM/yyyy"/> at <fmt:formatDate value="${trip.etd}" pattern="HH:mm"/></span>
+    <span class="destiny-time">Arrive on ${trip.to_city} on <fmt:formatDate value="${trip.eta}" pattern="dd/MM/yyyy"/> at <fmt:formatDate value="${trip.eta}" pattern="HH:mm"/></span>
     <button class="destiny-unreserve-button">Delete trip</button>
     <c:if test="${not empty trip.passengers}">
       <hr>

@@ -27,7 +27,7 @@ public class TripDaoJdbc implements TripDao {
 		/* TODO: export table name as a private final String */
 		/* TODO: export table creation as a private final String */
 		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips_users (id serial PRIMARY KEY, created timestamp, trip_id integer, user_id integer)");
-		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips (id serial PRIMARY KEY, to_city varchar(100), from_city varchar(100), created timestamp, seats integer, driver_id integer, cost real, eta varchar(100), etd varchar(100), departure_gps varchar (300), arrival_gps varchar (300)");
+		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips (id serial PRIMARY KEY, to_city varchar(100), from_city varchar(100), created timestamp, seats integer, driver_id integer, cost real, eta timestamp, etd timestamp, departure_gps varchar(300), arrival_gps varchar(300));");
 	}
 	
 	private String stripAccents(String s) 
@@ -66,9 +66,9 @@ public class TripDaoJdbc implements TripDao {
 				Trip trip = new Trip();
 				
 				trip.setId(rs.getInt("id"));
-				trip.setEtd(rs.getString("etd"));
+				trip.setEtd(rs.getTimestamp("etd"));
 				
-				trip.setEta(rs.getString("eta"));
+				trip.setEta(rs.getTimestamp("eta"));
 				//trip.addPassenger(rs.getInt("user_id"));
 				trip.setCost(rs.getDouble("cost"));
 				trip.setReserved(passengerId.equals(rs.getInt("trips_users.user_id")));
@@ -92,16 +92,18 @@ public class TripDaoJdbc implements TripDao {
 		
 		String newFrom = stripAccents(from);
 		String newTo = stripAccents(to);
+	    try{
+	    	
 	    
 	    
-		this.jdbcTemplate.query("SELECT first_name, last_name, phone_number, trips.*, temp.reserved as is_reserved FROM trips JOIN users ON trips.driver_id = users.id LEFT OUTER JOIN (SELECT id as reserved, trip_id as relation_trip_id FROM trips_users WHERE user_id = ?) as temp ON relation_trip_id = trips.id WHERE driver_id <> ? AND LOWER(from_city) LIKE '?%' AND LOWER(to_city) LIKE '?%'", new Object[] { user.getId(), user.getId(), newFrom, newTo }, (final ResultSet rs) -> {
+		this.jdbcTemplate.query("SELECT first_name, last_name, phone_number, trips.*, temp.reserved as is_reserved FROM trips JOIN users ON trips.driver_id = users.id LEFT OUTER JOIN (SELECT id as reserved, trip_id as relation_trip_id FROM trips_users WHERE user_id = ?) as temp ON relation_trip_id = trips.id WHERE driver_id <> ? AND LOWER(from_city) LIKE ? AND LOWER(to_city) LIKE ?", new Object[] { user.getId(), user.getId(), newFrom, newTo }, (final ResultSet rs) -> {
 			do {
 				Trip trip = new Trip();
 				
 				trip.setId(rs.getInt("id"));
 				trip.setCreated(rs.getTimestamp("created"));
-				trip.setEtd(rs.getString("etd"));
-				trip.setEta(rs.getString("eta"));
+				trip.setEtd(rs.getTimestamp("etd"));
+				trip.setEta(rs.getTimestamp("eta"));
 				trip.setCost(rs.getDouble("cost"));
 				trip.setReserved(rs.getInt("is_reserved") != 0);
 				trip.setSeats(rs.getInt("seats"));
@@ -131,6 +133,10 @@ public class TripDaoJdbc implements TripDao {
 		});
 
 		return trips;
+	    } catch(Throwable e) {
+	    		System.out.println(e);
+	    		return null;
+	    }
 	}
 	
 	public List<Trip> findAll(User user) {
@@ -141,8 +147,8 @@ public class TripDaoJdbc implements TripDao {
 				
 				trip.setId(rs.getInt("id"));
 				trip.setCreated(rs.getTimestamp("created"));
-				trip.setEtd(rs.getString("etd"));
-				trip.setEta(rs.getString("eta"));
+				trip.setEtd(rs.getTimestamp("etd"));
+				trip.setEta(rs.getTimestamp("eta"));
 				trip.setCost(rs.getDouble("cost"));
 				trip.setReserved(rs.getInt("is_reserved") != 0);
 				trip.setFrom_city(rs.getString("from_city"));
@@ -172,8 +178,8 @@ public class TripDaoJdbc implements TripDao {
 		this.jdbcTemplate.query("SELECT * FROM trips LEFT OUTER JOIN users ON driver_id = users.id  WHERE trips.id = ? LIMIT 1", new Object[] {tripId}, (final ResultSet rs) -> {
 			trip.setId(rs.getInt("id"));
 			trip.setCreated(rs.getTimestamp("created"));
-			trip.setEtd(rs.getString("etd"));
-			trip.setEta(rs.getString("eta"));
+			trip.setEtd(rs.getTimestamp("etd"));
+			trip.setEta(rs.getTimestamp("eta"));
 			trip.setCost(rs.getDouble("cost"));
 			trip.setSeats(rs.getInt("seats"));
 			trip.setFrom_city(rs.getString("from_city"));
