@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,14 @@ public class TripDaoJdbc implements TripDao {
 		/* TODO: export table name as a private final String */
 		/* TODO: export table creation as a private final String */
 		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips_users (id serial PRIMARY KEY, created timestamp, trip_id integer, user_id integer)");
-		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips (id serial PRIMARY KEY, to_city varchar(100), from_city varchar(100), created timestamp, seats integer, driver_id integer, cost real, eta varchar(100), etd varchar(100))");
+		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips (id serial PRIMARY KEY, to_city varchar(100), from_city varchar(100), created timestamp, seats integer, driver_id integer, cost real, eta varchar(100), etd varchar(100), departure_gps varchar (300), arrival_gps varchar (300)");
+	}
+	
+	private String stripAccents(String s) 
+	{
+	    s = Normalizer.normalize(s, Normalizer.Form.NFD);
+	    s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+	    return s;
 	}
 	
 	public Trip create(Trip trip, User driver) {
@@ -81,7 +89,12 @@ public class TripDaoJdbc implements TripDao {
 	public List<Trip> findByRoute(User user, String from, String to) {
 		List<Trip> trips = new ArrayList<>();
 		System.out.println("from " + from + " to " + to);
-		this.jdbcTemplate.query("SELECT first_name, last_name, phone_number, trips.*, temp.reserved as is_reserved FROM trips JOIN users ON trips.driver_id = users.id LEFT OUTER JOIN (SELECT id as reserved, trip_id as relation_trip_id FROM trips_users WHERE user_id = ?) as temp ON relation_trip_id = trips.id WHERE driver_id <> ? AND LOWER(from_city) LIKE ? AND LOWER(to_city) LIKE ?", new Object[] { user.getId(), user.getId(), from, to }, (final ResultSet rs) -> {
+		
+		String newFrom = stripAccents(from);
+		String newTo = stripAccents(to);
+	    
+	    
+		this.jdbcTemplate.query("SELECT first_name, last_name, phone_number, trips.*, temp.reserved as is_reserved FROM trips JOIN users ON trips.driver_id = users.id LEFT OUTER JOIN (SELECT id as reserved, trip_id as relation_trip_id FROM trips_users WHERE user_id = ?) as temp ON relation_trip_id = trips.id WHERE driver_id <> ? AND LOWER(from_city) LIKE '?%' AND LOWER(to_city) LIKE '?%'", new Object[] { user.getId(), user.getId(), newFrom, newTo }, (final ResultSet rs) -> {
 			do {
 				Trip trip = new Trip();
 				

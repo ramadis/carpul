@@ -7,6 +7,12 @@
   <head>
     <meta charset="utf-8">
     <title>Carpul | Add a destiny </title>
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.min.js"
+      integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+      crossorigin="anonymous"></script>
+    <script src="https://maps.google.com/maps/api/js?key=AIzaSyCKIU4-Ijaeex54obPySJ7kXLwLnrV5BRA"></script>
+    <script src="<c:url value='/static/js/gmaps.js' />" charset="utf-8"></script>
     <link href="<c:url value='/static/css/css.css' />" rel="stylesheet" type="text/css" />
     <link href="<c:url value='/static/css/pool_list.css' />" rel="stylesheet" type="text/css" />
     <link href="<c:url value='/static/css/profile_hero.css' />" rel="stylesheet" type="text/css" />
@@ -21,15 +27,20 @@
     <div class="profile-form-container flex-center">
       <form:form method="post" class="new-trip-form" modelAttribute="tripForm" action="trip">
         <h3>Add a new trip</h3>
+
+        <div id="map" style="width=100%; height: 400px; margin: 10px 0;">
+
+        </div>
+
         <div class="field-container">
           <spring:bind path="from_city">
               <label class="field-label" for="from_city">Departure city</label>
-              <form:input required="required" class="field" name="from_city" path="from_city" min="0" type="text" />
+              <form:input required="required" class="field" readonly="true" name="from_city" path="from_city" min="0" type="text" />
           </spring:bind>
 
           <spring:bind path="to_city">
               <label class="field-label" for="to_city">Arrival city</label>
-              <form:input required="required" class="field" name="to_city" path="to_city" min="0" type="text" />
+              <form:input required="required" readonly="true" class="field" name="to_city" path="to_city" min="0" type="text" />
           </spring:bind>
 
           <spring:bind path="seats">
@@ -52,10 +63,12 @@
             <form:input class="field" path="eta" type="text" name="eta"/>
           </spring:bind>
         </div>
-        <div class="actions">
+        <div class="actions" style="margin-bottom: 10px;">
           <button type="submit" class="login-button">Start the adventure!</button>
         </div>
       </form:form>
     </div>
+
+    <script src="<c:url value='/static/js/dynamic.js' />" charset="utf-8"></script>
   </body>
 </html>

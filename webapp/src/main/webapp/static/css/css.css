@@ -19,6 +19,12 @@ a {
 	align-items: center;
 }
 
+input[readonly] {
+	border: none;
+	background: transparent;
+	padding-left: 0;
+}
+
 body {
 	background: #e36f4a;
 	flex-direction: column;
