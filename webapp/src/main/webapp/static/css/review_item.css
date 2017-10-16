@@ -1,5 +1,6 @@
 .review-item-container {
   display: flex;
+  margin-bottom: 20px;
 }
 
 .review-item-container img {
@@ -9,6 +10,11 @@
 .review-meta {
   font-size: 12px;
   color: #ADADAD;
+}
+
+.history-content {
+  max-width: 15vw;
+  line-height: 20px;
 }
 
 .review-message {

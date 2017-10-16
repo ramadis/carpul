@@ -28,7 +28,9 @@ public class UserDaoJdbc implements UserDao {
 			user.setLast_name(rs.getString("last_name"));
 			user.setPhone_number(rs.getString("phone_number"));
 			user.setId(rs.getInt("id"));
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 	
 	public void loadResultIntoTrip(ResultSet rs, Trip trip) {
@@ -134,11 +136,6 @@ public class UserDaoJdbc implements UserDao {
 	}
 	
 	public User findById(final Integer userId) {
-		User user = new User();
-		this.jdbcTemplate.query("SELECT * FROM users WHERE id = ? LIMIT 1", new Object[] {user.getId()}, (final ResultSet rs) -> {
-			this.loadResultIntoUser(rs, user);
-		});
-
-		return user;
+		return this.getById(userId);
 	}
 }

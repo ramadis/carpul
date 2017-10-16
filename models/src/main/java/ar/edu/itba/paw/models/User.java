@@ -72,7 +72,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User = " + username;
+		return "User = " + first_name;
 	}
 
 	public Timestamp getCreated() {

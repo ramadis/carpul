@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import ar.edu.itba.paw.interfaces.HistoryService;
 import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
@@ -25,6 +26,9 @@ public class SearchController extends AuthController {
 
 	@Autowired
 	private TripService ts;
+	
+	@Autowired
+	private HistoryService hs;
 	
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public ModelAndView searchAllView(@RequestParam("from") String from, @RequestParam("to") String to) {
@@ -63,8 +67,11 @@ public class SearchController extends AuthController {
 	
 	@RequestMapping(value = "/reserve/{tripId}", method = RequestMethod.POST)
 	public String reserveTrip(@PathVariable("tripId") final Integer tripId) {
+		
 		User loggedUser = user();
 		ts.reserve(tripId, loggedUser);
+		
+		hs.addHistory(loggedUser, tripId, "RESERVE");
 		return "redirect:/user/" + loggedUser.getId();
 	}
 	
@@ -72,6 +79,7 @@ public class SearchController extends AuthController {
 	public String unreserveTrip(@PathVariable("tripId") final Integer tripId) {
 		User loggedUser = user();
 		ts.unreserve(tripId, loggedUser);
+		hs.addHistory(loggedUser, tripId, "UNRESERVE");
 		return "redirect:/user/" + loggedUser.getId();
 	}
 }

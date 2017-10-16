@@ -10,6 +10,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -45,6 +47,18 @@
       </section>
 
       <section class="destinys-container">
+        <c:if test="${not empty histories}">
+          <h3>News about your trips!</h3>
+
+          <ul class="no-bullets destiny-list">
+            <c:forEach items="${histories}" var="history">
+              <%@ include file="../history/item.jsp" %>
+            </c:forEach>
+          </ul>
+        </c:if>
+      </section>
+
+      <section class="destinys-container">
         <h3>What's next</h3>
 
         <a class="no-margin login-button" href="<c:url value='/' />">Going somewhere? Find a trip</a>
@@ -52,7 +66,7 @@
         <c:if test="${not empty reservations}">
           <ul class="no-bullets destiny-list">
             <c:forEach items="${reservations}" var="reservation">
-              <%@ include file="trip-past.jsp" %>
+              <%@ include file="destiny.jsp" %>
             </c:forEach>
           </ul>
         </c:if>

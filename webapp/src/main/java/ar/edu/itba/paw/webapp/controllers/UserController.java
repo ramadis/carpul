@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import ar.edu.itba.paw.interfaces.HistoryService;
 import ar.edu.itba.paw.interfaces.ReviewService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.User;
@@ -23,6 +24,9 @@ public class UserController extends AuthController {
 	
 	@Autowired
 	private ReviewService rs;
+	
+	@Autowired
+	private HistoryService hs;
 
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public ModelAndView registerUserView(Model model) {
@@ -53,12 +57,16 @@ public class UserController extends AuthController {
 		if (loggedUser.getId() != userId) {
 			final ModelAndView mav_other = new ModelAndView("user/profile-other");
 			mav_other.addObject("user", user);
+			mav.addObject("reviews", rs.getReviews(user));
 			mav_other.addObject("trips", us.getUserTrips(user));
 			return mav_other;
 		}
+		
+		// Load objects to view
 		mav.addObject("trips", us.getUserTrips(loggedUser));
 		mav.addObject("reviews", rs.getReviews(user));
 		mav.addObject("reservations", us.getReservedTrips(loggedUser));
+		mav.addObject("histories", hs.getHistories(loggedUser));
 		mav.addObject("user", loggedUser);
 		return mav;
 	}
