@@ -20,9 +20,10 @@ public abstract class AuthController {
 	private UserService us;
 	
 	@ExceptionHandler(value = Exception.class)
-    public String redirectToErrorPage(){
-        return "redirect:/errors";
-    }
+    public String redirectToErrorPage(Exception ex) {
+        System.out.println("Request: raised " + ex);
+        return "redirect:/error/500";
+      }
 	
 	@ModelAttribute
 	public User user() {

@@ -21,6 +21,8 @@
     <org.postgresql>9.4-1200-jdbc41</org.postgresql>
     <spring.security.version>4.0.4.RELEASE</spring.security.version>
 	  <servlet-api.version>2.5</servlet-api.version>
+    <javax.validation-api.version>1.0.0.GA</javax.validation-api.version>
+    <org.hibernate.validator>4.3.1.Final</org.hibernate.validator>
     <jstl.version>1.2</jstl.version>
     <org.hsqldb.version>2.3.1</org.hsqldb.version>
     <joda.time.version>2.9.9</joda.time.version>
@@ -60,6 +62,18 @@
         <groupId>org.springframework</groupId>
         <artifactId>spring-context</artifactId>
         <version>${org.springframework.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>javax.validation</groupId>
+        <artifactId>validation-api</artifactId>
+        <version>${javax.validation-api.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-validator</artifactId>
+        <version>${org.hibernate.validator}</version>
       </dependency>
 
       <dependency>

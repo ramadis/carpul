@@ -19,6 +19,14 @@ body {
 	flex-direction: column;
 }
 
+.form-error {
+	color: #e85252;
+	font-size: 12px;
+	margin: 0;
+	margin-top: 5px;
+	padding-left: 5px;
+}
+
 .user-form {
 	position: relative;
 	padding: 40px 45px;

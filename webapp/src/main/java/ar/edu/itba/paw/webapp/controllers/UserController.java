@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,12 +11,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ar.edu.itba.paw.interfaces.HistoryService;
 import ar.edu.itba.paw.interfaces.ReviewService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.forms.UserCreateForm;
 
 @Controller
 public class UserController extends AuthController {
@@ -27,10 +29,24 @@ public class UserController extends AuthController {
 	
 	@Autowired
 	private HistoryService hs;
-
+	
+	@RequestMapping(value = "/user", method = RequestMethod.POST)
+	public ModelAndView registerUser(@Valid @ModelAttribute("userCreateForm") final UserCreateForm form,
+							  final BindingResult errors) {
+		// Check for form errors
+		if (errors.hasErrors()) return registerUserView(form);
+		
+		// Register new user
+		us.register(form.getUser());
+		
+		// Redirect to login view
+		return new ModelAndView("redirect:/login");
+	}
+	
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
-	public ModelAndView registerUserView(Model model) {
-		model.addAttribute("userForm", new User());
+	public ModelAndView registerUserView(@ModelAttribute("userCreateForm") final UserCreateForm form) {
+		
+		// Expose view
 		final ModelAndView mav = new ModelAndView("user/register");
 		mav.addObject("registerUserURI", "user");
 		mav.addObject("loginUserURI", "login");
@@ -41,7 +57,7 @@ public class UserController extends AuthController {
 	public ModelAndView loginView(Model model) {
 		User user = new User();
 		model.addAttribute("userForm", user);
-		final ModelAndView mav = new ModelAndView("login");
+		final ModelAndView mav = new ModelAndView("user/login");
 		mav.addObject("loginUserURI", "login");
 		mav.addObject("registerUserURI", "user");
 		return mav;
@@ -69,13 +85,5 @@ public class UserController extends AuthController {
 		mav.addObject("histories", hs.getHistories(loggedUser));
 		mav.addObject("user", loggedUser);
 		return mav;
-	}
-
-	@RequestMapping(value = "/user", method = RequestMethod.POST)
-	public String registerUser(@ModelAttribute("userForm") User user,
-			BindingResult result, Model model,
-			final RedirectAttributes redirectAttribute) {
-		us.register(user);
-		return "redirect:/login";
 	}
 }
