@@ -1,12 +1,3 @@
-<%-- Comments so as to know from where the variables come from --%>
-<%--@elvariable id="user" type="ar.edu.itba.paw.models.User"--%>
-<%--@elvariable id="greeting" type="ar.edu.itba.paw.webapp.controllers.HelloWorldController"--%>
-
-<%--
-    This was the one Sotuyo gave us. The second one is the recommended one.
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
---%>
-
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -36,25 +27,23 @@
 
       <form:form method="post" modelAttribute="searchForm" action="search">
         <div class="searchbar">
-          <spring:bind path="from">
-            <label class="searchbar-label" for="from">From</label>
-            <input class="searchbar-input" placeholder="Origin" path="from" type="text" name="from" value="" tabindex="0"/>
-          </spring:bind>
+          <form:label path="from" class="searchbar-label" for="from">From</form:label>
+          <form:input class="searchbar-input" placeholder="Origin" path="from" type="text" name="from" value="" tabindex="0"/>
+          <form:errors path="from" class="form-error" element="p"/>
 
-          <spring:bind path="to">
-            <label class="searchbar-label" for="to">To</label>
-            <input class="searchbar-input" placeholder="Destination" path="to" type="text" name="to" value="" tabindex="0"/>
-          </spring:bind>
+          <form:label path="to" class="searchbar-label" for="to">To</form:label>
+          <form:input class="searchbar-input" placeholder="Destination" path="to" type="text" name="to" value="" tabindex="1"/>
+          <form:errors path="to" class="form-error" element="p"/>
 
-          <spring:bind path="when">
-            <label class="searchbar-label" for="when">On</label>
-            <input class="searchbar-input" id="when" placeholder="Time range" type="text" value="" tabindex="0"/>
-            <form:input class="searchbar-input hide" path="when" type="text" name="when" value="" tabindex="0"/>
-          </spring:bind>
+          <form:label path="when" class="searchbar-label" for="when">On</form:label>
+          <input class="searchbar-input" id="when" placeholder="Time range" type="text" value="" tabindex="2"/>
+          <form:input class="searchbar-input hide" path="when" type="text" name="when" value="" tabindex="-1"/>
+          <form:errors path="from" class="form-error" element="p"/>
 
           <button type="submit" class="login-button searchbar-button" name="button">Search</button>
         </div>
       </form:form>
+
     </div>
   </div>
 

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.TripDao;
+import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 
@@ -86,8 +87,10 @@ public class TripDaoJdbc implements TripDao {
 		return trips;
 	}
 	
-	public List<Trip> findByRoute(User user, String from, String to) {
+	public List<Trip> findByRoute(User user, Search search) {
 		List<Trip> trips = new ArrayList<>();
+		String from = search.getFrom();
+		String to = search.getTo();
 		System.out.println("from " + from + " to " + to);
 		
 		String newFrom = stripAccents(from);

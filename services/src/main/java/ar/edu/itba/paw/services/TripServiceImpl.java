@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ar.edu.itba.paw.interfaces.TripService;
+import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 
@@ -45,7 +46,7 @@ public class TripServiceImpl implements TripService {
 		tripDao.delete(tripId, user);
 	}
 	
-	public List<Trip> findByRoute(User user, String from, String to) {
-		return tripDao.findByRoute(user, from, to);
+	public List<Trip> findByRoute(User user, Search search) {
+		return tripDao.findByRoute(user, search);
 	}
 }
