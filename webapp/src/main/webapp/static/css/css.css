@@ -19,6 +19,16 @@ a {
 	align-items: center;
 }
 
+button[disabled] {
+	background: #a9a9a9;
+	cursor: not-allowed;
+	transition: none;
+}
+
+button[disabled]:hover {
+	background: #a9a9a9;
+}
+
 .form-error {
 	color: #e85252;
 	font-size: 12px;

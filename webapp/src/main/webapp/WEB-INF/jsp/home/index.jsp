@@ -40,7 +40,7 @@
           <form:input class="searchbar-input hide" path="when" type="text" name="when" value="" tabindex="-1"/>
           <form:errors path="from" class="form-error" element="p"/>
 
-          <button type="submit" class="login-button searchbar-button" name="button">Search</button>
+          <button type="submit" disabled class="login-button searchbar-button" name="button">Search</button>
         </div>
       </form:form>
 

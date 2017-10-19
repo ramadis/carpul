@@ -89,17 +89,14 @@ public class TripDaoJdbc implements TripDao {
 	
 	public List<Trip> findByRoute(User user, Search search) {
 		List<Trip> trips = new ArrayList<>();
-		String from = search.getFrom();
-		String to = search.getTo();
+		String from = stripAccents(search.getFrom());
+		String to = stripAccents(search.getTo());
 		System.out.println("from " + from + " to " + to);
+	    
+		String query = "SELECT first_name, last_name, phone_number, trips.*, temp.reserved as is_reserved FROM trips JOIN users ON trips.driver_id = users.id LEFT OUTER JOIN (SELECT id as reserved, trip_id as relation_trip_id FROM trips_users WHERE user_id = ?) as temp ON relation_trip_id = trips.id WHERE driver_id <> ? AND LOWER(from_city) LIKE ? AND LOWER(to_city) LIKE ?";
+		Object[] params = new Object[] { user.getId(), user.getId(), from, to };
 		
-		String newFrom = stripAccents(from);
-		String newTo = stripAccents(to);
-	    try{
-	    	
-	    
-	    
-		this.jdbcTemplate.query("SELECT first_name, last_name, phone_number, trips.*, temp.reserved as is_reserved FROM trips JOIN users ON trips.driver_id = users.id LEFT OUTER JOIN (SELECT id as reserved, trip_id as relation_trip_id FROM trips_users WHERE user_id = ?) as temp ON relation_trip_id = trips.id WHERE driver_id <> ? AND LOWER(from_city) LIKE ? AND LOWER(to_city) LIKE ?", new Object[] { user.getId(), user.getId(), newFrom, newTo }, (final ResultSet rs) -> {
+		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
 			do {
 				Trip trip = new Trip();
 				
@@ -136,10 +133,6 @@ public class TripDaoJdbc implements TripDao {
 		});
 
 		return trips;
-	    } catch(Throwable e) {
-	    		System.out.println(e);
-	    		return null;
-	    }
 	}
 	
 	public List<Trip> findAll(User user) {

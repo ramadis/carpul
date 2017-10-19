@@ -50,6 +50,8 @@ public class SearchController extends AuthController {
 		
 		// Get trips to this search
 		List<Trip> trips = ts.findByRoute(user(), search);
+		
+		System.out.println(trips);
 
 		// Expose view
 		final ModelAndView mav = new ModelAndView("search/search");
