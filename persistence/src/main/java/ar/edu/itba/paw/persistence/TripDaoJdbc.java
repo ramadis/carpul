@@ -31,38 +31,54 @@ public class TripDaoJdbc implements TripDao {
 		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips (id serial PRIMARY KEY, to_city varchar(100), from_city varchar(100), created timestamp, seats integer, driver_id integer, cost real, eta timestamp, etd timestamp, departure_gps varchar(300), arrival_gps varchar(300));");
 	}
 	
-	private String stripAccents(String s) 
-	{
+	private String stripAccents(String s) {
 	    s = Normalizer.normalize(s, Normalizer.Form.NFD);
 	    s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+	    
 	    return s;
 	}
 	
 	public Trip create(Trip trip, User driver) {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
-		jdbcTemplate.update("INSERT INTO trips (from_city, to_city, created, seats, driver_id, cost, eta, etd) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", new Object[] { trip.getFrom_city(), trip.getTo_city(), now, trip.getSeats(), driver.getId(), trip.getCost(), trip.getEta(), trip.getEtd()});
+		String query = "INSERT INTO trips (from_city, to_city, created, seats, driver_id, cost, eta, etd) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		Object[] params = new Object[] { trip.getFrom_city(), trip.getTo_city(), now, trip.getSeats(), driver.getId(), trip.getCost(), trip.getEta(), trip.getEtd() };
+		
+		jdbcTemplate.update(query, params);
 		return trip;
 	}
 	
 	public void reserveTrip(Integer tripId, User user) {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
-		jdbcTemplate.update("INSERT INTO trips_users (created, trip_id, user_id) VALUES (?, ?,?)", new Object[] { now, tripId, user.getId()});
+		String query = "INSERT INTO trips_users (created, trip_id, user_id) VALUES (?, ?,?)";
+		Object[] params = new Object[] { now, tripId, user.getId() };
+		
+		jdbcTemplate.update(query, params);
 		return;
 	}
 	
 	public void unreserveTrip(Integer tripId, User user) {
-		jdbcTemplate.update("DELETE FROM trips_users WHERE trip_id = ? AND user_id = ?", new Object[] { tripId, user.getId()});
+		String query = "DELETE FROM trips_users WHERE trip_id = ? AND user_id = ?";
+		Object[] params = new Object[] { tripId, user.getId() };
+		
+		jdbcTemplate.update(query, params);
 		return;
 	}
 	
 	public void delete(Integer tripId, User user) {
-		jdbcTemplate.update("DELETE FROM trips WHERE id = ? AND driver_id = ?", new Object[] { tripId, user.getId()});
+		String query = "DELETE FROM trips WHERE id = ? AND driver_id = ?";
+		Object[] params =new Object[] { tripId, user.getId() };
+		
+		jdbcTemplate.update(query, params);
 		return;
 	}
 	
 	public List<Trip> findByPassenger(final Integer passengerId) {
 		List<Trip> trips = new ArrayList<>();
-		this.jdbcTemplate.query("SELECT * FROM trips JOIN trips_users ON trips.id = trips_users.trip_id WHERE trips.id = ?", new Object[] {passengerId}, (final ResultSet rs) -> {
+		
+		String query = "SELECT * FROM trips JOIN trips_users ON trips.id = trips_users.trip_id WHERE trips.id = ?";
+		Object[] params = new Object[] { passengerId };
+		
+		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
 			do {
 				Trip trip = new Trip();
 				
@@ -87,14 +103,21 @@ public class TripDaoJdbc implements TripDao {
 		return trips;
 	}
 	
+	public List<Trip> findAfterDateByRoute(User user, Search search) {
+		return findByRouteWithDateComparision(user, search, ">");
+	}
+	
 	public List<Trip> findByRoute(User user, Search search) {
+		return findByRouteWithDateComparision(user, search, "=");
+	}
+	
+	private List<Trip> findByRouteWithDateComparision(User user, Search search, String comparision) {
 		List<Trip> trips = new ArrayList<>();
-		String from = stripAccents(search.getFrom());
-		String to = stripAccents(search.getTo());
-		System.out.println("from " + from + " to " + to);
+		String from = stripAccents(search.getFrom()).toLowerCase();
+		String to = stripAccents(search.getTo()).toLowerCase();
 	    
-		String query = "SELECT first_name, last_name, phone_number, trips.*, temp.reserved as is_reserved FROM trips JOIN users ON trips.driver_id = users.id LEFT OUTER JOIN (SELECT id as reserved, trip_id as relation_trip_id FROM trips_users WHERE user_id = ?) as temp ON relation_trip_id = trips.id WHERE driver_id <> ? AND LOWER(from_city) LIKE ? AND LOWER(to_city) LIKE ?";
-		Object[] params = new Object[] { user.getId(), user.getId(), from, to };
+		String query = "SELECT first_name, last_name, phone_number, trips.*, temp.reserved as is_reserved FROM trips JOIN users ON trips.driver_id = users.id LEFT OUTER JOIN (SELECT id as reserved, trip_id as relation_trip_id FROM trips_users WHERE user_id = ?) as temp ON relation_trip_id = trips.id WHERE driver_id <> ? AND LOWER(from_city) LIKE ? AND LOWER(to_city) LIKE ? AND etd::date::timestamp " + comparision + " ? ORDER BY etd ASC";
+		Object[] params = new Object[] { user.getId(), user.getId(), from, to, search.getWhen() };
 		
 		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
 			do {
@@ -137,7 +160,11 @@ public class TripDaoJdbc implements TripDao {
 	
 	public List<Trip> findAll(User user) {
 		List<Trip> trips = new ArrayList<>();
-		this.jdbcTemplate.query("SELECT first_name, last_name, phone_number, trips.*, temp.reserved as is_reserved FROM trips JOIN users ON trips.driver_id = users.id LEFT OUTER JOIN (SELECT id as reserved, trip_id as relation_trip_id FROM trips_users WHERE user_id = ?) as temp ON relation_trip_id = trips.id WHERE driver_id <> ?", new Object[] { user.getId(), user.getId() }, (final ResultSet rs) -> {
+		
+		String query = "SELECT first_name, last_name, phone_number, trips.*, temp.reserved as is_reserved FROM trips JOIN users ON trips.driver_id = users.id LEFT OUTER JOIN (SELECT id as reserved, trip_id as relation_trip_id FROM trips_users WHERE user_id = ?) as temp ON relation_trip_id = trips.id WHERE driver_id <> ?";
+		Object[] params = new Object[] { user.getId(), user.getId() };
+		
+		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
 			do {
 				Trip trip = new Trip();
 				
@@ -171,7 +198,11 @@ public class TripDaoJdbc implements TripDao {
 	
 	public Trip findById(final Integer tripId) {
 		Trip trip = new Trip();
-		this.jdbcTemplate.query("SELECT * FROM trips LEFT OUTER JOIN users ON driver_id = users.id  WHERE trips.id = ? LIMIT 1", new Object[] {tripId}, (final ResultSet rs) -> {
+		
+		String query = "SELECT * FROM trips LEFT OUTER JOIN users ON driver_id = users.id  WHERE trips.id = ? LIMIT 1";
+		Object[] params = new Object[] { tripId };
+		
+		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
 			trip.setId(rs.getInt("id"));
 			trip.setCreated(rs.getTimestamp("created"));
 			trip.setEtd(rs.getTimestamp("etd"));

@@ -10,6 +10,7 @@ public interface TripService {
 	Trip register(Trip trip, User driver);
 	Trip findById(Integer tripId);
 	List<Trip> findByRoute(User user, Search search);
+	List<Trip> findAfterDateByRoute(User user, Search search);
 	List<Trip> findByPassenger(Integer passengerId);
 	List<Trip> findAll(User user);
 	void reserve(Integer tripId, User user);

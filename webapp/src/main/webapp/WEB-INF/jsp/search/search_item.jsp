@@ -30,12 +30,17 @@
         <span class="clear gray sz-13">
           Leave from
           <span class="bold black"> ${trip.from_city}</span>
+          on
+          <span class="bold black"> <fmt:formatDate value="${trip.etd}" pattern="dd/MM/yyyy"/></span>
           at
-          <span class="bold black"> ${trip.etd}</span>
-          arrive on
+          <span class="bold black"> <fmt:formatDate value="${trip.etd}" pattern="HH:mm"/></span>
+          <br>
+          Arrive on
           <span class="bold black"> ${trip.to_city}</span>
+          on
+          <span class="bold black"> <fmt:formatDate value="${trip.eta}" pattern="dd/MM/yyyy"/></span>
           at
-          <span class="bold black"> ${trip.eta}</span>
+          <span class="bold black"> <fmt:formatDate value="${trip.eta}" pattern="HH:mm"/></span>
         </span>
         <div>
           <span class="price gray">

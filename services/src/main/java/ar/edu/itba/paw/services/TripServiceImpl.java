@@ -49,4 +49,8 @@ public class TripServiceImpl implements TripService {
 	public List<Trip> findByRoute(User user, Search search) {
 		return tripDao.findByRoute(user, search);
 	}
+	
+	public List<Trip> findAfterDateByRoute(User user, Search search) {
+		return tripDao.findAfterDateByRoute(user, search);
+	}
 }

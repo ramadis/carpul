@@ -1,6 +1,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <!DOCTYPE html>
 <html>
@@ -17,17 +18,15 @@
       <div class="destination flex align-center">
         <div class="destination-container">
           <span class="bold m-r-5">From</span>
-          <span class="clear">${from}</span>
+          <span class="clear">${search.from}</span>
         </div>
         <div class="destination-container">
           <span class="bold m-r-5">To</span>
-          <span class="clear">${to}</span>
+          <span class="clear">${search.to}</span>
         </div>
         <div class="destination-container">
           <span class="bold m-r-5">On</span>
-          <select name="on" class="clear">
-            <option value="0">This weekend</option>
-          </select>
+          <span class="clear"><fmt:formatDate value="${search.when}" pattern="dd/MM/yyyy"/></span>
         </div>
       </div>
     </div>
@@ -35,14 +34,21 @@
     <div class="list-container">
 
       <c:if test="${not empty trips}">
-        <span class="list-subtitle">These are the options to go to ${to} this weekend</span>
+        <span class="list-subtitle">These are the options to go to ${search.to} on <fmt:formatDate value="${search.when}" pattern="dd/MM/yyyy"/></span>
         <c:forEach items="${trips}" var="trip">
           <%@ include file="search_item.jsp" %>
         </c:forEach>
       </c:if>
 
-      <c:if test="${empty trips}">
-        <span class="list-subtitle">Sorry, no adventure to ${to} at this time :(</span>
+      <c:if test="${not empty later_trips}">
+        <span class="list-subtitle">These are the options to go to ${search.to} after <fmt:formatDate value="${search.when}" pattern="dd/MM/yyyy"/></span>
+        <c:forEach items="${later_trips}" var="trip">
+          <%@ include file="search_item.jsp" %>
+        </c:forEach>
+      </c:if>
+
+      <c:if test="${empty trips and empty later_trips}">
+        <span class="list-subtitle">Sorry, no adventure to ${search.to} at this time :(</span>
       </c:if>
 
 

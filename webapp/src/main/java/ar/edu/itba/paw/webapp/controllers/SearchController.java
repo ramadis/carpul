@@ -50,14 +50,13 @@ public class SearchController extends AuthController {
 		
 		// Get trips to this search
 		List<Trip> trips = ts.findByRoute(user(), search);
+		List<Trip> later_trips = ts.findAfterDateByRoute(user(), search);
 		
-		System.out.println(trips);
-
 		// Expose view
 		final ModelAndView mav = new ModelAndView("search/search");
 		mav.addObject("trips", trips);
-		mav.addObject("from", from);
-		mav.addObject("to", to);
+		mav.addObject("later_trips", later_trips);
+		mav.addObject("search", search);
 		mav.addObject("user", user());
 		return mav;
 	}
