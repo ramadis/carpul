@@ -51,19 +51,36 @@ function updateStartField(value) {
   });
 }
 
+function update(field, latlng) {
+
+  var input = {
+    'from' : 'from_city',
+    'to' : 'to_city'
+  };
+
+  var position = {
+    'from': 'etd',
+    'to': 'eta'
+  };
+
+  $("input[name=" + position[field] + "_latitude]").val(latlng.lat);
+  $("input[name=" + position[field] + "_longitude]").val(latlng.lng);
+
+  return function(results, status) {
+    if (status === 'OK' && results[1]) {
+      var result = results[1];
+      var city = result.address_components.find(function(comp) { return comp.types.includes("locality") || comp.types.includes("administrative_area_level_2") || comp.types.includes("administrative_area_level_1")});
+      $("input[name=" + input[field] + "]").val(city.long_name);
+    }
+  }
+}
+
 function updateStart(event) {
   var lat = event.latLng.lat();
   var lng = event.latLng.lng();
   var latlng = { lat: lat, lng: lng };
 
-  geocoder.geocode({'location': latlng}, function(results, status) {
-    if (status === 'OK' && results[1]) {
-      var result = results[1];
-      debugger;
-      var city = result.address_components.find(function(comp) { return comp.types.includes("locality") || comp.types.includes("administrative_area_level_2") || comp.types.includes("administrative_area_level_1")});
-      $("input[name=from_city]").val(city.long_name);
-    }
-  });
+  geocoder.geocode({'location': latlng}, update('from', latlng));
 }
 
 function updateFinish(event) {
@@ -71,13 +88,7 @@ function updateFinish(event) {
   var lng = event.latLng.lng();
   var latlng = { lat: lat, lng: lng };
 
-  geocoder.geocode({'location': latlng}, function(results, status) {
-    if (status === 'OK' && results[1]) {
-      var result = results[1];
-      var city = result.address_components.find(function(comp) { return comp.types.includes("locality")});
-      $("input[name=to_city]").val(city.long_name);
-    }
-  });
+  geocoder.geocode({'location': latlng}, update('to', latlng));
 }
 
 

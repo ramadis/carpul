@@ -8,6 +8,7 @@ import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 
+import ar.edu.itba.paw.models.Position;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
 
@@ -19,6 +20,18 @@ public class TripCreateForm {
 	@NotBlank
 	@Pattern(regexp = "[a-zA-Z ]+")
 	private String to_city;
+	
+	@NotBlank
+	private Double etd_latitude;
+
+	@NotBlank
+	private Double etd_longitude;
+	
+	@NotBlank
+	private Double eta_latitude;
+	
+	@NotBlank
+	private Double eta_longitude;
 	
 	@NotNull
 	@Min(1)
@@ -85,6 +98,38 @@ public class TripCreateForm {
 		this.eta = eta;
 	}
 	
+	public Double getEtd_latitude() {
+		return etd_latitude;
+	}
+
+	public void setEtd_latitude(Double etd_latitude) {
+		this.etd_latitude = etd_latitude;
+	}
+
+	public Double getEtd_longitude() {
+		return etd_longitude;
+	}
+
+	public void setEtd_longitude(Double etd_longitude) {
+		this.etd_longitude = etd_longitude;
+	}
+
+	public Double getEta_latitude() {
+		return eta_latitude;
+	}
+
+	public void setEta_latitude(Double eta_latitude) {
+		this.eta_latitude = eta_latitude;
+	}
+
+	public Double getEta_longitude() {
+		return eta_longitude;
+	}
+
+	public void setEta_longitude(Double eta_longitude) {
+		this.eta_longitude = eta_longitude;
+	}
+	
 	public Trip getTrip() {
 		Trip trip = new Trip();
 		trip.setEta(eta);
@@ -93,6 +138,8 @@ public class TripCreateForm {
 		trip.setFrom_city(from_city);
 		trip.setTo_city(to_city);
 		trip.setCost(cost);
+		trip.setDeparture(new Position(etd_latitude, etd_longitude));
+		trip.setArrival(new Position(eta_latitude, eta_longitude));
 		return trip;
 	}
 }

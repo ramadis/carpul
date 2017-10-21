@@ -28,7 +28,7 @@ public class TripDaoJdbc implements TripDao {
 		/* TODO: export table name as a private final String */
 		/* TODO: export table creation as a private final String */
 		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips_users (id serial PRIMARY KEY, created timestamp, trip_id integer, user_id integer)");
-		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips (id serial PRIMARY KEY, to_city varchar(100), from_city varchar(100), created timestamp, seats integer, driver_id integer, cost real, eta timestamp, etd timestamp, departure_gps varchar(300), arrival_gps varchar(300));");
+		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips (id serial PRIMARY KEY, to_city varchar(100), from_city varchar(100), created timestamp, seats integer, driver_id integer, cost real, eta timestamp, etd timestamp, departure_lat double precision, departure_lon double precision, arrival_lat double precision, arrival_lon double precision;");
 	}
 	
 	private String stripAccents(String s) {

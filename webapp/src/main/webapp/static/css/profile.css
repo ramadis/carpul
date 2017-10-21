@@ -144,13 +144,26 @@
 
 .destiny-item .driver {
   display: flex;
+  align-items: center;
+  width: 100%;
   font-size: 13px;
+  transition: 0.1s ease-in background;
 }
 
+.destiny-item .driver:hover {
+  background: #e36f4a;
+  border-radius: 5px;
+}
+
+.destiny-item .driver img {
+  display: inline-block;
+  vertical-align: middle;
+}
 .destiny-item .driver .driver-info {
+  display: inline-block;
+  vertical-align: middle;
   margin-left: 10px;
 }
-
 
 .destiny-item .driver .driver-name {
   font-weight: 900;

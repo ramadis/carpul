@@ -34,10 +34,14 @@
         <div class="field-container">
           <form:label path="from_city" class="field-label" for="from_city">Departure city</form:label>
           <form:input required="true" readonly="true" class="field" path="from_city" type="text" name="from_city"/>
+          <form:input required="true" readonly="true" class="field hide" path="etd_latitude" type="text" name="etd_latitude"/>
+          <form:input required="true" readonly="true" class="field hide" path="etd_longitude" type="text" name="etd_longitude"/>
           <form:errors path="from_city" class="form-error" element="p"/>
 
           <form:label path="to_city" class="field-label" for="to_city">Arrival city</form:label>
           <form:input required="true" readonly="true" class="field" path="to_city" type="text" name="to_city"/>
+          <form:input required="true" readonly="true" class="field hide" path="eta_latitude" type="text" name="eta_latitude"/>
+          <form:input required="true" readonly="true" class="field hide" path="eta_longitude" type="text" name="eta_longitude"/>
           <form:errors path="to_city" class="form-error" element="p"/>
 
           <form:label path="seats" class="field-label" for="seats">Available seats</form:label>

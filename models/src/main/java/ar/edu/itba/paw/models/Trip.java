@@ -11,6 +11,8 @@ public class Trip {
 	private String from_city;
 	private String to_city;
 	private Double cost;
+	private Position departure;
+	private Position arrival;
 	private Integer seats;
 	
 	//TODO: Check if necessary
@@ -218,5 +220,21 @@ public class Trip {
 	
 	public void setEta(Long eta) {
 		this.eta = new Timestamp(eta);
+	}
+
+	public Position getDeparture() {
+		return departure;
+	}
+
+	public void setDeparture(Position departure) {
+		this.departure = departure;
+	}
+
+	public Position getArrival() {
+		return arrival;
+	}
+
+	public void setArrival(Position arrival) {
+		this.arrival = arrival;
 	}
 }
