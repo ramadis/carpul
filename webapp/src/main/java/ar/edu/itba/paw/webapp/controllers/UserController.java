@@ -71,7 +71,7 @@ public class UserController extends AuthController {
 		
 		// Handle profile != to loggedUser
 		if (loggedUser.getId() != userId) {
-			final ModelAndView mav_other = new ModelAndView("user/profile-other");
+			final ModelAndView mav_other = new ModelAndView("unauth/profile");
 			mav_other.addObject("user", user);
 			mav.addObject("reviews", rs.getReviews(user));
 			mav_other.addObject("trips", us.getUserTrips(user));

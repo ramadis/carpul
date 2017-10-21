@@ -10,6 +10,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -35,7 +37,7 @@
       <c:if test="${not empty trips}">
         <ul class="no-bullets destiny-list">
           <c:forEach items="${trips}" var="trip">
-            <a href="<c:url value='/search/${trip.id}?from=${trip.from_city}&to=${trip.to_city}' />"><%@ include file="trip-unauth.jsp" %></a>
+            <a href="<c:url value='/search/${trip.id}?from=${trip.from_city}&to=${trip.to_city}&when=${trip.etd}' />"><%@ include file="trip.jsp" %></a>
           </c:forEach>
         </ul>
       </c:if>
