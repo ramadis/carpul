@@ -21,8 +21,8 @@
     <script src="<c:url value='/static/js/datetime.component.js' />" charset="utf-8"></script>
   </head>
   <body>
-    <%@ include file="../common/navbar.jsp" %>
     <c:set var="hero_message" value="Where are you going next?"/>
+    <%@ include file="../common/navbar.jsp" %>
     <%@ include file="../common/hero.jsp" %>
 
     <div class="profile-form-container flex-center">

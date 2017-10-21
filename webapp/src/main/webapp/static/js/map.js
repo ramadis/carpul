@@ -58,7 +58,8 @@ function updateStart(event) {
   geocoder.geocode({'location': latlng}, function(results, status) {
     if (status === 'OK' && results[1]) {
       var result = results[1];
-      var city = result.address_components.find(function(comp) { return comp.types.includes("locality")});
+      debugger;
+      var city = result.address_components.find(function(comp) { return comp.types.includes("locality") || comp.types.includes("administrative_area_level_2") || comp.types.includes("administrative_area_level_1")});
       $("input[name=from_city]").val(city.long_name);
     }
   });
