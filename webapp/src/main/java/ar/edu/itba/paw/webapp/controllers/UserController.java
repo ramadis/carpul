@@ -32,7 +32,7 @@ public class UserController extends AuthController {
 	
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
 	public ModelAndView registerUser(@Valid @ModelAttribute("userCreateForm") final UserCreateForm form,
-							  final BindingResult errors) {
+							  		final BindingResult errors) {
 		// Check for form errors
 		if (errors.hasErrors()) return registerUserView(form);
 		

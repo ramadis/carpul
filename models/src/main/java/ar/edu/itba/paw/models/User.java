@@ -8,9 +8,11 @@ public class User {
 	private String first_name;
 	private String last_name;
 	private String phone_number;
-	private String days_since_creation;
 	private Timestamp created;
 	private Integer id;
+	
+	//TODO: check if necessary. If not remove
+	private String days_since_creation;
 
 	public String getFirst_name() {
 		return first_name;

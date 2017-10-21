@@ -21,6 +21,7 @@ public abstract class AuthController {
 	
 	@ExceptionHandler(value = Exception.class)
     public String redirectToErrorPage(Exception ex) {
+		// If an error happens, show internal error message.
         System.out.println("Request: raised " + ex);
         return "redirect:/error/500";
       }
@@ -29,20 +30,21 @@ public abstract class AuthController {
 	public User user() {
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		final String username;
-		if (auth == null || !auth.isAuthenticated() || auth instanceof AnonymousAuthenticationToken) {
-			return null;
-		}
+		
+		if (auth == null || !auth.isAuthenticated() || auth instanceof AnonymousAuthenticationToken) return null;
+		
 		final Object principal = auth.getPrincipal();
-		if (principal instanceof Model) {
-			return ((Model) principal).getUser();
-		} else if (principal instanceof UserDetails) {
+		
+		if (principal instanceof Model) return ((Model) principal).getUser();
+		
+		if (principal instanceof UserDetails) {
 			username = ((UserDetails)principal).getUsername();
 		} else {
 			username = principal.toString();
 		}
+		
 		try {
 			return us.getByUsername(username);
-
 		} catch (IllegalStateException e) {
 			return null;
 		}

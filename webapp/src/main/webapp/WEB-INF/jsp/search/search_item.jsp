@@ -49,12 +49,12 @@
           </span>
 
             <c:if test="${not trip.reserved}">
-              <form:form class="inline-block" method="post" action="trip/${trip.id}/reserve">
+              <form:form class="inline-block" method="post" action="${url}trip/${trip.id}/reserve">
                 <button class="login-button">Reserve</button>
               </form:form>
             </c:if>
             <c:if test="${trip.reserved}">
-              <form:form class="inline-block" method="post" action="trip/${trip.id}/unreserve">
+              <form:form class="inline-block" method="post" action="${url}trip/${trip.id}/unreserve">
                 <button class="login-button main-color">Unreserve</button>
               </form:form>
             </c:if>

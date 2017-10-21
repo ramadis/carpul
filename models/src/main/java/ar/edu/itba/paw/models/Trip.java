@@ -6,22 +6,20 @@ import java.util.List;
 
 public class Trip {
 	private Integer id;
-	private Integer driver_id;
-	private Integer car_id;
-	
-	//TODO: Remove those ugly temp properties
-	private Long etd_temp;
 	private Timestamp etd;
 	private Timestamp eta;
-	private Long eta_temp;
 	private String from_city;
 	private String to_city;
 	private Double cost;
 	private Integer seats;
+	
+	//TODO: Check if necessary
+	//TODO: Remove those ugly temp properties
 	private Integer occupied_seats;
 	private Integer available_seats;
 	private Timestamp created;
 	private String time_since_reserved;
+	private Integer driver_id;
 	private Boolean reserved;
 	private String departure_location;
 	private String arrival_location;
@@ -86,17 +84,6 @@ public class Trip {
 	public void setDriver_id(Integer driver_id) {
 		this.driver_id = driver_id;
 	}
-
-
-	public Integer getCar_id() {
-		return car_id;
-	}
-
-
-	public void setCar_id(Integer car_id) {
-		this.car_id = car_id;
-	}
-
 
 	public Double getCost() {
 		return cost;
@@ -231,23 +218,5 @@ public class Trip {
 	
 	public void setEta(Long eta) {
 		this.eta = new Timestamp(eta);
-	}
-
-	public Long getEtd_temp() {
-		return etd_temp;
-	}
-
-	public void setEtd_temp(Long etd_temp) {
-		this.setEtd(new Timestamp(etd_temp));
-		this.etd_temp = etd_temp;
-	}
-
-	public Long getEta_temp() {
-		return eta_temp;
-	}
-
-	public void setEta_temp(Long eta_temp) {
-		this.setEta(new Timestamp(eta_temp));
-		this.eta_temp = eta_temp;
 	}
 }

@@ -67,7 +67,7 @@ public class TripController extends AuthController {
 	
 	@RequestMapping(value = "/trip", method = RequestMethod.POST)
 	public ModelAndView createTrip(@Valid @ModelAttribute("tripForm") final TripCreateForm form,
-			  final BindingResult errors) {
+			  					  final BindingResult errors) {
 		// Check for form errors
 		if (errors.hasErrors()) return createTripView(form);
 		

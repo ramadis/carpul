@@ -11,6 +11,7 @@ public class ErrorController extends AuthController {
 
 	@RequestMapping(value = "/error/{error}", method = RequestMethod.GET)
 	public ModelAndView registerUserView(@PathVariable("error") Integer error) {
+		// Expose view
 		final ModelAndView mav = new ModelAndView("error/base");
 		mav.addObject("error", error);
 		return mav;
