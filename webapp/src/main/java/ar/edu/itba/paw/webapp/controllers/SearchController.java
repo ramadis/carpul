@@ -89,24 +89,4 @@ public class SearchController extends AuthController {
 		Search search = form.getSearch();
 		return new ModelAndView("redirect:search?from=" + search.getFrom() + "&to=" + search.getTo() + "&when=" + search.getWhen().getTime());
 	}
-	
-	// TODO: Move to TripController
-	@RequestMapping(value = "/reserve/{tripId}", method = RequestMethod.POST)
-	public String reserveTrip(@PathVariable("tripId") final Integer tripId) {
-		
-		User loggedUser = user();
-		ts.reserve(tripId, loggedUser);
-		
-		hs.addHistory(loggedUser, tripId, "RESERVE");
-		return "redirect:/user/" + loggedUser.getId();
-	}
-	
-	// TODO: Move to TripController
-	@RequestMapping(value = "/unreserve/{tripId}", method = RequestMethod.POST)
-	public String unreserveTrip(@PathVariable("tripId") final Integer tripId) {
-		User loggedUser = user();
-		ts.unreserve(tripId, loggedUser);
-		hs.addHistory(loggedUser, tripId, "UNRESERVE");
-		return "redirect:/user/" + loggedUser.getId();
-	}
 }

@@ -1,5 +1,5 @@
 <li class="destiny-item" data-id="${reservation.id}">
-  <form:form class="inline-block no-margin" method="post" action="../unreserve/${reservation.id}">
+  <form:form class="inline-block no-margin" method="post" action="../trip/${reservation.id}/unreserve">
     <span class="destiny-cost"><span class="bold" style="display: inline;">$${reservation.cost_per_person}</span> or less</span>
     <span class="destiny-name">${reservation.to_city}</span>
     <span class="destiny-time">Depart from ${reservation.from_city} on <fmt:formatDate value="${reservation.etd}" pattern="dd/MM/yyyy"/> at <fmt:formatDate value="${reservation.etd}" pattern="HH:mm"/></span>

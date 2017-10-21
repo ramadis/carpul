@@ -28,7 +28,7 @@ function debounce(func, wait, immediate) {
 function showPosition(gps) {
   lat = gps.coords.latitude;
   lng = gps.coords.longitude;
-  var prompt = window.confirm("Would you like to set the start location to yours?");
+  var prompt = window.confirm("Would you like to set the departure location to yours?", "Change departure location");
   if (!prompt) return;
 
   var marker = map.markers[0];

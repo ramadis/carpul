@@ -216,6 +216,10 @@ public class Trip {
 	public void setEtd(Integer etd) {
 		this.etd = new Timestamp(etd);
 	}
+	
+	public void setEtd(Long etd) {
+		this.etd = new Timestamp(etd);
+	}
 
 	public Timestamp getEta() {
 		return eta;
@@ -223,6 +227,10 @@ public class Trip {
 
 	public void setEta(Timestamp eta) {
 		this.eta = eta;
+	}
+	
+	public void setEta(Long eta) {
+		this.eta = new Timestamp(eta);
 	}
 
 	public Long getEtd_temp() {

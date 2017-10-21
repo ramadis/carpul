@@ -1,5 +1,5 @@
 <li class="destiny-item trip-item" data-id="${trip.id}">
-  <form:form class="inline-block no-margin" method="post" action="../delete/trip/${trip.id}">
+  <form:form class="inline-block no-margin" method="post" action="../trip/${trip.id}/delete">
     <c:if test="${trip.occupied_seats eq 0}">
       <span class="destiny-cost">Earning <span class="bold" style="display: inline;">nothing yet</span></span>
     </c:if>

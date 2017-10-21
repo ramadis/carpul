@@ -21,11 +21,11 @@ $(document).ready(function() {
     if(!datetime) return;
     EtaConfigs.minDate = datetime;
     EtaConfigs.minTime = datetime.getHours() + ':' + datetime.getMinutes();
-    $("input[name=etd_temp]").val(datetime.getTime());
+    $("input[name=etd]").val(datetime.getTime());
   }
 
   function changeEta(datetime) {
     if(!datetime) return;
-    $("input[name=eta_temp]").val(datetime.getTime());
+    $("input[name=eta]").val(datetime.getTime());
   }
 });
