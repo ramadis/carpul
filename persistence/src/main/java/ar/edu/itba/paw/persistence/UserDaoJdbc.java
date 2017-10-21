@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.UserDao;
+import ar.edu.itba.paw.models.Position;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ public class UserDaoJdbc implements UserDao {
 	
 	public void loadResultIntoTrip(ResultSet rs, Trip trip) {
 		try {
+			// TODO: this should be referencede to TripDaoJDBC.
 			trip.setId(rs.getInt("id"));
 			trip.setCreated(rs.getTimestamp("created"));
 			trip.setEtd(rs.getTimestamp("etd"));
@@ -43,6 +45,11 @@ public class UserDaoJdbc implements UserDao {
 			trip.setSeats(rs.getInt("seats"));
 			trip.setFrom_city(rs.getString("from_city"));
 			trip.setTo_city(rs.getString("to_city"));
+			
+			Position departure = new Position(rs.getDouble("departure_lat"), rs.getDouble("departure_lon"));
+			Position arrival = new Position(rs.getDouble("arrival_lat"), rs.getDouble("arrival_lon"));
+			trip.setArrival(arrival);
+			trip.setDeparture(departure);
 		} catch (Exception e) {}
 	}
 	

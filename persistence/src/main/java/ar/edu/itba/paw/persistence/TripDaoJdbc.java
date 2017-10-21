@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.TripDao;
+import ar.edu.itba.paw.models.Position;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
@@ -28,10 +29,11 @@ public class TripDaoJdbc implements TripDao {
 		/* TODO: export table name as a private final String */
 		/* TODO: export table creation as a private final String */
 		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips_users (id serial PRIMARY KEY, created timestamp, trip_id integer, user_id integer)");
-		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips (id serial PRIMARY KEY, to_city varchar(100), from_city varchar(100), created timestamp, seats integer, driver_id integer, cost real, eta timestamp, etd timestamp, departure_lat double precision, departure_lon double precision, arrival_lat double precision, arrival_lon double precision;");
+		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips (id serial PRIMARY KEY, to_city varchar(100), from_city varchar(100), created timestamp, seats integer, driver_id integer, cost real, eta timestamp, etd timestamp, departure_lat double precision, departure_lon double precision, arrival_lat double precision, arrival_lon double precision)");
 	}
 	
 	private String stripAccents(String s) {
+		// TODO: not working. Check how to make it work
 	    s = Normalizer.normalize(s, Normalizer.Form.NFD);
 	    s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
 	    
@@ -40,8 +42,8 @@ public class TripDaoJdbc implements TripDao {
 	
 	public Trip create(Trip trip, User driver) {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
-		String query = "INSERT INTO trips (from_city, to_city, created, seats, driver_id, cost, eta, etd) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-		Object[] params = new Object[] { trip.getFrom_city(), trip.getTo_city(), now, trip.getSeats(), driver.getId(), trip.getCost(), trip.getEta(), trip.getEtd() };
+		String query = "INSERT INTO trips (from_city, to_city, created, seats, driver_id, cost, eta, etd, departure_lat, departure_lon, arrival_lat, arrival_lon) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		Object[] params = new Object[] { trip.getFrom_city(), trip.getTo_city(), now, trip.getSeats(), driver.getId(), trip.getCost(), trip.getEta(), trip.getEtd(), trip.getDeparture().getLatitude(), trip.getDeparture().getLongitude(), trip.getArrival().getLatitude(), trip.getArrival().getLongitude() };
 		
 		jdbcTemplate.update(query, params);
 		return trip;
@@ -132,6 +134,11 @@ public class TripDaoJdbc implements TripDao {
 				trip.setSeats(rs.getInt("seats"));
 				trip.setFrom_city(rs.getString("from_city"));
 				trip.setTo_city(rs.getString("to_city"));
+				
+				Position departure = new Position(rs.getDouble("departure_lat"), rs.getDouble("departure_lon"));
+				Position arrival = new Position(rs.getDouble("arrival_lat"), rs.getDouble("arrival_lon"));
+				trip.setArrival(arrival);
+				trip.setDeparture(departure);
 				
 				this.jdbcTemplate.query(" SELECT count(*) as amount FROM trips_users WHERE trip_id = ?", new Object[] { trip.getId()}, (final ResultSet rs2) -> {
 					trip.setOccupied_seats(rs2.getInt("amount"));

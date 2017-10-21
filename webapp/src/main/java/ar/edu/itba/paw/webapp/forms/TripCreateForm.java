@@ -21,16 +21,16 @@ public class TripCreateForm {
 	@Pattern(regexp = "[a-zA-Z ]+")
 	private String to_city;
 	
-	@NotBlank
+	@NotNull
 	private Double etd_latitude;
 
-	@NotBlank
+	@NotNull
 	private Double etd_longitude;
 	
-	@NotBlank
+	@NotNull
 	private Double eta_latitude;
 	
-	@NotBlank
+	@NotNull
 	private Double eta_longitude;
 	
 	@NotNull

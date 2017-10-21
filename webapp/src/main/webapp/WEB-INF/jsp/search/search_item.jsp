@@ -23,7 +23,7 @@
 
   <div class="pool-info">
     <div class="map-container">
-      <img src="https://puu.sh/xH5mj/28cb5c7eb2.png" style="width: 100%; height: 100%;"></img>
+      <img src="https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyCKIU4-Ijaeex54obPySJ7kXLwLnrV5BRA&size=1200x200&markers=color:green|label:A|${trip.departure.latitude}, ${trip.departure.longitude}&markers=color:blue|label:B|${trip.arrival.latitude}, ${trip.arrival.longitude}&path=color:0x0000ff80|weight:1|${trip.arrival.latitude}, ${trip.arrival.longitude}|${trip.departure.latitude}, ${trip.departure.longitude}" style="width: 100%; height: 100%;"></img>
     </div>
     <div class="bg-white">
       <div class="price-container flex space-between align-center">
