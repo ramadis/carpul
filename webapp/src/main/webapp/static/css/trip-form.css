@@ -14,3 +14,9 @@
 .cost-field .field {
   padding-left: 25px;
 }
+
+div#stars {
+  margin: 10px 0;
+  align-self: flex-end;
+  padding: 0;
+}

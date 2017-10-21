@@ -6,6 +6,7 @@ var finishLng = -58.3703602;
 var geocoder = new google.maps.Geocoder;
 var map = new GMaps({
   div: '#map',
+  language: 'es',
   lat: initialLat,
   lng: initialLng,
 });

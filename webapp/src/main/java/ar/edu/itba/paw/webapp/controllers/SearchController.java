@@ -71,6 +71,7 @@ public class SearchController extends AuthController {
 		trips.add(ts.findById(tripId));
 
 		final ModelAndView mav = new ModelAndView("search/search");
+		// TODO: Check if from, to are being used. wtf is is_searching.
 		mav.addObject("trips", trips);
 		mav.addObject("user", user());
 		mav.addObject("from", from);

@@ -112,7 +112,7 @@
 .review-button {
   margin-top: 20px;
   display: block;
-  max-width: 130px;
+  max-width: 100%;
   cursor: pointer;
 }
 

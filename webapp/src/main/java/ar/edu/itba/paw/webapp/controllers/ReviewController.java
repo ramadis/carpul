@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,8 @@ import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.forms.ReviewForm;
+import ar.edu.itba.paw.webapp.forms.SearchForm;
 
 @Controller
 public class ReviewController extends AuthController {
@@ -27,7 +31,8 @@ public class ReviewController extends AuthController {
 	private ReviewService rs;
 	
 	@RequestMapping(value = "/review/{tripId}", method = RequestMethod.GET)
-	public ModelAndView createReviewView(Model model, @PathVariable("tripId") final Integer tripId) {
+	public ModelAndView createReviewView(@ModelAttribute("reviewForm") final ReviewForm form,
+										@PathVariable("tripId") final Integer tripId) {
 		// Check if logged user can leave a review for the requested trip;
 		//TODO: check for date < now
 		//TODO: If jdbc returns empty, then return null.
@@ -40,9 +45,6 @@ public class ReviewController extends AuthController {
 		// Create review model
 		Review review = new Review();
 
-		// Load model
-		model.addAttribute("reviewForm", review);
-		
 		// Add view
 		ModelAndView mav = new ModelAndView("review/add");
 		mav.addObject("user", trip.getDriver());
@@ -53,23 +55,24 @@ public class ReviewController extends AuthController {
 	}
 	
 	@RequestMapping(value = "/review/{tripId}", method = RequestMethod.POST)
-	public ModelAndView addReview(@ModelAttribute("reviewForm") Review review,
-			@PathVariable("tripId") final Integer tripId,
-			BindingResult result, Model model,
-			final RedirectAttributes redirectAttribute) {
+	public ModelAndView addReview(@Valid @ModelAttribute("reviewForm") final ReviewForm form,
+								 BindingResult errors,
+								 @PathVariable("tripId") final Integer tripId) {
+		// Check for errors
+		if (errors.hasErrors()) return createReviewView(form, tripId);
 		
-		// Load review model
+		// Compose review
 		User loggedUser = user();
 		Trip trip = ts.findById(tripId);
+		Review review = form.getReview();
 		review.setOwner(loggedUser);
 		review.setReviewedUser(trip.getDriver());
 		review.setTrip(trip);
 		
-		System.out.println("Review:" + review.getTrip().getId());
-		System.out.println("Review is being made");
+		// Persist review
 		rs.add(review);
-		System.out.println("Review was made");
-		System.out.println(loggedUser.getId());
+
+		// Redirect to profile
 		return new ModelAndView("redirect:/user/" + loggedUser.getId());	
 	
 	}

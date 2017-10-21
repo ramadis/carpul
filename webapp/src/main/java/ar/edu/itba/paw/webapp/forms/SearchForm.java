@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.forms;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -15,6 +16,7 @@ public class SearchForm {
 	@Pattern(regexp = "[a-zA-Z ]+")
 	private String to;
 	
+	@NotNull
 	private Long when;
 	
 	public String getFrom() {
