@@ -8,8 +8,10 @@
   <link href="<c:url value='/static/css/css.css' />" rel="stylesheet" type="text/css" />
   <link href="<c:url value='/static/css/pool_list.css' />" rel="stylesheet" type="text/css" />
   <link href="<c:url value='/static/css/home.css' />" rel="stylesheet" type="text/css" />
+  <link href="<c:url value='/static/css/maps.css' />" rel="stylesheet" type="text/css" />
   <link href="<c:url value='/static/css/datetime.component.css' />" rel="stylesheet" type="text/css" />
 
+  <script src="https://maps.google.com/maps/api/js?key=AIzaSyCKIU4-Ijaeex54obPySJ7kXLwLnrV5BRA&libraries=places"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="<c:url value='/static/js/datetime.component.js' />" charset="utf-8"></script>
 </head>
