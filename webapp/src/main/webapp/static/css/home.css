@@ -8,6 +8,10 @@
   background-blend-mode: multiply;
 }
 
+input[readonly].searchbar-input {
+	padding-left: 10px;
+}
+
 .home-content-container {
   width: 80%;
   display: flex;

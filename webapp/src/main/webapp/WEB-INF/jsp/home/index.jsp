@@ -36,7 +36,7 @@
           <form:errors path="to" class="form-error" element="p"/>
 
           <form:label path="when" class="searchbar-label" for="when">On</form:label>
-          <input class="searchbar-input" id="when" placeholder="Time range" type="text" value="" tabindex="2"/>
+          <input readonly class="searchbar-input" id="when" placeholder="Time range" type="text" value="" tabindex="2"/>
           <form:input class="searchbar-input hide" path="when" type="text" name="when" value="" tabindex="-1"/>
           <form:errors path="from" class="form-error" element="p"/>
 
