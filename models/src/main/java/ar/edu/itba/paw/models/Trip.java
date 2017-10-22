@@ -14,6 +14,7 @@ public class Trip {
 	private Position departure;
 	private Position arrival;
 	private Integer seats;
+	private Boolean expired;
 	
 	//TODO: Check if necessary
 	//TODO: Remove those ugly temp properties
@@ -236,5 +237,13 @@ public class Trip {
 
 	public void setArrival(Position arrival) {
 		this.arrival = arrival;
+	}
+
+	public Boolean getExpired() {
+		return expired;
+	}
+
+	public void setExpired(Boolean expired) {
+		this.expired = expired;
 	}
 }

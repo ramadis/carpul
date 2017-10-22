@@ -58,7 +58,12 @@
         <c:if test="${not empty reservations}">
           <ul class="no-bullets destiny-list">
             <c:forEach items="${reservations}" var="reservation">
-              <%@ include file="destiny.jsp" %>
+              <c:if test="${not reservation.expired}">
+                <%@ include file="destiny.jsp" %>
+              </c:if>
+              <c:if test="${reservation.expired}">
+                <%@ include file="trip-past.jsp" %>
+              </c:if>
             </c:forEach>
           </ul>
         </c:if>

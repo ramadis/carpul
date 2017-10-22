@@ -46,6 +46,10 @@ public class UserDaoJdbc implements UserDao {
 			trip.setFrom_city(rs.getString("from_city"));
 			trip.setTo_city(rs.getString("to_city"));
 			
+			Long now = System.currentTimeMillis();
+			trip.setExpired(now > trip.getEta().getTime());
+			System.out.println(trip.getExpired());
+			
 			Position departure = new Position(rs.getDouble("departure_lat"), rs.getDouble("departure_lon"));
 			Position arrival = new Position(rs.getDouble("arrival_lat"), rs.getDouble("arrival_lon"));
 			trip.setArrival(arrival);

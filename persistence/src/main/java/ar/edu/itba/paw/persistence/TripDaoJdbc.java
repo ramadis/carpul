@@ -135,6 +135,9 @@ public class TripDaoJdbc implements TripDao {
 				trip.setFrom_city(rs.getString("from_city"));
 				trip.setTo_city(rs.getString("to_city"));
 				
+				Long now = System.currentTimeMillis();
+				trip.setExpired(now > trip.getEta().getTime());
+				
 				Position departure = new Position(rs.getDouble("departure_lat"), rs.getDouble("departure_lon"));
 				Position arrival = new Position(rs.getDouble("arrival_lat"), rs.getDouble("arrival_lon"));
 				trip.setArrival(arrival);
@@ -184,6 +187,9 @@ public class TripDaoJdbc implements TripDao {
 				trip.setFrom_city(rs.getString("from_city"));
 				trip.setTo_city(rs.getString("to_city"));
 				
+				Long now = System.currentTimeMillis();
+				trip.setExpired(now > trip.getEta().getTime());
+				
 				User driver = new User();
 				driver.setId(rs.getInt("driver_id"));
 				driver.setFirst_name(rs.getString("first_name"));
@@ -219,6 +225,9 @@ public class TripDaoJdbc implements TripDao {
 			trip.setFrom_city(rs.getString("from_city"));
 			trip.setTo_city(rs.getString("to_city"));
 			trip.setDriver_id(rs.getInt("driver_id"));
+			
+			Long now = System.currentTimeMillis();
+			trip.setExpired(now > trip.getEta().getTime());
 			
 			this.jdbcTemplate.query(" SELECT id FROM trips_users WHERE trip_id = ? AND user_id = ?", new Object[] { tripId, trip.getDriver_id() }, (final ResultSet rs2) -> {
 				
