@@ -37,12 +37,13 @@ public class ReviewDaoJdbc implements ReviewDao {
 
 	private void loadResultIntoReview(ResultSet rs, Review review) {
 		try {
-			// TODO: add created field
+			review.setId(rs.getInt("id"));
 			review.setStars(rs.getInt("stars"));
 			review.setMessage(rs.getString("message"));
 			review.setReviewedUser(userDao.getById(rs.getInt("reviewed_id")));
 			review.setOwner(userDao.getById(rs.getInt("owner_id")));
 			review.setTrip(tripDao.findById(rs.getInt("trip_id")));
+			review.setCreated(rs.getTimestamp("created"));
 		} catch (Throwable e) {}
 	}
 
@@ -61,13 +62,27 @@ public class ReviewDaoJdbc implements ReviewDao {
 
 		return reviews;
 	}
+	
+	public Boolean isReviewedByUser(Trip trip, User user) {
+		String query = "SELECT * FROM reviews WHERE owner_id = ? AND trip_id = ? LIMIT 1;";
+		Object[] params = new Object[] { user.getId(), trip.getId() };
+		
+		Review review = new Review();
+		this.connection.query(query, params, (ResultSet rs) -> {
+			review.setId(rs.getInt("id"));
+		});
+		
+		return review.getId() != null;
+	}
 
 
 	public List<Review> getReviews(Trip trip) {
 		List<Review> reviews = new ArrayList<>();
-
-		this.connection.query("SELECT * FROM reviews WHERE trip_id = ?", new Object[] { trip.getId() }, (ResultSet rs) -> {
-
+		String query = "SELECT * FROM reviews WHERE trip_id = ?";
+		Object[] params = new Object[] { trip.getId() };
+		
+		this.connection.query(query, params, (ResultSet rs) -> {
+			// TODO: is this being used?
 		});
 		return reviews;
 	}

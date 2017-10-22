@@ -116,9 +116,12 @@ public class UserDaoJdbc implements UserDao {
 	}
 
 	public List<Trip> getReservedTrips(User user) {
+		// Get no-reviewed trips for a given user
 		List<Trip> trips = new ArrayList<>();
-
-		this.jdbcTemplate.query("SELECT * FROM trips JOIN trips_users ON trip_id = trips.id JOIN users ON users.id = driver_id WHERE user_id = ?", new Object[] {user.getId()}, (final ResultSet rs) -> {
+		String query = "SELECT * FROM trips JOIN trips_users ON trip_id = trips.id JOIN users ON users.id = driver_id WHERE user_id = ? AND NOT EXISTS (SELECT * FROM reviews WHERE owner_id = ? AND trip_id = trip_id)";
+		Object[] params = new Object[] { user.getId(), user.getId() };
+		
+		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
 			do {
 				Trip trip = new Trip();
 				loadResultIntoTrip(rs, trip);

@@ -28,6 +28,7 @@
             <form:label path="password" class="field-label" for="password"><spring:message code="user.login.password"/></form:label>
             <form:input required="true" class="field" path="password" type="password" name="password"/>
           </div>
+          <form:errors path="" class="form-error" element="p"/>
           <div class="actions">
             <a href="<c:url value='${registerUserURI}'/>" class="create-account"><spring:message code="user.login.create"/></a>
             <button type="submit" class="login-button"><spring:message code="user.login.submit"/></button>
