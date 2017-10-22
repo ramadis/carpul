@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Trip {
+	// Mirror fields
 	private Integer id;
 	private Timestamp etd;
 	private Timestamp eta;
@@ -14,6 +15,7 @@ public class Trip {
 	private Position departure;
 	private Position arrival;
 	private Integer seats;
+	
 	private Boolean expired;
 	
 	//TODO: Check if necessary
