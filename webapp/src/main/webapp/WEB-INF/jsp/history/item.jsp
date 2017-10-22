@@ -3,18 +3,21 @@
 
 
 <li class="review-item-container">
+  <fmt:formatDate value="${history.trip.etd}" var="fmtetd" pattern="dd/MM/yyyy"/>
+  <fmt:formatDate value="${date}" var="fmtdate" pattern="dd/MM/yyyy HH:mm"/>
+
   <img width="50" height="50"  src="https://ui-avatars.com/api/?rounded=true&size=200&background=e36f4a&color=fff&name=${history.related.first_name} ${history.related.last_name}" alt="">
   <div class="review-item-content history-content">
     <c:if test="${history.type eq 'RESERVE'}">
-        <c:set var="message" value="reserved"/>
-        <c:set var="validation_message" value="All set for him!"/>
+      <spring:message code="history.item.reserved" var="message"/>
+      <spring:message code="history.item.all_set" var="validation_message"/>
     </c:if>
     <c:if test="${history.type eq 'UNRESERVE'}">
-        <c:set var="message" value="unreserved"/>
-        <c:set var="validation_message" value="Bummer :("/>
+      <spring:message code="history.item.unreserved" var="message"/>
+      <spring:message code="history.item.bummer" var="validation_message"/>
     </c:if>
-    <span class="review-message">${history.related.first_name} just ${message} your trip to ${history.trip.to_city} on <fmt:formatDate value="${history.trip.etd}" pattern="dd/MM/yyyy"/>. ${validation_message} </span>
-    <span class="review-meta">Happened on <fmt:formatDate value="${date}" pattern="dd/MM/yyyy HH:mm"/></span>
+    <span class="review-message"><spring:message code="history.item.message" arguments="${history.related.first_name},${message},${history.trip.to_city},${fmtetd},${validation_message}"/></span>
+    <span class="review-meta"><spring:message code="history.item.happened" arguments="${fmtetd}"/></span>
 
   </div>
 </li>

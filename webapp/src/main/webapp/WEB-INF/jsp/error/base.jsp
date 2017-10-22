@@ -6,12 +6,12 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Carpul | Yikes!</title>
+    <title><spring:message code="error.base.page_title" /></title>
     <link href="<c:url value='/static/css/css.css' />" rel="stylesheet" type="text/css" />
     <link href="<c:url value='/static/css/error.css' />" rel="stylesheet" type="text/css" />
   </head>
   <body class="flex-center">
-    <h1 class="error-title">So... this is awkward.</h1>
-    <h1 class="error-subtitle">(yep, this is a ${error} error page)</h1>
+    <h1 class="error-title"><spring:message code="error.base.title" /></h1>
+    <h1 class="error-subtitle"><spring:message code="error.base.subtitle" arguments="${error}"/></h1>
   </body>
 </html>

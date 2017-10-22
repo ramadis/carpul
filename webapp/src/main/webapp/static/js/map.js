@@ -114,6 +114,30 @@ map.addMarker({
   }
 });
 
+$("input[etd_latitude]").val(initialLat);
+$("input[etd_longitude]").val(initialLng);
+$("input[eta_latitude]").val(finishLat);
+$("input[eta_longitude]").val(finishLng);
+
 getLocation();
 updateStart({latLng:{lat: function() {return initialLat }, lng: function() { return initialLng} }});
 updateFinish({latLng:{lat: function() {return finishLat }, lng: function() { return finishLng} }});
+
+function calculateTime(datetime) {
+  var departure_lat = $("input[etd_latitude]").val();
+  var departure_lon = $("input[etd_longitude]").val();
+  var arrival_lat = $("input[eta_latitude]").val();
+  var arrival_lon = $("input[eta_longitude]").val();
+
+  var departure = departure_lat + ", " + departure_lon;
+  var arrival = arrival_lat + ", " + arrival_lon;
+
+  var request = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" + departure + "&destinations=" + arrival + "&key=AIzaSyBNIjxxJhHZAxRdT52yWRQrcNBLzd9YZAk";
+  fetch(request).then(function(response) {
+    if (!response.ok) console.error(response);
+    response.json().then(function(obj) {
+      obj
+      debugger;
+    });
+  });
+}

@@ -8,7 +8,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Carpul - Log in</title>
+    <title><spring:message code="user.login.page_title"/></title>
     <link href="<c:url value='/static/css/css.css' />" rel="stylesheet" type="text/css" />
   </head>
   <body class="flex-center">
@@ -17,23 +17,23 @@
         <div class="top-border"></div>
         <div class="text-container">
           <span>carpul</span>
-          <span class="catchphrase">Have we met yet?</span>
-          <span class="catchphrase-description">Create an account or login</span>
-          <span class="catchphrase-description"> to start travelling to amazing places</span>
+          <span class="catchphrase"><spring:message code="user.login.title"/></span>
+          <span class="catchphrase-description"><spring:message code="user.login.subtitle1"/></span>
+          <span class="catchphrase-description"> <spring:message code="user.login.subtitle2"/></span>
         </div>
           <div class="field-container">
             <spring:bind path="username">
-                <label class="field-label" for="username">Username</label>
+                <label class="field-label" for="username"><spring:message code="user.login.username"/></label>
                 <input class="field" name="username" path="username" type="text" />
             </spring:bind>
             <spring:bind path="password">
-              <label class="field-label" for="password">Password</label>
+              <label class="field-label" for="password"><spring:message code="user.login.password"/></label>
               <input class="field" path="password" type="password" name="password"/>
             </spring:bind>
           </div>
           <div class="actions">
-            <a href="<c:url value='${registerUserURI}'/>" class="create-account">Create account</a>
-            <button type="submit" class="login-button">Login</button>
+            <a href="<c:url value='${registerUserURI}'/>" class="create-account"><spring:message code="user.login.create"/></a>
+            <button type="submit" class="login-button"><spring:message code="user.login.submit"/></button>
           </div>
     </form:form>
   </body>

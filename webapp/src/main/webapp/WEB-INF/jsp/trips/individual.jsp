@@ -7,7 +7,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Carpul | Travel cheap to ${to}</title>
+    <title><spring:message code="trip.individual.page_title"/></title>
     <link href="<c:url value='/static/css/css.css' />" rel="stylesheet" type="text/css" />
     <link href="<c:url value='/static/css/pool_list.css' />" rel="stylesheet" type="text/css" />
   </head>
@@ -17,9 +17,9 @@
     <div class="list-container">
 
       <c:if test="${not empty trips}">
-        <span class="list-subtitle">These is the trip you were looking for</span>
+        <span class="list-subtitle"><spring:message code="trip.individual.title"/></span>
         <c:forEach items="${trips}" var="trip">
-          <%@ include file="../search/search_item.jsp" %>
+          <%@ include file="../search/item.jsp" %>
         </c:forEach>
       </c:if>
 

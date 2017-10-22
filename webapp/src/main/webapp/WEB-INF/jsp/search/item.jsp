@@ -11,14 +11,13 @@
     <div class="user-name">
       ${trip.driver.first_name}
     </div>
-    <span class="user-rating">
+    <%-- <span class="user-rating">
       <img src="<c:url value='/static/images/star.png' />"/>
       <img src="<c:url value='/static/images/star.png' />"/>
       <img src="<c:url value='/static/images/star.png' />"/>
       <img src="<c:url value='/static/images/star.png' />"/>
       <img src="<c:url value='/static/images/star.png' />"/>
-
-    </span>
+    </span> --%>
   </div>
 
   <div class="pool-info">
@@ -28,34 +27,34 @@
     <div class="bg-white">
       <div class="price-container flex space-between align-center">
         <span class="clear gray sz-13">
-          Leave from
+          <spring:message code="search.item.from"/>
           <span class="bold black"> ${trip.from_city}</span>
-          on
+          <spring:message code="search.item.on_low"/>
           <span class="bold black"> <fmt:formatDate value="${trip.etd}" pattern="dd/MM/yyyy"/></span>
-          at
+          <spring:message code="search.item.at"/>
           <span class="bold black"> <fmt:formatDate value="${trip.etd}" pattern="HH:mm"/></span>
           <br>
-          Arrive on
+          <spring:message code="search.item.arrive"/>
           <span class="bold black"> ${trip.to_city}</span>
-          on
+          <spring:message code="search.item.on_low"/>
           <span class="bold black"> <fmt:formatDate value="${trip.eta}" pattern="dd/MM/yyyy"/></span>
-          at
+          <spring:message code="search.item.at"/>
           <span class="bold black"> <fmt:formatDate value="${trip.eta}" pattern="HH:mm"/></span>
         </span>
         <div>
           <span class="price gray">
             <span class="bold black">$${trip.cost_per_person}</span>
-            /each
+            /<spring:message code="search.item.each"/>
           </span>
 
             <c:if test="${not trip.reserved}">
               <form:form class="inline-block" method="post" action="${url}trip/${trip.id}/reserve">
-                <button class="login-button">Reserve</button>
+                <button class="login-button"><spring:message code="search.item.reserve"/></button>
               </form:form>
             </c:if>
             <c:if test="${trip.reserved}">
               <form:form class="inline-block" method="post" action="${url}trip/${trip.id}/unreserve">
-                <button class="login-button main-color">Unreserve</button>
+                <button class="login-button main-color"><spring:message code="search.item.unreserve"/></button>
               </form:form>
             </c:if>
         </div>
@@ -67,7 +66,7 @@
         <div class="seats-container">
           <span class="seats bold gray">
             <img class="seats-icon" src="<c:url value='/static/images/seats.png' />"></img>
-            ${trip.available_seats} available
+            ${trip.available_seats} <spring:message code="search.item.available"/>
           </span>
         </div>
       </div>

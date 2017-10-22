@@ -47,9 +47,9 @@ public class ReviewController extends AuthController {
 
 		// Add view
 		ModelAndView mav = new ModelAndView("review/add");
-		mav.addObject("user", trip.getDriver());
+		mav.addObject("reviewed", trip.getDriver());
 		mav.addObject("trip", trip);
-		mav.addObject("owner", loggedUser);
+		mav.addObject("user", loggedUser);
 		
 		return mav;
 	}

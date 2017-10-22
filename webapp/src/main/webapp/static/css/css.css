@@ -37,7 +37,7 @@ button[disabled]:hover {
 	padding-left: 5px;
 }
 
-input[readonly] {
+input[readonly].off-field {
 	border: none;
 	background: transparent;
 	padding-left: 0;
