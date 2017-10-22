@@ -4,7 +4,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +16,7 @@ import ar.edu.itba.paw.interfaces.ReviewService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.forms.UserCreateForm;
+import ar.edu.itba.paw.webapp.forms.UserLoginForm;
 
 @Controller
 public class UserController extends AuthController {
@@ -54,9 +54,9 @@ public class UserController extends AuthController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ModelAndView loginView(Model model) {
-		User user = new User();
-		model.addAttribute("userForm", user);
+	public ModelAndView loginView(@Valid @ModelAttribute("userForm") final UserLoginForm form) {
+		
+		// Expose view
 		final ModelAndView mav = new ModelAndView("user/login");
 		mav.addObject("loginUserURI", "login");
 		mav.addObject("registerUserURI", "user");
@@ -68,13 +68,18 @@ public class UserController extends AuthController {
 		final ModelAndView mav = new ModelAndView("user/profile");
 		User user = us.getById(userId);
 		User loggedUser = user();
+
+		// If the user does not exist
+		if (user.getId() == null) return new ModelAndView("redirect:/error/404");
 		
 		// Handle profile != to loggedUser
 		if (loggedUser.getId() != userId) {
 			final ModelAndView mav_other = new ModelAndView("unauth/profile");
-			mav_other.addObject("user", user);
-			mav.addObject("reviews", rs.getReviews(user));
+			mav_other.addObject("reviews", rs.getReviews(user));
 			mav_other.addObject("trips", us.getUserTrips(user));
+			
+			user.setId(loggedUser.getId());
+			mav_other.addObject("user", user);
 			return mav_other;
 		}
 		

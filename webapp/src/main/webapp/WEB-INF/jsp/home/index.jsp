@@ -8,6 +8,7 @@
   <title><spring:message code="home.index.page_title"/></title>
   <link href="<c:url value='/static/css/css.css' />" rel="stylesheet" type="text/css" />
   <link href="<c:url value='/static/css/pool_list.css' />" rel="stylesheet" type="text/css" />
+  <link type="image/x-icon" rel="shortcut icon" href="<c:url value='/static/images/favicon.ico' />" >
   <link href="<c:url value='/static/css/home.css' />" rel="stylesheet" type="text/css" />
   <link href="<c:url value='/static/css/maps.css' />" rel="stylesheet" type="text/css" />
   <link href="<c:url value='/static/css/datetime.component.css' />" rel="stylesheet" type="text/css" />

@@ -8,6 +8,7 @@
     <meta charset="utf-8">
     <title><spring:message code="review.add.page_title" /></title>
     <link href="<c:url value='/static/css/css.css' />" rel="stylesheet" type="text/css" />
+    <link type="image/x-icon" rel="shortcut icon" href="<c:url value='/static/images/favicon.ico' />" >
     <link href="<c:url value='/static/css/pool_list.css' />" rel="stylesheet" type="text/css" />
     <link href="<c:url value='/static/css/profile_hero.css' />" rel="stylesheet" type="text/css" />
     <link href="<c:url value='/static/css/profile.css' />" rel="stylesheet" type="text/css" />

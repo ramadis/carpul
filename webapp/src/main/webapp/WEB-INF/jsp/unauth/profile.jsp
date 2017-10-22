@@ -5,7 +5,8 @@
 
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link type="image/x-icon" rel="shortcut icon" href="<c:url value='/static/images/favicon.ico' />" >
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <link href="<c:url value='/static/css/css.css' />" rel="stylesheet" type="text/css" />
   <link href="<c:url value='/static/css/pool_list.css' />" rel="stylesheet" type="text/css" />
   <link href="<c:url value='/static/css/profile_hero.css' />" rel="stylesheet" type="text/css" />

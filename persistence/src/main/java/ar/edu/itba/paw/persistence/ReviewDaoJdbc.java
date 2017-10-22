@@ -52,7 +52,6 @@ public class ReviewDaoJdbc implements ReviewDao {
 		String query = "SELECT * FROM reviews WHERE reviewed_id = ? ORDER BY created desc;";
 		Object[] params = new Object[] { user.getId() };
 		this.connection.query(query, params, (ResultSet rs) -> {
-			// TODO: Check while-do vs do-while
 			do {
 				Review review = new Review();
 				loadResultIntoReview(rs, review);

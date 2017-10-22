@@ -8,6 +8,7 @@
   <head>
     <meta charset="UTF-8">
     <title><spring:message code="search.search.page_title" arguments="${search.to}" /></title>
+    <link type="image/x-icon" rel="shortcut icon" href="<c:url value='/static/images/favicon.ico' />" >
     <link href="<c:url value='/static/css/css.css' />" rel="stylesheet" type="text/css" />
     <link href="<c:url value='/static/css/pool_list.css' />" rel="stylesheet" type="text/css" />
   </head>

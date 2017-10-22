@@ -3,12 +3,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
-
-
 <html>
   <head>
     <meta charset="utf-8">
     <title><spring:message code="user.login.page_title"/></title>
+    <link type="image/x-icon" rel="shortcut icon" href="<c:url value='/static/images/favicon.ico' />" >
     <link href="<c:url value='/static/css/css.css' />" rel="stylesheet" type="text/css" />
   </head>
   <body class="flex-center">
@@ -22,14 +21,11 @@
           <span class="catchphrase-description"> <spring:message code="user.login.subtitle2"/></span>
         </div>
           <div class="field-container">
-            <spring:bind path="username">
-                <label class="field-label" for="username"><spring:message code="user.login.username"/></label>
-                <input class="field" name="username" path="username" type="text" />
-            </spring:bind>
-            <spring:bind path="password">
-              <label class="field-label" for="password"><spring:message code="user.login.password"/></label>
-              <input class="field" path="password" type="password" name="password"/>
-            </spring:bind>
+            <form:label path="username" class="field-label" for="username"><spring:message code="user.login.username"/></form:label>
+            <form:input required="true" class="field" path="username" type="text" name="username"/>
+
+            <form:label path="password" class="field-label" for="password"><spring:message code="user.login.password"/></form:label>
+            <form:input required="true" class="field" path="password" type="password" name="password"/>
           </div>
           <div class="actions">
             <a href="<c:url value='${registerUserURI}'/>" class="create-account"><spring:message code="user.login.create"/></a>

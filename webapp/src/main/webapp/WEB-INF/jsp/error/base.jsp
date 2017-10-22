@@ -7,6 +7,7 @@
   <head>
     <meta charset="utf-8">
     <title><spring:message code="error.base.page_title" /></title>
+    <link type="image/x-icon" rel="shortcut icon" href="<c:url value='/static/images/favicon.ico' />" >
     <link href="<c:url value='/static/css/css.css' />" rel="stylesheet" type="text/css" />
     <link href="<c:url value='/static/css/error.css' />" rel="stylesheet" type="text/css" />
   </head>

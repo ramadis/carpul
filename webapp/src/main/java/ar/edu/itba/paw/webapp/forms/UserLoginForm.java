@@ -1,15 +1,7 @@
 package ar.edu.itba.paw.webapp.forms;
 
-import javax.validation.constraints.Pattern;
-
-import org.hibernate.validator.constraints.NotBlank;
-
 public class UserLoginForm {
-	@NotBlank
-	@Pattern(regexp = "[a-zA-Z0-9]+")
 	private String username;
-	
-	@NotBlank
 	private String password;
 
 	public String getUsername() {
