@@ -236,6 +236,11 @@ public class TripDaoJdbc implements TripDao {
 				trip.setOccupied_seats(rs2.getInt("amount"));
 			});
 			
+			Position departure = new Position(rs.getDouble("departure_lat"), rs.getDouble("departure_lon"));
+			Position arrival = new Position(rs.getDouble("arrival_lat"), rs.getDouble("arrival_lon"));
+			trip.setArrival(arrival);
+			trip.setDeparture(departure);
+			
 			User driver = new User();
 			driver.setId(rs.getInt("driver_id"));
 			driver.setFirst_name(rs.getString("first_name"));
