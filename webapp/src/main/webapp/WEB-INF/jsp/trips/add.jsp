@@ -1,6 +1,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <!DOCTYPE html>
 <html>
@@ -59,9 +60,12 @@
           <form:errors path="etd" class="form-error" element="p"/>
 
           <form:label path="eta" class="field-label" for="eta"><spring:message code="trip.add.eta"/></form:label>
-          <input required id="eta" class="field" type="text" name="eta_mask"/>
+          <input required="true" readonly="true" id="eta" class="field" type="text" name="eta_mask"/>
           <form:input required="true" min="1" max="20" class="field hide" path="eta" type="text" name="eta"/>
           <form:errors path="eta" class="form-error" element="p"/>
+
+          <form:errors path="" class="form-error" element="p"/>
+          
         </div>
 
         <div class="actions" style="margin-bottom: 10px;">

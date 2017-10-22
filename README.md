@@ -22,6 +22,10 @@
 * Leave and read user reviews
 * Keep track of recent events
 
+## Technical Features
+* Automatic user location
+* Custom annotations validations
+
 ## How To Use
 
 To clone and run this application, you'll need [Git](https://git-scm.com).

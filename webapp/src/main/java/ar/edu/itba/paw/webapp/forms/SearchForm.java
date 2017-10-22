@@ -9,11 +9,11 @@ import ar.edu.itba.paw.models.Search;
 
 public class SearchForm {
 	@NotBlank
-	@Pattern(regexp = "[a-zA-Z ]+")
+	@Pattern(regexp = "[a-zA-Z áéíóú]+")
 	private String from;
 	
 	@NotBlank
-	@Pattern(regexp = "[a-zA-Z ]+")
+	@Pattern(regexp = "[a-zA-Z áéíóú]+")
 	private String to;
 	
 	@NotNull

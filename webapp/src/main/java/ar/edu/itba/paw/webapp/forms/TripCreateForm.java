@@ -11,7 +11,9 @@ import org.hibernate.validator.constraints.Range;
 import ar.edu.itba.paw.models.Position;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
+import validators.TripTimeAnnotation;
 
+@TripTimeAnnotation( departure = "etd", arrival = "eta")
 public class TripCreateForm {
 	@NotBlank
 	@Pattern(regexp = "[a-zA-Z ]+")

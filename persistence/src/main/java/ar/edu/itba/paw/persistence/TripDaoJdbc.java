@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.text.Normalizer;
+import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,10 +35,7 @@ public class TripDaoJdbc implements TripDao {
 	
 	private String stripAccents(String s) {
 		// TODO: not working. Check how to make it work
-	    s = Normalizer.normalize(s, Normalizer.Form.NFD);
-	    s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
-	    
-	    return s;
+	    return Normalizer.normalize(s, Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
 	}
 	
 	public Trip create(Trip trip, User driver) {

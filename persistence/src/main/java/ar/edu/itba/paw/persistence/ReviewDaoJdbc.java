@@ -28,13 +28,13 @@ public class ReviewDaoJdbc implements ReviewDao {
 		this.connection = new JdbcTemplate(dataSource);
 		this.connection.execute(dbSchema);
 	}
-	
+
 	@Autowired
 	UserDao userDao;
 
 	@Autowired
 	TripDao tripDao;
-	
+
 	private void loadResultIntoReview(ResultSet rs, Review review) {
 		try {
 			// TODO: add created field
@@ -45,10 +45,10 @@ public class ReviewDaoJdbc implements ReviewDao {
 			review.setTrip(tripDao.findById(rs.getInt("trip_id")));
 		} catch (Throwable e) {}
 	}
-	
+
 	public List<Review> getReviews(User user) {
 		List<Review> reviews = new ArrayList<>();
-		
+
 		String query = "SELECT * FROM reviews WHERE reviewed_id = ? ORDER BY created desc;";
 		Object[] params = new Object[] { user.getId() };
 		this.connection.query(query, params, (ResultSet rs) -> {
@@ -58,20 +58,20 @@ public class ReviewDaoJdbc implements ReviewDao {
 				reviews.add(review);
 			} while(rs.next());
 		});
-		
+
 		return reviews;
 	}
-	
-	
+
+
 	public List<Review> getReviews(Trip trip) {
 		List<Review> reviews = new ArrayList<>();
-		
+
 		this.connection.query("SELECT * FROM reviews WHERE trip_id = ?", new Object[] { trip.getId() }, (ResultSet rs) -> {
-			
+
 		});
 		return reviews;
 	}
-	
+
 	public Boolean add(Review review) {
 		String query = "INSERT INTO reviews (created, owner_id, reviewed_id, stars, message, trip_id) VALUES (?,?,?,?,?,?)";
 		Timestamp now = new Timestamp(System.currentTimeMillis());
@@ -81,7 +81,6 @@ public class ReviewDaoJdbc implements ReviewDao {
 										review.getStars(),
 										review.getMessage(),
 										review.getTrip().getId() };
-		System.out.println(params);
 		this.connection.update(query, params);
 		return true;
 	}
