@@ -8,7 +8,6 @@ import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.NotBlank;
 
 import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.Search;
 
 public class ReviewForm {
 	@NotBlank

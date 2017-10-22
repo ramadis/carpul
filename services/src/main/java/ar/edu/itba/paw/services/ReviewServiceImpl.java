@@ -26,6 +26,10 @@ public class ReviewServiceImpl implements  ReviewService {
 		return reviewDao.getReviews(trip);
 	}
 	
+	public Boolean canLeaveReview(Trip trip, User user) {
+		return reviewDao.canLeaveReview(trip, user);
+	}
+	
 	public Boolean add(Review review) {
 		return reviewDao.add(review);
 	}

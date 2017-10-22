@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ar.edu.itba.paw.models.History;
-import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 
 @Service

@@ -6,10 +6,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.Range;
 
 import ar.edu.itba.paw.models.Position;
-import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
 import validators.TripTimeAnnotation;
 

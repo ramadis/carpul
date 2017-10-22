@@ -58,22 +58,25 @@ public class UserDaoJdbc implements UserDao {
 	@Autowired
 	public UserDaoJdbc(final DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
-		/* TODO: export table name as a private final String */
-		/* TODO: export table creation as a private final String */
 		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS users (id serial PRIMARY KEY, created timestamp, first_name varchar (100), phone_number varchar (100), last_name varchar (100), username varchar (100), password varchar (100))");
 	}
 
 	public User create(User user) {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
-		jdbcTemplate.update("INSERT INTO users (username, password, first_name, last_name, phone_number, created) VALUES (?,?,?,?,?,?)",
-				new Object[] { user.getUsername(), user.getPassword(), user.getFirst_name(), user.getLast_name(), user.getPhone_number(), now });
+		String query = "INSERT INTO users (username, password, first_name, last_name, phone_number, created) VALUES (?,?,?,?,?,?)";
+		Object[] params = new Object[] { user.getUsername(), user.getPassword(), user.getFirst_name(), user.getLast_name(), user.getPhone_number(), now };
+
+		jdbcTemplate.update(query, params);
 
 		return user;
 	}
 
 	public User getByUsername(String username) {
+		String query = "SELECT * FROM users WHERE username = ? LIMIT 1";
+		Object[] params = new Object[] { username };
 		User user = new User();
-		this.jdbcTemplate.query("SELECT * FROM users WHERE username = \'" + username + "\' LIMIT 1", (final ResultSet rs) -> {
+		
+		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
 			this.loadResultIntoUser(rs, user);
 		});
 
@@ -81,8 +84,11 @@ public class UserDaoJdbc implements UserDao {
 	}
 
 	public User getById(Integer id) {
+		String query = "SELECT * FROM users WHERE id = ? LIMIT 1";
+		Object[] params = new Object[] { id };
 		User user = new User();
-		this.jdbcTemplate.query("SELECT * FROM users WHERE id = ? LIMIT 1", new Object[] {id}, (final ResultSet rs) -> {
+		
+		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
 			this.loadResultIntoUser(rs, user);
 		});
 

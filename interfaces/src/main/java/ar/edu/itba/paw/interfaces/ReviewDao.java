@@ -10,4 +10,5 @@ public interface ReviewDao {
 	List<Review> getReviews(Trip trip);
 	List<Review> getReviews(User user);
 	Boolean add(Review review);
+	Boolean canLeaveReview(Trip trip, User user);
 }
