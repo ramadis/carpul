@@ -1,20 +1,7 @@
 
-<h1 align="center">
-  <br>
-  <a href="http://pawserver.it.itba.edu.ar/paw-2017b-6/"><img src="http://pawserver.it.itba.edu.ar/paw-2017b-6/static/images/logo.png" alt="Carpul" width="200"></a>
-  <br>
-  Carpul
-  <br>
-</h1>
-
-<h4 align="center">A cheap carpooling service focused on traveling far away.</h4>
-
-<p align="center">
-</p>
-<br>
-
-![screenshot](https://raw.githubusercontent.com/amitmerchant1990/electron-markdownify/master/img/markdownify.gif)
-
+![logo](http://pawserver.it.itba.edu.ar/paw-2017b-6/static/images/logo.png)
+### A cheap carpooling service focused on traveling far away.
+---
 ## Key Features
 
 * Find destinations to go
@@ -44,15 +31,24 @@ $ mvn eclipse:eclipse
 $ eclipse
 ```
 
-## Sample user
+## Sample
 
-A user with an old trip pending review, a current reserved trip, an own empty trip, an own occupied trip, reviews, and history.
+Credentials for a user with an old trip pending review, a current reserved trip, an own empty trip, an own occupied trip, reviews, and history.
+
 ```bash
 # Username
 entrega
 # Password
 holahola
 ```
+
+On the date `23/12/17` going from `Buenos Aires` to `Mar del plata` are several trips listed to play with.
+
+## Comments
+
+* A user can't search for his/her own trips
+* The earnings for a trip are calculated taking into account the amount of people registered for a trip and the cost per passenger.
+* Trips are only reviewable after the arrival time. If you review one, it won't display anymore in your profile.
 
 ## Credits
 
