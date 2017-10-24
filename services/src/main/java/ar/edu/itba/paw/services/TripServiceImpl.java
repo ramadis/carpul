@@ -61,10 +61,16 @@ public class TripServiceImpl implements TripService {
 	}
 	
 	public List<Trip> findByRoute(User user, Search search) {
-		return tripDao.findByRouteWithDateComparision(user, search, "=");
+		List<Trip> trips = tripDao.findByRouteWithDateComparision(user, search, "=");
+		
+		// Filter out expired trips
+		return trips.stream().filter((trip) -> !trip.getExpired()).collect(Collectors.toList());
 	}
 	
 	public List<Trip> findAfterDateByRoute(User user, Search search) {
-		return tripDao.findByRouteWithDateComparision(user, search, ">");
+		List<Trip> trips = tripDao.findByRouteWithDateComparision(user, search, ">");
+		
+		// Filter out expired trips
+		return trips.stream().filter((trip) -> !trip.getExpired()).collect(Collectors.toList());
 	}
 }
