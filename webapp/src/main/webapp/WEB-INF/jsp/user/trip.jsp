@@ -4,7 +4,7 @@
       <span class="destiny-cost"><spring:message code="user.trip.earning"/> <span class="bold" style="display: inline;"><spring:message code="user.trip.nil"/></span></span>
     </c:if>
     <c:if test="${trip.occupied_seats ne 0}">
-      <span class="destiny-cost"><spring:message code="user.trip.earning"/> <span class="bold" style="display: inline;">$${trip.cost}</span></span>
+      <span class="destiny-cost"><spring:message code="user.trip.earning"/> <span class="bold" style="display: inline;">$${trip.cost * trip.occupied_seats}</span></span>
     </c:if>
     <span class="destiny-name">${trip.to_city}</span>
 

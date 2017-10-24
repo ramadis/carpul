@@ -43,7 +43,7 @@
         </span>
         <div>
           <span class="price gray">
-            <span class="bold black">$${trip.cost_per_person}</span>
+            <span class="bold black">$${trip.cost}</span>
             /<spring:message code="search.item.each"/>
           </span>
 

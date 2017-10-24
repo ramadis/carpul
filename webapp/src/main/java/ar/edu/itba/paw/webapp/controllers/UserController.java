@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.HistoryService;
 import ar.edu.itba.paw.interfaces.ReviewService;
+import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.forms.UserCreateForm;
@@ -23,6 +24,9 @@ public class UserController extends AuthController {
 
 	@Autowired
 	private UserService us;
+	
+	@Autowired
+	private TripService ts;
 	
 	@Autowired
 	private ReviewService rs;
@@ -76,7 +80,7 @@ public class UserController extends AuthController {
 		if (loggedUser.getId() != userId) {
 			final ModelAndView mav_other = new ModelAndView("unauth/profile");
 			mav_other.addObject("reviews", rs.getReviews(user));
-			mav_other.addObject("trips", us.getUserTrips(user));
+			mav_other.addObject("trips", ts.getUserTrips(user));
 			
 			user.setId(loggedUser.getId());
 			mav_other.addObject("user", user);
@@ -84,9 +88,9 @@ public class UserController extends AuthController {
 		}
 		
 		// Load objects to view
-		mav.addObject("trips", us.getUserTrips(loggedUser));
+		mav.addObject("trips", ts.getUserTrips(loggedUser));
 		mav.addObject("reviews", rs.getReviews(user));
-		mav.addObject("reservations", us.getReservedTrips(loggedUser));
+		mav.addObject("reservations", ts.getReservedTrips(loggedUser));
 		mav.addObject("histories", hs.getHistories(loggedUser));
 		mav.addObject("user", loggedUser);
 		return mav;

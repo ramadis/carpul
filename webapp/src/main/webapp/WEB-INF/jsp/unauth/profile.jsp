@@ -42,8 +42,6 @@
       <section class="destinys-container">
         <h3><spring:message code="user.profile.next"/></h3>
 
-        <a class="no-margin login-button" href="<c:url value='/trip' />"><spring:message code="user.profile.new"/></a>
-
         <c:if test="${not empty trips}">
           <ul class="no-bullets destiny-list">
             <c:forEach items="${trips}" var="trip">

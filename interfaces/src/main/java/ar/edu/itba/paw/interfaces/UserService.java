@@ -10,7 +10,6 @@ public interface UserService {
 	User getById(Integer id);
 	User getByUsername(String username);
 	User findById(Integer userId);
-	List<Trip> getUserTrips(User user);
-	List<Trip> getReservedTrips(User user);
+	List<User> getPassengers(Trip trip);
 }
 

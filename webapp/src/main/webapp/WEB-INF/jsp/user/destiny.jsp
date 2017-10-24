@@ -5,7 +5,7 @@
   <fmt:formatDate value="${reservation.eta}" var="fmtetatime" pattern="HH:mm"/>
 
   <form:form class="inline-block no-margin" method="post" action="../trip/${reservation.id}/unreserve">
-    <span class="destiny-cost"><span class="bold" style="display: inline;">$${reservation.cost_per_person}</span></span>
+    <span class="destiny-cost"><span class="bold" style="display: inline;">$${reservation.cost}</span></span>
     <span class="destiny-name">${reservation.to_city}</span>
     <span class="destiny-time"><spring:message code="user.trip.depart" arguments="${reservation.from_city},${fmtetddate},${fmtetdtime}"/></span>
     <span class="destiny-time"><spring:message code="user.trip.arrive" arguments="${reservation.to_city},${fmtetddate},${fmtetdtime}"/></span>

@@ -15,21 +15,20 @@ public class Trip {
 	private Position departure;
 	private Position arrival;
 	private Integer seats;
-	
+	private Timestamp created;
+	private Integer occupied_seats;
 	private Boolean expired;
 	
 	//TODO: Check if necessary
 	//TODO: Remove those ugly temp properties
-	private Integer occupied_seats;
-	private Integer available_seats;
-	private Timestamp created;
+	
+	
 	private String time_since_reserved;
 	private Integer driver_id;
 	private Boolean reserved;
 	private String departure_location;
 	private String arrival_location;
-	private Double cost_per_person;
-	private final List<User> passengers = new ArrayList<>();
+	private List<User> passengers = new ArrayList<>();
 	private final List<Integer> passengerIds = new ArrayList<>();
 	private User driver;
 	
@@ -45,6 +44,10 @@ public class Trip {
 	
 	public List<User> getPassengers() {
 		return passengers;
+	}
+	
+	public void setPassengers(List<User> passengers) {
+		this.passengers = passengers;
 	}
 	
 	public void toggleReserve() {
@@ -171,11 +174,7 @@ public class Trip {
 	}
 
 	public Integer getAvailable_seats() {
-		return available_seats;
-	}
-
-	public void setAvailable_seats(Integer available_seats) {
-		this.available_seats = available_seats;
+		return this.seats - occupied_seats;
 	}
 
 	public Integer getOccupied_seats() {
@@ -183,18 +182,7 @@ public class Trip {
 	}
 
 	public void setOccupied_seats(Integer occupied_seats) {
-		this.available_seats = this.seats - occupied_seats;
-		if (occupied_seats == 0) this.cost_per_person = this.cost;
-		else this.cost_per_person = this.cost / occupied_seats;
 		this.occupied_seats = occupied_seats;
-	}
-
-	public Double getCost_per_person() {
-		return cost_per_person;
-	}
-
-	public void setCost_per_person(Double cost_per_person) {
-		this.cost_per_person = cost_per_person;
 	}
 
 	public Timestamp getEtd() {

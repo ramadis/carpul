@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ar.edu.itba.paw.interfaces.TripService;
+import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
@@ -17,6 +18,9 @@ public class TripServiceImpl implements TripService {
 
 	@Autowired
 	private TripDao tripDao;
+	
+	@Autowired
+	private UserService us;
 
 	public Trip register(final Trip trip, final User driver) {
 		return tripDao.create(trip, driver);
@@ -30,16 +34,23 @@ public class TripServiceImpl implements TripService {
 		tripDao.unreserveTrip(tripId, user);
 	}
 	
-	public List<Trip> findByPassenger(final Integer passengerId) {
-		return tripDao.findByPassenger(passengerId);
-	}
-	
 	public Trip findById(final Integer tripId) {
 		return tripDao.findById(tripId);
 	}
 	
-	public List<Trip> findAll(User user) {
-		return tripDao.findAll(user);
+	public List<Trip> getReservedTrips(User user) {
+		return tripDao.getReservedTrips(user);
+	}
+	
+	public List<Trip> getUserTrips(User user) {
+		List<Trip> trips = tripDao.getUserTrips(user);
+		
+		for(Trip t: trips) {
+			t.setPassengers(us.getPassengers(t));
+			t.setOccupied_seats(t.getPassengers().size());
+		}
+		
+		return trips;
 	}
 	
 	public void delete(Integer tripId, User user) {
@@ -47,10 +58,10 @@ public class TripServiceImpl implements TripService {
 	}
 	
 	public List<Trip> findByRoute(User user, Search search) {
-		return tripDao.findByRoute(user, search);
+		return tripDao.findByRouteWithDateComparision(user, search, "=");
 	}
 	
 	public List<Trip> findAfterDateByRoute(User user, Search search) {
-		return tripDao.findAfterDateByRoute(user, search);
+		return tripDao.findByRouteWithDateComparision(user, search, ">");
 	}
 }

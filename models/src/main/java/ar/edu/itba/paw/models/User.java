@@ -11,9 +11,6 @@ public class User {
 	private Timestamp created;
 	private Integer id;
 	
-	//TODO: check if necessary. If not remove
-	private String days_since_creation;
-
 	public String getFirst_name() {
 		return first_name;
 	}
@@ -83,17 +80,12 @@ public class User {
 	
 	public void setCreated(Timestamp created) {
 		this.created = created;
-		Timestamp now = new Timestamp(System.currentTimeMillis());
-		Long  ms = now.getTime() - created.getTime();
-		Integer days = (int) (ms / (1000*60*60*24));
-		this.setDays_since_creation(days.toString());
 	}
 
 	public String getDays_since_creation() {
-		return days_since_creation;
-	}
-
-	public void setDays_since_creation(String days_since_creation) {
-		this.days_since_creation = days_since_creation;
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+		Long  ms = now.getTime() - created.getTime();
+		Integer days = (int) (ms / (1000*60*60*24));
+		return days.toString();
 	}
 }

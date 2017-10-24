@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.UserDao;
-import ar.edu.itba.paw.models.Position;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,13 @@ public class UserDaoJdbc implements UserDao {
 
 	private final JdbcTemplate jdbcTemplate;
 
-	public void loadResultIntoUser(ResultSet rs, User user) {
+	@Autowired
+	public UserDaoJdbc(final DataSource dataSource) {
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
+		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS users (id serial PRIMARY KEY, created timestamp, first_name varchar (100), phone_number varchar (100), last_name varchar (100), username varchar (100), password varchar (100))");
+	}
+	
+	public static void loadResultIntoUser(ResultSet rs, User user) {
 		try {
 			user.setUsername(rs.getString("username"));
 			user.setPassword(rs.getString("password"));
@@ -30,35 +35,16 @@ public class UserDaoJdbc implements UserDao {
 			user.setPhone_number(rs.getString("phone_number"));
 			user.setId(rs.getInt("id"));
 		} catch (Exception e) {
+			System.out.println(e);
 		}
 	}
-
-	public void loadResultIntoTrip(ResultSet rs, Trip trip) {
+	
+	public static void loadReducedResultIntoUser(ResultSet rs, User user) {
 		try {
-			// TODO: this should be referencede to TripDaoJDBC.
-			trip.setId(rs.getInt("id"));
-			trip.setCreated(rs.getTimestamp("created"));
-			trip.setEtd(rs.getTimestamp("etd"));
-			trip.setEta(rs.getTimestamp("eta"));
-			trip.setCost(rs.getDouble("cost"));
-			trip.setSeats(rs.getInt("seats"));
-			trip.setFrom_city(rs.getString("from_city"));
-			trip.setTo_city(rs.getString("to_city"));
-
-			Long now = System.currentTimeMillis();
-			trip.setExpired(now > trip.getEta().getTime());
-
-			Position departure = new Position(rs.getDouble("departure_lat"), rs.getDouble("departure_lon"));
-			Position arrival = new Position(rs.getDouble("arrival_lat"), rs.getDouble("arrival_lon"));
-			trip.setArrival(arrival);
-			trip.setDeparture(departure);
+			user.setFirst_name(rs.getString("first_name"));
+			user.setLast_name(rs.getString("last_name"));
+			user.setPhone_number(rs.getString("phone_number"));
 		} catch (Exception e) {}
-	}
-
-	@Autowired
-	public UserDaoJdbc(final DataSource dataSource) {
-		this.jdbcTemplate = new JdbcTemplate(dataSource);
-		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS users (id serial PRIMARY KEY, created timestamp, first_name varchar (100), phone_number varchar (100), last_name varchar (100), username varchar (100), password varchar (100))");
 	}
 
 	public User create(User user) {
@@ -77,7 +63,7 @@ public class UserDaoJdbc implements UserDao {
 		User user = new User();
 		
 		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
-			this.loadResultIntoUser(rs, user);
+			loadResultIntoUser(rs, user);
 		});
 
 		return user;
@@ -89,70 +75,27 @@ public class UserDaoJdbc implements UserDao {
 		User user = new User();
 		
 		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
-			this.loadResultIntoUser(rs, user);
+			loadResultIntoUser(rs, user);
 		});
 
 		return user;
 	}
-
-	public List<Trip> getUserTrips(User user) {
-		List<Trip> trips = new ArrayList<>();
-		this.jdbcTemplate.query("SELECT * FROM trips WHERE trips.driver_id = ?", new Object[] {user.getId()}, (final ResultSet rs) -> {
-			do {
-				Trip trip = new Trip();
-				loadResultIntoTrip(rs, trip);
-				this.jdbcTemplate.query("SELECT * FROM users JOIN trips_users on users.id = trips_users.user_id WHERE trip_id = ?", new Object[] { trip.getId()}, (final ResultSet rs2) -> {
-					do {
-						User passenger = new User();
-						loadResultIntoUser(rs2, passenger);
-						trip.addPassenger(passenger);
-					}while (rs2.next());
-				});
-				trip.setOccupied_seats(trip.getPassengers().size());
-				/*
-				trip.setCar_id(rs.getInt("car_id"));
-				trip.setDeparture_location(rs.getString("departure_location"));
-				trip.setArrival_location(rs.getString("arrival_location"));
-	            */
-				trips.add(trip);
-	        } while(rs.next());
-		});
-
-		return trips;
-	}
-
-	public List<Trip> getReservedTrips(User user) {
-		// Get no-reviewed trips for a given user
-		List<Trip> trips = new ArrayList<>();
-		String query = "SELECT * FROM trips JOIN trips_users ON trip_id = trips.id JOIN users ON users.id = driver_id WHERE user_id = ? AND NOT EXISTS (SELECT * FROM reviews WHERE owner_id = ? AND trip_id = trip_id)";
-		Object[] params = new Object[] { user.getId(), user.getId() };
+	
+	public List<User> getPassengers(Trip trip) {
+		String query = "SELECT * FROM users JOIN trips_users on users.id = trips_users.user_id WHERE trip_id = ?";
+		Object[] params = new Object[] { trip.getId() };
+		List<User> users = new ArrayList<>();
 		
 		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
 			do {
-				Trip trip = new Trip();
-				loadResultIntoTrip(rs, trip);
-
-				this.jdbcTemplate.query("SELECT count(*) as amount FROM trips_users WHERE trip_id = ?", new Object[] { trip.getId()}, (final ResultSet rs2) -> {
-					trip.setOccupied_seats(rs2.getInt("amount"));
-				});
-
-				User driver = new User();
-				loadResultIntoUser(rs, driver);
-				trip.setDriver(driver);
-
-				/*
-				trip.setCar_id(rs.getInt("car_id"));
-				trip.setDeparture_location(rs.getString("departure_location"));
-				trip.setArrival_location(rs.getString("arrival_location"));
-	            */
-				trips.add(trip);
-	        } while(rs.next());
+				User passenger = new User();
+				loadResultIntoUser(rs, passenger);
+				users.add(passenger);
+			}while (rs.next());
 		});
-
-		return trips;
+		
+		return users;
 	}
 
-	public User findById(final Integer userId) {
-		return this.getById(userId);
-	}
+
 }

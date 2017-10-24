@@ -21,29 +21,28 @@ public class Provider implements AuthenticationProvider {
 
 	@Autowired
 	private UserService us;
-	
+
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		final String username = (String) authentication.getPrincipal();
 		final String password = (String) authentication.getCredentials();
-		
+
 		try {
 			final User user = us.getByUsername(username);
-			
+
 			if (user.getPassword().equals(password)) {
 				final Collection<GrantedAuthority> authorities = new HashSet<>();
 				authorities.add(new SimpleGrantedAuthority("USER"));
-	
+
 				return new UsernamePasswordAuthenticationToken(username, password, authorities);
 			}
-		
+
 		} catch (IllegalStateException e) {}
 		throw new UsernameNotFoundException("No user found by the name " + username);
 	}
 
 	@Override
 	public boolean supports(Class<?> authentication) {
-		// TODO Auto-generated method stub
 		return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
 	}
 

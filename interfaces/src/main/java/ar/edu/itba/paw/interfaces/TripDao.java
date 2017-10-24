@@ -9,11 +9,10 @@ import ar.edu.itba.paw.models.User;
 public interface TripDao {
 	Trip create(Trip trip, User driver);
 	Trip findById (Integer tripId);
-	List<Trip> findByPassenger(Integer passengerId);
-	List<Trip> findAll(User user);
-	List<Trip> findByRoute(User user, Search search);
-	List<Trip> findAfterDateByRoute(User user, Search search);
+	List<Trip> getUserTrips(User user);
+	List<Trip> getReservedTrips(User user);
 	void reserveTrip(Integer tripId, User user);
 	void delete(Integer tripId, User user);
 	void unreserveTrip(Integer tripId, User user);
+	List<Trip> findByRouteWithDateComparision(User user, Search search, String string);
 }

@@ -26,18 +26,14 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	public User findById(final Integer userId) {
-		return userDao.findById(userId);
+		return userDao.getById(userId);
 	}
 	
 	public User getByUsername(String username) {
 		return userDao.getByUsername(username);
 	}
 	
-	public List<Trip> getUserTrips(User user) {
-		return userDao.getUserTrips(user);
-	}
-	
-	public List<Trip> getReservedTrips(User user) {
-		return userDao.getReservedTrips(user);
+	public List<User> getPassengers(Trip trip) {
+		return userDao.getPassengers(trip);
 	}
 }
