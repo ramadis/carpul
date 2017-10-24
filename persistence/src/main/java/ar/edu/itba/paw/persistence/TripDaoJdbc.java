@@ -54,7 +54,6 @@ public class TripDaoJdbc implements TripDao {
 	}
 
 	private String stripAccents(String s) {
-		// TODO: not working. Check how to make it work
 	    return Normalizer.normalize(s, Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
 	}
 
@@ -93,6 +92,8 @@ public class TripDaoJdbc implements TripDao {
 	}
 
 	public List<Trip> findByRouteWithDateComparision(User user, Search search, String comparision) {
+		// Get available trips by a user and a route
+
 		List<Trip> trips = new ArrayList<>();
 		String from = stripAccents(search.getFrom()).toLowerCase();
 		String to = stripAccents(search.getTo()).toLowerCase();
@@ -107,7 +108,7 @@ public class TripDaoJdbc implements TripDao {
 				loadResultIntoTrip(rs, trip);
 				trip.setOccupied_seats(getPassengerAmount(trip));
 				if (trip.getAvailable_seats() < 1) continue;
-				
+
 				User driver = new User();
 				UserDaoJdbc.loadReducedResultIntoUser(rs, driver);
 				trip.setDriver(driver);
@@ -120,7 +121,10 @@ public class TripDaoJdbc implements TripDao {
 	}
 
 	public List<Trip> getUserTrips(User user) {
+		// Get trips owned by a given user
+
 		List<Trip> trips = new ArrayList<>();
+
 		String query = "SELECT * FROM trips WHERE trips.driver_id = ?";
 		Object[] params = new Object[] { user.getId() };
 

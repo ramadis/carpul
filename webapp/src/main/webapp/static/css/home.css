@@ -20,6 +20,20 @@ input[readonly].searchbar-input {
   align-items: center
 }
 
+.home-error-bar {
+  border-radius: 3px;
+  background: #e85252;
+  padding: 10px 20px;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+.home-error-bar .form-error {
+  margin-top: 0;
+  color: white;
+}
+
+
 .title {
   margin: 0;
   color: white;

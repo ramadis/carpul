@@ -34,21 +34,21 @@
         <div class="searchbar">
           <form:label path="from" class="searchbar-label" for="from"><spring:message code="home.index.from"/></form:label>
           <form:input class="searchbar-input" placeholder="Origin" path="from" type="text" name="from" value="" tabindex="1"/>
-          <form:errors path="from" class="form-error" element="p"/>
 
           <form:label path="to" class="searchbar-label" for="to"><spring:message code="home.index.to"/></form:label>
           <form:input class="searchbar-input" placeholder="Destination" path="to" type="text" name="to" value="" tabindex="2"/>
-          <form:errors path="to" class="form-error" element="p"/>
 
           <form:label path="when" class="searchbar-label" for="when"><spring:message code="home.index.on"/></form:label>
           <input readonly class="searchbar-input" id="when" placeholder="Time range" type="text" value="" tabindex="3"/>
           <form:input class="searchbar-input hide" path="when" type="text" name="when" value="" tabindex="-1"/>
-          <form:errors path="from" class="form-error" element="p"/>
 
           <button type="submit" disabled class="login-button searchbar-button" name="button" tabindex="4"><spring:message code="home.index.submit"/></button>
         </div>
-      </form:form>
 
+        <div class="home-error-bar">
+          <form:errors path="*" class="form-error" element="p"/>
+        </div>
+      </form:form>
     </div>
   </div>
 

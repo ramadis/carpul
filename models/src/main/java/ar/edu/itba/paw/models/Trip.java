@@ -16,30 +16,19 @@ public class Trip {
 	private Position arrival;
 	private Integer seats;
 	private Timestamp created;
+	private Integer driver_id;
+	
+	// Extra convenience fields
 	private Integer occupied_seats;
 	private Boolean expired;
-	
-	//TODO: Check if necessary
-	//TODO: Remove those ugly temp properties
-	
-	
-	private String time_since_reserved;
-	private Integer driver_id;
 	private Boolean reserved;
-	private String departure_location;
-	private String arrival_location;
 	private List<User> passengers = new ArrayList<>();
-	private final List<Integer> passengerIds = new ArrayList<>();
 	private User driver;
 	
 	public Trip() {}
 	
 	public void addPassenger(User p) {
 		passengers.add(p);
-	}
-	
-	public List<Integer> getPassengerIds() {
-		return passengerIds;
 	}
 	
 	public List<User> getPassengers() {
@@ -52,10 +41,6 @@ public class Trip {
 	
 	public void toggleReserve() {
 		reserved = !reserved;
-	}
-	
-	public void addPassenger(Integer p) {
-		passengerIds.add(p);
 	}
 	
 	public void setReserved(Boolean r) {
@@ -102,27 +87,6 @@ public class Trip {
 		this.cost = cost;
 	}
 
-
-	public String getDeparture_location() {
-		return departure_location;
-	}
-
-
-	public void setDeparture_location(String departure_location) {
-		this.departure_location = departure_location;
-	}
-
-
-	public String getArrival_location() {
-		return arrival_location;
-	}
-
-
-	public void setArrival_location(String arrival_location) {
-		this.arrival_location = arrival_location;
-	}
-
-
 	@Override
 	public String toString() {
 		return "Trip = " + id;
@@ -134,14 +98,6 @@ public class Trip {
 
 	public void setCreated(Timestamp created) {
 		this.created = created;
-	}
-
-	public String getTime_since_reserved() {
-		return time_since_reserved;
-	}
-
-	public void setTime_since_reserved(String time_since_reserved) {
-		this.time_since_reserved = time_since_reserved;
 	}
 
 	public Integer getSeats() {

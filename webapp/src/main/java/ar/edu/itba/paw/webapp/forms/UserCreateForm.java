@@ -9,15 +9,15 @@ import ar.edu.itba.paw.models.User;
 
 public class UserCreateForm {
 	@NotBlank
-	@Pattern(regexp = "[a-zA-Z]+")
+	@Pattern(regexp = "[\\p{L} ]+")
 	private String username;
 	
 	@NotBlank
-	@Pattern(regexp = "[a-zA-Z]+")
+	@Pattern(regexp = "[\\p{L} ]+")
 	private String first_name;
 	
 	@NotBlank
-	@Pattern(regexp = "[a-zA-Z]+")
+	@Pattern(regexp = "[\\p{L} ]+")
 	private String last_name;
 	
 	@Size(min = 6, max = 20)

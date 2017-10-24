@@ -14,11 +14,11 @@ import validators.TripTimeAnnotation;
 @TripTimeAnnotation( departure = "etd", arrival = "eta")
 public class TripCreateForm {
 	@NotBlank
-	@Pattern(regexp = "[a-zA-Z ]+")
+	@Pattern(regexp = "[\\p{L} ]+")
 	private String from_city;
 	
 	@NotBlank
-	@Pattern(regexp = "[a-zA-Z ]+")
+	@Pattern(regexp = "[\\p{L} ]+")
 	private String to_city;
 	
 	@NotNull

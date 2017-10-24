@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.TripDao;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,12 +46,14 @@ public class TripServiceImpl implements TripService {
 	public List<Trip> getUserTrips(User user) {
 		List<Trip> trips = tripDao.getUserTrips(user);
 		
+		// Add extra fields
 		for(Trip t: trips) {
 			t.setPassengers(us.getPassengers(t));
 			t.setOccupied_seats(t.getPassengers().size());
 		}
 		
-		return trips;
+		// Filter out expired trips
+		return trips.stream().filter((trip) -> !trip.getExpired()).collect(Collectors.toList());
 	}
 	
 	public void delete(Integer tripId, User user) {
