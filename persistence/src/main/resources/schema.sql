@@ -23,14 +23,17 @@ CREATE TABLE IF NOT EXISTS trips (
   departure_lat double precision,
   departure_lon double precision,
   arrival_lat double precision,
-  arrival_lon double precision
+  arrival_lon double precision,
+  FOREIGN KEY (driver_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS trips_users (
   id SERIAL PRIMARY KEY,
   created timestamp,
   trip_id integer,
-  user_id integer
+  user_id integer,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS reviews (
@@ -40,7 +43,10 @@ CREATE TABLE IF NOT EXISTS reviews (
   reviewed_id integer,
   trip_id integer,
   stars integer,
-  message text
+  message text,
+  FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (reviewed_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (trip_id) REFERENCES trips(id)
 );
 
 CREATE TABLE IF NOT EXISTS histories (
@@ -48,5 +54,7 @@ CREATE TABLE IF NOT EXISTS histories (
   created timestamp,
   user_id integer,
   trip_id integer,
-  type varchar(20)
+  type varchar(20),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE
 );

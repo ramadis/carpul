@@ -97,7 +97,7 @@ public class TripDaoJdbc implements TripDao {
 		String to = stripAccents(search.getTo()).toLowerCase();
 
 		String query = "SELECT first_name, last_name, phone_number, trips.*, temp.reserved as is_reserved FROM trips JOIN users ON trips.driver_id = users.id LEFT OUTER JOIN (SELECT id as reserved, trip_id as relation_trip_id FROM trips_users WHERE user_id = ?) as temp ON relation_trip_id = trips.id WHERE driver_id <> ? AND LOWER(from_city) LIKE ? AND LOWER(to_city) LIKE ? AND etd::date::timestamp " + comparision + " ? ORDER BY etd ASC";
-		Object[] params = new Object[] { user.getId(), user.getId(), from, to, search.getWhen() };
+		Object[] params = new Object[] { user.getId(), user.getId(), "%" + from + "%", "%" + to + "%", search.getWhen() };
 
 		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
 			do {
@@ -152,7 +152,7 @@ public class TripDaoJdbc implements TripDao {
 	public List<Trip> getReservedTrips(User user) {
 		// Get no-reviewed trips for a given user
 		List<Trip> trips = new ArrayList<>();
-		String query = "SELECT * FROM trips JOIN trips_users ON trip_id = trips.id JOIN users ON users.id = driver_id WHERE user_id = ? AND NOT EXISTS (SELECT * FROM reviews WHERE owner_id = ? AND trip_id = trips.id)";
+		String query = "SELECT *, users.id as userId FROM trips JOIN trips_users ON trip_id = trips.id JOIN users ON users.id = driver_id WHERE user_id = ? AND NOT EXISTS (SELECT * FROM reviews WHERE owner_id = ? AND trip_id = trips.id)";
 		Object[] params = new Object[] { user.getId(), user.getId() };
 
 		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
@@ -163,6 +163,7 @@ public class TripDaoJdbc implements TripDao {
 				trip.setOccupied_seats(getPassengerAmount(trip));
 				User driver = new User();
 				UserDaoJdbc.loadResultIntoUser(rs, driver);
+				driver.setId(rs.getInt("userId"));
 				trip.setDriver(driver);
 
 				trips.add(trip);

@@ -45,9 +45,7 @@
           <button type="submit" disabled class="login-button searchbar-button" name="button" tabindex="4"><spring:message code="home.index.submit"/></button>
         </div>
 
-        <div class="home-error-bar">
-          <form:errors path="*" class="form-error" element="p"/>
-        </div>
+        <form:errors path="*" class="home-error-bar form-error" element="div"/>
       </form:form>
     </div>
   </div>

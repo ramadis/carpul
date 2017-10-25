@@ -28,8 +28,7 @@ input[readonly].searchbar-input {
   margin-top: 10px;
 }
 
-.home-error-bar .form-error {
-  margin-top: 0;
+.home-error-bar.form-error {
   color: white;
 }
 
