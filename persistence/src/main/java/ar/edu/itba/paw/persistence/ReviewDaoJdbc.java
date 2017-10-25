@@ -21,12 +21,10 @@ import java.util.List;
 public class ReviewDaoJdbc implements ReviewDao {
 
 	private final JdbcTemplate connection;
-	private final String dbSchema = "CREATE TABLE IF NOT EXISTS reviews (id serial PRIMARY KEY, created timestamp, owner_id integer, reviewed_id integer, trip_id integer, stars integer, message text)";
 
 	@Autowired
 	public ReviewDaoJdbc(final DataSource dataSource) {
 		this.connection = new JdbcTemplate(dataSource);
-		//this.connection.execute(dbSchema);
 	}
 
 	@Autowired

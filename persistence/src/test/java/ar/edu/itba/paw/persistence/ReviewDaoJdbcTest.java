@@ -9,20 +9,15 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
-import ar.edu.itba.paw.models.Position;
 import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.Trip;
-import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistence.UserDaoJdbc;
 
 import static org.junit.Assert.*;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 @RunWith( SpringJUnit4ClassRunner.class )

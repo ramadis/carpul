@@ -1,12 +1,17 @@
 package ar.edu.itba.paw.webapp.config;
 
 import org.postgresql.Driver;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.jdbc.datasource.init.DataSourceInitializer;
+import org.springframework.jdbc.datasource.init.DatabasePopulator;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -28,12 +33,14 @@ import javax.sql.DataSource;
 @EnableWebMvc
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
-
 	
-	 @Override
-	 public void addResourceHandlers(ResourceHandlerRegistry registry) {
-	  registry.addResourceHandler("/static/**").addResourceLocations("/static/").setCachePeriod(5);
-	 }
+	@Value("classpath:schema.sql")
+	private Resource schemaSql;
+	
+	@Override
+		public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/static/**").addResourceLocations("/static/").setCachePeriod(5);
+	}
 	 
 	@Bean
 	public ViewResolver viewResolver() {
@@ -61,6 +68,20 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		messageSource.setDefaultEncoding(StandardCharsets.UTF_8.displayName());
 		messageSource.setCacheSeconds(5);
 		return messageSource;
+	}
+	
+	@Bean
+	public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
+		final DataSourceInitializer dsi = new DataSourceInitializer();
+		dsi.setDataSource(ds);
+		dsi.setDatabasePopulator(databasePopulator());
+		return dsi;
+	}
+	
+	private DatabasePopulator databasePopulator() {
+		final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
+		dbp.addScript(schemaSql);
+		return dbp;
 	}
 
 	@Bean

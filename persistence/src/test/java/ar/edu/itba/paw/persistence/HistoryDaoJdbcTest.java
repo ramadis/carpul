@@ -10,15 +10,10 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import ar.edu.itba.paw.models.History;
-import ar.edu.itba.paw.models.Position;
-import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.Trip;
-import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistence.UserDaoJdbc;
 
 import static org.junit.Assert.*;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -42,11 +37,9 @@ public class HistoryDaoJdbcTest {
 	private TripDaoJdbc tripDao;
 	
 	private JdbcTemplate jdbcTemplate;
-	private History testHistory;
 	
 	@Before
 	public void setUp() {
-		testHistory = TestUtils.HistoryUtils.sampleHistory();
 		jdbcTemplate = new JdbcTemplate(ds);
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, "trips");
 		jdbcTemplate.execute("TRUNCATE TABLE trips RESTART IDENTITY;");

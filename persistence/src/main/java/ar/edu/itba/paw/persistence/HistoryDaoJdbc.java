@@ -21,12 +21,10 @@ import java.util.List;
 public class HistoryDaoJdbc implements HistoryDao {
 
 	private final JdbcTemplate connection;
-	private final String dbSchema = "CREATE TABLE IF NOT EXISTS histories (id serial PRIMARY KEY, created timestamp, user_id integer, trip_id integer, type varchar(20))";
 
 	@Autowired
 	public HistoryDaoJdbc(final DataSource dataSource) {
 		this.connection = new JdbcTemplate(dataSource);
-		//this.connection.execute(dbSchema);
 	}
 
 	@Autowired
