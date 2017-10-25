@@ -14,13 +14,27 @@ $(document).ready(function() {
     $("input[name=when]").val(datetime.getTime());
   }
 
+function RemoveAccents(str) {
+  var accents    = 'ÀÁÂÃÄÅàáâãäåßÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž';
+  var accentsOut = "AAAAAAaaaaaaBOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz";
+  str = str.split('');
+  var strLen = str.length;
+  var i, x;
+  for (i = 0; i < strLen; i++) {
+    if ((x = accents.indexOf(str[i])) != -1) {
+      str[i] = accentsOut[x];
+    }
+  }
+  return str.join('');
+}
+
   var when = $("input#when");
   var to = $("input[name=to]");
   var from = $("input[name=from]");
 
   function autocompleteChanged(field) {
     var place = this.getPlace();
-    field.val(place.address_components[0].long_name);
+    field.val(RemoveAccents(place.address_components[0].long_name));
   }
 
   var autocompleteOpts = {
@@ -34,6 +48,9 @@ $(document).ready(function() {
   toAutocomplete.addListener('place_changed', autocompleteChanged.bind(toAutocomplete, to));
 
   function enableButton() {
+    from.val(RemoveAccents(from.val()));
+    to.val(RemoveAccents(to.val()));
+
     if (from.val() && to.val() && when.val()) {
       return $("button[type=submit]").removeAttr('disabled');
     }

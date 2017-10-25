@@ -3,11 +3,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title><spring:message code="search.search.page_title" arguments="${search.to}" /></title>
     <link type="image/x-icon" rel="shortcut icon" href="<c:url value='/static/images/favicon.ico' />" >
     <link href="<c:url value='/static/css/css.css' />" rel="stylesheet" type="text/css" />

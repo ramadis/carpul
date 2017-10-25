@@ -3,6 +3,20 @@ var initialLng = -58.3678814;
 var finishLat = -34.6019644;
 var finishLng = -58.3703602;
 
+function RemoveAccents(str) {
+  var accents    = 'ÀÁÂÃÄÅàáâãäåßÒÓÔÕÕÖØòóôõöøÈÉÊËèéêëðÇçÐÌÍÎÏìíîïÙÚÛÜùúûüÑñŠšŸÿýŽž';
+  var accentsOut = "AAAAAAaaaaaaBOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz";
+  str = str.split('');
+  var strLen = str.length;
+  var i, x;
+  for (i = 0; i < strLen; i++) {
+    if ((x = accents.indexOf(str[i])) != -1) {
+      str[i] = accentsOut[x];
+    }
+  }
+  return str.join('');
+}
+
 var geocoder = new google.maps.Geocoder;
 var map = new GMaps({
   div: '#map',
@@ -70,7 +84,7 @@ function update(field, latlng) {
     if (status === 'OK' && results[1]) {
       var result = results[1];
       var city = result.address_components.find(function(comp) { return comp.types.includes("locality") || comp.types.includes("administrative_area_level_2") || comp.types.includes("administrative_area_level_1")});
-      $("input[name=" + input[field] + "]").val(city.long_name);
+      $("input[name=" + input[field] + "]").val(RemoveAccents(city.long_name));
     }
   }
 }
