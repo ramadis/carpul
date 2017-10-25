@@ -26,7 +26,7 @@
     <%@ include file="/WEB-INF/jsp/common/hero.jsp" %>
 
     <div class="profile-form-container flex-center">
-      <form:form class="new-trip-form" modelAttribute="reviewForm" action="/webapp/review/${trip.id}">
+      <form:form class="new-trip-form" modelAttribute="reviewForm" action="../review/${trip.id}">
         <h3><spring:message code="review.add.title"/></h3>
         <h2><spring:message code="review.add.subtitle" arguments="${user.first_name},${reviewed.first_name},${trip.from_city},${trip.to_city}"/></h2>
 

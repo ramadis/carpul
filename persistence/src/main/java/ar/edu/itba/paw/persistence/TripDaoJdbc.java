@@ -90,7 +90,7 @@ public class TripDaoJdbc implements TripDao {
 		String from = search.getFrom().toLowerCase();
 		String to = search.getTo().toLowerCase();
 
-		String query = "SELECT first_name, last_name, phone_number, trips.*, temp.reserved as is_reserved FROM trips JOIN users ON trips.driver_id = users.id LEFT OUTER JOIN (SELECT id as reserved, trip_id as relation_trip_id FROM trips_users WHERE user_id = ?) as temp ON relation_trip_id = trips.id WHERE driver_id <> ? AND LOWER(from_city) LIKE ? AND LOWER(to_city) LIKE ? AND etd::date::timestamp " + comparision + " ? ORDER BY etd ASC";
+		String query = "SELECT users.id as userId, first_name, last_name, phone_number, trips.*, temp.reserved as is_reserved FROM trips JOIN users ON trips.driver_id = users.id LEFT OUTER JOIN (SELECT id as reserved, trip_id as relation_trip_id FROM trips_users WHERE user_id = ?) as temp ON relation_trip_id = trips.id WHERE driver_id <> ? AND LOWER(from_city) LIKE ? AND LOWER(to_city) LIKE ? AND etd::date::timestamp " + comparision + " ? ORDER BY etd ASC";
 		Object[] params = new Object[] { user.getId(), user.getId(), "%" + from + "%", "%" + to + "%", search.getWhen() };
 
 		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
@@ -103,6 +103,7 @@ public class TripDaoJdbc implements TripDao {
 
 				User driver = new User();
 				UserDaoJdbc.loadReducedResultIntoUser(rs, driver);
+				driver.setId(rs.getInt("userId"));
 				trip.setDriver(driver);
 
 				trips.add(trip);
@@ -182,7 +183,7 @@ public class TripDaoJdbc implements TripDao {
 	public Trip findById(final Integer tripId) {
 		Trip trip = new Trip();
 
-		String query = "SELECT * FROM trips LEFT OUTER JOIN users ON driver_id = users.id  WHERE trips.id = ? LIMIT 1";
+		String query = "SELECT trips.*, users.id as userId FROM trips LEFT OUTER JOIN users ON driver_id = users.id  WHERE trips.id = ? LIMIT 1";
 		Object[] params = new Object[] { tripId };
 
 		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
@@ -193,6 +194,7 @@ public class TripDaoJdbc implements TripDao {
 
 			User driver = new User();
 			UserDaoJdbc.loadResultIntoUser(rs, driver);
+			driver.setId(rs.getInt("userId"));
 			trip.setDriver(driver);
 		});
 

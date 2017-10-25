@@ -33,14 +33,14 @@
       <form:form method="post" modelAttribute="searchForm" action="search">
         <div class="searchbar">
           <form:label path="from" class="searchbar-label" for="from"><spring:message code="home.index.from"/></form:label>
-          <form:input class="searchbar-input" placeholder="Origin" path="from" type="text" name="from" value="" tabindex="1"/>
+          <form:input class="searchbar-input" placeholder="Origin" path="from" type="text" name="from" tabindex="1"/>
 
           <form:label path="to" class="searchbar-label" for="to"><spring:message code="home.index.to"/></form:label>
-          <form:input class="searchbar-input" placeholder="Destination" path="to" type="text" name="to" value="" tabindex="2"/>
+          <form:input class="searchbar-input" placeholder="Destination" path="to" type="text" name="to" tabindex="2"/>
 
           <form:label path="when" class="searchbar-label" for="when"><spring:message code="home.index.on"/></form:label>
-          <input readonly class="searchbar-input" id="when" placeholder="Time range" type="text" value="" tabindex="3"/>
-          <form:input class="searchbar-input hide" path="when" type="text" name="when" value="" tabindex="-1"/>
+          <input readonly class="searchbar-input" id="when" placeholder="Time range" type="text" tabindex="3"/>
+          <form:input class="searchbar-input hide" path="when" type="text" name="when" />
 
           <button type="submit" disabled class="login-button searchbar-button" name="button" tabindex="4"><spring:message code="home.index.submit"/></button>
         </div>
