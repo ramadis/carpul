@@ -46,7 +46,6 @@ public class TripDaoJdbcTest {
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
 		jdbcTemplate.execute("TRUNCATE TABLE users RESTART IDENTITY;");
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, "trips_users");
-		
 		jdbcTemplate.execute("TRUNCATE TABLE trips_users RESTART IDENTITY;");
 		userDao.create(TestUtils.UserUtils.sampleUser());
 	}

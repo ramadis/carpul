@@ -33,6 +33,10 @@ public class UserServiceImpl implements UserService {
 		return userDao.getByUsername(username);
 	}
 	
+	public Boolean exists(User user) {
+		return userDao.exists(user);
+	}
+	
 	public List<User> getPassengers(Trip trip) {
 		return userDao.getPassengers(trip);
 	}

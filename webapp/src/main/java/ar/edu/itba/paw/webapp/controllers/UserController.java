@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,10 +39,21 @@ public class UserController extends AuthController {
 	public ModelAndView registerUser(@Valid @ModelAttribute("userCreateForm") final UserCreateForm form,
 							  		final BindingResult errors) {
 		// Check for form errors
+		
 		if (errors.hasErrors()) return registerUserView(form);
 		
+		// Get user from form
+		User user = form.getUser();
+		
+		// Check if user exists
+		if (us.exists(user)) {
+			ObjectError error = new ObjectError("username","An account already exists for this username");
+			errors.addError(error);
+			return registerUserView(form);
+		}
+		
 		// Register new user
-		us.register(form.getUser());
+		us.register(user);
 		
 		// Redirect to login view
 		return new ModelAndView("redirect:/login");

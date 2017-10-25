@@ -49,6 +49,8 @@
           <a href="<c:url value='${loginUserURI}'/>" class="create-account"><spring:message code="user.register.login"/></a>
           <button type="submit" class="login-button"><spring:message code="user.register.submit"/></button>
         </div>
+
+        <form:errors path="" class="form-error" element="p"/>
     </form:form>
   </body>
 </html>

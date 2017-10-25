@@ -146,7 +146,7 @@ public class TripDaoJdbc implements TripDao {
 	public List<Trip> getReservedTrips(User user) {
 		// Get no-reviewed trips for a given user
 		List<Trip> trips = new ArrayList<>();
-		String query = "SELECT *, users.id as userId FROM trips JOIN trips_users ON trip_id = trips.id JOIN users ON users.id = driver_id WHERE user_id = ? AND NOT EXISTS (SELECT * FROM reviews WHERE owner_id = ? AND trip_id = trips.id)";
+		String query = "SELECT trips.*, trips_users.*, users.*, users.id as userIdAux FROM trips JOIN trips_users ON trip_id = trips.id JOIN users ON users.id = driver_id WHERE user_id = ? AND NOT EXISTS (SELECT * FROM reviews WHERE owner_id = ? AND trip_id = trips.id)";
 		Object[] params = new Object[] { user.getId(), user.getId() };
 
 		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
@@ -157,7 +157,7 @@ public class TripDaoJdbc implements TripDao {
 				trip.setOccupied_seats(getPassengerAmount(trip));
 				User driver = new User();
 				UserDaoJdbc.loadResultIntoUser(rs, driver);
-				driver.setId(rs.getInt("userId"));
+				driver.setId(rs.getInt("userIdAux"));
 				trip.setDriver(driver);
 
 				trips.add(trip);

@@ -44,6 +44,18 @@ public class UserDaoJdbc implements UserDao {
 			user.setPhone_number(rs.getString("phone_number"));
 		} catch (Exception e) {}
 	}
+	
+	public Boolean exists(User user) {
+		String query = "SELECT * FROM users WHERE username = ?";
+		Object[] params = new Object[] { user.getUsername() };
+		User newUser = new User();
+		
+		jdbcTemplate.query(query, params, (ResultSet rs) -> {
+			loadResultIntoUser(rs, newUser);
+		});
+		
+		return newUser.getId() != null;
+	}
 
 	public User create(User user) {
 		Timestamp now = new Timestamp(System.currentTimeMillis());

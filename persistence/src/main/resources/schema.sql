@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS trips_users (
   created timestamp,
   trip_id integer,
   user_id integer,
-  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE
 );
 
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS reviews (
   message text,
   FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (reviewed_id) REFERENCES users(id) ON DELETE CASCADE,
-  FOREIGN KEY (trip_id) REFERENCES trips(id)
+  FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS histories (

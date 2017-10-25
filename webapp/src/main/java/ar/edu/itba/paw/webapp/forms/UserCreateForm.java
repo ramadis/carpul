@@ -28,16 +28,8 @@ public class UserCreateForm {
 	@NotBlank
 	private String password;
 	
-	@Size(min = 6, max = 100)
-	@NotBlank
-	private String repeat_password;
-	
 	public String getUsername() {
 		return username;
-	}
-	
-	public String getRepeat_password() {
-		return repeat_password;
 	}
 
 	public String getFirst_name() {
@@ -62,10 +54,6 @@ public class UserCreateForm {
 
 	public void setPhone_number(String phone_number) {
 		this.phone_number = phone_number;
-	}
-
-	public void setRepeat_password(String repeat_password) {
-		this.repeat_password = repeat_password;
 	}
 
 	public void setUsername(String username) {

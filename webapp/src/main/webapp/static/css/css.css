@@ -19,6 +19,10 @@ a {
 	align-items: center;
 }
 
+form {
+	margin-bottom: 0 !important;
+}
+
 button[disabled] {
 	background: #a9a9a9;
 	cursor: not-allowed;
