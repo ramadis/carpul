@@ -27,8 +27,8 @@ public class TripDaoJdbc implements TripDao {
 	@Autowired
 	public TripDaoJdbc(final DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
-		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips_users (id serial PRIMARY KEY, created timestamp, trip_id integer, user_id integer)");
-		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips (id serial PRIMARY KEY, to_city varchar(100), from_city varchar(100), created timestamp, seats integer, driver_id integer, cost real, eta timestamp, etd timestamp, departure_lat double precision, departure_lon double precision, arrival_lat double precision, arrival_lon double precision)");
+		//jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips_users (id serial PRIMARY KEY, created timestamp, trip_id integer, user_id integer)");
+		//jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS trips (id serial PRIMARY KEY, to_city varchar(100), from_city varchar(100), created timestamp, seats integer, driver_id integer, cost real, eta timestamp, etd timestamp, departure_lat double precision, departure_lon double precision, arrival_lat double precision, arrival_lon double precision)");
 	}
 
 	private static void loadResultIntoTrip(ResultSet rs, Trip trip) {
@@ -179,8 +179,8 @@ public class TripDaoJdbc implements TripDao {
 		Object[] params = new Object[] { trip.getId(), trip.getDriver_id() };
 		List<Boolean> bools = new ArrayList<>();
 
-		this.jdbcTemplate.query(query, params, (final ResultSet rs2) -> {
-			bools.add(rs2.next());
+		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
+			bools.add(rs.next());
 		});
 
 		return bools.size() > 0 ? bools.get(1) : false;

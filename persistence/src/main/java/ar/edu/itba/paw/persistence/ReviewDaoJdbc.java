@@ -26,7 +26,7 @@ public class ReviewDaoJdbc implements ReviewDao {
 	@Autowired
 	public ReviewDaoJdbc(final DataSource dataSource) {
 		this.connection = new JdbcTemplate(dataSource);
-		this.connection.execute(dbSchema);
+		//this.connection.execute(dbSchema);
 	}
 
 	@Autowired

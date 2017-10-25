@@ -22,7 +22,7 @@ public class UserDaoJdbc implements UserDao {
 	@Autowired
 	public UserDaoJdbc(final DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
-		jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS users (id serial PRIMARY KEY, created timestamp, first_name varchar (100), phone_number varchar (100), last_name varchar (100), username varchar (100), password varchar (100))");
+		//jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS users (id serial PRIMARY KEY, created timestamp, first_name varchar (100), phone_number varchar (100), last_name varchar (100), username varchar (100), password varchar (100))");
 	}
 	
 	public static void loadResultIntoUser(ResultSet rs, User user) {
