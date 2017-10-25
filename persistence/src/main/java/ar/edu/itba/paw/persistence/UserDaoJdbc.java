@@ -23,7 +23,7 @@ public class UserDaoJdbc implements UserDao {
 	public UserDaoJdbc(final DataSource dataSource) {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
-	
+
 	public static void loadResultIntoUser(ResultSet rs, User user) {
 		try {
 			user.setUsername(rs.getString("username"));
@@ -34,10 +34,9 @@ public class UserDaoJdbc implements UserDao {
 			user.setPhone_number(rs.getString("phone_number"));
 			user.setId(rs.getInt("id"));
 		} catch (Exception e) {
-			System.out.println(e);
 		}
 	}
-	
+
 	public static void loadReducedResultIntoUser(ResultSet rs, User user) {
 		try {
 			user.setFirst_name(rs.getString("first_name"));
@@ -60,7 +59,7 @@ public class UserDaoJdbc implements UserDao {
 		String query = "SELECT * FROM users WHERE username = ? LIMIT 1";
 		Object[] params = new Object[] { username };
 		User user = new User();
-		
+
 		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
 			loadResultIntoUser(rs, user);
 		});
@@ -72,19 +71,19 @@ public class UserDaoJdbc implements UserDao {
 		String query = "SELECT * FROM users WHERE id = ? LIMIT 1";
 		Object[] params = new Object[] { id };
 		User user = new User();
-		
+
 		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
 			loadResultIntoUser(rs, user);
 		});
 
 		return user;
 	}
-	
+
 	public List<User> getPassengers(Trip trip) {
 		String query = "SELECT * FROM users JOIN trips_users on users.id = trips_users.user_id WHERE trip_id = ?";
 		Object[] params = new Object[] { trip.getId() };
 		List<User> users = new ArrayList<>();
-		
+
 		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
 			do {
 				User passenger = new User();
@@ -92,7 +91,7 @@ public class UserDaoJdbc implements UserDao {
 				users.add(passenger);
 			}while (rs.next());
 		});
-		
+
 		return users;
 	}
 

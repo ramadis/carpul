@@ -30,13 +30,12 @@ public class ReviewController extends AuthController {
 	@RequestMapping(value = "/review/{tripId}", method = RequestMethod.GET)
 	public ModelAndView createReviewView(@ModelAttribute("reviewForm") final ReviewForm form,
 										@PathVariable("tripId") final Integer tripId) {
-		
+
 		// 404 if user can not make a review
 		Trip trip = ts.findById(tripId);
 		User loggedUser = user();
-		System.out.println("Can leave review: " + rs.canLeaveReview(trip, loggedUser));
 		if (trip == null || trip.getId() == null || !rs.canLeaveReview(trip, loggedUser)) return new ModelAndView("redirect:/404");
-		
+
 		// Expose view
 		ModelAndView mav = new ModelAndView("review/add");
 		mav.addObject("reviewed", trip.getDriver());

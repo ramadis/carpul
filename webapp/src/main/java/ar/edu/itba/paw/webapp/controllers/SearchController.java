@@ -26,7 +26,7 @@ public class SearchController extends AuthController {
 
 	@Autowired
 	private TripService ts;
-	
+
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public ModelAndView searchAllView(@RequestParam("from") String from,
 									 @RequestParam("to") String to,
@@ -36,13 +36,11 @@ public class SearchController extends AuthController {
 		search.setFrom(from);
 		search.setTo(to);
 		search.setWhen(when);
-		
+
 		// Get trips to this search
 		List<Trip> trips = ts.findByRoute(user(), search);
 		List<Trip> later_trips = ts.findAfterDateByRoute(user(), search);
-		
-		System.out.println(to);
-		
+
 		// Expose view
 		final ModelAndView mav = new ModelAndView("search/search");
 		mav.addObject("trips", trips);
@@ -51,7 +49,7 @@ public class SearchController extends AuthController {
 		mav.addObject("user", user());
 		return mav;
 	}
-	
+
 	@RequestMapping(value = "/search/{tripId}", method = RequestMethod.GET)
 	public ModelAndView searchAllView(@PathVariable("tripId") final Integer tripId,
 									 @RequestParam("from") String from,
@@ -67,13 +65,13 @@ public class SearchController extends AuthController {
 		mav.addObject("is_searching", true);
 		return mav;
 	}
-	
+
 	@RequestMapping(value = "/search", method = RequestMethod.POST)
 	public ModelAndView searchRedirect(@Valid @ModelAttribute("searchForm") final SearchForm form,
 								  	  BindingResult errors) {
 		// Check for errors
 		if (errors.hasErrors()) return new ModelAndView("home/index");
-		
+
 		// Compose search URI
 		Search search = form.getSearch();
 		return new ModelAndView("redirect:search?from=" + search.getFrom() + "&to=" + search.getTo() + "&when=" + search.getWhen().getTime());

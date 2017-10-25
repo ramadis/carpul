@@ -26,19 +26,19 @@ import javax.sql.DataSource;
 public class ReviewDaoJdbcTest {
 	@Autowired
 	private DataSource ds;
-	
+
 	@Autowired
 	private ReviewDaoJdbc reviewDao;
-	
+
 	@Autowired
 	private UserDaoJdbc userDao;
-	
+
 	@Autowired
 	private TripDaoJdbc tripDao;
-	
+
 	private JdbcTemplate jdbcTemplate;
 	private Review testReview;
-	
+
 	@Before
 	public void setUp() {
 		testReview = TestUtils.ReviewUtils.sampleReview();
@@ -52,7 +52,7 @@ public class ReviewDaoJdbcTest {
 		userDao.create(TestUtils.UserUtils.sampleUser());
 		tripDao.create(TestUtils.TripUtils.sampleTrip(), TestUtils.UserUtils.sampleUser());
 	}
-	
+
 	public void assertReview(Review review) {
 		assertNotNull(review);
 		assertEquals(TestUtils.ReviewUtils.OWNER_ID, review.getOwner().getId());
@@ -63,41 +63,38 @@ public class ReviewDaoJdbcTest {
 		assertNotNull(review.getCreated());
 		assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "reviews"));
 	}
-	
+
 	@Test
 	public void testAdd() {
 		// Create review
 		Review createdReview = reviewDao.add(testReview);
-		
+
 		// Asserts for review
 		assertReview(createdReview);
 	}
-	
+
 	@Test
 	public void testGetReviewsTrip() {
 		// Create review
 		reviewDao.add(TestUtils.ReviewUtils.sampleReview());
-		
+
 		// Create review
 		List<Review> reviews = reviewDao.getReviews(TestUtils.TripUtils.sampleTrip());
-		
-		System.out.println(reviews.get(0).getId());
-		System.out.println(reviews.get(0).getOwner());
-		
+
 		// Asserts for review
 		assertReview(reviews.get(0));
 	}
-	
+
 	@Test
 	public void testGetReviewsUser() {
 		// Create review
 		testAdd();
-		
+
 		// Create review
 		List<Review> reviews = reviewDao.getReviews(TestUtils.UserUtils.sampleUser());
-		
+
 		// Asserts for review
 		assertReview(reviews.get(0));
 	}
-	
+
 }
