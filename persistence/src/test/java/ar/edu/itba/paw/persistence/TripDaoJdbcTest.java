@@ -17,6 +17,7 @@ import ar.edu.itba.paw.persistence.UserDaoJdbc;
 import static org.junit.Assert.*;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -43,7 +44,12 @@ public class TripDaoJdbcTest {
 		testTrip = TestUtils.TripUtils.sampleTrip();
 		jdbcTemplate = new JdbcTemplate(ds);
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, "trips");
+		jdbcTemplate.execute("TRUNCATE TABLE trips RESTART IDENTITY;");
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
+		jdbcTemplate.execute("TRUNCATE TABLE users RESTART IDENTITY;");
+		JdbcTestUtils.deleteFromTables(jdbcTemplate, "trips_users");
+		
+		jdbcTemplate.execute("TRUNCATE TABLE trips_users RESTART IDENTITY;");
 		userDao.create(TestUtils.UserUtils.sampleUser());
 	}
 	
@@ -84,13 +90,78 @@ public class TripDaoJdbcTest {
 		tripDao.create(trip, user);
 		
 		// Reserve trip
-		tripDao.reserveTrip(0, user);
+		tripDao.reserveTrip(TestUtils.TripUtils.ID, user);
 		
 		// Get trip
 		Trip reservedTrip = tripDao.findById(TestUtils.TripUtils.ID);
 		
-		// Assert reservation
-		assertEquals(true, reservedTrip.getReserved());
+		// Assert trip
+		assertFalse(reservedTrip.getReserved());
+	}
+	
+	@Test
+	public void testUnreserve() {
+		User user = TestUtils.UserUtils.sampleUser();
+		
+		// Reserve trip
+		testReserve();
+		
+		// Unreserve trip
+		tripDao.unreserveTrip(TestUtils.TripUtils.ID, user);
+		
+		// Get trip
+		Trip reservedTrip = tripDao.findById(TestUtils.TripUtils.ID);
+		
+		// Assert trip
+		assertFalse(reservedTrip.getReserved());
+	}
+	
+	@Test
+	public void testDelete() {
+		User user = TestUtils.UserUtils.sampleUser();
+		
+		// Create trip
+		testCreate();
+		
+		// Delete trip
+		tripDao.delete(TestUtils.TripUtils.ID, user);
+		
+		// Get trip
+		Trip reservedTrip = tripDao.findById(TestUtils.TripUtils.ID);
+		
+		// Assert trip
+		assertNull(reservedTrip.getId());
+	}
+	
+	@Test
+	public void testGetUserTrips() {
+		User user = TestUtils.UserUtils.sampleUser();
+		
+		// Create trip
+		testCreate();
+		
+		// Get trips for users
+		List<Trip> trips = tripDao.getUserTrips(user);
+		
+		// Assert trip
+		assertTrue(trips.size() > 0);
+	}
+	
+	@Test
+	public void testGetReservedTrips() {
+		User user = TestUtils.UserUtils.sampleUser();
+		
+		// Create trip
+		testCreate();
+		
+		// Reserve trip
+		testReserve();
+		
+		// Get trips for users
+		List<Trip> trips = tripDao.getReservedTrips(user);
+		
+		// Assert trip
+		assertEquals(1, trips.size());
 	}
 	
 	

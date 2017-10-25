@@ -2,7 +2,9 @@ package ar.edu.itba.paw.persistence;
 
 import java.sql.Timestamp;
 
+import ar.edu.itba.paw.models.History;
 import ar.edu.itba.paw.models.Position;
+import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 
@@ -48,6 +50,7 @@ public class TestUtils {
 		public static Trip sampleTrip() {
 			// Create test trip
 			Trip trip = new Trip();
+			trip.setId(ID);
 			trip.setTo_city(TO_CITY);
 			trip.setFrom_city(FROM_CITY);
 			trip.setSeats(SEATS);
@@ -63,6 +66,50 @@ public class TestUtils {
 			trip.setArrival(arrival);
 			trip.setDeparture(departure);
 			return trip;
+		}
+	}
+	
+	public static class ReviewUtils {
+		public static final Integer ID = 0;
+		public static final Integer OWNER_ID = 0;
+		public static final Integer REVIEWED_ID = 0;
+		public static final Integer TRIP_ID = 0;
+		public static final Integer STARS = 3;
+		public static final String MESSAGE = "Message";
+		public static final Timestamp NOW = new Timestamp(System.currentTimeMillis());
+	
+		public static Review sampleReview() {
+			// Create test review
+			Review review = new Review();
+			
+			review.setOwner(TestUtils.UserUtils.sampleUser());
+			review.setReviewedUser(TestUtils.UserUtils.sampleUser());
+			review.setStars(STARS);
+			review.setCreated(NOW);
+			review.setTrip(TestUtils.TripUtils.sampleTrip());
+			review.setMessage(MESSAGE);
+
+			return review;
+		}
+	}
+	
+	public static class HistoryUtils {
+		public static final Integer ID = 0;
+		public static final Integer USER_ID = 0;
+		public static final Integer TRIP_ID = 0;
+		public static final String TYPE = "CREATED";
+		public static final Timestamp NOW = new Timestamp(System.currentTimeMillis());
+	
+		public static History sampleHistory() {
+			// Create test history
+			History history = new History();
+			
+			history.setRelated(TestUtils.UserUtils.sampleUser());
+			history.setTrip(TestUtils.TripUtils.sampleTrip());
+			history.setType(TYPE);
+			history.setCreated(NOW);
+			
+			return history;
 		}
 	}
 }

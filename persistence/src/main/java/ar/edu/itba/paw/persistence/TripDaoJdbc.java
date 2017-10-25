@@ -183,7 +183,7 @@ public class TripDaoJdbc implements TripDao {
 			bools.add(rs.next());
 		});
 
-		return bools.size() > 0 ? bools.get(1) : false;
+		return bools.size() > 0 ? bools.get(0) : false;
 	}
 
 	public Trip findById(final Integer tripId) {

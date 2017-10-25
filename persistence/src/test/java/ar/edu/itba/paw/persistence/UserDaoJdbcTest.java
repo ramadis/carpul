@@ -36,6 +36,7 @@ public class UserDaoJdbcTest {
 	public void setUp() {
 		jdbcTemplate = new JdbcTemplate(ds);
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
+		jdbcTemplate.execute("TRUNCATE TABLE users RESTART IDENTITY;");
 		testUser = TestUtils.UserUtils.sampleUser();
 	}
 	
@@ -84,6 +85,4 @@ public class UserDaoJdbcTest {
 		// Asserts
 		assertUser(user);
 	}
-	
-	// TODO: test getPassengers
 }

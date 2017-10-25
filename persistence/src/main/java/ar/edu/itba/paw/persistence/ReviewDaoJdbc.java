@@ -92,7 +92,7 @@ public class ReviewDaoJdbc implements ReviewDao {
 		return reviews;
 	}
 
-	public Boolean add(Review review) {
+	public Review add(Review review) {
 		String query = "INSERT INTO reviews (created, owner_id, reviewed_id, stars, message, trip_id) VALUES (?,?,?,?,?,?)";
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		Object[] params = new Object[] { now,
@@ -102,6 +102,6 @@ public class ReviewDaoJdbc implements ReviewDao {
 										review.getMessage(),
 										review.getTrip().getId() };
 		this.connection.update(query, params);
-		return true;
+		return review;
 	}
 }

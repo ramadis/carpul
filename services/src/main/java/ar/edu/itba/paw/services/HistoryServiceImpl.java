@@ -25,7 +25,7 @@ public class HistoryServiceImpl implements  HistoryService {
 		return historyDao.getHistoriesByPage(user, page);
 	}
 	
-	public Boolean addHistory(User user, Integer tripId, String type) {
+	public History addHistory(User user, Integer tripId, String type) {
 		return historyDao.addHistory(user, tripId, type);
 	}
 }

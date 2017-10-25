@@ -9,6 +9,6 @@ import ar.edu.itba.paw.models.User;
 public interface ReviewDao {
 	List<Review> getReviews(Trip trip);
 	List<Review> getReviews(User user);
-	Boolean add(Review review);
+	Review add(Review review);
 	Boolean canLeaveReview(Trip trip, User user);
 }
