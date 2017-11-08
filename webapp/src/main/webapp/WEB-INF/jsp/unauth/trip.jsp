@@ -7,8 +7,19 @@
   <div class="inline-block no-margin">
     <span class="destiny-cost"><span class="bold" style="display: inline;">$${trip.cost}</span></span>
     <span class="destiny-name">${trip.to_city}</span>
-    <span class="destiny-time"><spring:message code="user.trip.depart" arguments="${trip.from_city},${fmtetddate},${fmtetdtime}"/></span>
-    <span class="destiny-time"><spring:message code="user.trip.arrive" arguments="${trip.to_city},${fmtetadate},${fmtetatime}"/></span>
+    <span class="destiny-time"><spring:message code="user.trip.departing" arguments="${trip.from_city}"/></span>
+    <div class="destiny-timetable">
+      <div class="destiny-timerow">
+        <span class="destiny-time-titlespan"><spring:message code="user.trip.depart_single"/></span>
+        <span>${fmtetddate}</span>
+        <span class="destiny-time-span">${fmtetdtime}</span>
+      </div>
+      <div class="destiny-timerow">
+        <span class="destiny-time-titlespan"><spring:message code="user.trip.arrive_single"/></span>
+        <span>${fmtetadate}</span>
+        <span class="destiny-time-span">${fmtetatime}</span>
+      </div>
+    </div>
     <c:if test="${not empty trip.passengers}">
       <hr>
       <c:forEach items="${trip.passengers}" var="passenger">

@@ -77,7 +77,7 @@
   transition: 0.1s ease-out background;
   border: none;
   outline: none;
-  font-size: 12px;
+  font-size: 16px;
   cursor: pointer;
 }
 
@@ -95,8 +95,8 @@
   border-radius: 10px;
   box-sizing: border-box;
   padding: 20px;
+  padding-top: 40px;
   width: 20vw;
-  height: 20vw;
   background: url('../images/cabin.jpg');
   background-size: cover;
   background-color: rgba(0,0,0,.2);
@@ -196,16 +196,42 @@
 .map-trigger {
   font-weight: 900;
   font-size: 14px;
-  display: inline-block;
+  display: inherit;
   padding: 5px 10px;
   padding-left: 0;
   margin-top: 5px;
   margin-bottom: -5px;
+  text-align: center;
   border-radius: 2px;
-  transition: 0.1s ease-in background, 0.05s ease-in padding;
+  transition: 0.1s ease-in background;
 }
 
 .map-trigger:hover {
-  padding-left: 5px;
   background: #e36f4a;
+}
+
+.destiny-timetable {
+  display: flex;
+  justify-content: space-around;
+  background: rgba(0, 0, 0, 0.5);
+  margin: 10 0;
+  margin-bottom: 0;
+  box-sizing: border-box;
+  padding: 10px 0;
+  border-radius: 5px;
+}
+
+.destiny-timerow {
+  text-align: center;
+}
+
+.destiny-timerow .destiny-time-span {
+  font-size: 32px;
+}
+
+.destiny-timerow .destiny-time-titlespan {
+  font-size: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid white;
+  margin-bottom: 10px;
 }

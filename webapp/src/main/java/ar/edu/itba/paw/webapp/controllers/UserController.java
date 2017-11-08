@@ -37,6 +37,10 @@ public class UserController extends AuthController {
 	private HistoryService hs;
 	
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
+	
+	//TODO: RUN THIS MIGRATIONS IN PRODU:
+	// ALTER TABLE trips ADD deleted boolean;
+	// UPDATE trips SET deleted = false;
 	public ModelAndView registerUser(@Valid @ModelAttribute("userCreateForm") final UserCreateForm form,
 							  		final BindingResult errors) {
 		// Check for form errors
