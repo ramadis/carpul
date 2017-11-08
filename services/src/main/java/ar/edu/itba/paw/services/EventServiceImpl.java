@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.HistoryService;
 import ar.edu.itba.paw.interfaces.TripService;
@@ -19,16 +20,24 @@ public class EventServiceImpl implements  EventService {
 	@Autowired
 	TripService ts;
 	
+	@Autowired
+	EmailService es;
+	
 	public void registerReserve(User user, Integer tripId) {
 		hs.addHistory(user, tripId, "RESERVE");
 		// TODO: Change DB. Users usernames should be valid emails.
-		EmailService.INSTANCE.sendReservationEmail(user, ts.findById(tripId));
+		es.sendReservationEmail(user, ts.findById(tripId));
 		
 	}
 	
 	public void registerUnreserve(User user, Integer tripId) {
 		hs.addHistory(user, tripId, "UNRESERVE");
 		// TODO: Change DB. Users usernames should be valid emails.
-		EmailService.INSTANCE.sendUnreservationEmail(user, ts.findById(tripId));
+		es.sendUnreservationEmail(user, ts.findById(tripId));
+	}
+	
+	public void registerDelete(User user, Integer tripId) {
+		//hs.addHistory(user, tripId, "DELETE");
+		es.sendDeletionEmail(user, ts.findById(tripId));
 	}
 }

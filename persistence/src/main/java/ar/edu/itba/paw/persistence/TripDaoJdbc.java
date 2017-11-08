@@ -76,9 +76,8 @@ public class TripDaoJdbc implements TripDao {
 	}
 
 	public void delete(Integer tripId, User user) {
-		String query = "UPDATE trips SET deleted = true WHERE id = ? AND driver_id = ?";
+		String query = "UPDATE trips SET deleted = TRUE WHERE id = ? AND driver_id = ?";
 		Object[] params =new Object[] { tripId, user.getId() };
-
 		jdbcTemplate.update(query, params);
 		return;
 	}

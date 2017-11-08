@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.HistoryService;
 import ar.edu.itba.paw.interfaces.ReviewService;
 import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.services.EmailService;
 import ar.edu.itba.paw.webapp.forms.UserCreateForm;
 import ar.edu.itba.paw.webapp.forms.UserLoginForm;
 
@@ -34,6 +34,9 @@ public class UserController extends AuthController {
 	private ReviewService rs;
 	
 	@Autowired
+	private EmailService es;
+	
+	@Autowired
 	private HistoryService hs;
 	
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
@@ -41,6 +44,7 @@ public class UserController extends AuthController {
 	//TODO: RUN THIS MIGRATIONS IN PRODU:
 	// ALTER TABLE trips ADD deleted boolean;
 	// UPDATE trips SET deleted = false;
+	
 	public ModelAndView registerUser(@Valid @ModelAttribute("userCreateForm") final UserCreateForm form,
 							  		final BindingResult errors) {
 		// Check for form errors
@@ -61,7 +65,7 @@ public class UserController extends AuthController {
 		us.register(user);
 		
 		// Send welcome email to user
-		EmailService.INSTANCE.sendRegistrationEmail(user);
+		es.sendRegistrationEmail(user);
 		
 		// Redirect to login view
 		return new ModelAndView("redirect:/login");

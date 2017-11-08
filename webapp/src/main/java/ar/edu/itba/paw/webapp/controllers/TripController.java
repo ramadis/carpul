@@ -40,7 +40,9 @@ public class TripController extends AuthController {
 	public ModelAndView deleteTrip(@PathVariable("tripId") final Integer tripId) {
 		// Delete trip
 		User loggedUser = user();
+
 		ts.delete(tripId, loggedUser);
+		es.registerDelete(loggedUser, tripId);
 		
 		// Redirect to profile
 		return new ModelAndView("redirect:/user/" + loggedUser.getId());

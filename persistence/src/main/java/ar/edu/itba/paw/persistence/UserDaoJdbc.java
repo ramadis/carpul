@@ -95,7 +95,7 @@ public class UserDaoJdbc implements UserDao {
 		String query = "SELECT * FROM users JOIN trips_users on users.id = trips_users.user_id WHERE trip_id = ?";
 		Object[] params = new Object[] { trip.getId() };
 		List<User> users = new ArrayList<>();
-
+		
 		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
 			do {
 				User passenger = new User();
