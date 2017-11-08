@@ -14,6 +14,18 @@
   <link href="<c:url value='/static/css/profile.css' />" rel="stylesheet" type="text/css" />
   <link href="<c:url value='/static/css/review_item.css' />" rel="stylesheet" type="text/css" />
 
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    function deleteTrip(id) {
+      var confirmate = confirm('Are you sure you want to delete this trip?');
+      if (confirmate) $.post('../trip/' + id + '/delete');
+    }
+
+    function unreserve(id) {
+      var confirmate = confirm('Are you sure you want to delete this trip?');
+      if (confirmate) $.post('../trip/' + id + '/unreserve');
+    }
+  </script>
   <title><spring:message code="user.profile.page_title" arguments="${user.first_name},${user.last_name}"/></title>
 </head>
 <body>

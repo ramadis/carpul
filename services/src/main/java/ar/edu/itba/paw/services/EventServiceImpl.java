@@ -38,6 +38,7 @@ public class EventServiceImpl implements  EventService {
 	
 	public void registerDelete(User user, Integer tripId) {
 		//hs.addHistory(user, tripId, "DELETE");
+		//TODO: Should implement addHistory DELETE which mark as deleted for every passenger.
 		es.sendDeletionEmail(user, ts.findById(tripId));
 	}
 }
