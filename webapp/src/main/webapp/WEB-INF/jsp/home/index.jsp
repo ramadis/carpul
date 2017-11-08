@@ -50,6 +50,24 @@
     </div>
   </div>
 
+  <div class="trips-recommendations-container">
+    <c:if test="${empty trips}">
+      <%-- TODO: Remove hardcode --%>
+      <h1>Not trips in the near future from Buenos Aires :/</h1>
+    </c:if>
+
+    <c:if test="${not empty trips}">
+      <h1>These are some trips you might find interesting ;)</h1>
+      <div class="trip-recommendation-list">
+        <c:forEach items="${trips}" var="trip">
+          <a class="trip-recommendation-item" href="search/?from=${trip.from_city}&to=${trip.to_city}&when=${now}">
+            <span>${trip.to_city}</span>
+          </a>
+        </c:forEach>
+      </div>
+    </c:if>
+  </div>
+
   <script src="<c:url value='/static/js/search_time.js' />" charset="utf-8"></script>
 
 </body>

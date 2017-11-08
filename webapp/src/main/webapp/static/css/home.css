@@ -72,3 +72,40 @@ input[readonly].searchbar-input {
 .searchbar-label {
   font-weight: 700;
 }
+
+.trips-recommendations-container {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.trips-recommendations-container h1 {
+  color: #a0a0a0;
+  margin-top: 40px;
+  font-weight: 400;
+  font-size: 26px;
+}
+
+.trip-recommendation-list {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.trip-recommendation-item {
+  color: white;
+  cursor: pointer;
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 20px;
+  background: #6cd298;
+  border-radius: 5px;
+  transition: 0.1s ease-in background;
+}
+
+.trip-recommendation-item:hover {
+  background-color: #e36f4a;
+}
