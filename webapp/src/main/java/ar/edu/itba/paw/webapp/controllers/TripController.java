@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.HistoryService;
 import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.models.User;
@@ -24,6 +25,9 @@ public class TripController extends AuthController {
 	
 	@Autowired
 	private HistoryService hs;
+	
+	@Autowired
+	private EventService es;
 	
 	@RequestMapping(value = "/trip", method = RequestMethod.GET)
 	public ModelAndView createTripView(@ModelAttribute("tripForm") final TripCreateForm form) {
@@ -47,7 +51,8 @@ public class TripController extends AuthController {
 		// Reserve trip and register in log
 		User loggedUser = user();
 		ts.reserve(tripId, loggedUser);
-		hs.addHistory(loggedUser, tripId, "RESERVE");
+		//hs.addHistory(loggedUser, tripId, "RESERVE");
+		es.registerReserve(loggedUser, tripId);
 		
 		// Redirect to profile
 		return new ModelAndView("redirect:/user/" + loggedUser.getId());
@@ -58,7 +63,8 @@ public class TripController extends AuthController {
 		// Unreserve trip and  register in log
 		User loggedUser = user();
 		ts.unreserve(tripId, loggedUser);
-		hs.addHistory(loggedUser, tripId, "UNRESERVE");
+		//hs.addHistory(loggedUser, tripId, "UNRESERVE");
+		es.registerUnreserve(loggedUser, tripId);
 		
 		// Redirect to profile
 		return new ModelAndView("redirect:/user/" + loggedUser.getId());

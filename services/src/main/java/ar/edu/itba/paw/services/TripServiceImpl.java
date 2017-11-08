@@ -36,7 +36,11 @@ public class TripServiceImpl implements TripService {
 	}
 	
 	public Trip findById(final Integer tripId) {
-		return tripDao.findById(tripId);
+		// TODO: Evaluate performance issues
+		Trip trip = tripDao.findById(tripId);
+		User user = us.getById(trip.getDriver_id());
+		trip.setDriver(user);
+		return trip;
 	}
 	
 	public List<Trip> getReservedTrips(User user) {
