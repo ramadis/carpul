@@ -3,13 +3,14 @@ package ar.edu.itba.paw.webapp.forms;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import ar.edu.itba.paw.models.User;
 
 public class UserCreateForm {
 	@NotBlank
-	@Pattern(regexp = "[\\p{L} ]+")
+	@Email
 	private String username;
 	
 	@NotBlank

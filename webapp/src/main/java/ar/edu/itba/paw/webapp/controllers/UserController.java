@@ -17,6 +17,7 @@ import ar.edu.itba.paw.interfaces.ReviewService;
 import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.services.EmailService;
 import ar.edu.itba.paw.webapp.forms.UserCreateForm;
 import ar.edu.itba.paw.webapp.forms.UserLoginForm;
 
@@ -54,6 +55,9 @@ public class UserController extends AuthController {
 		
 		// Register new user
 		us.register(user);
+		
+		// Send welcome email to user
+		EmailService.INSTANCE.sendRegistrationEmail(user);
 		
 		// Redirect to login view
 		return new ModelAndView("redirect:/login");

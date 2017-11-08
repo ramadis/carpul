@@ -37,11 +37,11 @@
           <form:errors path="phone_number" class="form-error" element="p"/>
 
           <form:label path="username" class="field-label" for="username"><spring:message code="user.register.username"/></form:label>
-          <form:input required="true" class="field" name="username" path="username" type="text" />
+          <form:input required="true" class="field" name="username" path="username" type="email" />
           <form:errors path="username" class="form-error" element="p"/>
 
           <form:label path="password" class="field-label" for="password"><spring:message code="user.register.password"/></form:label>
-          <form:input required="true" class="field" pattern=".{6,}" path="password" type="text" name="password"/>
+          <form:input required="true" class="field" pattern=".{6,100}" path="password" type="password" name="password"/>
           <form:errors path="password" class="form-error" element="p"/>
         </div>
 

@@ -28,6 +28,7 @@
     <jstl.version>1.2</jstl.version>
     <org.hsqldb.version>2.3.1</org.hsqldb.version>
     <joda.time.version>2.9.9</joda.time.version>
+    <sendgrid.version>4.1.2</sendgrid.version>
 	</properties>
   <build>
     <plugins>
@@ -64,6 +65,12 @@
         <groupId>org.springframework</groupId>
         <artifactId>spring-context</artifactId>
         <version>${org.springframework.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.sendgrid</groupId>
+        <artifactId>sendgrid-java</artifactId>
+        <version>${sendgrid.version}</version>
       </dependency>
 
       <dependency>
