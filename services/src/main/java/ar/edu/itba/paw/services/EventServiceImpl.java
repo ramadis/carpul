@@ -15,13 +15,13 @@ import ar.edu.itba.paw.models.User;
 public class EventServiceImpl implements  EventService {
 	
 	@Autowired
-	HistoryService hs;
+	private HistoryService hs;
 	
 	@Autowired
-	TripService ts;
+	private TripService ts;
 	
 	@Autowired
-	EmailService es;
+	private EmailService es;
 	
 	public void registerReserve(User user, Integer tripId) {
 		hs.addHistory(user, tripId, "RESERVE");

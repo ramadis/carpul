@@ -50,9 +50,7 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
 				.key("secret key. sh.")
 				.tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(60))
 				.userDetailsService(userDetailsService)
-			.and().csrf()
-				.disable()
-			;
+			.and().csrf().disable();
 	}
 	
 	@Override

@@ -18,7 +18,7 @@ import ar.edu.itba.paw.models.User;
 public class Service implements UserDetailsService {
 
 	@Autowired
-	UserService us;
+	private UserService us;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

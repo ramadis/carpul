@@ -3,6 +3,8 @@ package ar.edu.itba.paw.webapp.controllers;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -18,6 +20,7 @@ import ar.edu.itba.paw.interfaces.ReviewService;
 import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.auth.Provider;
 import ar.edu.itba.paw.webapp.forms.UserCreateForm;
 import ar.edu.itba.paw.webapp.forms.UserLoginForm;
 
@@ -29,6 +32,9 @@ public class UserController extends AuthController {
 	
 	@Autowired
 	private TripService ts;
+	
+	@Autowired
+	private Provider userAuthProvider;
 	
 	@Autowired
 	private ReviewService rs;
@@ -67,8 +73,13 @@ public class UserController extends AuthController {
 		// Send welcome email to user
 		es.sendRegistrationEmail(user);
 		
+		// Login automatically
+		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+		userAuthProvider.authenticate(auth);
+		SecurityContextHolder.getContext().setAuthentication(auth);
+		
 		// Redirect to login view
-		return new ModelAndView("redirect:/login");
+		return new ModelAndView("redirect:/");
 	}
 	
 	@RequestMapping(value = "/user", method = RequestMethod.GET)

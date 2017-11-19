@@ -91,4 +91,8 @@ public class HistoryDaoJdbc implements HistoryDao {
 		history.setType(type);
 		return history;
 	}
+	
+//	public History addDeletedHistory(Integer tripId) {
+//		// INSERT INTO histories (SELECT user_id, "DELETED" FROM trips_users WHETE trip_id = 2)
+//	}
 }
