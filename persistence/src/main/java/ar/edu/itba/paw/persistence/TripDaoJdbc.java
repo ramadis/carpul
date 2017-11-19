@@ -60,7 +60,7 @@ public class TripDaoJdbc implements TripDao {
 
 	public void reserveTrip(Integer tripId, User user) {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
-		String query = "INSERT INTO trips_users (created, trip_id, user_id) VALUES (?, ?,?)";
+		String query = "INSERT INTO trips_users (created, trip_id, user_id) VALUES (?, ?, ?)";
 		Object[] params = new Object[] { now, tripId, user.getId() };
 
 		jdbcTemplate.update(query, params);
@@ -80,6 +80,37 @@ public class TripDaoJdbc implements TripDao {
 		Object[] params =new Object[] { tripId, user.getId() };
 		jdbcTemplate.update(query, params);
 		return;
+	}
+	
+	public List<Trip> findByRouteWithDateComparision(Search search, String comparision) {
+		// Get available trips by a route
+
+		List<Trip> trips = new ArrayList<>();
+		String from = search.getFrom().toLowerCase();
+		String to = search.getTo().toLowerCase();
+
+		String query = "SELECT users.id as userId, first_name, last_name, phone_number, trips.* FROM trips JOIN users ON trips.driver_id = users.id WHERE LOWER(from_city) LIKE ? AND LOWER(to_city) LIKE ? AND etd::date::timestamp " + comparision + " ? ORDER BY etd ASC";
+		Object[] params = new Object[] { "%" + from + "%", "%" + to + "%", search.getWhen() };
+
+		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
+			do {
+				Trip trip = new Trip();
+
+				loadResultIntoTrip(rs, trip);
+				trip.setOccupied_seats(getPassengerAmount(trip));
+				trip.setReserved(false);
+				if (trip.getAvailable_seats() < 1) continue;
+
+				User driver = new User();
+				UserDaoJdbc.loadReducedResultIntoUser(rs, driver);
+				driver.setId(rs.getInt("userId"));
+				trip.setDriver(driver);
+
+				trips.add(trip);
+	        } while(rs.next());
+		});
+
+		return trips;
 	}
 
 	public List<Trip> findByRouteWithDateComparision(User user, Search search, String comparision) {

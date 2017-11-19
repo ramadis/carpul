@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.forms.SearchForm;
 
 @Controller
@@ -36,17 +37,20 @@ public class SearchController extends AuthController {
 		search.setFrom(from);
 		search.setTo(to);
 		search.setWhen(when);
+		
+		// Get logged user
+		User user = user();
 
 		// Get trips to this search
-		List<Trip> trips = ts.findByRoute(user(), search);
-		List<Trip> later_trips = ts.findAfterDateByRoute(user(), search);
+		List<Trip> trips = user == null ? ts.findByRoute(search) : ts.findByRoute(user, search);
+		List<Trip> later_trips = user == null ? ts.findAfterDateByRoute(search) : ts.findAfterDateByRoute(user, search);
 
 		// Expose view
 		final ModelAndView mav = new ModelAndView("search/search");
 		mav.addObject("trips", trips);
 		mav.addObject("later_trips", later_trips);
 		mav.addObject("search", search);
-		mav.addObject("user", user());
+		mav.addObject("user", user);
 		return mav;
 	}
 

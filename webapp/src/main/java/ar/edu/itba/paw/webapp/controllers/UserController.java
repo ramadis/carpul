@@ -110,14 +110,14 @@ public class UserController extends AuthController {
 
 		// If the user does not exist
 		if (user.getId() == null) return new ModelAndView("redirect:/error/404");
-		
+
 		// Handle profile != to loggedUser
-		if (loggedUser.getId() != userId) {
+		if (loggedUser == null || loggedUser.getId() != userId) {
 			final ModelAndView mav_other = new ModelAndView("unauth/profile");
 			mav_other.addObject("reviews", rs.getReviews(user));
 			mav_other.addObject("trips", ts.getUserTrips(user));
-			
-			user.setId(loggedUser.getId());
+
+			user.setId(loggedUser == null ? null : loggedUser.getId());
 			mav_other.addObject("user", user);
 			return mav_other;
 		}

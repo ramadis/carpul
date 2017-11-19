@@ -81,6 +81,15 @@ public class User {
 	public void setCreated(Timestamp created) {
 		this.created = created;
 	}
+	
+	public boolean equals(Object o) {
+		User u = (User) o;
+		return u.getUsername().equals(this.getUsername());
+	}
+	
+	public int hashCode() {
+		return this.getId();
+	}
 
 	public String getDays_since_creation() {
 		Timestamp now = new Timestamp(System.currentTimeMillis());

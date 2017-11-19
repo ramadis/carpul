@@ -14,5 +14,6 @@ public interface TripDao {
 	void reserveTrip(Integer tripId, User user);
 	void delete(Integer tripId, User user);
 	void unreserveTrip(Integer tripId, User user);
+	List<Trip> findByRouteWithDateComparision(Search search, String string);
 	List<Trip> findByRouteWithDateComparision(User user, Search search, String string);
 }
