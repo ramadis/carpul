@@ -34,11 +34,16 @@
       <c:forEach items="${trip.passengers}" var="passenger">
         <a href="<c:url value='/user/${passenger.id}' />">
           <div class="driver">
-            <img width="50" height="50" src="https://ui-avatars.com/api/?rounded=true&size=150&background=e36f4a&color=fff&name=${passenger.first_name} ${passenger.last_name}" alt="">
-            <div class="driver-info">
-              <span class="driver-name">${passenger.first_name} ${passenger.last_name}</span>
-              <span>${passenger.phone_number}</span>
+            <div class="driver-item-data">
+              <img width="50" height="50" src="https://ui-avatars.com/api/?rounded=true&size=150&background=e36f4a&color=fff&name=${passenger.first_name} ${passenger.last_name}" alt="">
+              <div class="driver-info">
+                <span class="driver-name">${passenger.first_name} ${passenger.last_name}</span>
+                <span>${passenger.phone_number}</span>
+              </div>
             </div>
+            <a onclick="kickout(${passenger.id}, ${trip.id})" type="button" class="kick-hitchhiker" href="#">
+              <img src="<c:url value='/static/images/delete.png' />" height="20px" width="20px" alt="">
+            </a>
           </div>
         </a>
       </c:forEach>

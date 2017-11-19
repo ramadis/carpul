@@ -8,6 +8,7 @@
 <head>
   <link type="image/x-icon" rel="shortcut icon" href="<c:url value='/static/images/favicon.ico' />" >
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8">
   <link href="<c:url value='/static/css/css.css' />" rel="stylesheet" type="text/css" />
   <link href="<c:url value='/static/css/pool_list.css' />" rel="stylesheet" type="text/css" />
   <link href="<c:url value='/static/css/profile_hero.css' />" rel="stylesheet" type="text/css" />
@@ -19,6 +20,11 @@
     function deleteTrip(id) {
       var confirmate = confirm('Are you sure you want to delete this trip?');
       if (confirmate) $.post('../trip/' + id + '/delete');
+    }
+
+    function kickout(id, tripId) {
+      var confirmate = confirm('Are you sure you want to remove this passenger from you trip?');
+      if (confirmate) $.post('../trip/' + tripId + '/unreserve/' + id);
     }
 
     function unreserve(id) {

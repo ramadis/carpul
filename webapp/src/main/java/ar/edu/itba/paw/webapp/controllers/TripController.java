@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.HistoryService;
 import ar.edu.itba.paw.interfaces.TripService;
+import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.forms.TripCreateForm;
 
@@ -67,6 +68,30 @@ public class TripController extends AuthController {
 		ts.unreserve(tripId, loggedUser);
 		//hs.addHistory(loggedUser, tripId, "UNRESERVE");
 		es.registerUnreserve(loggedUser, tripId);
+		
+		// Redirect to profile
+		return new ModelAndView("redirect:/user/" + loggedUser.getId());
+	}
+	
+	@RequestMapping(value = "/trip/{tripId}/unreserve/{userId}", method = RequestMethod.POST)
+	public ModelAndView kickFromTrip(@PathVariable("tripId") final Integer tripId,
+									 @PathVariable("userId") final Integer userId) {
+		
+		// Check you have control over the trip
+		Trip trip = ts.findById(tripId);
+		User loggedUser = user();
+		
+		if (!trip.getDriver().equals(loggedUser)) return new ModelAndView("redirect:/404");
+		
+		// Create wrapper user
+		User user = new User();
+		user.setId(userId);
+		
+		// Unreserve trip for the kicked user
+		ts.unreserve(tripId, user);
+		// TODO: Check how to alert this change
+		// hs.addHistory(loggedUser, tripId, "UNRESERVE");
+		// es.registerUnreserve(loggedUser, tripId);
 		
 		// Redirect to profile
 		return new ModelAndView("redirect:/user/" + loggedUser.getId());

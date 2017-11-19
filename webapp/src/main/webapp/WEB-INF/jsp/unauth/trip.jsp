@@ -26,10 +26,12 @@
         <c:if test="${empty passenger}">
         </c:if>
         <div class="driver">
-          <img width="50" height="50" src="https://ui-avatars.com/api/?rounded=true&size=150&background=e36f4a&color=fff&name=${passenger.first_name} ${passenger.last_name}" alt="">
-          <div class="driver-info">
-            <span class="driver-name">${passenger.first_name} ${passenger.last_name}</span>
-            <span>${passenger.phone_number}</span>
+          <div class="driver-item-data">
+            <img width="50" height="50" src="https://ui-avatars.com/api/?rounded=true&size=150&background=e36f4a&color=fff&name=${passenger.first_name} ${passenger.last_name}" alt="">
+            <div class="driver-info">
+              <span class="driver-name">${passenger.first_name} ${passenger.last_name}</span>
+              <span>${passenger.phone_number}</span>
+            </div>
           </div>
         </div>
       </c:forEach>

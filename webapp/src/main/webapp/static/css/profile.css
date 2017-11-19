@@ -145,6 +145,7 @@
 .destiny-item .driver {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   font-size: 13px;
   transition: 0.1s ease-in background;
@@ -153,6 +154,10 @@
 .destiny-item .driver:hover {
   background: #e36f4a;
   border-radius: 5px;
+}
+
+.destiny-item .driver:hover .kick-hitchhiker {
+  opacity: 1;
 }
 
 .destiny-item .driver img {
@@ -234,4 +239,10 @@
   padding-bottom: 10px;
   border-bottom: 1px solid white;
   margin-bottom: 10px;
+}
+
+.kick-hitchhiker {
+  opacity: 0;
+  margin-right: 10px;
+  transition: 0.1s ease-in opacity;
 }
