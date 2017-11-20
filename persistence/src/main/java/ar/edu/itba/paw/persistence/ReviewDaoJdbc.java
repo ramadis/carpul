@@ -17,7 +17,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
 public class ReviewDaoJdbc implements ReviewDao {
 
 	private final JdbcTemplate connection;
@@ -94,7 +93,7 @@ public class ReviewDaoJdbc implements ReviewDao {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		Object[] params = new Object[] { now,
 										review.getOwner().getId(),
-										review.getReviewedUser().getId(),
+										review.getReviewed().getId(),
 										review.getStars(),
 										review.getMessage(),
 										review.getTrip().getId() };

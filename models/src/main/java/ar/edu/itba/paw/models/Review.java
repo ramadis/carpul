@@ -27,7 +27,7 @@ public class Review {
 	
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name="reviewed_id")
-	private User reviewedUser;
+	private User reviewed;
 	
 	@Column(length = 500)
 	private String message;
@@ -54,12 +54,12 @@ public class Review {
 		this.owner = owner;
 	}
 	
-	public User getReviewedUser() {
-		return reviewedUser;
+	public User getReviewed() {
+		return reviewed;
 	}
 	
 	public void setReviewedUser(User reviewedUser) {
-		this.reviewedUser = reviewedUser;
+		this.reviewed = reviewedUser;
 	}
 	
 	public String getMessage() {

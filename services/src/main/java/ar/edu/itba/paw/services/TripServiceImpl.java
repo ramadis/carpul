@@ -60,6 +60,7 @@ public class TripServiceImpl implements TripService {
 //			t.setOccupied_seats(t.getPassengers().size());
 //		}
 		
+		// TODO: Check how to handle OccupiedSeats and Available seats
 		// Filter out expired trips
 		return trips.stream().filter((trip) -> !trip.getExpired() && !trip.getDeleted())
 							 .collect(Collectors.toList());

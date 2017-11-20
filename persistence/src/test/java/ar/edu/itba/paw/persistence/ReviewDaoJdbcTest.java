@@ -56,7 +56,7 @@ public class ReviewDaoJdbcTest {
 	public void assertReview(Review review) {
 		assertNotNull(review);
 		assertEquals(TestUtils.ReviewUtils.OWNER_ID, review.getOwner().getId());
-		assertEquals(TestUtils.ReviewUtils.REVIEWED_ID, review.getReviewedUser().getId());
+		assertEquals(TestUtils.ReviewUtils.REVIEWED_ID, review.getReviewed().getId());
 		assertEquals(TestUtils.ReviewUtils.STARS, review.getStars());
 		assertEquals(TestUtils.ReviewUtils.MESSAGE, review.getMessage());
 		assertEquals(TestUtils.ReviewUtils.TRIP_ID, review.getTrip().getId());
