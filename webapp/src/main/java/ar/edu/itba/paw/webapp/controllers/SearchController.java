@@ -34,8 +34,8 @@ public class SearchController extends AuthController {
 									 @RequestParam("when") Long when) {
 		// Create a valid search model.
 		Search search = new Search();
-		search.setFrom(from);
-		search.setTo(to);
+		search.setFrom(from.split(",")[0]);
+		search.setTo(to.split(",")[0]);
 		search.setWhen(when);
 		
 		// Get logged user

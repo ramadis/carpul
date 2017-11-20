@@ -88,6 +88,7 @@ input[readonly].searchbar-input {
 
 .trip-recommendation-list {
   display: flex;
+  flex-wrap: wrap;
   width: 100%;
   justify-content: space-around;
 }

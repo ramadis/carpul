@@ -1,6 +1,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <html>
@@ -60,9 +61,7 @@
       <h1>These are some trips you might find interesting ;)</h1>
       <div class="trip-recommendation-list">
         <c:forEach items="${trips}" var="trip">
-          <a class="trip-recommendation-item" href="search/?from=${trip.from_city}&to=${trip.to_city}&when=${now}">
-            <span>${trip.to_city}</span>
-          </a>
+          <%@ include file="../search/small_item.jsp" %>
         </c:forEach>
       </div>
     </c:if>

@@ -42,6 +42,12 @@ public class EventServiceImpl implements  EventService {
 		es.sendUnreservationEmail(user, ts.findById(tripId));
 	}
 	
+	public void registerKicked(User user, Integer tripId) {
+		hs.addHistory(user, tripId, "KICKED");
+		// TODO: Change DB. Users usernames should be valid emails.
+		es.sendUnreservationEmail(user, ts.findById(tripId));
+	}
+	
 	public void registerDelete(User user, Integer tripId) {
 		//TODO: Check if it works
 		// Create trip wrapper

@@ -52,6 +52,29 @@ body {
 	overflow: hidden;
 }
 
+.small-pool-info {
+	padding: 20px;
+	text-align: center;
+	color: white;
+	background: url('../images/cabin.jpg');
+	background-size: cover;
+	background-color: rgba(0,0,0,.2);
+	background-blend-mode: darken;
+	background-position: center;
+}
+
+.small-pool-info .header-container {
+	margin-bottom: 10px;
+}
+
+.small-pool-info .header {
+	font-size: 30px;
+}
+
+.small-pool-info .CTA {
+	margin-top: 10px;
+}
+
 .price-container {
 	height: 50px;
 	border-bottom: 1px solid lightgray;
