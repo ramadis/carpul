@@ -2,13 +2,38 @@ package ar.edu.itba.paw.models;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "users")
 public class User {
+	@Column(length = 100, nullable = false, unique = true)
 	private String username;
+	
+	@Column(length = 100, nullable = false)
 	private String password;
+	
+	@Column(length = 100)
 	private String first_name;
+	
+	@Column(length = 100)
 	private String last_name;
+	
+	@Column(length = 100)
 	private String phone_number;
+	
+	@Column
 	private Timestamp created;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_seq")
+	@SequenceGenerator(sequenceName = "users_id_seq", name = "users_id_seq", allocationSize = 1)
 	private Integer id;
 	
 	public String getFirst_name() {

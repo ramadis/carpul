@@ -14,7 +14,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
 public class UserDaoJdbc implements UserDao {
 
 	private final JdbcTemplate jdbcTemplate;
@@ -105,6 +104,19 @@ public class UserDaoJdbc implements UserDao {
 		});
 
 		return users;
+	}
+
+	@Override
+	public User findById(Integer id) {
+		String query = "SELECT * FROM users WHERE id = ? LIMIT 1";
+		Object[] params = new Object[] { id };
+		User user = new User();
+
+		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
+			loadResultIntoUser(rs, user);
+		});
+
+		return user;
 	}
 
 

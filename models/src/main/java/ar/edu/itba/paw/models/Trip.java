@@ -4,28 +4,69 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "trips")
 public class Trip {
 	// Mirror fields
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trips_id_seq")
+	@SequenceGenerator(sequenceName = "trips_id_seq", name = "trips_id_seq", allocationSize = 1)
 	private Integer id;
+	
+	@Column
 	private Timestamp etd;
+	
+	@Column
 	private Timestamp eta;
+	
+	@Column(length = 100)
 	private String from_city;
+	
+	@Column(length = 100)
 	private String to_city;
+	
+	@Column
 	private Double cost;
+	
 	private Position departure;
 	private Position arrival;
+	
+	@Column
 	private Integer seats;
+	
+	@Column
 	private Timestamp created;
+	
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name="driver_id")
+	private User driver;
+	
 	private Integer driver_id;
 	
 	// Extra convenience fields
 	private Integer occupied_seats;
 	private Boolean expired;
 	private Boolean reserved;
-	private List<User> passengers = new ArrayList<>();
-	private User driver;
 	
-	public Trip() {}
+	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = false, mappedBy = "driver")
+	private List<User> passengers = new ArrayList<>();
+	
+	public Trip() {
+		super();
+	}
 	
 	public void addPassenger(User p) {
 		passengers.add(p);

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import java.sql.ResultSet;
@@ -17,14 +19,11 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryDaoJdbc implements HistoryDao {
+@Repository
+public class HistoryDaoHibernate implements HistoryDao {
 
-	private final JdbcTemplate connection;
-
-	@Autowired
-	public HistoryDaoJdbc(final DataSource dataSource) {
-		this.connection = new JdbcTemplate(dataSource);
-	}
+	@PersistenceContext
+	private EntityManager em;
 
 	@Autowired
 	UserDao userDao;
@@ -32,18 +31,17 @@ public class HistoryDaoJdbc implements HistoryDao {
 	@Autowired
 	TripDao tripDao;
 
-	private void loadResultIntoHistory(ResultSet rs, History history) {
-		try {
-			history.setCreated(rs.getTimestamp("created"));
-			history.setType(rs.getString("type"));
-			history.setRelated(userDao.getById(rs.getInt("user_id")));
-			history.setTrip(tripDao.findById(rs.getInt("trip_id")));
-			history.setOwn(rs.getBoolean("own"));
-		} catch (Throwable e) {
-		}
-	}
-
 	public List<History> getHistories(User user) {
+		String query = "from History as histories WHERE histories.trip IN (from Trip as trips WHERE driver = :driver) AND histories.own = FALSE OR histories.related = :related AND histories.own = TRUE ORDER BY histories.created desc";
+		
+		List<User> users = em.createQuery(query, User.class)
+							 .setParameter("username", query)
+							 .setMaxResults(5)
+							 .getResultList();
+		
+		return users.isEmpty() ? null : users.get(0);
+		
+		
 		List<History> histories = new ArrayList<>();
 
 		String query = "SELECT * FROM histories WHERE (trip_id IN (SELECT id FROM trips WHERE driver_id = ?) AND own = FALSE ) OR (user_id = ? AND own = TRUE ) ORDER BY created desc LIMIT 5";
