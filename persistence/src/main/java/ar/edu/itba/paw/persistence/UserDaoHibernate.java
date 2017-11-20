@@ -84,28 +84,8 @@ public class UserDaoHibernate implements UserDao {
 	}
 
 	public List<User> getPassengers(Trip trip) {
-//		String query = "SELECT * FROM users JOIN trips_users on users.id = trips_users.user_id WHERE trip_id = ?";
-//		
-//		List<User> users = em.createQuery(query, User.class)
-//							 .setParameter("username", username)
-//							 .getResultList();
-//		
-//		return users.isEmpty() ? null : users.get(0);
-//		
-//		
-//		String query = 
-//		Object[] params = new Object[] { trip.getId() };
-//		List<User> users = new ArrayList<>();
-//		
-//		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
-//			do {
-//				User passenger = new User();
-//				loadResultIntoUser(rs, passenger);
-//				users.add(passenger);
-//			}while (rs.next());
-//		});
-		List<User> users = new ArrayList<>();
-		return users;
+		System.out.println(trip.getPassengers());
+		return trip.getPassengers();
 	}
 
 

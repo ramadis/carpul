@@ -11,10 +11,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "trips")
@@ -41,11 +44,11 @@ public class Trip {
 	@Column
 	private Double cost;
 	
-	private Position departure;
-	private Position arrival;
-	
 	@Column
 	private Integer seats;
+	
+	@Column
+	private Boolean deleted;
 	
 	@Column
 	private Timestamp created;
@@ -54,15 +57,30 @@ public class Trip {
 	@JoinColumn(name="driver_id")
 	private User driver;
 	
+	@Transient
 	private Integer driver_id;
 	
 	// Extra convenience fields
+	@Transient
 	private Integer occupied_seats;
+	
+	@Transient
 	private Boolean expired;
+	
+	@Transient
+	private Position departure;
+	
+	@Transient
+	private Position arrival;
+	
+	@Transient
 	private Boolean reserved;
 	
-	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = false, mappedBy = "driver")
-	private List<User> passengers = new ArrayList<>();
+	@ManyToMany
+    @JoinTable( name = "trips_users",
+            		joinColumns = @JoinColumn(name = "trip_id"),
+            		inverseJoinColumns = @JoinColumn(name = "user_id"))
+	private List<User> passengers;
 	
 	public Trip() {
 		super();
@@ -104,7 +122,6 @@ public class Trip {
 		return id;
 	}
 
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -114,7 +131,6 @@ public class Trip {
 		return driver_id;
 	}
 
-
 	public void setDriver_id(Integer driver_id) {
 		this.driver_id = driver_id;
 	}
@@ -122,7 +138,6 @@ public class Trip {
 	public Double getCost() {
 		return cost;
 	}
-
 
 	public void setCost(Double cost) {
 		this.cost = cost;

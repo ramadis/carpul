@@ -1,12 +1,17 @@
 package ar.edu.itba.paw.models;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -21,6 +26,9 @@ public class User {
 	
 	@Column(length = 100)
 	private String first_name;
+	
+	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = false, mappedBy = "driver")
+	private List<Trip> drived_trips;
 	
 	@Column(length = 100)
 	private String last_name;
@@ -84,7 +92,6 @@ public class User {
 	public String getPassword() {
 		return password;
 	}
-	
 
 	public void setUsername(String username) {
 		this.username = username;
