@@ -39,9 +39,14 @@ public class TripController extends AuthController {
 	
 	@RequestMapping(value = "/trip/{tripId}/delete", method = RequestMethod.POST)
 	public ModelAndView deleteTrip(@PathVariable("tripId") final Integer tripId) {
-		// Delete trip
+		
+		// Check you have control over the trip
+		Trip trip = ts.findById(tripId);
 		User loggedUser = user();
+		
+		if (!trip.getDriver().equals(loggedUser)) return new ModelAndView("redirect:/404");
 
+		// Delete trip
 		ts.delete(tripId, loggedUser);
 		es.registerDelete(loggedUser, tripId);
 		

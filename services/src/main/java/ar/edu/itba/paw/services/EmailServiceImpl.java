@@ -19,8 +19,9 @@ public class EmailServiceImpl implements EmailService {
 	private final SendGrid sg = new SendGrid("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");
 	
 	@Autowired
-	UserService us;
+	private UserService us;
 	
+	// TODO: Check users that do not have an email as a username
 	public void sendRegistrationEmail(User user) {
 		String subject = "Hey, welcome to Carpul!";
 	    String content = "Welcome to a life of adventures " + user.getFirst_name() + ". It's your time to shine. Welcome to carpul!" ;

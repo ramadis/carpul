@@ -46,8 +46,8 @@ public class HistoryDaoJdbc implements HistoryDao {
 	public List<History> getHistories(User user) {
 		List<History> histories = new ArrayList<>();
 
-		String query = "SELECT * FROM histories WHERE trip_id IN (SELECT id FROM trips WHERE driver_id = ?) ORDER BY created desc LIMIT 5";
-		Object[] params = new Object[] { user.getId() };
+		String query = "SELECT * FROM histories WHERE (trip_id IN (SELECT id FROM trips WHERE driver_id = ?) AND type <> 'DELETE' ) OR (user_id = ? AND type LIKE 'DELETE') ORDER BY created desc LIMIT 5";
+		Object[] params = new Object[] { user.getId(), user.getId() };
 		this.connection.query(query, params, (ResultSet rs) -> {
 			do {
 				History history = new History();
