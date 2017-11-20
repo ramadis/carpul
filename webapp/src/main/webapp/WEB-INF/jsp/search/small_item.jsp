@@ -2,7 +2,7 @@
 <div class="pool-item flex-center">
   <div class="pool-info small-pool-info">
     <div class="header-container">
-      <span class="bold header"> ${trip.from_city} - ${trip.to_city}</span>
+      <span class="bold header"> ${trip.from_city} <spring:message code="home.index.small_to"/> ${trip.to_city}</span>
     </div>
 
     <div >

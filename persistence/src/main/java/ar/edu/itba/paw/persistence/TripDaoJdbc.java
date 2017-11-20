@@ -89,7 +89,7 @@ public class TripDaoJdbc implements TripDao {
 		String from = search.getFrom().toLowerCase();
 		String to = search.getTo().toLowerCase();
 
-		String query = "SELECT users.id as userId, first_name, last_name, phone_number, trips.* FROM trips JOIN users ON trips.driver_id = users.id WHERE LOWER(from_city) LIKE ? AND LOWER(to_city) LIKE ? AND etd::date::timestamp " + comparision + " ? ORDER BY etd ASC";
+		String query = "SELECT users.id as userId, first_name, last_name, phone_number, trips.* FROM trips JOIN users ON trips.driver_id = users.id WHERE trips.deleted = FALSE AND LOWER(from_city) LIKE ? AND LOWER(to_city) LIKE ? AND etd::date::timestamp " + comparision + " ? ORDER BY etd ASC";
 		Object[] params = new Object[] { "%" + from + "%", "%" + to + "%", search.getWhen() };
 
 		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
@@ -120,7 +120,7 @@ public class TripDaoJdbc implements TripDao {
 		String from = search.getFrom().toLowerCase();
 		String to = search.getTo().toLowerCase();
 
-		String query = "SELECT users.id as userId, first_name, last_name, phone_number, trips.*, temp.reserved as is_reserved FROM trips JOIN users ON trips.driver_id = users.id LEFT OUTER JOIN (SELECT id as reserved, trip_id as relation_trip_id FROM trips_users WHERE user_id = ?) as temp ON relation_trip_id = trips.id WHERE driver_id <> ? AND LOWER(from_city) LIKE ? AND LOWER(to_city) LIKE ? AND etd::date::timestamp " + comparision + " ? ORDER BY etd ASC";
+		String query = "SELECT users.id as userId, first_name, last_name, phone_number, trips.*, temp.reserved as is_reserved FROM trips JOIN users ON trips.driver_id = users.id LEFT OUTER JOIN (SELECT id as reserved, trip_id as relation_trip_id FROM trips_users WHERE user_id = ?) as temp ON relation_trip_id = trips.id WHERE trips.deleted = FALSE AND driver_id <> ? AND LOWER(from_city) LIKE ? AND LOWER(to_city) LIKE ? AND etd::date::timestamp " + comparision + " ? ORDER BY etd ASC";
 		Object[] params = new Object[] { user.getId(), user.getId(), "%" + from + "%", "%" + to + "%", search.getWhen() };
 
 		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
@@ -148,7 +148,7 @@ public class TripDaoJdbc implements TripDao {
 
 		List<Trip> trips = new ArrayList<>();
 
-		String query = "SELECT * FROM trips WHERE trips.driver_id = ?";
+		String query = "SELECT * FROM trips WHERE trips.driver_id = ? AND deleted = FALSE";
 		Object[] params = new Object[] { user.getId() };
 
 		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {
@@ -177,7 +177,7 @@ public class TripDaoJdbc implements TripDao {
 	public List<Trip> getReservedTrips(User user) {
 		// Get no-reviewed trips for a given user
 		List<Trip> trips = new ArrayList<>();
-		String query = "SELECT trips.*, trips_users.*, users.*, users.id as userIdAux FROM trips JOIN trips_users ON trip_id = trips.id JOIN users ON users.id = driver_id WHERE user_id = ? AND NOT EXISTS (SELECT * FROM reviews WHERE owner_id = ? AND trip_id = trips.id)";
+		String query = "SELECT trips.*, trips_users.*, users.*, users.id as userIdAux FROM trips JOIN trips_users ON trip_id = trips.id JOIN users ON users.id = driver_id WHERE user_id = ? AND trips.deleted = FALSE AND NOT EXISTS (SELECT * FROM reviews WHERE owner_id = ? AND trip_id = trips.id)";
 		Object[] params = new Object[] { user.getId(), user.getId() };
 
 		this.jdbcTemplate.query(query, params, (final ResultSet rs) -> {

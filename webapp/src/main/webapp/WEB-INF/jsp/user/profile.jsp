@@ -18,18 +18,28 @@
   <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script type="text/javascript">
     function deleteTrip(id) {
+      // TODO: Check if should reload on callback.
       var confirmate = confirm('Are you sure you want to delete this trip?');
-      if (confirmate) $.post('../trip/' + id + '/delete');
+      if (confirmate) {
+        $.post('../trip/' + id + '/delete');
+        location.reload();
+      }
     }
 
     function kickout(id, tripId) {
       var confirmate = confirm('Are you sure you want to remove this passenger from you trip?');
-      if (confirmate) $.post('../trip/' + tripId + '/unreserve/' + id);
+      if (confirmate) {
+        $.post('../trip/' + tripId + '/unreserve/' + id);
+        location.reload();
+      }
     }
 
     function unreserve(id) {
       var confirmate = confirm('Are you sure you want to delete this trip?');
-      if (confirmate) $.post('../trip/' + id + '/unreserve');
+      if (confirmate) {
+        $.post('../trip/' + id + '/unreserve');
+        location.reload();
+      }
     }
   </script>
   <title><spring:message code="user.profile.page_title" arguments="${user.first_name},${user.last_name}"/></title>
