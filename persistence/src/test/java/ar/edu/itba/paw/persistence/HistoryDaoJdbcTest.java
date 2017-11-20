@@ -63,7 +63,7 @@ public class HistoryDaoJdbcTest {
 	@Test
 	public void testAddHistory() {
 		// Create review
-		History createdHistory = historyDao.addHistory(TestUtils.UserUtils.sampleUser(), TestUtils.TripUtils.ID, TestUtils.HistoryUtils.TYPE);
+		History createdHistory = historyDao.addHistory(TestUtils.UserUtils.sampleUser(), TestUtils.TripUtils.ID, TestUtils.HistoryUtils.TYPE, false);
 		
 		// Asserts for review
 		assertHistory(createdHistory);
@@ -72,7 +72,7 @@ public class HistoryDaoJdbcTest {
 	@Test
 	public void testGetHistories() {
 		// Create review
-		historyDao.addHistory(TestUtils.UserUtils.sampleUser(), TestUtils.TripUtils.ID, TestUtils.HistoryUtils.TYPE);
+		historyDao.addHistory(TestUtils.UserUtils.sampleUser(), TestUtils.TripUtils.ID, TestUtils.HistoryUtils.TYPE, false);
 		
 		// Get histories by user
 		List<History> histories = historyDao.getHistories(TestUtils.UserUtils.sampleUser());

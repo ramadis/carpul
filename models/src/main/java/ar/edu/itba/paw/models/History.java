@@ -7,7 +7,14 @@ public class History {
 	private Trip trip;
 	private String type;
 	private Timestamp created;
+	private Boolean own;
 	
+	public Boolean getOwn() {
+		return own;
+	}
+	public void setOwn(Boolean own) {
+		this.own = own;
+	}
 	public User getRelated() {
 		return related;
 	}

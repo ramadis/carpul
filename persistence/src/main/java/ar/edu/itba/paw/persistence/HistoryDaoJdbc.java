@@ -39,6 +39,7 @@ public class HistoryDaoJdbc implements HistoryDao {
 			history.setType(rs.getString("type"));
 			history.setRelated(userDao.getById(rs.getInt("user_id")));
 			history.setTrip(tripDao.findById(rs.getInt("trip_id")));
+			history.setOwn(rs.getBoolean("own"));
 		} catch (Throwable e) {
 		}
 	}
@@ -46,7 +47,7 @@ public class HistoryDaoJdbc implements HistoryDao {
 	public List<History> getHistories(User user) {
 		List<History> histories = new ArrayList<>();
 
-		String query = "SELECT * FROM histories WHERE (trip_id IN (SELECT id FROM trips WHERE driver_id = ?) AND type <> 'DELETE' ) OR (user_id = ? AND type LIKE 'DELETE') ORDER BY created desc LIMIT 5";
+		String query = "SELECT * FROM histories WHERE (trip_id IN (SELECT id FROM trips WHERE driver_id = ?) AND own = FALSE ) OR (user_id = ? AND own = TRUE ) ORDER BY created desc LIMIT 5";
 		Object[] params = new Object[] { user.getId(), user.getId() };
 		this.connection.query(query, params, (ResultSet rs) -> {
 			do {
@@ -75,10 +76,10 @@ public class HistoryDaoJdbc implements HistoryDao {
 		return histories;
 	}
 
-	public History addHistory(User user, Integer tripId, String type) {
+	public History addHistory(User user, Integer tripId, String type, Boolean own) {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
-		String query = "INSERT INTO histories (created, user_id, trip_id, type) VALUES (?,?,?,?);";
-		Object[] params = new Object[] { now, user.getId(), tripId, type };
+		String query = "INSERT INTO histories (created, user_id, trip_id, type, own) VALUES (?,?,?,?, ?);";
+		Object[] params = new Object[] { now, user.getId(), tripId, type, own };
 
 		this.connection.update(query, params);
 		
@@ -89,6 +90,7 @@ public class HistoryDaoJdbc implements HistoryDao {
 		history.setRelated(user);
 		history.setTrip(trip);
 		history.setType(type);
+		history.setOwn(own);
 		return history;
 	}
 	

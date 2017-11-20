@@ -30,20 +30,22 @@ public class EventServiceImpl implements  EventService {
 	private EmailService es;
 	
 	public void registerReserve(User user, Integer tripId) {
-		hs.addHistory(user, tripId, "RESERVE");
+		hs.addHistory(user, tripId, "RESERVE", false);
 		// TODO: Change DB. Users usernames should be valid emails.
 		es.sendReservationEmail(user, ts.findById(tripId));
 		
 	}
 	
 	public void registerUnreserve(User user, Integer tripId) {
-		hs.addHistory(user, tripId, "UNRESERVE");
+		hs.addHistory(user, tripId, "UNRESERVE", false);
 		// TODO: Change DB. Users usernames should be valid emails.
 		es.sendUnreservationEmail(user, ts.findById(tripId));
 	}
 	
+	// TODO: Run migration ALTER TABLE histories ADD own boolean
+	// UPDATE histories SET own = false;
 	public void registerKicked(User user, Integer tripId) {
-		hs.addHistory(user, tripId, "KICKED");
+		hs.addHistory(user, tripId, "KICKED", true);
 		// TODO: Change DB. Users usernames should be valid emails.
 		es.sendUnreservationEmail(user, ts.findById(tripId));
 	}
@@ -58,7 +60,7 @@ public class EventServiceImpl implements  EventService {
 		
 		// Add an event for every passenger and alert them via email.
 		passengers.forEach((passenger) -> {
-			hs.addHistory(passenger, tripId, "DELETE");
+			hs.addHistory(passenger, tripId, "DELETE", true);
 			es.sendDeletionEmail(passenger, ts.findById(tripId));
 		});
 	}
