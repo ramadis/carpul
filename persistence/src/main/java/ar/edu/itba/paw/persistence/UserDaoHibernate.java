@@ -84,8 +84,7 @@ public class UserDaoHibernate implements UserDao {
 	}
 
 	public List<User> getPassengers(Trip trip) {
-		System.out.println(trip.getPassengers());
-		return trip.getPassengers();
+		return trip.getPassengers() == null ? new ArrayList<User>() : trip.getPassengers();
 	}
 
 

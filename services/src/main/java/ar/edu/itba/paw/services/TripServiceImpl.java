@@ -47,20 +47,22 @@ public class TripServiceImpl implements TripService {
 	}
 	
 	public List<Trip> getReservedTrips(User user) {
-		return tripDao.getReservedTrips(user);
+		//return tripDao.getReservedTrips(user);
+		return user.getReserved_trips();
 	}
 	
 	public List<Trip> getUserTrips(User user) {
-		List<Trip> trips = tripDao.getUserTrips(user);
+		List<Trip> trips = user.getDrived_trips();
 		
-		// Add extra fields
-		for(Trip t: trips) {
-			t.setPassengers(us.getPassengers(t));
-			t.setOccupied_seats(t.getPassengers().size());
-		}
+//		// Add extra fields
+//		for(Trip t: trips) {
+//			t.setPassengers(us.getPassengers(t));
+//			t.setOccupied_seats(t.getPassengers().size());
+//		}
 		
 		// Filter out expired trips
-		return trips.stream().filter((trip) -> !trip.getExpired()).collect(Collectors.toList());
+		return trips.stream().filter((trip) -> !trip.getExpired() && !trip.getDeleted())
+							 .collect(Collectors.toList());
 	}
 	
 	public void delete(Integer tripId, User user) {

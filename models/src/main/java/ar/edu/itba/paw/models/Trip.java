@@ -76,7 +76,7 @@ public class Trip {
 	@Transient
 	private Boolean reserved;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
     @JoinTable( name = "trips_users",
             		joinColumns = @JoinColumn(name = "trip_id"),
             		inverseJoinColumns = @JoinColumn(name = "user_id"))
@@ -175,6 +175,10 @@ public class Trip {
 		this.from_city = from_city.toLowerCase();
 	}
 
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
 	public String getTo_city() {
 		if (to_city == null || to_city.length() <= 1) return to_city;
 		String cap = to_city.substring(0, 1).toUpperCase() + to_city.substring(1);
@@ -242,7 +246,8 @@ public class Trip {
 	}
 
 	public Boolean getExpired() {
-		return expired;
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+		return eta.before(now);
 	}
 
 	public void setExpired(Boolean expired) {

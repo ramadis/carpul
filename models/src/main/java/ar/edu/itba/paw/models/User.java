@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
@@ -27,8 +29,11 @@ public class User {
 	@Column(length = 100)
 	private String first_name;
 	
-	@OneToMany(fetch = FetchType.LAZY, orphanRemoval = false, mappedBy = "driver")
+	@OneToMany(fetch = FetchType.EAGER, orphanRemoval = false, mappedBy = "driver")
 	private List<Trip> drived_trips;
+	
+	@ManyToMany(fetch = FetchType.EAGER, mappedBy="passengers")
+	private List<Trip> reserved_trips;
 	
 	@Column(length = 100)
 	private String last_name;
@@ -44,8 +49,22 @@ public class User {
 	@SequenceGenerator(sequenceName = "users_id_seq", name = "users_id_seq", allocationSize = 1)
 	private Integer id;
 	
+	// METHODS
+	
 	public String getFirst_name() {
 		return first_name;
+	}
+
+	public List<Trip> getReserved_trips() {
+		return reserved_trips;
+	}
+
+	public List<Trip> getDrived_trips() {
+		return drived_trips;
+	}
+
+	public void setDrived_trips(List<Trip> drived_trips) {
+		this.drived_trips = drived_trips;
 	}
 
 	public void setFirst_name(String first_name) {
