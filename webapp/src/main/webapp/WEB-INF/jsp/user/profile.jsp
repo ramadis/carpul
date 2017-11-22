@@ -122,7 +122,7 @@
       </section>
     </c:if>
 
-    <c:if test="${empty reservations and empty trips and empty histories and empty reservations}">
+    <c:if test="${empty reservations and empty trips and empty histories and empty reviews}">
       <div class="empty-profile">
         <h3 class="empty-title"><spring:message code="user.profile.empty_title"/></h3>
         <h4 class="empty-subtitle"><spring:message code="user.profile.empty_subtitle"/></h4>
