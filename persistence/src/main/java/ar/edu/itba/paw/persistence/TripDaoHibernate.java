@@ -85,6 +85,7 @@ public class TripDaoHibernate implements TripDao {
 	
 	public List<Trip> findByRouteWithDateComparision(Search search, String comparision) {
 		// Get available trips by a route
+		// TODO: Check where and how to set trip.reserved
 		String query = "SELECT t FROM Trip t WHERE t.deleted = FALSE AND lower(t.from_city) LIKE :from AND lower(t.to_city) LIKE :to ORDER BY etd ASC";
 		
 		List<Trip> trips = em.createQuery(query, Trip.class)

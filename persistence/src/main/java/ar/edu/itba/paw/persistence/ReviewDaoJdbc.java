@@ -27,10 +27,10 @@ public class ReviewDaoJdbc implements ReviewDao {
 	}
 
 	@Autowired
-	UserDao userDao;
+	private UserDao userDao;
 
 	@Autowired
-	TripDao tripDao;
+	private TripDao tripDao;
 
 	private void loadResultIntoReview(ResultSet rs, Review review) {
 		try {

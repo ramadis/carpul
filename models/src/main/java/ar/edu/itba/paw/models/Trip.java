@@ -247,7 +247,7 @@ public class Trip {
 	}
 
 	public Integer getAvailable_seats() {
-		return this.seats - occupied_seats;
+		return this.seats - reservations.size();
 	}
 
 	public Integer getOccupied_seats() {

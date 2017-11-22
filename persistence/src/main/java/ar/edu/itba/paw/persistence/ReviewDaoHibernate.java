@@ -27,10 +27,10 @@ public class ReviewDaoHibernate implements ReviewDao {
 	private EntityManager em;
 
 	@Autowired
-	UserDao userDao;
+	private UserDao userDao;
 
 	@Autowired
-	TripDao tripDao;
+	private TripDao tripDao;
 
 	public List<Review> getReviews(User user) {
 		String query = "SELECT r FROM Review r WHERE r.reviewed = :reviewed ORDER BY created desc";

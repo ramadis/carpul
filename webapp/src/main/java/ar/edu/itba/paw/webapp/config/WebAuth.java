@@ -19,10 +19,10 @@ import ar.edu.itba.paw.webapp.auth.Service;
 public class WebAuth extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	Provider authProvider;
+	private Provider authProvider;
 	
 	@Autowired
-	Service userDetailsService;
+	private Service userDetailsService;
 	
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {

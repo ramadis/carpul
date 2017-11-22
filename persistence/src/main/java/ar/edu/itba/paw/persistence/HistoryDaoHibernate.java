@@ -27,10 +27,10 @@ public class HistoryDaoHibernate implements HistoryDao {
 	private EntityManager em;
 
 	@Autowired
-	UserDao userDao;
+	private UserDao userDao;
 
 	@Autowired
-	TripDao tripDao;
+	private TripDao tripDao;
 
 	public List<History> getHistories(User user) {
 		// TODO: Check queries with LIMITs that are filtered later

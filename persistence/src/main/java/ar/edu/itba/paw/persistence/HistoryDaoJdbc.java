@@ -27,10 +27,10 @@ public class HistoryDaoJdbc implements HistoryDao {
 	}
 
 	@Autowired
-	UserDao userDao;
+	private UserDao userDao;
 
 	@Autowired
-	TripDao tripDao;
+	private TripDao tripDao;
 
 	private void loadResultIntoHistory(ResultSet rs, History history) {
 		try {
