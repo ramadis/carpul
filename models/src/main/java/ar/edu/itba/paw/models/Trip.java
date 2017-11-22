@@ -3,6 +3,7 @@ package ar.edu.itba.paw.models;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,6 +47,50 @@ public class Trip {
 	
 	@Column
 	private Integer seats;
+	
+	@Column
+	private Double departure_lat;
+	
+	@Column
+	private Double departure_lon;
+	
+	public Double getDeparture_lat() {
+		return departure_lat;
+	}
+
+	public void setDeparture_lat(Double departure_lat) {
+		this.departure_lat = departure_lat;
+	}
+
+	public Double getDeparture_lon() {
+		return departure_lon;
+	}
+
+	public void setDeparture_lon(Double departure_lon) {
+		this.departure_lon = departure_lon;
+	}
+
+	public Double getArrival_lon() {
+		return arrival_lon;
+	}
+
+	public void setArrival_lon(Double arrival_lon) {
+		this.arrival_lon = arrival_lon;
+	}
+
+	public Double getArrival_lat() {
+		return arrival_lat;
+	}
+
+	public void setArrival_lat(Double arrival_lat) {
+		this.arrival_lat = arrival_lat;
+	}
+
+	@Column
+	private Double arrival_lon;
+	
+	@Column
+	private Double arrival_lat;
 	
 	@Column
 	private Boolean deleted;
@@ -96,6 +141,10 @@ public class Trip {
 	
 	public List<Reservation> getReservations() {
 		return reservations;
+	}
+	
+	public List<User> getPassengers() {
+		return this.reservations.stream().map((reservation) -> reservation.getUser()).collect(Collectors.toList());
 	}
 
 	public void setReservations(List<Reservation> reservations) {

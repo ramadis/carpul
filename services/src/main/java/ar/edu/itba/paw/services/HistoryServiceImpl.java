@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.models.History;
 import ar.edu.itba.paw.models.User;
@@ -25,6 +26,7 @@ public class HistoryServiceImpl implements  HistoryService {
 		return historyDao.getHistoriesByPage(user, page);
 	}
 	
+	@Transactional
 	public History addHistory(User user, Integer tripId, String type, Boolean own) {
 		return historyDao.addHistory(user, tripId, type, own);
 	}

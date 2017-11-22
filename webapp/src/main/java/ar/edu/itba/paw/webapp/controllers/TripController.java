@@ -112,8 +112,9 @@ public class TripController extends AuthController {
 		
 		// Register new user
 		User loggedUser = user();
+		System.out.println("CHECK 1");
 		ts.register(form.getTrip(), loggedUser);
-		
+		System.out.println("CHECK 2");
 		// Redirect to profile view
 		return new ModelAndView("redirect:/user/" + loggedUser.getId());
 	}

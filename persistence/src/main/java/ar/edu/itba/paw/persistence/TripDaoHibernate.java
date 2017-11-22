@@ -29,9 +29,12 @@ public class TripDaoHibernate implements TripDao {
 	private EntityManager em;
 	
 	public Trip create(Trip trip, User driver) {
+		System.out.println("CHECK 3");
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		trip.setDriver(driver);
+		System.out.println("CHECK 4");
 		trip.setCreated(now);
+		System.out.println("CHECK 5");
 		
 		em.persist(trip);
 		return trip;

@@ -138,6 +138,11 @@ public class TripCreateForm {
 		trip.setFrom_city(from_city);
 		trip.setTo_city(to_city);
 		trip.setCost(cost);
+		trip.setDeleted(false);
+		trip.setDeparture_lat(etd_latitude);
+		trip.setDeparture_lon(etd_longitude);
+		trip.setArrival_lat(eta_latitude);
+		trip.setArrival_lon(eta_longitude);
 		trip.setDeparture(new Position(etd_latitude, etd_longitude));
 		trip.setArrival(new Position(eta_latitude, eta_longitude));
 		return trip;
