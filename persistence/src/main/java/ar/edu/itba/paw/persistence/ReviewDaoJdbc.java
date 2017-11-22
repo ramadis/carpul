@@ -59,17 +59,16 @@ public class ReviewDaoJdbc implements ReviewDao {
 
 		return reviews;
 	}
-	
+
 	public Boolean canLeaveReview(Trip trip, User user) {
-		// TODO: Check why eta < now is not returning valid row
 		String query = "SELECT * FROM trips WHERE trips.id = ? AND EXISTS (SELECT * FROM reviews WHERE trip_id = ? AND owner_id = ?)";
 		Object[] params = new Object[] { trip.getId(), trip.getId(), user.getId() };
-		
+
 		Trip t = new Trip();
 		this.connection.query(query, params, (ResultSet rs) -> {
 			t.setId(rs.getInt("id"));
 		});
-		
+
 		return t.getId() == null;
 	}
 
@@ -78,13 +77,13 @@ public class ReviewDaoJdbc implements ReviewDao {
 		List<Review> reviews = new ArrayList<>();
 		String query = "SELECT * FROM reviews WHERE trip_id = ?";
 		Object[] params = new Object[] { trip.getId() };
-		
+
 		this.connection.query(query, params, (ResultSet rs) -> {
 			Review review = new Review();
 			loadResultIntoReview(rs, review);
 			reviews.add(review);
 		});
-		
+
 		return reviews;
 	}
 

@@ -30,7 +30,7 @@ public class HomeController extends AuthController {
 		final ModelAndView mav = new ModelAndView("home/index");
 		
 		// TODO: Should use other endpoint. Should bring only ~5 options. Should group by to_city; Should redirect to the relevan search item
-		mav.addObject("trips", loggedUser == null ? ts.findAfterDateByRoute(search) : ts.findAfterDateByRoute(loggedUser, search));
+		mav.addObject("trips", ts.getSuggestions(loggedUser, search));
 		mav.addObject("now", System.currentTimeMillis());
 		return mav;
 	}

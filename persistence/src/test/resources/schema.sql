@@ -1,5 +1,3 @@
--- TODO: Add key constraints
-
 CREATE TABLE IF NOT EXISTS users (
   id INTEGER IDENTITY PRIMARY KEY,
   created timestamp,

@@ -21,7 +21,6 @@ public class EmailServiceImpl implements EmailService {
 	@Autowired
 	private UserService us;
 	
-	// TODO: Check users that do not have an email as a username
 	public void sendRegistrationEmail(User user) {
 		String subject = "Hey, welcome to Carpul!";
 	    String content = "Welcome to a life of adventures " + user.getFirst_name() + ". It's your time to shine. Welcome to carpul!" ;
@@ -60,6 +59,8 @@ public class EmailServiceImpl implements EmailService {
 	}
 	
 	private Mail createEmail(String from, String subject, String to, String content) {
+		if (!from.contains("@")) return null;
+		
 		Email toEmail = new Email(to);
 		Email fromEmail = new Email(from);
 		fromEmail.setName("Carpul");
@@ -68,6 +69,8 @@ public class EmailServiceImpl implements EmailService {
 	}
 	
 	private void sendEmail(Mail email) {
+		if (email == null) return;
+		
 	    try {
 	    	  Request request = new Request();
 	      request.setMethod(Method.POST);

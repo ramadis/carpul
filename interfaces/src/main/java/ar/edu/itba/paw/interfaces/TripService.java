@@ -15,6 +15,7 @@ public interface TripService {
 	List<Trip> getReservedTrips(User user);
 	List<Trip> findAfterDateByRoute(User user, Search search);
 	List<Trip> findAfterDateByRoute(Search search);
+	List<Trip> getSuggestions(User user, Search search);
 	void reserve(Integer tripId, User user);
 	void delete(Integer tripId, User user);
 	void unreserve(Integer tripId, User user);

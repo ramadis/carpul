@@ -28,15 +28,15 @@ public class TripDaoHibernate implements TripDao {
 
 	@PersistenceContext
 	private EntityManager em;
-	
+
 	@Autowired
 	private ReviewDao reviewDao;
-	
+
 	public Trip create(Trip trip, User driver) {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		trip.setDriver(driver);
 		trip.setCreated(now);
-		
+
 		em.persist(trip);
 		return trip;
 	}
@@ -50,26 +50,26 @@ public class TripDaoHibernate implements TripDao {
 		reserve.setTrip(trip);
 		reserve.setUser(user);
 		reserve.setCreated(now);
-		
+
 		em.persist(reserve);
 		return;
 	}
 
 	public void unreserveTrip(Integer tripId, User user) {
 		String query = "SELECT r FROM Reservation r WHERE trip.id = :tripId AND user = :user";
-		
+
 		List<Reservation> reservations = em.createQuery(query, Reservation.class)
 										  .setParameter("tripId", tripId)
 										  .setParameter("user", user)
 										  .getResultList();
-		
+
 		if (!reservations.isEmpty()) em.remove(reservations.get(0));
 		return;
 	}
 
 	public void delete(Integer tripId, User user) {
 		Trip trip = findById(tripId);
-		
+
 		if (trip != null) {
 			trip.setDeleted(true);
 			em.merge(trip);
@@ -77,12 +77,12 @@ public class TripDaoHibernate implements TripDao {
 
 		return;
 	}
-	
+
 	public List<Trip> findByRouteWithDateComparision(Search search, String comparision) {
 		// Get available trips by a route
 		// TODO: Check where and how to set trip.reserved
 		String query = "SELECT t FROM Trip t WHERE t.deleted = FALSE AND lower(t.from_city) LIKE :from AND lower(t.to_city) LIKE :to ORDER BY etd ASC";
-		
+
 		List<Trip> trips = em.createQuery(query, Trip.class)
 						     .setParameter("from", "%" + search.getFrom().toLowerCase() + "%")
 						     .setParameter("to", "%" + search.getTo().toLowerCase() + "%")
@@ -97,13 +97,13 @@ public class TripDaoHibernate implements TripDao {
 					.filter((trip) -> trip.getPassengers().size() < trip.getSeats())
 					 .collect(Collectors.toList());
 		}
-		
+
 		return trips;
 	}
 
 	public List<Trip> findByRouteWithDateComparision(User user, Search search, String comparision) {
 		List<Trip> trips = findByRouteWithDateComparision(search, comparision);
-		
+
 		return trips.stream().filter((trip) -> !trip.getDriver().equals(user))
 							 .collect(Collectors.toList());
 	}
@@ -111,7 +111,7 @@ public class TripDaoHibernate implements TripDao {
 	public List<Trip> getUserTrips(User user) {
 		// Get trips owned by a given user
 		String query = "SELECT t FROM Trip t WHERE t.deleted = FALSE AND t.driver = :user";
-		
+
 		List<Trip> trips = em.createQuery(query, Trip.class)
 						     .setParameter("user", user)
 						     .getResultList();
@@ -121,31 +121,30 @@ public class TripDaoHibernate implements TripDao {
 
 	private Integer getPassengerAmount(Trip trip) {
 		String query = "SELECT r FROM Reservation r WHERE trip = :trip";
-		
+
 		List<Reservation> reserves = em.createQuery(query, Reservation.class)
   								     .setParameter("trip", trip)
 								     .getResultList();
-		
+
 		return reserves.size();
 	}
 
 	public List<Trip> getReservedTrips(User user) {
-		// TODO: Check if is just a wrapper or an actual user
 		List<Trip> trips = user.getReservations().stream().map((reservation) -> reservation.getTrip())
 											.filter((trip) -> reviewDao.canLeaveReview(trip, user))
 											.collect(Collectors.toList());
-		
+
 		return trips;
-		
+
 	}
 
 	private Boolean isReserved(Trip trip) {
 		String query = "SELECT r FROM Reservation r WHERE trip = :trip";
-		
+
 		List<Reservation> reservations = em.createQuery(query, Reservation.class)
 										  .setParameter("trip", trip)
 										  .getResultList();
-		
+
 		return !reservations.isEmpty();
 	}
 
