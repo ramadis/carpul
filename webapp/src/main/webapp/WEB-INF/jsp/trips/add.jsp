@@ -30,6 +30,7 @@
     <div class="profile-form-container flex-center">
       <form:form method="post" class="new-trip-form" modelAttribute="tripForm" action="trip">
         <h3><spring:message code="trip.add.title"/></h3>
+        <h2><spring:message code="trip.add.subtitle" arguments="${user.first_name},${reviewed.first_name},${trip.from_city},${trip.to_city}"/></h2>
 
         <div id="map" style="width=100%; height: 400px; margin: 10px 0;"></div>
 
@@ -65,7 +66,7 @@
           <form:errors path="eta" class="form-error" element="p"/>
 
           <form:errors path="" class="form-error" element="p"/>
-          
+
         </div>
 
         <div class="actions" style="margin-bottom: 10px;">
