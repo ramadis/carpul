@@ -53,6 +53,51 @@ public class Trip {
 	
 	@Column
 	private Double departure_lon;
+
+	@Column
+	private Double arrival_lon;
+	
+	@Column
+	private Double arrival_lat;
+	
+	@Column
+	private Boolean deleted;
+	
+	@Column
+	private Timestamp created;
+	
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name="driver_id")
+	private User driver;
+	
+	// Extra convenience fields
+	@Transient
+	private Integer occupied_seats;
+	
+	@Transient
+	private Integer driver_id;
+	
+	@Transient
+	private Boolean expired;
+	
+	@Transient
+	private Position departure;
+	
+	@Transient
+	private Position arrival;
+	
+	@Transient
+	private Boolean reserved;
+	
+	@OneToMany(fetch = FetchType.EAGER, orphanRemoval = false, mappedBy = "trip")
+	private List<Reservation> reservations;
+	
+	@OneToMany(fetch = FetchType.EAGER, orphanRemoval = false, mappedBy = "trip")
+	private List<Review> reviews;
+	
+	public List<Review> getReviews() {
+		return reviews;
+	}
 	
 	public Double getDeparture_lat() {
 		return departure_lat;
@@ -84,51 +129,6 @@ public class Trip {
 
 	public void setArrival_lat(Double arrival_lat) {
 		this.arrival_lat = arrival_lat;
-	}
-
-	@Column
-	private Double arrival_lon;
-	
-	@Column
-	private Double arrival_lat;
-	
-	@Column
-	private Boolean deleted;
-	
-	@Column
-	private Timestamp created;
-	
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name="driver_id")
-	private User driver;
-	
-	@Transient
-	private Integer driver_id;
-	
-	// Extra convenience fields
-	@Transient
-	private Integer occupied_seats;
-	
-	@Transient
-	private Boolean expired;
-	
-	@Transient
-	private Position departure;
-	
-	@Transient
-	private Position arrival;
-	
-	@Transient
-	private Boolean reserved;
-	
-	@OneToMany(fetch = FetchType.EAGER, orphanRemoval = false, mappedBy = "trip")
-	private List<Reservation> reservations;
-	
-	@OneToMany(fetch = FetchType.EAGER, orphanRemoval = false, mappedBy = "trip")
-	private List<Review> reviews;
-	
-	public List<Review> getReviews() {
-		return reviews;
 	}
 
 	public void setReviews(List<Review> reviews) {
@@ -253,7 +253,7 @@ public class Trip {
 	public Integer getOccupied_seats() {
 		return this.getPassengers().size();
 	}
-	
+		
 	public boolean equals(Object o) {
 		Trip u = (Trip) o;
 		return u.getId().equals(this.getId());

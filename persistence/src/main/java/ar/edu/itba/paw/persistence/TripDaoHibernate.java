@@ -87,7 +87,7 @@ public class TripDaoHibernate implements TripDao {
 						     .setParameter("from", "%" + search.getFrom().toLowerCase() + "%")
 						     .setParameter("to", "%" + search.getTo().toLowerCase() + "%")
 						     .getResultList();
-
+		
 		if (comparision == ">" ) {
 			return trips.stream().filter((trip) -> trip.getEtd().after(search.getWhen()))
 								.filter((trip) -> trip.getPassengers().size() < trip.getSeats())
@@ -149,6 +149,8 @@ public class TripDaoHibernate implements TripDao {
 	}
 
 	public Trip findById(final Integer tripId) {
-		return em.find(Trip.class, tripId);
+		Trip trip = em.find(Trip.class, tripId);
+		trip.setReserved(isReserved(trip));
+		return trip;
 	}
 }
