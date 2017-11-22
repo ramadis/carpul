@@ -4,7 +4,6 @@ import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.HistoryService;
 import ar.edu.itba.paw.interfaces.TripService;
-import ar.edu.itba.paw.interfaces.UserService;
 
 import java.util.List;
 
@@ -22,9 +21,6 @@ public class EventServiceImpl implements  EventService {
 
 	@Autowired
 	private TripService ts;
-
-	@Autowired
-	private UserService us;
 
 	@Autowired
 	private EmailService es;

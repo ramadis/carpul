@@ -3,23 +3,17 @@ package ar.edu.itba.paw.services;
 import com.sendgrid.*;
 
 import ar.edu.itba.paw.interfaces.EmailService;
-import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 
 import java.io.IOException;
-import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EmailServiceImpl implements EmailService {
 	private final String from = "hi@carpul.com";
 	private final SendGrid sg = new SendGrid("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");
-	
-	@Autowired
-	private UserService us;
 	
 	public void sendRegistrationEmail(User user) {
 		String subject = "Hey, welcome to Carpul!";

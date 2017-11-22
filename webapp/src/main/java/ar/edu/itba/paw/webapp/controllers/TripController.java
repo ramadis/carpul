@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.EventService;
-import ar.edu.itba.paw.interfaces.HistoryService;
 import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.Trip;
@@ -24,9 +23,6 @@ public class TripController extends AuthController {
 
 	@Autowired
 	private TripService ts;
-	
-	@Autowired
-	private HistoryService hs;
 	
 	@Autowired
 	private UserService us;

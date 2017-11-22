@@ -14,7 +14,6 @@ import ar.edu.itba.paw.interfaces.ReviewDao;
 import ar.edu.itba.paw.interfaces.TripDao;
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.persistence.UserDaoJdbc;
 
 import static org.junit.Assert.*;
 

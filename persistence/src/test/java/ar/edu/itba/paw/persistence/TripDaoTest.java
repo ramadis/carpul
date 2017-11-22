@@ -14,11 +14,8 @@ import ar.edu.itba.paw.interfaces.TripDao;
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.persistence.UserDaoJdbc;
 
 import static org.junit.Assert.*;
-
-import java.util.List;
 
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 

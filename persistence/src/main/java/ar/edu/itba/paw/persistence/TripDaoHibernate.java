@@ -2,24 +2,18 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.ReviewDao;
 import ar.edu.itba.paw.interfaces.TripDao;
-import ar.edu.itba.paw.models.Position;
 import ar.edu.itba.paw.models.Reservation;
-import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
 
-import java.sql.ResultSet;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

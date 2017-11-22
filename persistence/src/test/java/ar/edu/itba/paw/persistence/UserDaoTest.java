@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.persistence.UserDaoJdbc;
 
 import static org.junit.Assert.*;
 
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.sql.DataSource;
-import javax.persistence.EntityManager;
 
 @RunWith( SpringJUnit4ClassRunner.class )
 @ContextConfiguration(classes = TestConfig.class)
@@ -32,7 +29,6 @@ public class UserDaoTest {
 	@Autowired
 	private UserDao userDao;
 	private JdbcTemplate jdbcTemplate;
-	private User testUser;
 	
 	@Before
 	public void setUp() {
