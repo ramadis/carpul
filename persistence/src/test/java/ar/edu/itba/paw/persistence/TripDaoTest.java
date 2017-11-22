@@ -8,7 +8,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
+import ar.edu.itba.paw.interfaces.TripDao;
+import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistence.UserDaoJdbc;
@@ -24,15 +27,15 @@ import javax.sql.DataSource;
 @RunWith( SpringJUnit4ClassRunner.class )
 @ContextConfiguration(classes = TestConfig.class)
 @Sql("classpath:schema.sql")
-public class TripDaoJdbcTest {
+public class TripDaoTest {
 	@Autowired
 	private DataSource ds;
 	
 	@Autowired
-	private TripDaoHibernate tripDao;
+	private TripDao tripDao;
 	
 	@Autowired
-	private UserDaoJdbc userDao;
+	private UserDao userDao;
 	
 	private JdbcTemplate jdbcTemplate;
 	private Trip testTrip;
@@ -47,6 +50,14 @@ public class TripDaoJdbcTest {
 		jdbcTemplate.execute("TRUNCATE TABLE users RESTART IDENTITY;");
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, "trips_users");
 		jdbcTemplate.execute("TRUNCATE TABLE trips_users RESTART IDENTITY;");
+		
+		String[] sequences = {"users_id_seq", "trips_id_seq", "reviews_id_seq", "trips_users_id_seq"}; 
+		
+		for (String sequence : sequences) {
+		    jdbcTemplate.execute("DROP SEQUENCE " + sequence + " IF EXISTS");
+		    jdbcTemplate.execute("CREATE SEQUENCE " + sequence + " as INTEGER");
+		}
+		
 		userDao.create(TestUtils.UserUtils.sampleUser());
 	}
 	
@@ -63,13 +74,13 @@ public class TripDaoJdbcTest {
 		assertEquals(TestUtils.TripUtils.ARRIVAL_LAT, trip.getArrival().getLatitude());
 		assertEquals(TestUtils.TripUtils.ARRIVAL_LON, trip.getArrival().getLongitude());
 		assertNotNull(trip.getCreated());
-		assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "trips"));
 	}
 	
 	@Test
+	@Transactional
 	public void testCreate() {
 		Trip trip = testTrip;
-		User user = TestUtils.UserUtils.sampleUser();
+		User user = userDao.getById(1);
 
 		// Create trip
 		final Trip createdTrip = tripDao.create(trip, user);
@@ -79,9 +90,10 @@ public class TripDaoJdbcTest {
 	}
 	
 	@Test
+	@Transactional
 	public void testReserve() {
 		Trip trip = testTrip;
-		User user = TestUtils.UserUtils.sampleUser();
+		User user = userDao.getById(1);
 		
 		// Create trip
 		tripDao.create(trip, user);
@@ -97,8 +109,9 @@ public class TripDaoJdbcTest {
 	}
 	
 	@Test
+	@Transactional
 	public void testUnreserve() {
-		User user = TestUtils.UserUtils.sampleUser();
+		User user = userDao.getById(1);
 		
 		// Reserve trip
 		testReserve();
@@ -114,8 +127,9 @@ public class TripDaoJdbcTest {
 	}
 	
 	@Test
+	@Transactional
 	public void testDelete() {
-		User user = TestUtils.UserUtils.sampleUser();
+		User user = userDao.getById(1);
 		
 		// Create trip
 		testCreate();
@@ -131,8 +145,9 @@ public class TripDaoJdbcTest {
 	}
 	
 	@Test
+	@Transactional
 	public void testGetUserTrips() {
-		User user = TestUtils.UserUtils.sampleUser();
+		User user = userDao.getById(1);
 		
 		// Create trip
 		testCreate();
@@ -145,8 +160,9 @@ public class TripDaoJdbcTest {
 	}
 	
 	@Test
+	@Transactional
 	public void testGetReservedTrips() {
-		User user = TestUtils.UserUtils.sampleUser();
+		User user = userDao.getById(1);
 		
 		// Create trip
 		testCreate();

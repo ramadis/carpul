@@ -8,8 +8,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
+import ar.edu.itba.paw.interfaces.HistoryDao;
+import ar.edu.itba.paw.interfaces.TripDao;
+import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.models.History;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistence.UserDaoJdbc;
 
 import static org.junit.Assert.*;
@@ -23,18 +28,18 @@ import javax.sql.DataSource;
 @RunWith( SpringJUnit4ClassRunner.class )
 @ContextConfiguration(classes = TestConfig.class)
 @Sql("classpath:schema.sql")
-public class HistoryDaoJdbcTest {
+public class HistoryDaoTest {
 	@Autowired
 	private DataSource ds;
 	
 	@Autowired
-	private HistoryDaoJdbc historyDao;
+	private HistoryDao historyDao;
 	
 	@Autowired
-	private UserDaoJdbc userDao;
+	private UserDao userDao;
 	
 	@Autowired
-	private TripDaoHibernate tripDao;
+	private TripDao tripDao;
 	
 	private JdbcTemplate jdbcTemplate;
 	
@@ -47,8 +52,16 @@ public class HistoryDaoJdbcTest {
 		jdbcTemplate.execute("TRUNCATE TABLE users RESTART IDENTITY;");
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, "histories");
 		jdbcTemplate.execute("TRUNCATE TABLE histories RESTART IDENTITY;");
+		
+		String[] sequences = {"users_id_seq", "trips_id_seq", "histories_id_seq"}; 
+		
+		for (String sequence : sequences) {
+		    jdbcTemplate.execute("DROP SEQUENCE " + sequence + " IF EXISTS");
+		    jdbcTemplate.execute("CREATE SEQUENCE " + sequence + " as INTEGER");
+		}
+		
 		userDao.create(TestUtils.UserUtils.sampleUser());
-		tripDao.create(TestUtils.TripUtils.sampleTrip(), TestUtils.UserUtils.sampleUser());
+		tripDao.create(TestUtils.TripUtils.sampleTrip(), userDao.getById(1));
 	}
 	
 	public void assertHistory(History history) {
@@ -57,25 +70,31 @@ public class HistoryDaoJdbcTest {
 		assertEquals(TestUtils.HistoryUtils.TYPE, history.getType());
 		assertEquals(TestUtils.HistoryUtils.TRIP_ID, history.getTrip().getId());
 		assertNotNull(history.getCreated());
-		assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "histories"));
+	}
+	
+	public History createHistory() {
+		History history = historyDao.addHistory(userDao.getById(1), TestUtils.TripUtils.ID, TestUtils.HistoryUtils.TYPE, false);
+		return history;
 	}
 	
 	@Test
+	@Transactional
 	public void testAddHistory() {
 		// Create review
-		History createdHistory = historyDao.addHistory(TestUtils.UserUtils.sampleUser(), TestUtils.TripUtils.ID, TestUtils.HistoryUtils.TYPE, false);
+		History createdHistory = createHistory();
 		
 		// Asserts for review
 		assertHistory(createdHistory);
 	}
 	
 	@Test
+	@Transactional
 	public void testGetHistories() {
 		// Create review
-		historyDao.addHistory(TestUtils.UserUtils.sampleUser(), TestUtils.TripUtils.ID, TestUtils.HistoryUtils.TYPE, false);
+		createHistory();
 		
 		// Get histories by user
-		List<History> histories = historyDao.getHistories(TestUtils.UserUtils.sampleUser());
+		List<History> histories = historyDao.getHistories(userDao.getById(1));
 		
 		// Asserts for review
 		assertHistory(histories.get(0));

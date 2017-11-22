@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS trips (
   from_city varchar(100),
   created timestamp,
   seats integer,
+  deleted boolean,
   driver_id integer,
   cost real,
   eta timestamp,
@@ -49,6 +50,7 @@ CREATE TABLE IF NOT EXISTS reviews (
 
 CREATE TABLE IF NOT EXISTS histories (
   id SERIAL PRIMARY KEY,
+  own boolean,
   created timestamp,
   user_id integer,
   trip_id integer,

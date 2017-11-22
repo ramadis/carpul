@@ -8,7 +8,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
+import ar.edu.itba.paw.interfaces.ReviewDao;
+import ar.edu.itba.paw.interfaces.TripDao;
+import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.persistence.UserDaoJdbc;
 
@@ -23,25 +27,25 @@ import javax.sql.DataSource;
 @RunWith( SpringJUnit4ClassRunner.class )
 @ContextConfiguration(classes = TestConfig.class)
 @Sql("classpath:schema.sql")
-public class ReviewDaoJdbcTest {
+public class ReviewDaoTest {
 	@Autowired
 	private DataSource ds;
 
 	@Autowired
-	private ReviewDaoJdbc reviewDao;
+	private ReviewDao reviewDao;
 
 	@Autowired
-	private UserDaoJdbc userDao;
+	private UserDao userDao;
 
 	@Autowired
-	private TripDaoHibernate tripDao;
+	private TripDao tripDao;
 
 	private JdbcTemplate jdbcTemplate;
 	private Review testReview;
 
 	@Before
 	public void setUp() {
-		testReview = TestUtils.ReviewUtils.sampleReview();
+		
 		jdbcTemplate = new JdbcTemplate(ds);
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, "trips");
 		jdbcTemplate.execute("TRUNCATE TABLE trips RESTART IDENTITY;");
@@ -49,8 +53,18 @@ public class ReviewDaoJdbcTest {
 		jdbcTemplate.execute("TRUNCATE TABLE users RESTART IDENTITY;");
 		JdbcTestUtils.deleteFromTables(jdbcTemplate, "reviews");
 		jdbcTemplate.execute("TRUNCATE TABLE reviews RESTART IDENTITY;");
+		
+		String[] sequences = {"users_id_seq", "trips_id_seq", "reviews_id_seq"}; 
+		
+		for (String sequence : sequences) {
+		    jdbcTemplate.execute("DROP SEQUENCE " + sequence + " IF EXISTS");
+		    jdbcTemplate.execute("CREATE SEQUENCE " + sequence + " as INTEGER");
+		}
+		
 		userDao.create(TestUtils.UserUtils.sampleUser());
-		tripDao.create(TestUtils.TripUtils.sampleTrip(), TestUtils.UserUtils.sampleUser());
+		tripDao.create(TestUtils.TripUtils.sampleTrip(), userDao.getById(1));
+		
+		testReview = TestUtils.ReviewUtils.sampleReview(userDao.getById(1), userDao.getById(1), tripDao.findById(1));
 	}
 
 	public void assertReview(Review review) {
@@ -61,22 +75,27 @@ public class ReviewDaoJdbcTest {
 		assertEquals(TestUtils.ReviewUtils.MESSAGE, review.getMessage());
 		assertEquals(TestUtils.ReviewUtils.TRIP_ID, review.getTrip().getId());
 		assertNotNull(review.getCreated());
-		assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "reviews"));
+	}
+	
+	public Review createReview() {
+		return reviewDao.add(testReview);
 	}
 
 	@Test
+	@Transactional
 	public void testAdd() {
 		// Create review
-		Review createdReview = reviewDao.add(testReview);
+		Review createdReview = createReview();
 
 		// Asserts for review
 		assertReview(createdReview);
 	}
 
 	@Test
+	@Transactional
 	public void testGetReviewsTrip() {
 		// Create review
-		reviewDao.add(TestUtils.ReviewUtils.sampleReview());
+		reviewDao.add(testReview);
 
 		// Create review
 		List<Review> reviews = reviewDao.getReviews(TestUtils.TripUtils.sampleTrip());
@@ -86,9 +105,10 @@ public class ReviewDaoJdbcTest {
 	}
 
 	@Test
+	@Transactional
 	public void testGetReviewsUser() {
 		// Create review
-		testAdd();
+		createReview();
 
 		// Create review
 		List<Review> reviews = reviewDao.getReviews(TestUtils.UserUtils.sampleUser());

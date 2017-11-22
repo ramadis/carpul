@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS trips (
   driver_id integer,
   cost real,
   eta timestamp,
+  deleted boolean,
   etd timestamp,
   departure_lat double precision,
   departure_lon double precision,
@@ -52,6 +53,7 @@ CREATE TABLE IF NOT EXISTS histories (
   created timestamp,
   user_id integer,
   trip_id integer,
+  own boolean,
   type varchar(20),
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE

@@ -17,14 +17,15 @@ public class TestUtils {
 		public static final String USERNAME = "Username";
 		public static final String FIRST_NAME = "First";
 		public static final String LAST_NAME = "Last";
-		public static final Integer ID = 0;
+		public static final Integer ID = 1;
 		public static final String PHONE_NUMBER = "phone";
 		public static final Timestamp NOW = new Timestamp(System.currentTimeMillis());
+		
+		private UserUtils () {}
 		
 		public static User sampleUser() {
 			// Create test user
 			User user = new User();
-			user.setId(ID);
 			user.setUsername(USERNAME);
 			user.setPassword(PASSWORD);
 			user.setFirst_name(FIRST_NAME);
@@ -36,7 +37,7 @@ public class TestUtils {
 	}
 	
 	public static class TripUtils {
-		public static final Integer ID = 0;
+		public static final Integer ID = 1;
 		public static final String TO_CITY = "To city";
 		public static final String FROM_CITY = "From city";
 		public static final Integer SEATS = 4;
@@ -50,10 +51,11 @@ public class TestUtils {
 		public static final Double ARRIVAL_LON = -58.388214;
 		public static final Timestamp NOW = new Timestamp(System.currentTimeMillis());
 	
+		private TripUtils () {}
+		
 		public static Trip sampleTrip() {
 			// Create test trip
 			Trip trip = new Trip();
-			trip.setId(ID);
 			trip.setTo_city(TO_CITY);
 			trip.setFrom_city(FROM_CITY);
 			trip.setSeats(SEATS);
@@ -73,23 +75,25 @@ public class TestUtils {
 	}
 	
 	public static class ReviewUtils {
-		public static final Integer ID = 0;
-		public static final Integer OWNER_ID = 0;
-		public static final Integer REVIEWED_ID = 0;
-		public static final Integer TRIP_ID = 0;
+		public static final Integer ID = 1;
+		public static final Integer OWNER_ID = 1;
+		public static final Integer REVIEWED_ID = 1;
+		public static final Integer TRIP_ID = 1;
 		public static final Integer STARS = 3;
 		public static final String MESSAGE = "Message";
 		public static final Timestamp NOW = new Timestamp(System.currentTimeMillis());
 	
-		public static Review sampleReview() {
+		private ReviewUtils () {}
+		
+		public static Review sampleReview(User owner, User reviewed, Trip trip) {
 			// Create test review
 			Review review = new Review();
 			
-			review.setOwner(TestUtils.UserUtils.sampleUser());
-			review.setReviewedUser(TestUtils.UserUtils.sampleUser());
+			review.setOwner(owner);
+			review.setReviewedUser(reviewed);
 			review.setStars(STARS);
 			review.setCreated(NOW);
-			review.setTrip(TestUtils.TripUtils.sampleTrip());
+			review.setTrip(trip);
 			review.setMessage(MESSAGE);
 
 			return review;
@@ -97,12 +101,13 @@ public class TestUtils {
 	}
 	
 	public static class HistoryUtils {
-		public static final Integer ID = 0;
-		public static final Integer USER_ID = 0;
-		public static final Integer TRIP_ID = 0;
+		public static final Integer USER_ID = 1;
+		public static final Integer TRIP_ID = 1;
 		public static final String TYPE = "CREATED";
 		public static final Timestamp NOW = new Timestamp(System.currentTimeMillis());
 	
+		private HistoryUtils () {}
+		
 		public static History sampleHistory() {
 			// Create test history
 			History history = new History();

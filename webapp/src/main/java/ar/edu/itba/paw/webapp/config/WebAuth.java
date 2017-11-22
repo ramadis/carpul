@@ -51,7 +51,7 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
 				.accessDeniedPage("/404")
 			.and().rememberMe()
 				.rememberMeParameter("remember")
-				.key("secret key. sh.")
+				.key("p7kuiw-i5estn(d85h4+0@(-x90%u@zgn%o5rud6og_nk45jlu0%u@zgn%o5-i5estn(d85h4+0@(-xn(d85h4+0@(-x90%u@zgn%o5rud6og_nk45jlu0%u@zgn%")
 				.tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(60))
 				.userDetailsService(userDetailsService)
 			.and().csrf().disable();
