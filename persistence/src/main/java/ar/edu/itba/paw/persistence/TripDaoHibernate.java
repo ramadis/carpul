@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.interfaces.ReviewDao;
 import ar.edu.itba.paw.interfaces.TripDao;
 import ar.edu.itba.paw.models.Position;
 import ar.edu.itba.paw.models.Reservation;
@@ -27,6 +28,9 @@ public class TripDaoHibernate implements TripDao {
 
 	@PersistenceContext
 	private EntityManager em;
+	
+	@Autowired
+	private ReviewDao reviewDao;
 	
 	public Trip create(Trip trip, User driver) {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
@@ -127,9 +131,12 @@ public class TripDaoHibernate implements TripDao {
 
 	public List<Trip> getReservedTrips(User user) {
 		// TODO: Check if is just a wrapper or an actual user
-		return user.getReservations().stream().map((reservation) -> reservation.getTrip())
-											  .filter((trip) -> trip.getReviews().stream().filter((review) -> review.getOwner().equals(user)).collect(Collectors.toList()).isEmpty())
-											  .collect(Collectors.toList());
+		List<Trip> trips = user.getReservations().stream().map((reservation) -> reservation.getTrip())
+											.filter((trip) -> reviewDao.canLeaveReview(trip, user))
+											.collect(Collectors.toList());
+		System.out.println(trips);
+		
+		return trips;
 		
 	}
 

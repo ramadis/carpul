@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -68,6 +69,10 @@ public class UserController extends AuthController {
 		}
 		
 		// Register new user
+		// TODO: Encrypt password
+		//BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		//encoder.encode(password);
+		// user.setPassword(password);
 		us.register(user);
 		
 		// Send welcome email to user

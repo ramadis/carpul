@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <a class="destiny-time map-trigger" target="iframe" href="https://www.google.com/maps/embed/v1/directions?key=AIzaSyCNS1Xx_AGiNgyperC3ovLBiTdsMlwnuZU&origin=${trip.departure.latitude}, ${trip.departure.longitude}&destination=${trip.arrival.latitude}, ${trip.arrival.longitude}" ><spring:message code="user.trip.map"/></a>
+    <a class="destiny-time map-trigger" target="iframe" href="https://www.google.com/maps/embed/v1/directions?key=AIzaSyCNS1Xx_AGiNgyperC3ovLBiTdsMlwnuZU&origin=${trip.departure_lat}, ${trip.departure_lon}&destination=${trip.arrival_lat}, ${trip.arrival_lon}" ><spring:message code="user.trip.map"/></a>
     <button class="destiny-unreserve-button" onclick="deleteTrip(${trip.id})"><spring:message code="user.trip.delete"/></button>
     <c:if test="${not empty trip.passengers}">
       <hr>

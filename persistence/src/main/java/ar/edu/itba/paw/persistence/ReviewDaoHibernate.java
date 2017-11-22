@@ -50,7 +50,7 @@ public class ReviewDaoHibernate implements ReviewDao {
 							 .setParameter("owner", user)
 							 .getResultList();
 		
-		System.out.println(trips);
+		System.out.println(trips.isEmpty());
 		
 		return trips.isEmpty();
 	}
