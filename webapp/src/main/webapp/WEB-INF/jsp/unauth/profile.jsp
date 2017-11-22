@@ -40,9 +40,9 @@
       </section>
 
       <section class="destinys-container">
-        <h3><spring:message code="user.profile.next"/></h3>
-
         <c:if test="${not empty trips}">
+          <h3><spring:message code="user.unauth.profile.is_hitch" arguments="${user.first_name}"/></h3>
+
           <ul class="no-bullets destiny-list">
             <c:forEach items="${trips}" var="trip">
               <a href="<c:url value='/search/${trip.id}?from=${trip.from_city}&to=${trip.to_city}&when=${trip.etd}' />"><%@ include file="trip.jsp" %></a>
@@ -52,7 +52,7 @@
       </section>
     </c:if>
 
-    <c:if test="${empty reservations and empty trips}">
+    <c:if test="${empty reservations and empty trips and empty reviews}">
       <div class="empty-profile">
         <h3 class="empty-title"><spring:message code="user.profile.empty_title"/></h3>
       </div>
