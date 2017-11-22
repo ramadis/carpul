@@ -145,12 +145,6 @@ public class TripDaoHibernate implements TripDao {
 	}
 
 	public Trip findById(final Integer tripId) {
-		String query = "SELECT t FROM Trip t WHERE t.deleted = FALSE AND t.id = :tripId";
-		
-		List<Trip> trips = em.createQuery(query, Trip.class)
-						     .setParameter("tripId", tripId)
-						     .getResultList();
-
-		return trips.isEmpty() ? null : trips.get(0);
+		return em.find(Trip.class, tripId);
 	}
 }

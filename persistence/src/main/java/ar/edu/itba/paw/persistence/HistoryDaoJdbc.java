@@ -17,7 +17,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
 public class HistoryDaoJdbc implements HistoryDao {
 
 	private final JdbcTemplate connection;
