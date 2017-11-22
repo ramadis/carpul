@@ -74,7 +74,7 @@ public class TripServiceImpl implements TripService {
 
 	public List<Trip> getSuggestions(User user, Search search) {
 		List<Trip> trips = user == null ? findAfterDateByRoute(search) : findAfterDateByRoute(user, search);
-		return trips.subList(0, trips.size() >= 5 ? 5 : trips.size());
+		return trips.subList(0, trips.size() >= 10 ? 9 : trips.size());
 
 	}
 
