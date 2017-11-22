@@ -70,9 +70,6 @@ public class UserController extends AuthController {
 		
 		// Register new user
 		// TODO: Encrypt password
-		//BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		//encoder.encode(password);
-		// user.setPassword(password);
 		us.register(user);
 		
 		// Send welcome email to user

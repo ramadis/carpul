@@ -5,6 +5,9 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import ar.edu.itba.paw.models.User;
 
@@ -70,12 +73,14 @@ public class UserCreateForm {
 	}
 	
 	public User getUser() {
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		
 		User user = new User();
 		user.setFirst_name(first_name);
 		user.setLast_name(last_name);
 		user.setPhone_number(phone_number);
 		user.setUsername(username);
-		user.setPassword(password);
+		user.setPassword(passwordEncoder.encode(password));
 		return user;
 	}
 }
