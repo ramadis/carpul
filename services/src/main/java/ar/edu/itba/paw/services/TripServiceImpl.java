@@ -56,13 +56,6 @@ public class TripServiceImpl implements TripService {
 	public List<Trip> getUserTrips(User user) {
 		List<Trip> trips = user.getDrived_trips();
 
-//		// Add extra fields
-//		for(Trip t: trips) {
-//			t.setPassengers(us.getPassengers(t));
-//			t.setOccupied_seats(t.getPassengers().size());
-//		}
-
-		// Filter out expired trips but what about trips to review?
 		return trips.stream().filter((trip) -> !trip.getExpired() && !trip.getDeleted())
 							 .collect(Collectors.toList());
 	}
@@ -71,31 +64,27 @@ public class TripServiceImpl implements TripService {
 	public void delete(Integer tripId, User user) {
 		tripDao.delete(tripId, user);
 	}
+	
+	private List<Trip> filterExpired(List<Trip> trips) {
+		return trips.stream().filter((trip) -> !trip.getExpired() && !trip.getDeleted()).collect(Collectors.toList());
+	}
 
 	public List<Trip> findByRoute(User user, Search search) {
 		List<Trip> trips = tripDao.findByRouteWithDateComparision(user, search, "=");
-
-		// Filter out expired trips
-		return trips.stream().filter((trip) -> !trip.getExpired()).collect(Collectors.toList());
+		return filterExpired(trips);
 	}
 
 	public List<Trip> findAfterDateByRoute(User user, Search search) {
 		List<Trip> trips = tripDao.findByRouteWithDateComparision(user, search, ">");
-		// Filter out expired trips
-		return trips.stream().filter((trip) -> !trip.getExpired()).collect(Collectors.toList());
-	}
+		return filterExpired(trips);	}
 
 	public List<Trip> findByRoute(Search search) {
 		List<Trip> trips = tripDao.findByRouteWithDateComparision(search, "=");
-
-		// Filter out expired trips
-		return trips.stream().filter((trip) -> !trip.getExpired()).collect(Collectors.toList());
+		return filterExpired(trips);
 	}
 
 	public List<Trip> findAfterDateByRoute(Search search) {
 		List<Trip> trips = tripDao.findByRouteWithDateComparision(search, ">");
-
-		// Filter out expired trips
-		return trips.stream().filter((trip) -> !trip.getExpired()).collect(Collectors.toList());
+		return filterExpired(trips);
 	}
 }
