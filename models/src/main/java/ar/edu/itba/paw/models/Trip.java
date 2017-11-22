@@ -251,7 +251,16 @@ public class Trip {
 	}
 
 	public Integer getOccupied_seats() {
-		return occupied_seats;
+		return this.getPassengers().size();
+	}
+	
+	public boolean equals(Object o) {
+		Trip u = (Trip) o;
+		return u.getId().equals(this.getId());
+	}
+	
+	public int hashCode() {
+		return this.getId();
 	}
 
 	public void setOccupied_seats(Integer occupied_seats) {
