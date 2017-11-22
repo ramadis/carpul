@@ -138,6 +138,20 @@ public class User {
 		this.created = created;
 	}
 	
+	public Integer getRating() {
+		Integer sum = 0;
+		Integer count = 0;
+		
+		for (Trip trip: this.getDrived_trips()) {
+			for (Review review: trip.getReviews()) {
+				sum += review.getStars();
+				count++;	
+			}
+		}
+		
+		return count == 0 ? -1 : Math.round(sum/count);
+	}
+	
 	public boolean equals(Object o) {
 		User u = (User) o;
 		return u.getUsername().equals(this.getUsername());

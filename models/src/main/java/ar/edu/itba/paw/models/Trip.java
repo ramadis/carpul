@@ -261,7 +261,7 @@ public class Trip {
 	public Timestamp getEtd() {
 		return etd;
 	}
-
+	
 	public void setEtd(Timestamp etd) {
 		this.etd = etd;
 	}

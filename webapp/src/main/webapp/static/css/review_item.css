@@ -80,3 +80,58 @@
   width: 100px;
   margin-bottom: 5px;
 }
+
+.stars-1-white {
+  background: url('../images/star-white.png');
+  background-repeat: no-repeat;
+  background-position: 0 top;
+  height: 12px;
+  width: 100px;
+  margin: 5px 0;
+}
+
+.stars-2-white {
+  background: url('../images/star-white.png'),url('../images/star-white.png');
+  background-repeat: no-repeat, no-repeat;
+  background-position: 0 top,
+                     12px top;
+  height: 12px;
+  width: 100px;
+  margin: 5px 0;
+}
+
+.stars-3-white {
+  background: url('../images/star-white.png'),url('../images/star-white.png'),url('../images/star-white.png');
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: 0 top,
+                     12px top,
+                     24px top;
+  height: 12px;
+  width: 100px;
+  margin: 5px 0;
+}
+
+.stars-4-white {
+  background: url('../images/star-white.png'),url('../images/star-white.png'),url('../images/star-white.png'),url('../images/star-white.png');
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-position: 0 top,
+                     12px top,
+                     24px top,
+                     36px top;
+  height: 12px;
+  width: 100px;
+  margin: 5px 0;
+}
+
+.stars-5-white {
+  background: url('../images/star-white.png'),url('../images/star-white.png'),url('../images/star-white.png'),url('../images/star-white.png'),url('../images/star-white.png');
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  background-position: 0 top,
+                     12px top,
+                     24px top,
+                     36px top,
+                     48px top;
+  height: 12px;
+  width: 100px;
+  margin: 5px 0;
+}
