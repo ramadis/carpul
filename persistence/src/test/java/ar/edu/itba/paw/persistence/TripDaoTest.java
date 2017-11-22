@@ -76,6 +76,26 @@ public class TripDaoTest {
 		assertNotNull(trip.getCreated());
 	}
 	
+	private void createTrip() {
+		Trip trip = testTrip;
+		User user = userDao.getById(1);
+		tripDao.create(trip, user);
+	}
+	
+	private void reserveTrip() {
+		Trip trip = testTrip;
+		User user = userDao.getById(1);
+		
+		// Create trip
+		tripDao.create(trip, user);
+		
+		// Reserve trip
+		tripDao.reserveTrip(TestUtils.TripUtils.ID, user);
+		
+		// Get trip
+		tripDao.findById(TestUtils.TripUtils.ID);
+	}
+	
 	@Test
 	@Transactional
 	public void testCreate() {
@@ -99,13 +119,13 @@ public class TripDaoTest {
 		tripDao.create(trip, user);
 		
 		// Reserve trip
-		tripDao.reserveTrip(TestUtils.TripUtils.ID, user);
+		tripDao.reserveTrip(1, user);
 		
 		// Get trip
-		Trip reservedTrip = tripDao.findById(TestUtils.TripUtils.ID);
+		Trip reservedTrip = tripDao.findById(1);
 		
 		// Assert trip
-		assertFalse(reservedTrip.getReserved());
+		assertFalse(reservedTrip.getPassengers().contains(user));
 	}
 	
 	@Test
@@ -114,7 +134,7 @@ public class TripDaoTest {
 		User user = userDao.getById(1);
 		
 		// Reserve trip
-		testReserve();
+		reserveTrip();
 		
 		// Unreserve trip
 		tripDao.unreserveTrip(TestUtils.TripUtils.ID, user);
@@ -132,7 +152,7 @@ public class TripDaoTest {
 		User user = userDao.getById(1);
 		
 		// Create trip
-		testCreate();
+		createTrip();
 		
 		// Delete trip
 		tripDao.delete(TestUtils.TripUtils.ID, user);
@@ -141,41 +161,6 @@ public class TripDaoTest {
 		Trip reservedTrip = tripDao.findById(TestUtils.TripUtils.ID);
 		
 		// Assert trip
-		assertNull(reservedTrip.getId());
+		assertTrue(reservedTrip.getDeleted());
 	}
-	
-	@Test
-	@Transactional
-	public void testGetUserTrips() {
-		User user = userDao.getById(1);
-		
-		// Create trip
-		testCreate();
-		
-		// Get trips for users
-		List<Trip> trips = tripDao.getUserTrips(user);
-		
-		// Assert trip
-		assertTrue(trips.size() > 0);
-	}
-	
-	@Test
-	@Transactional
-	public void testGetReservedTrips() {
-		User user = userDao.getById(1);
-		
-		// Create trip
-		testCreate();
-		
-		// Reserve trip
-		testReserve();
-		
-		// Get trips for users
-		List<Trip> trips = tripDao.getReservedTrips(user);
-		
-		// Assert trip
-		assertEquals(1, trips.size());
-	}
-	
-	
 }

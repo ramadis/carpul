@@ -98,7 +98,7 @@ public class ReviewDaoTest {
 		reviewDao.add(testReview);
 
 		// Create review
-		List<Review> reviews = reviewDao.getReviews(TestUtils.TripUtils.sampleTrip());
+		List<Review> reviews = reviewDao.getReviews(tripDao.findById(1));
 
 		// Asserts for review
 		assertReview(reviews.get(0));
@@ -111,7 +111,7 @@ public class ReviewDaoTest {
 		createReview();
 
 		// Create review
-		List<Review> reviews = reviewDao.getReviews(TestUtils.UserUtils.sampleUser());
+		List<Review> reviews = reviewDao.getReviews(tripDao.findById(1));
 
 		// Asserts for review
 		assertReview(reviews.get(0));

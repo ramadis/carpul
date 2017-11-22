@@ -144,6 +144,7 @@ public class Trip {
 	}
 	
 	public List<User> getPassengers() {
+		if (reservations == null) return new ArrayList<>();
 		return this.reservations.stream().map((reservation) -> reservation.getUser()).collect(Collectors.toList());
 	}
 
@@ -247,6 +248,7 @@ public class Trip {
 	}
 
 	public Integer getAvailable_seats() {
+		if (reservations == null) return this.seats;
 		return this.seats - reservations.size();
 	}
 
