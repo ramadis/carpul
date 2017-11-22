@@ -70,17 +70,32 @@ public class TripServiceImpl implements TripService {
 
 	public List<Trip> findByRoute(User user, Search search) {
 		List<Trip> trips = tripDao.findByRouteWithDateComparision(user, search, "=");
+		
+		for(Trip trip: trips) {
+			trip.setReserved(trip.getPassengers().contains(user));
+		}
+		
 		return filterExpired(trips);
 	}
 
 	public List<Trip> getSuggestions(User user, Search search) {
 		List<Trip> trips = user == null ? findAfterDateByRoute(search) : findAfterDateByRoute(user, search);
+		
+		for(Trip trip: trips) {
+			trip.setReserved(trip.getPassengers().contains(user));
+		}
+		
 		return trips.subList(0, trips.size() >= 10 ? 9 : trips.size());
 
 	}
 
 	public List<Trip> findAfterDateByRoute(User user, Search search) {
 		List<Trip> trips = tripDao.findByRouteWithDateComparision(user, search, ">");
+		
+		for(Trip trip: trips) {
+			trip.setReserved(trip.getPassengers().contains(user));
+		}
+		
 		return filterExpired(trips);	}
 
 	public List<Trip> findByRoute(Search search) {
