@@ -50,7 +50,7 @@
   <%@ include file="/WEB-INF/jsp/common/hero.jsp" %>
 
   <section class="profile-container">
-    <c:if test="${not empty reservations or not empty trips or not empty reviews}">
+    <c:if test="${not empty reservations or not empty trips or not empty reviews or not empty histories}">
 
       <section class="reviews-container">
         <c:if test="${not empty reviews}">
@@ -77,6 +77,9 @@
             </c:forEach>
           </ul>
         </c:if>
+        <c:if test="${empty histories}">
+          <h3 class="empty-message"><spring:message code="user.profile.empty_histories"/></h3>
+        </c:if>
       </section>
 
       <section class="destinys-container">
@@ -96,6 +99,9 @@
             </c:forEach>
           </ul>
         </c:if>
+        <c:if test="${empty reservations}">
+          <h3 class="empty-message"><spring:message code="user.profile.empty_reservations"/></h3>
+        </c:if>
       </section>
 
       <section class="destinys-container">
@@ -110,10 +116,13 @@
             </c:forEach>
           </ul>
         </c:if>
+        <c:if test="${empty trips}">
+          <h3 class="empty-message"><spring:message code="user.profile.empty_trips"/></h3>
+        </c:if>
       </section>
     </c:if>
 
-    <c:if test="${empty reservations and empty trips}">
+    <c:if test="${empty reservations and empty trips and empty histories and empty reservations}">
       <div class="empty-profile">
         <h3 class="empty-title"><spring:message code="user.profile.empty_title"/></h3>
         <h4 class="empty-subtitle"><spring:message code="user.profile.empty_subtitle"/></h4>
