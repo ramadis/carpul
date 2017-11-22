@@ -31,10 +31,12 @@ public class EmailServiceImpl implements EmailService {
 	}
 	
 	public void sendReservationEmail(User user, Trip trip) {
+		System.out.println("BEFORE CREATING THE EMAIL");
 		String subject = "Hey " + trip.getDriver().getFirst_name() + ", you have a new reservation!";
 	    String content = "Hey " + trip.getDriver().getFirst_name() + " Just FYI: " + user.getFirst_name() + " just reserved your trip to " + trip.getTo_city() + ". Check the details in your Carpul profile!";
 		
 		Mail email = createEmail(from, subject, trip.getDriver().getUsername(), content);
+		System.out.println("AFTER CREATING THE EMAIL");
 		sendEmail(email);
 	}
 	
@@ -66,12 +68,16 @@ public class EmailServiceImpl implements EmailService {
 	}
 	
 	private void sendEmail(Mail email) {
-		Request request = new Request();
 	    try {
+	    	  Request request = new Request();
 	      request.setMethod(Method.POST);
 	      request.setEndpoint("mail/send");
 	      request.setBody(email.build());
 	      Response response = sg.api(request);
-	    } catch (IOException ex) {}
+			System.out.println("AFTER SENDING THE EMAIL");
+
+	    } catch (IOException ex) {
+	    		System.out.print(ex);
+	    }
 	}
 }

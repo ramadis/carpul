@@ -42,17 +42,21 @@ public class TripDaoHibernate implements TripDao {
 
 	public void reserveTrip(Integer tripId, User user) {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
+		System.out.println("CHECK 1");
 		Trip trip = findById(tripId);
-
+		System.out.println("CHECK 2");
 		// Create reservation
 		Reservation reserve = new Reservation();
+		System.out.println("CHECK 3");
 		reserve.setTrip(trip);
+		System.out.println("CHECK 4");
 		reserve.setUser(user);
+		System.out.println("CHECK 5");
 		reserve.setCreated(now);
-		
-		System.out.println("CHECK AFTER GENERATE RESERVATION");
+		System.out.println("CHECK 6");
 		
 		em.persist(reserve);
+		System.out.println("CHECK 7");
 		return;
 	}
 

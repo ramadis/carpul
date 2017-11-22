@@ -22,6 +22,7 @@ public abstract class AuthController {
 	@ExceptionHandler(value = Exception.class)
     public String redirectToErrorPage(Exception ex) {
 		// If an error happens, show internal error message.
+		ex.printStackTrace();
 		System.out.println(ex);
         return "redirect:/error/500";
       }

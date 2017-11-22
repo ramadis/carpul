@@ -62,10 +62,10 @@ public class TripController extends AuthController {
 	public ModelAndView reserveTrip(@PathVariable("tripId") final Integer tripId) {
 		// Reserve trip and register in log
 		User loggedUser = user();
-		ts.reserve(tripId, loggedUser);
-		//hs.addHistory(loggedUser, tripId, "RESERVE");
-		es.registerReserve(loggedUser, tripId);
 		
+		ts.reserve(tripId, loggedUser);
+		es.registerReserve(loggedUser, tripId);
+
 		// Redirect to profile
 		return new ModelAndView("redirect:/user/" + loggedUser.getId());
 	}

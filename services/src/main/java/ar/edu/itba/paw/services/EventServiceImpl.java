@@ -32,8 +32,7 @@ public class EventServiceImpl implements  EventService {
 	public void registerReserve(User user, Integer tripId) {
 		hs.addHistory(user, tripId, "RESERVE", false);
 		// TODO: Change DB. Users usernames should be valid emails.
-		es.sendReservationEmail(user, ts.findById(tripId));
-		
+		es.sendReservationEmail(user, ts.findById(tripId));		
 	}
 	
 	public void registerUnreserve(User user, Integer tripId) {
@@ -53,15 +52,15 @@ public class EventServiceImpl implements  EventService {
 	public void registerDelete(User user, Integer tripId) {
 		//TODO: Check if it works
 		// Create trip wrapper
-		Trip trip = new Trip();
-		trip.setId(tripId);
 		
-		List<User> passengers = us.getPassengers(trip);
+		Trip trip = ts.findById(tripId);
+		
+		List<User> passengers = trip.getPassengers();
 		
 		// Add an event for every passenger and alert them via email.
 		passengers.forEach((passenger) -> {
 			hs.addHistory(passenger, tripId, "DELETE", true);
-			es.sendDeletionEmail(passenger, ts.findById(tripId));
+			es.sendDeletionEmail(passenger, trip);
 		});
 	}
 }

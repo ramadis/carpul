@@ -20,7 +20,7 @@
         <span class="destiny-time-span">${fmtetatime}</span>
       </div>
     </div>
-    <a class="destiny-time map-trigger" target="iframe" href="https://www.google.com/maps/embed/v1/directions?key=AIzaSyCNS1Xx_AGiNgyperC3ovLBiTdsMlwnuZU&origin=${reservation.departure.latitude}, ${reservation.departure.longitude}&destination=${reservation.arrival.latitude}, ${reservation.arrival.longitude}" >See adventure on the map</a>
+    <a class="destiny-time map-trigger" target="iframe" href="https://www.google.com/maps/embed/v1/directions?key=AIzaSyCNS1Xx_AGiNgyperC3ovLBiTdsMlwnuZU&origin=${reservation.departure_lat}, ${reservation.departure_lon}&destination=${reservation.arrival_lat}, ${reservation.arrival_lon}" >See adventure on the map</a>
     <button class="destiny-unreserve-button" onclick="unreserve(${trip.id})"><spring:message code="user.trip.unreserve"/></button>
     <hr>
     <div class="driver">
