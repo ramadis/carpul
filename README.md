@@ -10,11 +10,17 @@
 * Search case insensitive and substring
 * Get results for future trips
 * Keep track of recent events
+* Receive email notifications
+* See the latest updates relating your trips
+* Improved design
+* See some suggestions in your home screen
+* Every rated user has stars depending on his reviews
 
 ## Technical Features
 * Automatic user location
 * Custom annotations validations
 * JUnit tests
+* Hibernate integration
 
 ## How To Use
 
@@ -36,11 +42,17 @@ $ eclipse
 
 ## Sample
 
-Credentials for a user with an old trip pending review, a current reserved trip, an own empty trip, an own occupied trip, reviews, and history.
+Credentials for users with useful data are:
 
 ```bash
 # Username
 entrega
+# Password
+holahola
+
+
+# Username
+carpul@mailinator.com
 # Password
 holahola
 ```

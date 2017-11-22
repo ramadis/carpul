@@ -1,7 +1,6 @@
 .review-item-container {
   display: flex;
   margin-bottom: 20px;
-  max-width: 300px;
 }
 
 .review-item-container img {
@@ -19,6 +18,8 @@
 }
 
 .review-message {
+  max-width: 360px;
+  word-wrap: break-word;
   color: #5a5a5a;
 }
 
