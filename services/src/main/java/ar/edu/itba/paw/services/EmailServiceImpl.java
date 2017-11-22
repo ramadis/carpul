@@ -60,8 +60,8 @@ public class EmailServiceImpl implements EmailService {
 	private Mail createEmail(String from, String subject, String to, String content) {
 		Email toEmail = new Email(to);
 		Email fromEmail = new Email(from);
+		fromEmail.setName("Carpul");
 		Content contentEmail = new Content("text/plain", content);
-		
 		return new Mail(fromEmail, subject, toEmail, contentEmail);
 	}
 	
