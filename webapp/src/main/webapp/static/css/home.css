@@ -90,7 +90,7 @@ input[readonly].searchbar-input {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .trip-recommendation-item {

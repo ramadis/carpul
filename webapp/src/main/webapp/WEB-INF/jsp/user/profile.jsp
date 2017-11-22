@@ -78,7 +78,7 @@
           </ul>
         </c:if>
         <c:if test="${empty histories}">
-          <h3 class="empty-message"><spring:message code="user.profile.empty_histories"/></h3>
+          <h3><spring:message code="user.profile.empty_histories"/></h3>
         </c:if>
       </section>
 

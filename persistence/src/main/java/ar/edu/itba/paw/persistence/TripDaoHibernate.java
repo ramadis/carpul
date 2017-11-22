@@ -135,7 +135,7 @@ public class TripDaoHibernate implements TripDao {
 	public List<Trip> getReservedTrips(User user) {
 		// TODO: Check if is just a wrapper or an actual user
 		return user.getReservations().stream().map((reservation) -> reservation.getTrip())
-											  .filter((trip) -> trip.getReviews().isEmpty())
+											  .filter((trip) -> trip.getReviews().stream().filter((review) -> review.getOwner().equals(user)).collect(Collectors.toList()).isEmpty())
 											  .collect(Collectors.toList());
 		
 	}
