@@ -20,10 +20,10 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private Provider authProvider;
-	
+
 	@Autowired
 	private Service userDetailsService;
-	
+
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
 		http.authenticationProvider(authProvider)
@@ -33,7 +33,6 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
 			.and().authorizeRequests()
 				.antMatchers("/login").anonymous()
 				.antMatchers("/user").anonymous()
-				// TODO: Check search pattern matcher
 				.antMatchers("/search**").permitAll()
 				.antMatchers("/*").permitAll()
 			.and().authorizeRequests()
@@ -57,7 +56,7 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
 				.userDetailsService(userDetailsService)
 			.and().csrf().disable();
 	}
-	
+
 	@Override
 	public void configure(final WebSecurity http) throws Exception {
 		http.ignoring()

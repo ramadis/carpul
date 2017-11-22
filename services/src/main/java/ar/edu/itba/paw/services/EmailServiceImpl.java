@@ -48,14 +48,13 @@ public class EmailServiceImpl implements EmailService {
 	}
 	
 	public void sendDeletionEmail(User user, Trip trip) {
-		List<User> passengers = us.getPassengers(trip);
-		for(User u: passengers) {
-			String subject = "Alert " + u.getFirst_name() + ", your trip to " + trip.getTo_city() + " was cancelled";
-		    String content = "Hey " + u.getFirst_name() + " Just FYI: " + user.getFirst_name() + " just removed his trip to " + trip.getTo_city() + ". Try to fin another trip to the same place!";
-			
-			Mail email = createEmail(from, subject, u.getUsername(), content);
-			sendEmail(email);
-		}
+		User u = user;
+		
+		String subject = "Alert " + u.getFirst_name() + ", your trip to " + trip.getTo_city() + " was cancelled";
+	    String content = "Hey " + u.getFirst_name() + " Just FYI: " + user.getFirst_name() + " just removed his trip to " + trip.getTo_city() + ". Try to fin another trip to the same place!";
+		
+		Mail email = createEmail(from, subject, u.getUsername(), content);
+		sendEmail(email);
 	}
 	
 	private Mail createEmail(String from, String subject, String to, String content) {

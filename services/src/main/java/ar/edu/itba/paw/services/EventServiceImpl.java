@@ -40,17 +40,14 @@ public class EventServiceImpl implements  EventService {
 	}
 
 	// TODO: Run migration ALTER TABLE histories ADD own boolean
+	// TODO: Change DB. Users usernames should be valid emails.
 	// UPDATE histories SET own = false;
 	public void registerKicked(User user, Integer tripId) {
 		hs.addHistory(user, tripId, "KICKED", true);
-		// TODO: Change DB. Users usernames should be valid emails.
-		es.sendUnreservationEmail(user, ts.findById(tripId));
+		es.sendDeletionEmail(user, ts.findById(tripId));
 	}
 
 	public void registerDelete(User user, Integer tripId) {
-		//TODO: Check if it works
-		// Create trip wrapper
-
 		Trip trip = ts.findById(tripId);
 
 		List<User> passengers = trip.getPassengers();

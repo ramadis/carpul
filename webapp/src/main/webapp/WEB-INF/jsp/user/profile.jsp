@@ -34,7 +34,7 @@
     }
 
     function unreserve(id) {
-      var confirmate = confirm('Are you sure you want to delete this trip?');
+      var confirmate = confirm('Are you sure you want to unreserve this trip?');
       if (confirmate) {
         $.post('../trip/' + id + '/unreserve');
         location.reload();
