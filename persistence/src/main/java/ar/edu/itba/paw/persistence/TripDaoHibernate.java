@@ -134,7 +134,6 @@ public class TripDaoHibernate implements TripDao {
 		List<Trip> trips = user.getReservations().stream().map((reservation) -> reservation.getTrip())
 											.filter((trip) -> reviewDao.canLeaveReview(trip, user))
 											.collect(Collectors.toList());
-		System.out.println(trips);
 		
 		return trips;
 		

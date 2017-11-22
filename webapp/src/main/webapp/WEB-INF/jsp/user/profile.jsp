@@ -30,7 +30,7 @@
       var confirmate = confirm('Are you sure you want to remove this passenger from you trip?');
       if (confirmate) {
         $.post('../trip/' + tripId + '/unreserve/' + id);
-        //location.reload();
+        location.reload();
       }
     }
 
