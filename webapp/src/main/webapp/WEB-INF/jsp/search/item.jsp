@@ -22,7 +22,7 @@
 
   <div class="pool-info">
     <div class="map-container">
-      <img src="https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyCKIU4-Ijaeex54obPySJ7kXLwLnrV5BRA&size=1200x200&markers=color:green|label:A|${trip.departure.latitude}, ${trip.departure.longitude}&markers=color:blue|label:B|${trip.arrival.latitude}, ${trip.arrival.longitude}&path=color:0x0000ff80|weight:1|${trip.arrival.latitude}, ${trip.arrival.longitude}|${trip.departure.latitude}, ${trip.departure.longitude}" style="width: 100%; height: 100%;"></img>
+      <img src="https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyCKIU4-Ijaeex54obPySJ7kXLwLnrV5BRA&size=1200x200&markers=color:green|label:A|${trip.departure_lat}, ${trip.departure_lon}&markers=color:blue|label:B|${trip.arrival_lat}, ${trip.arrival_lon}&path=color:0x0000ff80|weight:1|${trip.arrival_lat}, ${trip.arrival_lon}|${trip.departure_lat}, ${trip.departure_lon}" style="width: 100%; height: 100%;"></img>
     </div>
     <div class="bg-white">
       <div class="price-container flex space-between align-center">
@@ -66,7 +66,8 @@
         <div class="seats-container">
           <span class="seats bold gray">
             <img class="seats-icon" src="<c:url value='/static/images/seats.png' />"></img>
-            ${trip.available_seats} <spring:message code="search.item.available"/>
+            <%-- TODO: CHECK WHY AVAILABLE_SEATS BREAKS --%>
+            <%-- ${trip.available_seats} <spring:message code="search.item.available"/> --%>
           </span>
         </div>
       </div>

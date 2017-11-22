@@ -84,7 +84,6 @@ public class TripServiceImpl implements TripService {
 	
 	public List<Trip> findAfterDateByRoute(User user, Search search) {
 		List<Trip> trips = tripDao.findByRouteWithDateComparision(user, search, ">");
-		
 		// Filter out expired trips
 		return trips.stream().filter((trip) -> !trip.getExpired()).collect(Collectors.toList());
 	}
@@ -98,7 +97,7 @@ public class TripServiceImpl implements TripService {
 	
 	public List<Trip> findAfterDateByRoute(Search search) {
 		List<Trip> trips = tripDao.findByRouteWithDateComparision(search, ">");
-		
+
 		// Filter out expired trips
 		return trips.stream().filter((trip) -> !trip.getExpired()).collect(Collectors.toList());
 	}

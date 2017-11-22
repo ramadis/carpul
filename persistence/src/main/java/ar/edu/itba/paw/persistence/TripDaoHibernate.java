@@ -50,6 +50,8 @@ public class TripDaoHibernate implements TripDao {
 		reserve.setUser(user);
 		reserve.setCreated(now);
 		
+		System.out.println("CHECK AFTER GENERATE RESERVATION");
+		
 		em.persist(reserve);
 		return;
 	}
@@ -83,7 +85,7 @@ public class TripDaoHibernate implements TripDao {
 	
 	public List<Trip> findByRouteWithDateComparision(Search search, String comparision) {
 		// Get available trips by a route
-		String query = "SELECT t FROM Trip t WHERE t.deleted = FALSE AND from_city LIKE :from AND to_city LIKE :to ORDER BY etd ASC";
+		String query = "SELECT t FROM Trip t WHERE t.deleted = FALSE AND lower(t.from_city) LIKE :from AND lower(t.to_city) LIKE :to ORDER BY etd ASC";
 		
 		List<Trip> trips = em.createQuery(query, Trip.class)
 						     .setParameter("from", "%" + search.getFrom().toLowerCase() + "%")
