@@ -66,7 +66,6 @@
         <div class="seats-container">
           <span class="seats bold gray">
             <img class="seats-icon" src="<c:url value='/static/images/seats.png' />"></img>
-            <%-- TODO: CHECK WHY AVAILABLE_SEATS BREAKS --%>
             ${trip.available_seats} <spring:message code="search.item.available"/>
           </span>
         </div>

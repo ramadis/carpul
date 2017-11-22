@@ -31,7 +31,6 @@ public class TripServiceImpl implements TripService {
 
 	@Transactional
 	public void reserve(Integer tripId, User user) {
-		// TODO: Check if tripId belongs to user. Check if it's not already reserved
 		Trip trip = tripDao.findById(tripId);
 		if (trip.getDriver().equals(user) || us.getPassengers(trip).contains(user)) return;
 		tripDao.reserveTrip(tripId, user);
@@ -43,7 +42,6 @@ public class TripServiceImpl implements TripService {
 	}
 
 	public Trip findById(final Integer tripId) {
-		// TODO: Evaluate performance issues
 		Trip trip = tripDao.findById(tripId);
 		return trip;
 	}
@@ -64,7 +62,7 @@ public class TripServiceImpl implements TripService {
 	public void delete(Integer tripId, User user) {
 		tripDao.delete(tripId, user);
 	}
-	
+
 	private List<Trip> filterExpired(List<Trip> trips) {
 		return trips.stream().filter((trip) -> !trip.getExpired() && !trip.getDeleted()).collect(Collectors.toList());
 	}
@@ -73,7 +71,7 @@ public class TripServiceImpl implements TripService {
 		List<Trip> trips = tripDao.findByRouteWithDateComparision(user, search, "=");
 		return filterExpired(trips);
 	}
-	
+
 	public List<Trip> getSuggestions(User user, Search search) {
 		List<Trip> trips = user == null ? findAfterDateByRoute(search) : findAfterDateByRoute(user, search);
 		return trips.subList(0, trips.size() >= 5 ? 5 : trips.size());

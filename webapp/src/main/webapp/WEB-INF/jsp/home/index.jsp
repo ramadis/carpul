@@ -53,12 +53,11 @@
 
   <div class="trips-recommendations-container">
     <c:if test="${empty trips}">
-      <%-- TODO: Remove hardcode --%>
-      <h1>Not trips in the near future from Buenos Aires :/</h1>
+      <h1><spring:message code="home.index.no_trips"/></h1>
     </c:if>
 
     <c:if test="${not empty trips}">
-      <h1>These are some trips you might find interesting ;)</h1>
+      <h1><spring:message code="home.index.suggestions"/></h1>
       <div class="trip-recommendation-list">
         <c:forEach items="${trips}" var="trip">
           <%@ include file="../search/small_item.jsp" %>
