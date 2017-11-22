@@ -31,62 +31,58 @@ public class UserController extends AuthController {
 
 	@Autowired
 	private UserService us;
-	
+
 	@Autowired
 	private TripService ts;
-	
+
 	@Autowired
 	private Provider userAuthProvider;
-	
+
 	@Autowired
 	private ReviewService rs;
-	
+
 	@Autowired
 	private EmailService es;
-	
+
 	@Autowired
 	private HistoryService hs;
-	
+
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
-	
-	//TODO: RUN THIS MIGRATIONS IN PRODU:
-	// ALTER TABLE trips ADD deleted boolean;
-	// UPDATE trips SET deleted = false;
+
 	@Transactional
 	public ModelAndView registerUser(@Valid @ModelAttribute("userCreateForm") final UserCreateForm form,
 							  		final BindingResult errors) {
 		// Check for form errors
 		if (errors.hasErrors()) return registerUserView(form);
-		
+
 		// Get user from form
 		User user = form.getUser();
-		
+
 		// Check if user exists
 		if (us.exists(user)) {
 			ObjectError error = new ObjectError("username","An account already exists for this username");
 			errors.addError(error);
 			return registerUserView(form);
 		}
-		
+
 		// Register new user
-		// TODO: Encrypt password
 		us.register(user);
-		
+
 		// Send welcome email to user
 		es.sendRegistrationEmail(user);
-		
+
 		// Login automatically
 		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
 		userAuthProvider.authenticate(auth);
 		SecurityContextHolder.getContext().setAuthentication(auth);
-		
+
 		// Redirect to login view
 		return new ModelAndView("redirect:/");
 	}
-	
+
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
 	public ModelAndView registerUserView(@ModelAttribute("userCreateForm") final UserCreateForm form) {
-		
+
 		// Expose view
 		final ModelAndView mav = new ModelAndView("user/register");
 		mav.addObject("registerUserURI", "user");
@@ -96,7 +92,7 @@ public class UserController extends AuthController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView loginView(@Valid @ModelAttribute("userForm") final UserLoginForm form) {
-		
+
 		// Expose view
 		final ModelAndView mav = new ModelAndView("user/login");
 		mav.addObject("loginUserURI", "login");
@@ -123,7 +119,7 @@ public class UserController extends AuthController {
 			mav_other.addObject("user", user);
 			return mav_other;
 		}
-		
+
 		// Load objects to view
 		mav.addObject("trips", ts.getUserTrips(loggedUser));
 		mav.addObject("reviews", rs.getReviews(user));

@@ -39,9 +39,6 @@ public class EventServiceImpl implements  EventService {
 		es.sendUnreservationEmail(user, ts.findById(tripId));
 	}
 
-	// TODO: Run migration ALTER TABLE histories ADD own boolean
-	// TODO: Change DB. Users usernames should be valid emails.
-	// UPDATE histories SET own = false;
 	public void registerKicked(User user, Integer tripId) {
 		hs.addHistory(user, tripId, "KICKED", true);
 		es.sendDeletionEmail(user, ts.findById(tripId));

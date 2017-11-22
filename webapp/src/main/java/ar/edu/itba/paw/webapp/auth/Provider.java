@@ -29,11 +29,10 @@ public class Provider implements AuthenticationProvider {
 		final String username = (String) authentication.getPrincipal();
 		final String password = (String) authentication.getCredentials();
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		
+
 		try {
 			final User user = us.getByUsername(username);
-			
-			// TODO: Encrypt passwords.
+
 			if (user.getPassword().equals(password) || passwordEncoder.matches(password, user.getPassword())) {
 				final Collection<GrantedAuthority> authorities = new HashSet<>();
 				authorities.add(new SimpleGrantedAuthority("USER"));
