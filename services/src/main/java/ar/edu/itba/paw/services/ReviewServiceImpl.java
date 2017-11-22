@@ -31,6 +31,7 @@ public class ReviewServiceImpl implements ReviewService {
 		return reviewDao.canLeaveReview(trip, user);
 	}
 	
+	@Transactional
 	public Review add(Review review) {
 		return reviewDao.add(review);
 	}

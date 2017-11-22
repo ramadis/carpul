@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class UserDaoHibernate implements UserDao {
@@ -84,7 +85,10 @@ public class UserDaoHibernate implements UserDao {
 	}
 
 	public List<User> getPassengers(Trip trip) {
-		return trip.getPassengers() == null ? new ArrayList<User>() : trip.getPassengers();
+		List<User> passengers = trip.getReservations().stream().map((reservation) -> reservation.getUser()).collect(Collectors.toList());
+		
+		
+		return passengers == null ? new ArrayList<User>() : passengers;
 	}
 
 

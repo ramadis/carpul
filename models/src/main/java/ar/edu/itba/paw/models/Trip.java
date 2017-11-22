@@ -76,28 +76,32 @@ public class Trip {
 	@Transient
 	private Boolean reserved;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable( name = "trips_users",
-            		joinColumns = @JoinColumn(name = "trip_id"),
-            		inverseJoinColumns = @JoinColumn(name = "user_id"))
-	private List<User> passengers;
+	@OneToMany(fetch = FetchType.EAGER, orphanRemoval = false, mappedBy = "trip")
+	private List<Reservation> reservations;
 	
+	@OneToMany(fetch = FetchType.EAGER, orphanRemoval = false, mappedBy = "trip")
+	private List<Review> reviews;
+	
+	public List<Review> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(List<Review> reviews) {
+		this.reviews = reviews;
+	}
+
 	public Trip() {
 		super();
 	}
 	
-	public void addPassenger(User p) {
-		passengers.add(p);
+	public List<Reservation> getReservations() {
+		return reservations;
 	}
-	
-	public List<User> getPassengers() {
-		return passengers;
+
+	public void setReservations(List<Reservation> reservations) {
+		this.reservations = reservations;
 	}
-	
-	public void setPassengers(List<User> passengers) {
-		this.passengers = passengers;
-	}
-	
+
 	public void toggleReserve() {
 		reserved = !reserved;
 	}
@@ -177,6 +181,10 @@ public class Trip {
 
 	public Boolean getDeleted() {
 		return deleted;
+	}
+	
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	public String getTo_city() {

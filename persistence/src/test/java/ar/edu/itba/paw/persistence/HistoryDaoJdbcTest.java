@@ -34,7 +34,7 @@ public class HistoryDaoJdbcTest {
 	private UserDaoJdbc userDao;
 	
 	@Autowired
-	private TripDaoJdbc tripDao;
+	private TripDaoHibernate tripDao;
 	
 	private JdbcTemplate jdbcTemplate;
 	

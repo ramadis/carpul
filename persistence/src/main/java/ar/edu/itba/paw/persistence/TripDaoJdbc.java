@@ -17,7 +17,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
 public class TripDaoJdbc implements TripDao {
 
 	private final JdbcTemplate jdbcTemplate;

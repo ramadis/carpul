@@ -32,8 +32,8 @@ public class User {
 	@OneToMany(fetch = FetchType.EAGER, orphanRemoval = false, mappedBy = "driver")
 	private List<Trip> drived_trips;
 	
-	@ManyToMany(fetch = FetchType.EAGER, mappedBy="passengers")
-	private List<Trip> reserved_trips;
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="user")
+	private List<Reservation> reservations;
 	
 	@Column(length = 100)
 	private String last_name;
@@ -55,8 +55,12 @@ public class User {
 		return first_name;
 	}
 
-	public List<Trip> getReserved_trips() {
-		return reserved_trips;
+	public List<Reservation> getReservations() {
+		return reservations;
+	}
+
+	public void setReservations(List<Reservation> reservations) {
+		this.reservations = reservations;
 	}
 
 	public List<Trip> getDrived_trips() {

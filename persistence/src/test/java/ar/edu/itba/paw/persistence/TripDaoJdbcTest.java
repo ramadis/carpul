@@ -29,7 +29,7 @@ public class TripDaoJdbcTest {
 	private DataSource ds;
 	
 	@Autowired
-	private TripDaoJdbc tripDao;
+	private TripDaoHibernate tripDao;
 	
 	@Autowired
 	private UserDaoJdbc userDao;

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.interfaces.UserService;
@@ -23,10 +24,12 @@ public class TripServiceImpl implements TripService {
 	@Autowired
 	private UserService us;
 
+	@Transactional
 	public Trip register(final Trip trip, final User driver) {
 		return tripDao.create(trip, driver);
 	}
 	
+	@Transactional
 	public void reserve(Integer tripId, User user) {
 		// TODO: Check if tripId belongs to user. Check if it's not already reserved
 		Trip trip = tripDao.findById(tripId);
@@ -34,6 +37,7 @@ public class TripServiceImpl implements TripService {
 		tripDao.reserveTrip(tripId, user);
 	}
 	
+	@Transactional
 	public void unreserve(Integer tripId, User user) {
 		tripDao.unreserveTrip(tripId, user);
 	}
@@ -48,7 +52,7 @@ public class TripServiceImpl implements TripService {
 	
 	public List<Trip> getReservedTrips(User user) {
 		//return tripDao.getReservedTrips(user);
-		return user.getReserved_trips();
+		return user.getReservations().stream().map((reservation) -> reservation.getTrip()).collect(Collectors.toList());
 	}
 	
 	public List<Trip> getUserTrips(User user) {
@@ -61,11 +65,12 @@ public class TripServiceImpl implements TripService {
 //		}
 		
 		// TODO: Check how to handle OccupiedSeats and Available seats
-		// Filter out expired trips
+		// Filter out expired trips but what about trips to review?
 		return trips.stream().filter((trip) -> !trip.getExpired() && !trip.getDeleted())
 							 .collect(Collectors.toList());
 	}
 	
+	@Transactional
 	public void delete(Integer tripId, User user) {
 		tripDao.delete(tripId, user);
 	}

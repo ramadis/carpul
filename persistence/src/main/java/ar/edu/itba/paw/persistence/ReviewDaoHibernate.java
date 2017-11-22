@@ -33,7 +33,7 @@ public class ReviewDaoHibernate implements ReviewDao {
 	TripDao tripDao;
 
 	public List<Review> getReviews(User user) {
-		String query = "SELECT r FROM Review r WHERE r.reviewed = :reviewed";
+		String query = "SELECT r FROM Review r WHERE r.reviewed = :reviewed ORDER BY created desc";
 		
 		List<Review> reviews = em.createQuery(query, Review.class)
 								 .setParameter("reviewed", user)
@@ -43,12 +43,14 @@ public class ReviewDaoHibernate implements ReviewDao {
 	}
 	
 	public Boolean canLeaveReview(Trip trip, User user) {
-		String query = "SELECT t from Trip t WHERE t.id = :tripId AND EXISTS (SELECT r from Review r WHERE r.trip.id = :tripId AND r.owner.id = :ownerId)";
+		String query = "SELECT t from Trip t WHERE t = :trip AND EXISTS (SELECT r from Review r WHERE r.trip = :trip AND r.owner = :owner)";
 		
 		List<Trip> trips = em.createQuery(query, Trip.class)
-								 .setParameter("tripId", trip.getId())
-								 .setParameter("ownerId", user.getId())
-								 .getResultList();
+							 .setParameter("trip", trip)
+							 .setParameter("owner", user)
+							 .getResultList();
+		
+		System.out.println(trips);
 		
 		return trips.isEmpty();
 	}
