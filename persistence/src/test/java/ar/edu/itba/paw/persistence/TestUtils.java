@@ -9,6 +9,9 @@ import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 
 public class TestUtils {	
+	
+	private TestUtils() {}
+	
 	public static class UserUtils {
 		public static final String PASSWORD = "Password";
 		public static final String USERNAME = "Username";

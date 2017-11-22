@@ -55,7 +55,6 @@ public class UserController extends AuthController {
 	public ModelAndView registerUser(@Valid @ModelAttribute("userCreateForm") final UserCreateForm form,
 							  		final BindingResult errors) {
 		// Check for form errors
-		
 		if (errors.hasErrors()) return registerUserView(form);
 		
 		// Get user from form
