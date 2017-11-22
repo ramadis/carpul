@@ -86,9 +86,11 @@ public class TripDaoHibernate implements TripDao {
 
 		if (comparision == ">" ) {
 			return trips.stream().filter((trip) -> trip.getEtd().after(search.getWhen()))
+								.filter((trip) -> trip.getPassengers().size() < trip.getSeats())
 								 .collect(Collectors.toList());
 		} else if (comparision == "=") {
 			return trips.stream().filter((trip) -> trip.getEtd().equals(search.getWhen()))
+					.filter((trip) -> trip.getPassengers().size() < trip.getSeats())
 					 .collect(Collectors.toList());
 		}
 		
