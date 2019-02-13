@@ -9,6 +9,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -63,7 +65,7 @@ public class UserController {
 
 	@GET
 	@Path("/")
-	@Produces(value = { MediaType.APPLICATION_JSON, })
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response listUsers() {
 		User user = new User();
 		user.setUsername("testteest");
@@ -72,33 +74,30 @@ public class UserController {
 	
 	@POST
 	@Path("/")
-	@Produces(value = { MediaType.APPLICATION_JSON, })
-	public Response createUser(final User userDto) {
-//		// Check for form errors
-//		if (errors.hasErrors()) return registerUserView(form);
-
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response createUser(final UserCreateForm form) {
 		// Get user from form
-//		User user = form.getUser();
-		final User user = us.register(userDto);
+		User user = form.getUser();
 
 		// Check if user exists
-//		if (us.exists(user)) {
-//			ObjectError error = new ObjectError("username","An account already exists for this username");
-//			errors.addError(error);
-//			return registerUserView(form);
-//		}
+		if (us.exists(user)) {
+			ObjectError error = new ObjectError("username","An account already exists for this username");
+			return Response.ok().build();
+		}
 
 		// Register new user
-//		us.register(user);
+		us.register(user);
 
 		// Send welcome email to user
 //		es.sendRegistrationEmail(user);
+		
+		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(user.getId())).build();
 
 		// Login automatically
 //		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
 //		userAuthProvider.authenticate(auth);
 //		SecurityContextHolder.getContext().setAuthentication(auth);
-		return Response.created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(user.getId())).build()).build();
+		return Response.created(uri).build();
 	}
 
 //
