@@ -1,65 +1,66 @@
-package ar.edu.itba.paw.webapp.config;
-
-import java.util.concurrent.TimeUnit;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-
-import ar.edu.itba.paw.webapp.auth.Provider;
-import ar.edu.itba.paw.webapp.auth.Service;
-
-@Configuration
-@EnableWebSecurity
-@ComponentScan({"ar.edu.itba.paw.webapp.auth"})
-public class WebAuth extends WebSecurityConfigurerAdapter {
-
-	@Autowired
-	private Provider authProvider;
-
-	@Autowired
-	private Service userDetailsService;
-
-	@Override
-	protected void configure(final HttpSecurity http) throws Exception {
-		http.authenticationProvider(authProvider)
-			.userDetailsService(userDetailsService)
-			.sessionManagement()
-			.invalidSessionUrl("/login")
-			.and().authorizeRequests()
-				.antMatchers("/login").anonymous()
-				.antMatchers("/user").anonymous()
-				.antMatchers("/search**").permitAll()
-				.antMatchers("/*").permitAll()
-			.and().authorizeRequests()
-				.anyRequest()
-				.authenticated()
-			.and().formLogin()
-				.loginPage("/login")
-				//.loginProcessingUrl("/login")
-				.usernameParameter("username")
-				.passwordParameter("password")
-				//.defaultSuccessUrl("/", false)
-			.and().logout()
-				.logoutUrl("/logout")
-				.logoutSuccessUrl("/login")
-			.and().exceptionHandling()
-				.accessDeniedPage("/404")
-			.and().rememberMe()
-				.rememberMeParameter("remember")
-				.key("p7kuiw-i5estn(d85h4+0@(-x90%u@zgn%o5rud6og_nk45jlu0%u@zgn%o5-i5estn(d85h4+0@(-xn(d85h4+0@(-x90%u@zgn%o5rud6og_nk45jlu0%u@zgn%")
-				.tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(60))
-				.userDetailsService(userDetailsService)
-			.and().csrf().disable();
-	}
-
-	@Override
-	public void configure(final WebSecurity http) throws Exception {
-		http.ignoring()
-			.antMatchers("/styles/**", "/scripts/**", "/images/**", "/favicon.ico", "/static/**", "/403");
-	}
-}
+//package ar.edu.itba.paw.webapp.config;
+//
+//import java.util.concurrent.TimeUnit;
+//
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.context.annotation.ComponentScan;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+//import org.springframework.security.config.annotation.web.builders.WebSecurity;
+//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+//
+//import ar.edu.itba.paw.webapp.auth.Provider;
+//import ar.edu.itba.paw.webapp.auth.Service;
+//
+//
+//@Configuration
+//@EnableWebSecurity
+//@ComponentScan({"ar.edu.itba.paw.webapp.auth"})
+//public class WebAuth extends WebSecurityConfigurerAdapter {
+//
+//	@Autowired
+//	private Provider authProvider;
+//
+//	@Autowired
+//	private Service userDetailsService;
+//
+//	@Override
+//	protected void configure(final HttpSecurity http) throws Exception {
+//		http.authenticationProvider(authProvider)
+//			.userDetailsService(userDetailsService)
+//			.sessionManagement()
+//			.invalidSessionUrl("/login")
+//			.and().authorizeRequests()
+//				.antMatchers("/login").anonymous()
+//				.antMatchers("/user").anonymous()
+//				.antMatchers("/search**").permitAll()
+//				.antMatchers("/*").permitAll()
+//			.and().authorizeRequests()
+//				.anyRequest()
+//				.authenticated()
+//			.and().formLogin()
+//				.loginPage("/login")
+//				//.loginProcessingUrl("/login")
+//				.usernameParameter("username")
+//				.passwordParameter("password")
+//				//.defaultSuccessUrl("/", false)
+//			.and().logout()
+//				.logoutUrl("/logout")
+//				.logoutSuccessUrl("/login")
+//			.and().exceptionHandling()
+//				.accessDeniedPage("/404")
+//			.and().rememberMe()
+//				.rememberMeParameter("remember")
+//				.key("p7kuiw-i5estn(d85h4+0@(-x90%u@zgn%o5rud6og_nk45jlu0%u@zgn%o5-i5estn(d85h4+0@(-xn(d85h4+0@(-x90%u@zgn%o5rud6og_nk45jlu0%u@zgn%")
+//				.tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(60))
+//				.userDetailsService(userDetailsService)
+//			.and().csrf().disable();
+//	}
+//
+//	@Override
+//	public void configure(final WebSecurity http) throws Exception {
+//		http.ignoring()
+//			.antMatchers("/styles/**", "/scripts/**", "/images/**", "/favicon.ico", "/static/**", "/403");
+//	}
+//}
