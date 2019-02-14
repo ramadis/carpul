@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.models;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -12,10 +13,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
 	@Column(length = 100, nullable = false, unique = true)
 	private String username;
 	
