@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controllers;
 
 import javax.validation.Valid;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -34,6 +35,7 @@ import ar.edu.itba.paw.interfaces.ReviewService;
 import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.DTO.UserDTO;
 import ar.edu.itba.paw.webapp.auth.Provider;
 import ar.edu.itba.paw.webapp.forms.UserCreateForm;
 import ar.edu.itba.paw.webapp.forms.UserLoginForm;
@@ -65,15 +67,6 @@ public class UserController {
 //	@Autowired
 //	private HistoryService hs;
 
-	@GET
-	@Path("/")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response listUsers() {
-		User user = new User();
-		user.setUsername("testteest");
-		return Response.ok(user).build();
-	}
-	
 	@POST
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -95,10 +88,6 @@ public class UserController {
 		
 		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(user.getId())).build();
 
-		// Login automatically
-//		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-//		userAuthProvider.authenticate(auth);
-//		SecurityContextHolder.getContext().setAuthentication(auth);
 		return Response.created(uri).build();
 	}
 	
@@ -108,69 +97,15 @@ public class UserController {
 	public Response getById(@PathParam("id") final int id) {
 		final User user = us.getById(id);
 		if (user != null) {
-			return Response.ok(user).build();
+			return Response.ok(new UserDTO(user)).build();
 		} else {
 			return Response.status(Status.NOT_FOUND).build();
 		}
 	}
 
-//
-//	@RequestMapping(value = "/user", method = RequestMethod.POST)
-//
-//	@Transactional
-//	public ModelAndView registerUser(@Valid @ModelAttribute("userCreateForm") final UserCreateForm form,
-//							  		final BindingResult errors) {
-//		// Check for form errors
-//		if (errors.hasErrors()) return registerUserView(form);
-//
-//		// Get user from form
-//		User user = form.getUser();
-//
-//		// Check if user exists
-//		if (us.exists(user)) {
-//			ObjectError error = new ObjectError("username","An account already exists for this username");
-//			errors.addError(error);
-//			return registerUserView(form);
-//		}
-//
-//		// Register new user
-//		us.register(user);
-//
-//		// Send welcome email to user
-//		es.sendRegistrationEmail(user);
-//
-//		// Login automatically
-//		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-//		userAuthProvider.authenticate(auth);
-//		SecurityContextHolder.getContext().setAuthentication(auth);
-//
-//		// Redirect to login view
-//		return new ModelAndView("redirect:/");
-//	}
-//
-//	@RequestMapping(value = "/user", method = RequestMethod.GET)
-//	public ModelAndView registerUserView(@ModelAttribute("userCreateForm") final UserCreateForm form) {
-//
-//		// Expose view
-//		final ModelAndView mav = new ModelAndView("user/register");
-//		mav.addObject("registerUserURI", "user");
-//		mav.addObject("loginUserURI", "login");
-//		return mav;
-//	}
-//
-//	@RequestMapping(value = "/login", method = RequestMethod.GET)
-//	public ModelAndView loginView(@Valid @ModelAttribute("userForm") final UserLoginForm form) {
-//
-//		// Expose view
-//		final ModelAndView mav = new ModelAndView("user/login");
-//		mav.addObject("loginUserURI", "login");
-//		mav.addObject("registerUserURI", "user");
-//		return mav;
-//	}
-//
+
 //	@RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
 //	public ModelAndView getUserView(@PathVariable("userId") final Integer userId) {
-//		final ModelAndView mav = new ModelAndView("user/profile");
 //		User user = us.getById(userId);
 //		User loggedUser = user();
 //

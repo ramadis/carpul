@@ -42,22 +42,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	
 	@Value("classpath:schema.sql")
 	private Resource schemaSql;
-//	
-//	@Override
-//		public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//		registry.addResourceHandler("/static/**").addResourceLocations("/static/").setCachePeriod(5);
-//	}
-//	 
-//	@Bean
-//	public ViewResolver viewResolver() {
-//		final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-//		
-//		viewResolver.setViewClass(JstlView.class);
-//		viewResolver.setPrefix("/WEB-INF/jsp/");
-//		viewResolver.setSuffix(".jsp");
-//		return viewResolver;
-//	}
-//	
+
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
@@ -78,25 +63,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	public PlatformTransactionManager transactionManager(final EntityManagerFactory emf) {
 		return new JpaTransactionManager(emf);
 	}
-//	
-//	@Bean
-//	public MessageSource messageSource() {
-//		String[] i18n = new String[] { "/WEB-INF/i18n/messages",
-//									   "/WEB-INF/i18n/trips",
-//									   "/WEB-INF/i18n/search",
-//									   "/WEB-INF/i18n/review",
-//									   "/WEB-INF/i18n/home",
-//									   "/WEB-INF/i18n/history",
-//									   "/WEB-INF/i18n/error",
-//									   "/WEB-INF/i18n/common",
-//									   "/WEB-INF/i18n/user"};
-//		final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-//		messageSource.setBasenames(i18n);
-//		messageSource.setDefaultEncoding(StandardCharsets.UTF_8.displayName());
-//		messageSource.setCacheSeconds(5);
-//		return messageSource;
-//	}
-//	
 //	@Bean
 //	public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
 //		final DataSourceInitializer dsi = new DataSourceInitializer();

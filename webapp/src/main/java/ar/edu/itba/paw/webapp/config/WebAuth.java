@@ -9,6 +9,8 @@
 //import org.springframework.security.config.annotation.web.builders.WebSecurity;
 //import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 //import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+//import org.springframework.security.config.http.SessionCreationPolicy;
+//import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 //
 //import ar.edu.itba.paw.webapp.auth.Provider;
 //import ar.edu.itba.paw.webapp.auth.Service;
@@ -16,51 +18,46 @@
 //
 //@Configuration
 //@EnableWebSecurity
-//@ComponentScan({"ar.edu.itba.paw.webapp.auth"})
+//@ComponentScan({"ar.edu.itba.paw.webapp.auth", "ar.edu.itba.paw.webapp.config"})
 //public class WebAuth extends WebSecurityConfigurerAdapter {
-//
-//	@Autowired
-//	private Provider authProvider;
+////
+////	@Autowired
+////	private Provider authProvider;
 //
 //	@Autowired
 //	private Service userDetailsService;
 //
 //	@Override
 //	protected void configure(final HttpSecurity http) throws Exception {
-//		http.authenticationProvider(authProvider)
+//		http
 //			.userDetailsService(userDetailsService)
 //			.sessionManagement()
-//			.invalidSessionUrl("/login")
+//			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//            .and().authorizeRequests()
 //			.and().authorizeRequests()
-//				.antMatchers("/login").anonymous()
-//				.antMatchers("/user").anonymous()
-//				.antMatchers("/search**").permitAll()
-//				.antMatchers("/*").permitAll()
+//				.antMatchers("/api/login").anonymous()
+//				.antMatchers("/api/user/*").anonymous()
+//				.antMatchers("/api/search**").permitAll()
+//				.antMatchers("/api/*").permitAll() // TODO: Check this jaja
 //			.and().authorizeRequests()
 //				.anyRequest()
 //				.authenticated()
 //			.and().formLogin()
-//				.loginPage("/login")
-//				//.loginProcessingUrl("/login")
-//				.usernameParameter("username")
-//				.passwordParameter("password")
-//				//.defaultSuccessUrl("/", false)
+//                .usernameParameter("email")
+//                .passwordParameter("password")
+//                .loginProcessingUrl("/api/login")
 //			.and().logout()
 //				.logoutUrl("/logout")
 //				.logoutSuccessUrl("/login")
 //			.and().exceptionHandling()
 //				.accessDeniedPage("/404")
-//			.and().rememberMe()
-//				.rememberMeParameter("remember")
-//				.key("p7kuiw-i5estn(d85h4+0@(-x90%u@zgn%o5rud6og_nk45jlu0%u@zgn%o5-i5estn(d85h4+0@(-xn(d85h4+0@(-x90%u@zgn%o5rud6og_nk45jlu0%u@zgn%")
-//				.tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(60))
-//				.userDetailsService(userDetailsService)
+//			.and().addFilterBefore(enableCors, ChannelProcessingFilter.class);
 //			.and().csrf().disable();
 //	}
-//
-//	@Override
-//	public void configure(final WebSecurity http) throws Exception {
-//		http.ignoring()
-//			.antMatchers("/styles/**", "/scripts/**", "/images/**", "/favicon.ico", "/static/**", "/403");
-//	}
-//}
+////
+////	@Override
+////	public void configure(final WebSecurity http) throws Exception {
+////		http.ignoring()
+////			.antMatchers("/styles/**", "/scripts/**", "/images/**", "/favicon.ico", "/static/**", "/403");
+////	}
+////}
