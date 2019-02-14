@@ -4,9 +4,11 @@ import javax.validation.Valid;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
@@ -57,8 +59,8 @@ public class UserController {
 //	@Autowired
 //	private ReviewService rs;
 //
-//	@Autowired
-//	private EmailService es;
+	@Autowired
+	private EmailService es;
 //
 //	@Autowired
 //	private HistoryService hs;
@@ -78,17 +80,17 @@ public class UserController {
 	public Response createUser(final UserCreateForm form) {
 		// Get user from form
 		User user = form.getUser();
-
+		
 		// Check if user exists
 		if (us.exists(user)) {
-			ObjectError error = new ObjectError("username","An account already exists for this username");
-			return Response.ok().build();
+			return Response.status(Status.CONFLICT).build();
 		}
 
 		// Register new user
 		us.register(user);
 
 		// Send welcome email to user
+		// TODO: Uncomment this line
 //		es.sendRegistrationEmail(user);
 		
 		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(user.getId())).build();
@@ -98,6 +100,18 @@ public class UserController {
 //		userAuthProvider.authenticate(auth);
 //		SecurityContextHolder.getContext().setAuthentication(auth);
 		return Response.created(uri).build();
+	}
+	
+	@GET
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getById(@PathParam("id") final int id) {
+		final User user = us.getById(id);
+		if (user != null) {
+			return Response.ok(user).build();
+		} else {
+			return Response.status(Status.NOT_FOUND).build();
+		}
 	}
 
 //
