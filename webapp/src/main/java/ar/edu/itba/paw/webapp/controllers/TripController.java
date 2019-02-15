@@ -83,29 +83,14 @@ public class TripController extends AuthController {
 		review.setTrip(trip);
 		
 		// Persist review
-		Review savedReview =rs.add(review);
+		Review savedReview = rs.add(review);
 		
 		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(savedReview.getId())).build();
 		
 		return Response.created(uri).build();
 		
 	}
-	
-	@GET
-	@Path("/{id}/reviews")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response createReviewView(@PathVariable("id") final Integer tripId) {
-		User loggedUser = user();
-		
-		// Check existance and permissions 
-		Trip trip = ts.findById(tripId);
-		if (trip == null || trip.getId() == null) return Response.status(Status.NOT_FOUND).build();
-		if (!rs.canLeaveReview(trip, loggedUser)) return Response.status(Status.UNAUTHORIZED).build();
-		
-		// TODO: Return reviews
-		return Response.noContent().build();
-	}
-	
+
 	@DELETE
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)

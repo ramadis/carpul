@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.controllers;
 
 import javax.validation.Valid;
+import javax.validation.Validator;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -14,6 +16,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,6 +39,8 @@ import ar.edu.itba.paw.interfaces.HistoryService;
 import ar.edu.itba.paw.interfaces.ReviewService;
 import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.models.History;
+import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.DTO.UserDTO;
@@ -56,25 +63,32 @@ public class UserController extends AuthController {
 
 	@Autowired
 	private TripService ts;
-//
-//	@Autowired
-//	private Provider userAuthProvider;
-//
-//	@Autowired
-//	private ReviewService rs;
-//
+
+	@Autowired
+	private ReviewService rs;
+
 	@Autowired
 	private EmailService es;
-//
-//	@Autowired
-//	private HistoryService hs;
+
+	@Autowired
+	private HistoryService hs;
+	
+	@Autowired
+    private Validator validator;
 
 	@POST
 	@Path("/")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createUser(final UserCreateForm form) {
+		// Check if the user is valid
+		if (!validator.validate(form).isEmpty()) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		
 		// Get user from form
 		User user = form.getUser();
+		
 		
 		// Check if user exists
 		if (us.exists(user)) {
@@ -106,7 +120,7 @@ public class UserController extends AuthController {
 	}
 	
 	@POST
-	@Path("/trips")
+	@Path("/{id}/trips")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createTrip(final TripCreateForm form) {
 		// Create trip with logged user as a driver
@@ -116,33 +130,60 @@ public class UserController extends AuthController {
 		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(trip.getId())).build();
 		return Response.created(uri).build();
 	}
-
-
-//	@RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
-//	public ModelAndView getUserView(@PathVariable("userId") final Integer userId) {
-//		User user = us.getById(userId);
-//		User loggedUser = user();
-//
-//		// If the user does not exist
-//		if (user.getId() == null) return new ModelAndView("redirect:/error/404");
-//
-//		// Handle profile != to loggedUser
-//		if (loggedUser == null || loggedUser.getId() != userId) {
-//			final ModelAndView mav_other = new ModelAndView("unauth/profile");
-//			mav_other.addObject("reviews", rs.getReviews(user));
-//			mav_other.addObject("trips", ts.getUserTrips(user));
-//
-//			user.setId(loggedUser == null ? null : loggedUser.getId());
-//			mav_other.addObject("user", user);
-//			return mav_other;
-//		}
-//
-//		// Load objects to view
-//		mav.addObject("trips", ts.getUserTrips(loggedUser));
-//		mav.addObject("reviews", rs.getReviews(user));
-//		mav.addObject("reservations", ts.getReservedTrips(loggedUser));
-//		mav.addObject("histories", hs.getHistories(loggedUser));
-//		mav.addObject("user", loggedUser);
-//		return mav;
-//	}
+	
+	@GET
+	@Path("/{id}/trips")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getOwnTrips(@PathParam("id") final int id) {
+		// TODO: Check permissions
+		final User user = us.getById(id);
+		if (user != null) Response.status(Status.NOT_FOUND).build();
+		
+		List<Trip> trips = ts.getUserTrips(user);
+		
+		// TODO: Return list of trips
+		return Response.noContent().build();
+	}
+	
+	@GET
+	@Path("/{id}/reviews")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getReviews(@PathParam("id") final int id) {
+		final User user = us.getById(id);
+		if (user != null) Response.status(Status.NOT_FOUND).build();
+		
+		List<Review> reviews = rs.getReviews(user);
+		
+		// TODO: Return list of reviews
+		return Response.noContent().build();
+	}
+	
+	@GET
+	@Path("/{id}/history")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getHistory(@PathParam("id") final int id) {
+		final User user = us.getById(id);
+		if (user != null) Response.status(Status.NOT_FOUND).build();
+		
+		List<History> histories = hs.getHistories(user);
+		
+		// TODO: Return list of histories
+		return Response.noContent().build();
+	}
+	
+	// TODO: Check if there's a more RESTful way to do this
+	// Reservations should be linked to trips. Does this make sense?
+	@GET
+	@Path("/{id}/reservations")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getReservations(@PathParam("id") final int id) {
+		// TODO: Check permissions
+		final User user = us.getById(id);
+		if (user != null) Response.status(Status.NOT_FOUND).build();
+		
+		List<Trip> trips = ts.getReservedTrips(user);
+		
+		// TODO: Return list of trips
+		return Response.noContent().build();
+	}
 }
