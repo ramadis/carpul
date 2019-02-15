@@ -154,11 +154,13 @@ public class TripController extends AuthController {
 	public Response unreserveTrip(@PathParam("id") final Integer tripId) {
 		User loggedUser = user();
 		
+		// TODO: Move this to services
 		// Check that trip exists
-		Trip dbTrip = ts.findById(tripId);
-		if (dbTrip == null || loggedUser == null) return Response.status(Status.NOT_FOUND).build();
+		Trip trip = ts.findById(tripId);
+		if (trip == null || loggedUser == null) return Response.status(Status.NOT_FOUND).build();
 		
 		// Unreserve trip and notify
+		// TODO: Unreserve is not working
 		ts.unreserve(tripId, loggedUser);
 		es.registerUnreserve(loggedUser, tripId);
 		
@@ -182,6 +184,7 @@ public class TripController extends AuthController {
 		if (user == null) return Response.status(Status.NOT_FOUND).build();
 		
 		// Unreserve trip for the kicked user
+		// TODO: Unreeserve is not working as expected
 		ts.unreserve(tripId, user);
 		es.registerKicked(user, tripId);
 		
