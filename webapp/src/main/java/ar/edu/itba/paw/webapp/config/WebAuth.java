@@ -31,7 +31,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import ar.edu.itba.paw.webapp.auth.JWTFilter;
 import ar.edu.itba.paw.webapp.auth.JWTLogin;
-import ar.edu.itba.paw.webapp.auth.Provider;
 import ar.edu.itba.paw.webapp.auth.Service;
 
 
