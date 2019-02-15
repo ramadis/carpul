@@ -115,14 +115,18 @@ public class UserController extends AuthController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	// TODO: This endpoint is working
-	public Response createTrip(final TripCreateForm form) {
+	public Response createTrip(final TripCreateForm form, @PathParam("id") final int id) {
 		// Check if the trip form is valid
 		if (!validator.validate(form).isEmpty()) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		
-		// Create trip with logged user as a driver
 		User loggedUser = user();
+
+		// If trying to create a trip for someone else, fail by unauthorized
+		if (!loggedUser.getId().equals(id)) return Response.status(Status.UNAUTHORIZED).build();
+			
+		// Create trip with logged user as a driver
 		Trip trip = ts.register(form.getTrip(), loggedUser);
 		
 		final URI uri = uriInfo.getBaseUriBuilder().path("trips").path(String.valueOf(trip.getId())).build();
@@ -135,7 +139,6 @@ public class UserController extends AuthController {
 	public Response getOwnTrips(@PathParam("id") final int id,
 								@DefaultValue("0") @QueryParam("page") int page,
 								@DefaultValue("25") @QueryParam("per_page") int perPage) {
-		// TODO: Check permissions and what to do with default values for pagination
 		final User user = us.getById(id);
 		if (user == null) return Response.status(Status.NOT_FOUND).build();
 		

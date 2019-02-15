@@ -2,6 +2,8 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.TripDao;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,10 +34,8 @@ public class TripServiceImpl implements TripService {
 	@Transactional
 	public void reserve(Integer tripId, User user) {
 		Trip trip = tripDao.findById(tripId);
-		// TODO: Add time check (not reserving old trips)
-		// TODO: Add place available check
-		if (trip.getDriver().equals(user) || us.getPassengers(trip).contains(user)) return;
 		tripDao.reserveTrip(tripId, user);
+		return;
 	}
 
 	@Transactional

@@ -23,6 +23,10 @@ public class ReviewServiceImpl implements ReviewService {
 		return reviewDao.getReviews(user);
 	}
 	
+	public Review getReviewById(int id) {
+		return reviewDao.getReviewById(id);
+	}
+	
 	public List<Review> getReviews(Trip trip) {
 		return reviewDao.getReviews(trip);
 	}

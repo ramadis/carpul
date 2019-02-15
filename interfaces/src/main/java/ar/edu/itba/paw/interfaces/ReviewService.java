@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 
 public interface ReviewService {
+	Review getReviewById(int id);
 	List<Review> getReviews(Trip trip);
 	List<Review> getReviews(User user);
 	Boolean canLeaveReview(Trip trip, User user);

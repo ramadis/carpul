@@ -28,6 +28,14 @@ public class ReviewDaoHibernate implements ReviewDao {
 		return reviews;
 	}
 	
+	public Review getReviewById(int id) {
+		String query = "SELECT r FROM Review r where r.id = :id";
+		Review review = em.createQuery(query, Review.class)
+						.setParameter("id", id)
+						.getSingleResult();
+		return review;
+	}
+	
 	public Boolean canLeaveReview(Trip trip, User user) {
 		String query = "SELECT t from Trip t WHERE t = :trip AND EXISTS (SELECT r from Review r WHERE r.trip = :trip AND r.owner = :owner)";
 		

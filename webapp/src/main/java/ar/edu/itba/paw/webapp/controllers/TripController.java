@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.controllers;
 
 import java.net.URI;
+import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.validation.Valid;
 import javax.validation.Validator;
@@ -84,7 +86,6 @@ public class TripController extends AuthController {
 		}
 		
 		// Check requirements for review are passed
-		// TODO: Move this to the service
 		User loggedUser = user();
 		Trip trip = ts.findById(tripId);
 		if (loggedUser == null || trip == null) return Response.status(Status.NOT_FOUND).build();
@@ -137,15 +138,24 @@ public class TripController extends AuthController {
 		Trip trip = ts.findById(tripId);
 		if (trip == null || loggedUser == null) return Response.status(Status.NOT_FOUND).build();
 		
-		// TODO: Probably move this to services. Controllers should be lean.
-		// Check that is authorized to reserve
+		// Make several checks to ensure the user can reserve the trip
+		Date date = new Date();
+		Timestamp now = new Timestamp(date.getTime());
 		
-		// Reserve trip and register in log
+		boolean isLate = now.after(trip.getEtd());
+		boolean isFull = trip.getAvailable_seats() < 1;
+		boolean isDriver = trip.getDriver().equals(loggedUser);
+		boolean hasReserved = us.getPassengers(trip).contains(loggedUser);
+		
+		if (isLate || isFull || isDriver) return Response.status(Status.FORBIDDEN).build();
+		if (hasReserved) return Response.noContent().build();
+		
+		// Reserve and register trip 
 		ts.reserve(tripId, loggedUser);
 		es.registerReserve(loggedUser, tripId);
 
 		// Return success
-		return Response.noContent().build();
+		return Response.status(Status.CREATED).build();
 	}
 	
 	@DELETE
@@ -154,13 +164,20 @@ public class TripController extends AuthController {
 	public Response unreserveTrip(@PathParam("id") final Integer tripId) {
 		User loggedUser = user();
 		
-		// TODO: Move this to services
 		// Check that trip exists
 		Trip trip = ts.findById(tripId);
 		if (trip == null || loggedUser == null) return Response.status(Status.NOT_FOUND).build();
 		
+		// Check that has permissions required
+		if (!loggedUser.getId().equals(tripId)) return Response.status(Status.UNAUTHORIZED).build();
+
+		// Check if it's too late
+		Date date = new Date();
+		Timestamp now = new Timestamp(date.getTime());
+		boolean isLate = now.after(trip.getEtd());
+		if (isLate) return Response.status(Status.FORBIDDEN).build();
+		
 		// Unreserve trip and notify
-		// TODO: Unreserve is not working
 		ts.unreserve(tripId, loggedUser);
 		es.registerUnreserve(loggedUser, tripId);
 		
@@ -183,8 +200,13 @@ public class TripController extends AuthController {
 		User user = us.findById(userId);
 		if (user == null) return Response.status(Status.NOT_FOUND).build();
 		
+		// Check if it's too late
+		Date date = new Date();
+		Timestamp now = new Timestamp(date.getTime());
+		boolean isLate = now.after(trip.getEtd());
+		if (isLate) return Response.status(Status.FORBIDDEN).build();
+		
 		// Unreserve trip for the kicked user
-		// TODO: Unreeserve is not working as expected
 		ts.unreserve(tripId, user);
 		es.registerKicked(user, tripId);
 		

@@ -58,6 +58,21 @@ public class ReviewDaoJdbc implements ReviewDao {
 
 		return reviews;
 	}
+	
+	public Review getReviewById(int id) {
+		Review finalReview = new Review();
+		String query = "SELECT * FROM reviews WHERE reviewed_id = ? ORDER BY created desc LIMIT 1;";
+		Object[] params = new Object[] { id };
+		
+		this.connection.query(query, params, (ResultSet rs) -> {
+			do {
+				Review review = new Review();
+				loadResultIntoReview(rs, finalReview);
+			} while(rs.next());
+		});
+
+		return finalReview;
+	}
 
 	public Boolean canLeaveReview(Trip trip, User user) {
 		String query = "SELECT * FROM trips WHERE trips.id = ? AND EXISTS (SELECT * FROM reviews WHERE trip_id = ? AND owner_id = ?)";
