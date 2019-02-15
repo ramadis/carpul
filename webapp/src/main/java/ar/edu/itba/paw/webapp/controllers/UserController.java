@@ -9,6 +9,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -34,6 +35,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.common.collect.Lists;
+
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.HistoryService;
 import ar.edu.itba.paw.interfaces.ReviewService;
@@ -43,12 +46,14 @@ import ar.edu.itba.paw.models.History;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.DTO.TripDTO;
 import ar.edu.itba.paw.webapp.DTO.UserDTO;
 import ar.edu.itba.paw.webapp.auth.Provider;
 import ar.edu.itba.paw.webapp.forms.TripCreateForm;
 import ar.edu.itba.paw.webapp.forms.UserCreateForm;
 import ar.edu.itba.paw.webapp.forms.UserLoginForm;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("users")
@@ -89,7 +94,6 @@ public class UserController extends AuthController {
 		// Get user from form
 		User user = form.getUser();
 		
-		
 		// Check if user exists
 		if (us.exists(user)) {
 			return Response.status(Status.CONFLICT).build();
@@ -99,8 +103,7 @@ public class UserController extends AuthController {
 		us.register(user);
 
 		// Send welcome email to user
-		// TODO: Uncomment this line
-//		es.sendRegistrationEmail(user);
+		es.sendRegistrationEmail(user);
 		
 		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(user.getId())).build();
 
@@ -112,6 +115,7 @@ public class UserController extends AuthController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("id") final int id) {
 		final User user = us.getById(id);
+		
 		if (user != null) {
 			return Response.ok(new UserDTO(user)).build();
 		} else {
@@ -132,22 +136,28 @@ public class UserController extends AuthController {
 		User loggedUser = user();
 		Trip trip = ts.register(form.getTrip(), loggedUser);
 		
-		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(trip.getId())).build();
+		final URI uri = uriInfo.getBaseUriBuilder().path("trips").path(String.valueOf(trip.getId())).build();
 		return Response.created(uri).build();
 	}
 	
 	@GET
 	@Path("/{id}/trips")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getOwnTrips(@PathParam("id") final int id) {
+	public Response getOwnTrips(@PathParam("id") final int id,
+								@QueryParam("page") int page,
+								@QueryParam("per_page") int perPage) {
 		// TODO: Check permissions
 		final User user = us.getById(id);
 		if (user != null) Response.status(Status.NOT_FOUND).build();
 		
-		List<Trip> trips = ts.getUserTrips(user);
+		// Search trips belonging to a given user
+		List<TripDTO> tripDTOs = new ArrayList<>();
+		List<Trip> trips = ts.getUserTrips(user, page, perPage);
+		if (trips == null || trips.isEmpty()) return Response.noContent().build();
 		
-		// TODO: Return list of trips
-		return Response.noContent().build();
+		for (Trip t: trips) tripDTOs.add(new TripDTO(t));
+		
+		return Response.ok(tripDTOs).build();
 	}
 	
 	@GET

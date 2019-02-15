@@ -11,7 +11,7 @@ public interface TripService {
 	Trip findById(Integer tripId);
 	List<Trip> findByRoute(User user, Search search);
 	List<Trip> findByRoute(Search search);
-	List<Trip> getUserTrips(User user);
+	List<Trip> getUserTrips(User user, Integer page, Integer perPage);
 	List<Trip> getReservedTrips(User user);
 	List<Trip> findAfterDateByRoute(User user, Search search);
 	List<Trip> findAfterDateByRoute(Search search);

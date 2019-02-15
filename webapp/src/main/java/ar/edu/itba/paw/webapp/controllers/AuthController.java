@@ -1,4 +1,6 @@
 package ar.edu.itba.paw.webapp.controllers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 
@@ -11,10 +13,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.auth.JWTFilter;
 import ar.edu.itba.paw.webapp.auth.Model;
 
 @Controller
 public abstract class AuthController {
+    private final static Logger console = LoggerFactory.getLogger(JWTFilter.class);
 
 	@Autowired
 	private UserService us;
@@ -29,28 +33,26 @@ public abstract class AuthController {
 
 	@ModelAttribute
 	public User user() {
-		// TODO: Change this;
-		return us.getByUsername("ramiro.olivera+99@gmail.com");
-//		
-//		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		final String username;
-//
-//		if (auth == null || !auth.isAuthenticated() || auth instanceof AnonymousAuthenticationToken) return null;
-//
-//		final Object principal = auth.getPrincipal();
-//
-//		if (principal instanceof Model) return ((Model) principal).getUser();
-//
-//		if (principal instanceof UserDetails) {
-//			username = ((UserDetails)principal).getUsername();
-//		} else {
-//			username = principal.toString();
-//		}
-//
-//		try {
-//			return us.getByUsername(username);
-//		} catch (IllegalStateException e) {
-//			return null;
-//		}
+		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		final String username;
+
+		if (auth == null || !auth.isAuthenticated() || auth instanceof AnonymousAuthenticationToken) return null;
+
+		final Object principal = auth.getPrincipal();
+
+		if (principal instanceof Model) return ((Model) principal).getUser();
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails)principal).getUsername();
+		} else {
+			username = principal.toString();
+		}
+
+		try {
+			return us.getByUsername(username);
+		} catch (IllegalStateException e) {
+			console.error(e.getMessage());
+			return null;
+		}
 	}
 }
