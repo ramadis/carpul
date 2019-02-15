@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import ar.edu.itba.paw.models.Position;
 import ar.edu.itba.paw.models.Trip;
-import customValidators.TripTimeAnnotation;
+import ar.edu.itba.paw.webapp.forms.validations.TripTimeAnnotation;;
 
 @TripTimeAnnotation( departure = "etd", arrival = "eta")
 public class TripCreateForm {

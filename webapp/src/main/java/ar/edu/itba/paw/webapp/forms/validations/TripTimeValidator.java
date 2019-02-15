@@ -1,4 +1,4 @@
-package customValidators;
+package ar.edu.itba.paw.webapp.forms.validations;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

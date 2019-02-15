@@ -1,4 +1,4 @@
-package customValidators;
+package ar.edu.itba.paw.webapp.forms.validations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
