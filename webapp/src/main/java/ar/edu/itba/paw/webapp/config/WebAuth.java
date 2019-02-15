@@ -5,6 +5,9 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpMethod;
+import org.jose4j.jwk.RsaJsonWebKey;
+import org.jose4j.jwk.RsaJwkGenerator;
+import org.jose4j.lang.JoseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,11 +55,10 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JWTFilter jwtFilter;
-
-
+    
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
-		console.info("test");
+
 		http
 			.userDetailsService(userDetailsService)
 			.sessionManagement()
@@ -106,7 +108,12 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
         auth.setUserDetailsService(userDetailsService);
         return auth;
     }
-	
+    
+    @Bean(name = "JWTSecretKey")
+    public RsaJsonWebKey getJWTSecretKey() throws JoseException {
+        return RsaJwkGenerator.generateJwk(2048);
+    }
+    
 	@Override
 	public void configure(final WebSecurity http) throws Exception {
 		http.ignoring()

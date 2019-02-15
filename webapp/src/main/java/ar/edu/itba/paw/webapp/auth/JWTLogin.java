@@ -29,6 +29,10 @@ import org.springframework.security.core.userdetails.User;
 @Component
 public class JWTLogin extends SavedRequestAwareAuthenticationSuccessHandler {
     private final static Logger console = LoggerFactory.getLogger(JWTLogin.class);
+    
+    @Autowired
+    @Qualifier("JWTSecretKey")
+    private RsaJsonWebKey jwtSecretKey;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -48,16 +52,13 @@ public class JWTLogin extends SavedRequestAwareAuthenticationSuccessHandler {
 	        JsonWebSignature jws = new JsonWebSignature();
 	        
 	        // Generate an RSA key pair, which will be used for signing and verification of the JWT, wrapped in a JWK
-	        RsaJsonWebKey rsaJsonWebKey = RsaJwkGenerator.generateJwk(2048);
-	
-	        jws.setKey(rsaJsonWebKey.getPrivateKey());
 	
 	        
 	        // The payload of the JWS is JSON content of the JWT Claims
 	        jws.setPayload(claims.toJson());
 	
 	        // The JWT is signed using the private key
-	        jws.setKey(rsaJsonWebKey.getPrivateKey());
+	        jws.setKey(jwtSecretKey.getPrivateKey());
 	
 	        // Set the signature algorithm on the JWT/JWS that will integrity protect the claims
 	        jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.RSA_USING_SHA256);
