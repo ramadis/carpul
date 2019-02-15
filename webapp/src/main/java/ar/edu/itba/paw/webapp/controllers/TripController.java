@@ -70,7 +70,7 @@ public class TripController extends AuthController {
 	@POST
 	@Path("/{id}/reviews")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addReview(final ReviewForm form, @PathVariable("id") final Integer tripId) {
+	public Response addReview(final ReviewForm form, @PathParam("id") final Integer tripId) {
 		// Check for errors
 		//		if (errors.hasErrors()) return createReviewView(form, tripId);
 		
@@ -94,7 +94,7 @@ public class TripController extends AuthController {
 	@DELETE
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response deleteTrip(@PathVariable("id") final Integer tripId) {
+	public Response deleteTrip(@PathParam("id") final Integer tripId) {
 		User loggedUser = user();
 		
 		// Check you have control over the trip
@@ -112,7 +112,7 @@ public class TripController extends AuthController {
 	@PUT
 	@Path("/{id}/reservation")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response reserveTrip(@PathVariable("id") final Integer tripId) {
+	public Response reserveTrip(@PathParam("id") final Integer tripId) {
 		User loggedUser = user();
 		
 		// Reserve trip and register in log
@@ -125,7 +125,7 @@ public class TripController extends AuthController {
 	@DELETE
 	@Path("/{id}/reservation")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response unreserveTrip(@PathVariable("id") final Integer tripId) {
+	public Response unreserveTrip(@PathParam("id") final Integer tripId) {
 		User loggedUser = user();
 		
 		// Unreserve trip and  register in log
@@ -141,8 +141,8 @@ public class TripController extends AuthController {
 	@DELETE
 	@Path("{id}/passengers/{userid}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response kickFromTrip(@PathVariable("id") final Integer tripId, 
-								 @PathVariable("userid") final Integer userId) {
+	public Response kickFromTrip(@PathParam("id") final Integer tripId, 
+								 @PathParam("userid") final Integer userId) {
 		// Check logged user has control over the trip
 		Trip trip = ts.findById(tripId);
 		User loggedUser = user();
