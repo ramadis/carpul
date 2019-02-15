@@ -8,14 +8,18 @@ import ar.edu.itba.paw.models.User;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EmailServiceImpl implements EmailService {
 	private final String from = "hi@carpul.com";
 	private final SendGrid sg = new SendGrid("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");
-	
+    private final static Logger console = LoggerFactory.getLogger(EmailServiceImpl.class);
+
 	public void sendRegistrationEmail(User user) {
+		console.info("Trying to send registration email to {}", user.getUsername());
 		String subject = "Hey, welcome to Carpul!";
 	    String content = "Welcome to a life of adventures " + user.getFirst_name() + ". It's your time to shine. Welcome to carpul!" ;
 		
@@ -24,6 +28,7 @@ public class EmailServiceImpl implements EmailService {
 	}
 	
 	public void sendReservationEmail(User user, Trip trip) {
+		console.info("Trying to send reservation email to {}", user.getUsername());
 		String subject = "Hey " + trip.getDriver().getFirst_name() + ", you have a new reservation!";
 	    String content = "Hey " + trip.getDriver().getFirst_name() + " Just FYI: " + user.getFirst_name() + " just reserved your trip to " + trip.getTo_city() + ". Check the details in your Carpul profile!";
 		
@@ -32,6 +37,7 @@ public class EmailServiceImpl implements EmailService {
 	}
 	
 	public void sendUnreservationEmail(User user, Trip trip) {
+		console.info("Trying to send unreserve email to {}", user.getUsername());
 		String subject = "Hey " + trip.getDriver().getFirst_name() + ", someone just dropped a reservation!";
 	    String content = "Hey " + trip.getDriver().getFirst_name() + " Just FYI: " + user.getFirst_name() + " just dropped a reservation for your trip to " + trip.getTo_city() + ". Check the details in your Carpul profile!";
 		
@@ -40,6 +46,7 @@ public class EmailServiceImpl implements EmailService {
 	}
 	
 	public void sendDeletionEmail(User user, Trip trip) {
+		console.info("Trying to send trip deleted email to {}", user.getUsername());
 		User u = user;
 		
 		String subject = "Alert " + u.getFirst_name() + ", your trip to " + trip.getTo_city() + " was cancelled";
@@ -70,7 +77,7 @@ public class EmailServiceImpl implements EmailService {
 	      sg.api(request);
 
 	    } catch (IOException ex) {
-	    		System.out.print(ex);
+	    	console.error(ex.getMessage());
 	    }
 	}
 }

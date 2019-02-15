@@ -38,7 +38,7 @@ public class JWTLogin extends SavedRequestAwareAuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
     	try {
 	    	User user = (User) authentication.getPrincipal();
-	        
+        	console.info("User {} is trying to get logged in", user.getUsername());
 	    	
 	        JwtClaims claims = new JwtClaims();
 	        claims.setIssuer("Carpul");  // who creates the token and signs it

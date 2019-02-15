@@ -32,6 +32,8 @@ public class TripServiceImpl implements TripService {
 	@Transactional
 	public void reserve(Integer tripId, User user) {
 		Trip trip = tripDao.findById(tripId);
+		// TODO: Add time check (not reserving old trips)
+		// TODO: Add place available check
 		if (trip.getDriver().equals(user) || us.getPassengers(trip).contains(user)) return;
 		tripDao.reserveTrip(tripId, user);
 	}

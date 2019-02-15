@@ -84,10 +84,11 @@ public class TripController extends AuthController {
 		}
 		
 		// Check requirements for review are passed
+		// TODO: Move this to the service
 		User loggedUser = user();
 		Trip trip = ts.findById(tripId);
 		if (loggedUser == null || trip == null) return Response.status(Status.NOT_FOUND).build();
-		boolean wasPassenger = trip.getPassengers().stream().anyMatch(p -> p.getId().equals(loggedUser.getId()));
+		boolean wasPassenger = trip.getPassengers().contains(loggedUser);
 		if(!wasPassenger) return Response.status(Status.UNAUTHORIZED).build();
 		
 		// Compose review
@@ -133,8 +134,11 @@ public class TripController extends AuthController {
 		User loggedUser = user();
 		
 		// Check that trip exists
-		Trip dbTrip = ts.findById(tripId);
-		if (dbTrip == null || loggedUser == null) return Response.status(Status.NOT_FOUND).build();
+		Trip trip = ts.findById(tripId);
+		if (trip == null || loggedUser == null) return Response.status(Status.NOT_FOUND).build();
+		
+		// TODO: Probably move this to services. Controllers should be lean.
+		// Check that is authorized to reserve
 		
 		// Reserve trip and register in log
 		ts.reserve(tripId, loggedUser);
