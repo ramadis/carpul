@@ -26,7 +26,7 @@ public abstract class AuthController {
 
 	@ModelAttribute
 	public User user() {
-		return us.getByUsername("rolivera+carpul@itba.edu.ar");
+		return us.getByUsername("rolivera+carpul1@itba.edu.ar");
 //		
 //		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 //		final String username;

@@ -42,6 +42,19 @@
         <load-on-startup>1</load-on-startup> </servlet>
     <servlet-mapping> <servlet-name>jersey-servlet</servlet-name> <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
+    
+    <filter>
+        <filter-name>CacheFilter</filter-name>
+    	<filter-class>ar.edu.itba.paw.webapp.config.CacheFilter</filter-class>
+  	</filter>
+
+
+  <filter-mapping>
+    <filter-name>CacheFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>ERROR</dispatcher>
+    <dispatcher>REQUEST</dispatcher>
+  </filter-mapping>
   
   <filter>
     <filter-name>springSecurityFilterChain</filter-name>
