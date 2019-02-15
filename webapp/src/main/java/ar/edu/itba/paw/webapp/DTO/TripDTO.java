@@ -2,6 +2,8 @@ package ar.edu.itba.paw.webapp.DTO;
 
 import java.sql.Timestamp;
 
+import org.slf4j.Logger;
+
 import ar.edu.itba.paw.models.Position;
 import ar.edu.itba.paw.models.Trip;
 
@@ -13,8 +15,8 @@ public class TripDTO {
 	private String to_city;
 	private Double cost;
 	private Integer seats;
-	private Position departure;
-	private Position arrival;
+	private PositionDTO departure;
+	private PositionDTO arrival;
 	private Integer occupied_seats;
 	private Integer driver_id;
 	private Boolean expired;
@@ -22,7 +24,6 @@ public class TripDTO {
 	public TripDTO() {}
 	
 	public TripDTO(Trip trip) {
-		super();
 		this.id = trip.getId();
 		this.etd = trip.getEtd();
 		this.eta = trip.getEta();
@@ -30,10 +31,10 @@ public class TripDTO {
 		this.to_city = trip.getTo_city();
 		this.cost = trip.getCost();
 		this.seats = trip.getSeats();
-		this.departure = trip.getDeparture();
-		this.arrival = trip.getArrival();
+		this.departure = new PositionDTO(new Position(trip.getDeparture_lat(), trip.getDeparture_lon()));
+		this.arrival = new PositionDTO(new Position(trip.getArrival_lat(), trip.getArrival_lon()));
 		this.occupied_seats = trip.getOccupied_seats();
-		this.driver_id = trip.getDriver_id();
+		this.driver_id = trip.getDriver().getId();
 		this.expired = trip.getExpired();
 	}
 	
@@ -79,16 +80,16 @@ public class TripDTO {
 	public void setSeats(Integer seats) {
 		this.seats = seats;
 	}
-	public Position getDeparture() {
+	public PositionDTO getDeparture() {
 		return departure;
 	}
-	public void setDeparture(Position departure) {
+	public void setDeparture(PositionDTO departure) {
 		this.departure = departure;
 	}
-	public Position getArrival() {
+	public PositionDTO getArrival() {
 		return arrival;
 	}
-	public void setArrival(Position arrival) {
+	public void setArrival(PositionDTO arrival) {
 		this.arrival = arrival;
 	}
 	public Integer getOccupied_seats() {
