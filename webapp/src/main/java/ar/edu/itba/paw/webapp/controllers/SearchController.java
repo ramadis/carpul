@@ -13,32 +13,18 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
-import ar.edu.itba.paw.webapp.DTO.ResultDTO;
 import ar.edu.itba.paw.webapp.DTO.TripDTO;
-import ar.edu.itba.paw.webapp.config.WebAuth;
-import ar.edu.itba.paw.webapp.forms.SearchForm;
 import ar.edu.itba.paw.models.User;
 
 @Path("search")
 @Component
 public class SearchController extends AuthController {
-    private final static Logger console = LoggerFactory.getLogger(WebAuth.class);
 
 	@Autowired
 	private TripService ts;

@@ -29,6 +29,7 @@ public class HistoryDTO {
 		this.type = history.getType();
 		this.own = history.getOwn();
 		this.id = history.getId();
+		this.created =history.getCreated();
 	}
 	
 	public Integer getUser_id() {

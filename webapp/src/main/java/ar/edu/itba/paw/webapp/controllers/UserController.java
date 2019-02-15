@@ -29,8 +29,8 @@ import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.History;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
-import ar.edu.itba.paw.webapp.DTO.HistoryDTO;
 import ar.edu.itba.paw.webapp.DTO.ReviewDTO;
+import ar.edu.itba.paw.webapp.DTO.HistoryDTO;
 import ar.edu.itba.paw.webapp.DTO.TripDTO;
 import ar.edu.itba.paw.webapp.DTO.UserDTO;
 import ar.edu.itba.paw.webapp.forms.TripCreateForm;
@@ -70,7 +70,6 @@ public class UserController extends AuthController {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	// TODO: This endpoint is working
 	public Response createUser(final UserCreateForm form) {
 		// Check if the user form is valid
 		if (!validator.validate(form).isEmpty()) {
@@ -94,6 +93,19 @@ public class UserController extends AuthController {
 		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(user.getId())).build();
 
 		return Response.created(uri).build();
+	}
+	
+	@GET
+	@Path("/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUser() {
+		final User user = user();
+		
+		if (user != null) {
+			return Response.ok(new UserDTO(user)).build();
+		} else {
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
 	}
 	
 	@GET
@@ -183,7 +195,7 @@ public class UserController extends AuthController {
 
 		
 		for (History h: histories) historyDTOs.add(new HistoryDTO(h));
-		return Response.ok(histories).build();
+		return Response.ok(historyDTOs).build();
 	}
 	
 	@GET

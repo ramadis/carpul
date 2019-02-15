@@ -296,6 +296,9 @@ public class Trip {
 	}
 
 	public Position getDeparture() {
+		if (this.departure == null) {
+			this.departure = new Position(this.getDeparture_lat(), this.getDeparture_lon());
+		}
 		return departure;
 	}
 
@@ -304,7 +307,10 @@ public class Trip {
 	}
 
 	public Position getArrival() {
-		return arrival;
+		if (this.arrival == null) {
+			this.arrival = new Position(this.getArrival_lat(), this.getArrival_lon());
+		}
+ 		return arrival;
 	}
 
 	public void setArrival(Position arrival) {
