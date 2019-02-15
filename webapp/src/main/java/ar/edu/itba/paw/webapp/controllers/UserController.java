@@ -163,7 +163,7 @@ public class UserController extends AuthController {
 		// Transform reviews to DTOs
 		List<ReviewDTO> reviewDTOs = new ArrayList<>();
 		List<Review> reviews = rs.getReviews(user);
-		if (reviews == null || reviews.isEmpty()) return Response.status(Status.NOT_FOUND).build();
+		if (reviews == null || reviews.isEmpty()) return Response.noContent().build();
 		
 		// Return reviews for a given user id
 		for (Review r: reviews) reviewDTOs.add(new ReviewDTO(r));
@@ -179,7 +179,7 @@ public class UserController extends AuthController {
 		
 		List<HistoryDTO> historyDTOs = new ArrayList<>();
 		List<History> histories = hs.getHistories(user);
-		if (histories == null || histories.isEmpty()) return Response.status(Status.NOT_FOUND).build();
+		if (histories == null || histories.isEmpty()) return Response.noContent().build();
 
 		
 		for (History h: histories) historyDTOs.add(new HistoryDTO(h));

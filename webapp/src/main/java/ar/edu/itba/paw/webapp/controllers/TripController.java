@@ -88,9 +88,9 @@ public class TripController extends AuthController {
 		// Check requirements for review are passed
 		User loggedUser = user();
 		Trip trip = ts.findById(tripId);
-		if (loggedUser == null || trip == null) return Response.status(Status.NOT_FOUND).build();
+		if (trip == null) return Response.status(Status.NOT_FOUND).build();
 		boolean wasPassenger = trip.getPassengers().contains(loggedUser);
-		if(!wasPassenger) return Response.status(Status.UNAUTHORIZED).build();
+		if(loggedUser == null||!wasPassenger) return Response.status(Status.UNAUTHORIZED).build();
 		
 		// Compose review
 		Review review = form.getReview();
@@ -117,8 +117,9 @@ public class TripController extends AuthController {
 		
 		// Check you have control over the trip
 		Trip trip = ts.findById(tripId);
-		if (trip == null || trip.getDeleted() || loggedUser == null) return Response.status(Status.NOT_FOUND).build();
-		if (!trip.getDriver().equals(loggedUser)) return Response.status(Status.UNAUTHORIZED).build();
+		if (trip == null) return Response.status(Status.NOT_FOUND).build();
+		if (loggedUser == null|| !trip.getDriver().equals(loggedUser)) return Response.status(Status.UNAUTHORIZED).build();
+		if (trip.getDeleted())return Response.noContent().build();
 		
 		// Delete trip
 		ts.delete(tripId, loggedUser);
@@ -166,10 +167,10 @@ public class TripController extends AuthController {
 		
 		// Check that trip exists
 		Trip trip = ts.findById(tripId);
-		if (trip == null || loggedUser == null) return Response.status(Status.NOT_FOUND).build();
+		if (trip == null) return Response.status(Status.NOT_FOUND).build();
 		
 		// Check that has permissions required
-		if (!loggedUser.getId().equals(tripId)) return Response.status(Status.UNAUTHORIZED).build();
+		if (loggedUser == null || !loggedUser.getId().equals(tripId)) return Response.status(Status.UNAUTHORIZED).build();
 
 		// Check if it's too late
 		Date date = new Date();
