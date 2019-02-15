@@ -73,8 +73,8 @@ public class UserController extends AuthController {
 	@Autowired
 	private HistoryService hs;
 	
-//	@Autowired
-//    private Validator validator;
+	@Autowired
+    private Validator validator;
 
 	@POST
 	@Path("/")
@@ -82,9 +82,9 @@ public class UserController extends AuthController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createUser(final UserCreateForm form) {
 		// Check if the user is valid
-//		if (!validator.validate(form).isEmpty()) {
-//			return Response.status(Status.BAD_REQUEST).build();
-//		}
+		if (!validator.validate(form).isEmpty()) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
 		
 		// Get user from form
 		User user = form.getUser();

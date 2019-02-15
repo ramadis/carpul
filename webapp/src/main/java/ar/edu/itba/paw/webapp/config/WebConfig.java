@@ -27,6 +27,8 @@ import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import javax.validation.Validation;
+import javax.validation.Validator;
 
 
 
@@ -76,6 +78,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 //		dbp.addScript(schemaSql);
 //		return dbp;
 //	}
+	
+
+    @Bean
+    public Validator validator() {
+        return Validation.byDefaultProvider().configure().buildValidatorFactory().getValidator();
+    }
 
 	@Bean
 	public DataSource dataSource() {
