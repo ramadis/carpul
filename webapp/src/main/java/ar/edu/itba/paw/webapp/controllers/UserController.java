@@ -81,7 +81,7 @@ public class UserController extends AuthController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createUser(final UserCreateForm form) {
-		// Check if the user is valid
+		// Check if the user form is valid
 		if (!validator.validate(form).isEmpty()) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
@@ -123,6 +123,11 @@ public class UserController extends AuthController {
 	@Path("/{id}/trips")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createTrip(final TripCreateForm form) {
+		// Check if the trip form is valid
+		if (!validator.validate(form).isEmpty()) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		
 		// Create trip with logged user as a driver
 		User loggedUser = user();
 		Trip trip = ts.register(form.getTrip(), loggedUser);

@@ -32,14 +32,13 @@ import javax.validation.Validator;
 
 
 
-@ComponentScan({
-		"ar.edu.itba.paw.webapp.controllers",
-		"ar.edu.itba.paw.services",
-		"ar.edu.itba.paw.persistence"
-})
-@EnableWebMvc
-@Configuration
 @EnableTransactionManagement
+@Configuration
+@ComponentScan({
+	"ar.edu.itba.paw.webapp.controllers",
+	"ar.edu.itba.paw.services",
+	"ar.edu.itba.paw.persistence"
+})
 public class WebConfig extends WebMvcConfigurerAdapter {
 	
 	@Value("classpath:schema.sql")

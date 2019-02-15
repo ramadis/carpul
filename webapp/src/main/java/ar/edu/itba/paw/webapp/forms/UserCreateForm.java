@@ -72,14 +72,12 @@ public class UserCreateForm {
 	}
 	
 	public User getUser() {
-		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		
 		User user = new User();
 		user.setFirst_name(first_name);
 		user.setLast_name(last_name);
 		user.setPhone_number(phone_number);
 		user.setUsername(username);
-		user.setPassword(passwordEncoder.encode(password));
+		user.setPassword(password);
 		return user;
 	}
 }
