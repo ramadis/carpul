@@ -41,9 +41,6 @@ import ar.edu.itba.paw.webapp.auth.Service;
 public class WebAuth extends WebSecurityConfigurerAdapter {
     private final static Logger console = LoggerFactory.getLogger(WebAuth.class);
 
-//	@Autowired
-//	private Provider authProvider;
-
 	@Autowired
 	private Service userDetailsService;
 	
@@ -64,13 +61,13 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and().authorizeRequests()
-			.and().authorizeRequests()
-				.antMatchers(HttpMethod.POST, "/api/users").anonymous()    // Register
-	            .antMatchers(HttpMethod.POST, "/api/login").anonymous()    // Login
-				.antMatchers("/api/search**").permitAll()
+//			.and().authorizeRequests()
+//				.antMatchers(HttpMethod.POST, "/api/users").anonymous()    // Register
+//	            .antMatchers(HttpMethod.POST, "/api/login").anonymous()    // Login
+//				.antMatchers("/api/search**").permitAll()
 			.and().authorizeRequests()
 				.anyRequest()
-				.authenticated()
+				.permitAll()
 			.and().formLogin()
                 .usernameParameter("username")
                 .passwordParameter("password")

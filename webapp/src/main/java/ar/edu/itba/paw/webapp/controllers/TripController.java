@@ -3,6 +3,8 @@ package ar.edu.itba.paw.webapp.controllers;
 import java.net.URI;
 
 import javax.validation.Valid;
+import javax.validation.Validator;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,6 +18,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
@@ -35,12 +39,11 @@ import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.DTO.UserDTO;
 import ar.edu.itba.paw.webapp.forms.ReviewForm;
-import ar.edu.itba.paw.webapp.forms.TripCreateForm;
-import ar.edu.itba.paw.webapp.forms.UserCreateForm;
 
 @Path("trips")
 @Component
 public class TripController extends AuthController {
+    private final static Logger console = LoggerFactory.getLogger(TripController.class);
 
 	@Autowired
 	private TripService ts;
@@ -57,6 +60,9 @@ public class TripController extends AuthController {
 	@Autowired
 	private ReviewService rs;
 	
+	@Autowired
+    private Validator validator;
+	
 	
 	public Response getById(@PathParam("id") final int id) {
 		final User user = us.getById(id);
@@ -69,14 +75,22 @@ public class TripController extends AuthController {
 	
 	@POST
 	@Path("/{id}/reviews")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addReview(final ReviewForm form, @PathParam("id") final Integer tripId) {
-		// Check for errors
-		//		if (errors.hasErrors()) return createReviewView(form, tripId);
+		// Validate review form is schema-compliant
+		if (!validator.validate(form).isEmpty()) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
 		
-		// Compose review
+		// Check requirements for review are passed
 		User loggedUser = user();
 		Trip trip = ts.findById(tripId);
+		if (loggedUser == null || trip == null) return Response.status(Status.NOT_FOUND).build();
+		boolean wasPassenger = trip.getPassengers().stream().anyMatch(p -> p.getId().equals(loggedUser.getId()));
+		if(!wasPassenger) return Response.status(Status.UNAUTHORIZED).build();
+		
+		// Compose review
 		Review review = form.getReview();
 		review.setOwner(loggedUser);
 		review.setReviewedUser(trip.getDriver());
@@ -85,6 +99,7 @@ public class TripController extends AuthController {
 		// Persist review
 		Review savedReview = rs.add(review);
 		
+		// TODO: Change this uri returned on creation
 		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(savedReview.getId())).build();
 		
 		return Response.created(uri).build();
@@ -94,18 +109,20 @@ public class TripController extends AuthController {
 	@DELETE
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
+	// TODO: This endpoint is working
 	public Response deleteTrip(@PathParam("id") final Integer tripId) {
 		User loggedUser = user();
 		
 		// Check you have control over the trip
 		Trip trip = ts.findById(tripId);
-		if (!trip.getDriver().equals(loggedUser)) return Response.status(Status.FORBIDDEN).build();
+		if (trip == null || trip.getDeleted() || loggedUser == null) return Response.status(Status.NOT_FOUND).build();
+		if (!trip.getDriver().equals(loggedUser)) return Response.status(Status.UNAUTHORIZED).build();
 		
 		// Delete trip
 		ts.delete(tripId, loggedUser);
 		es.registerDelete(loggedUser, tripId);
 		
-		// Redirect to profile
+		// Return success
 		return Response.noContent().build();
 	}
 	
@@ -115,10 +132,15 @@ public class TripController extends AuthController {
 	public Response reserveTrip(@PathParam("id") final Integer tripId) {
 		User loggedUser = user();
 		
+		// Check that trip exists
+		Trip dbTrip = ts.findById(tripId);
+		if (dbTrip == null || loggedUser == null) return Response.status(Status.NOT_FOUND).build();
+		
 		// Reserve trip and register in log
 		ts.reserve(tripId, loggedUser);
 		es.registerReserve(loggedUser, tripId);
 
+		// Return success
 		return Response.noContent().build();
 	}
 	
@@ -128,13 +150,15 @@ public class TripController extends AuthController {
 	public Response unreserveTrip(@PathParam("id") final Integer tripId) {
 		User loggedUser = user();
 		
-		// Unreserve trip and  register in log
-		ts.unreserve(tripId, loggedUser);
+		// Check that trip exists
+		Trip dbTrip = ts.findById(tripId);
+		if (dbTrip == null || loggedUser == null) return Response.status(Status.NOT_FOUND).build();
 		
-		// TODO: Check why this line is commented out
-		//hs.addHistory(loggedUser, tripId, "UNRESERVE");
+		// Unreserve trip and notify
+		ts.unreserve(tripId, loggedUser);
 		es.registerUnreserve(loggedUser, tripId);
 		
+		// Return success
 		return Response.noContent().build();
 	}
 	
@@ -143,19 +167,21 @@ public class TripController extends AuthController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response kickFromTrip(@PathParam("id") final Integer tripId, 
 								 @PathParam("userid") final Integer userId) {
-		// Check logged user has control over the trip
+		// Check logged user is authorized to edit the trip
 		Trip trip = ts.findById(tripId);
 		User loggedUser = user();
-		
-		if (!trip.getDriver().equals(loggedUser)) return Response.status(Status.FORBIDDEN).build();
+		if (trip == null) return Response.status(Status.NOT_FOUND).build();
+		if (loggedUser == null || !trip.getDriver().equals(loggedUser)) return Response.status(Status.UNAUTHORIZED).build();
 		
 		// Find kicked user
 		User user = us.findById(userId);
+		if (user == null) return Response.status(Status.NOT_FOUND).build();
 		
 		// Unreserve trip for the kicked user
 		ts.unreserve(tripId, user);
 		es.registerKicked(user, tripId);
 		
+		// Return success
 		return Response.noContent().build();
 	}
 }

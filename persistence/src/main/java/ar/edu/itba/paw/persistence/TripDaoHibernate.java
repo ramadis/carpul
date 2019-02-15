@@ -7,11 +7,14 @@ import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Repository
 public class TripDaoHibernate implements TripDao {
+	private final static Logger console = LoggerFactory.getLogger(TripDaoHibernate.class);
 
 	@PersistenceContext
 	private EntityManager em;
@@ -62,6 +66,7 @@ public class TripDaoHibernate implements TripDao {
 	}
 
 	public void delete(Integer tripId, User user) {
+		
 		Trip trip = findById(tripId);
 
 		if (trip != null) {
@@ -106,8 +111,11 @@ public class TripDaoHibernate implements TripDao {
 		String query = "SELECT t FROM Trip t WHERE t.deleted = FALSE AND t.driver = :user";
 
 		List<Trip> trips = em.createQuery(query, Trip.class)
-						     .setParameter("user", user)
+						     .setParameter("user", user.getId())
 						     .getResultList();
+		
+		console.info("GET_USER_TRIPS");
+		console.info(trips.toString());
 
 		return trips;
 	}
@@ -143,6 +151,7 @@ public class TripDaoHibernate implements TripDao {
 
 	public Trip findById(final Integer tripId) {
 		Trip trip = em.find(Trip.class, tripId);
+		if (trip == null) return null;
 		trip.setReserved(isReserved(trip));
 		return trip;
 	}

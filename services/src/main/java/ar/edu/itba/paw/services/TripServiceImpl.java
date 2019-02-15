@@ -51,7 +51,7 @@ public class TripServiceImpl implements TripService {
 		//return user.getReservations().stream().map((reservation) -> reservation.getTrip()).collect(Collectors.toList());
 	}
 
-	public List<Trip> getUserTrips(User user, Integer page, Integer perPage) {
+	public List<Trip> getUserTrips(User user) {
 		List<Trip> trips = user.getDrived_trips();
 		
 		return trips.stream().filter((trip) -> !trip.getExpired() && !trip.getDeleted())

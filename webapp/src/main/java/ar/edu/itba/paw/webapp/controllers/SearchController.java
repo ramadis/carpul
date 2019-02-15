@@ -27,8 +27,8 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
-import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.forms.SearchForm;
+import ar.edu.itba.paw.models.User;
 
 @Path("search")
 @Component

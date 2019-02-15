@@ -1,9 +1,8 @@
 package ar.edu.itba.paw.webapp.controllers;
 
-import javax.validation.Valid;
 import javax.validation.Validator;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -17,25 +16,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
-import java.util.Set;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-
-import com.google.common.collect.Lists;
 
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.HistoryService;
@@ -45,13 +29,13 @@ import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.History;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.DTO.HistoryDTO;
+import ar.edu.itba.paw.webapp.DTO.ReviewDTO;
 import ar.edu.itba.paw.webapp.DTO.TripDTO;
 import ar.edu.itba.paw.webapp.DTO.UserDTO;
-import ar.edu.itba.paw.webapp.auth.Provider;
 import ar.edu.itba.paw.webapp.forms.TripCreateForm;
 import ar.edu.itba.paw.webapp.forms.UserCreateForm;
-import ar.edu.itba.paw.webapp.forms.UserLoginForm;
+import ar.edu.itba.paw.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +43,8 @@ import java.util.List;
 @Path("users")
 @Component
 public class UserController extends AuthController {
-
+	private final static Logger console = LoggerFactory.getLogger(UserController.class);
+	
 	@Autowired
 	private UserService us;
 	
@@ -85,6 +70,7 @@ public class UserController extends AuthController {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	// TODO: This endpoint is working
 	public Response createUser(final UserCreateForm form) {
 		// Check if the user form is valid
 		if (!validator.validate(form).isEmpty()) {
@@ -113,6 +99,7 @@ public class UserController extends AuthController {
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
+	// TODO: This endpoint is working
 	public Response getById(@PathParam("id") final int id) {
 		final User user = us.getById(id);
 		
@@ -125,7 +112,9 @@ public class UserController extends AuthController {
 	
 	@POST
 	@Path("/{id}/trips")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	// TODO: This endpoint is working
 	public Response createTrip(final TripCreateForm form) {
 		// Check if the trip form is valid
 		if (!validator.validate(form).isEmpty()) {
@@ -144,19 +133,20 @@ public class UserController extends AuthController {
 	@Path("/{id}/trips")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getOwnTrips(@PathParam("id") final int id,
-								@QueryParam("page") int page,
-								@QueryParam("per_page") int perPage) {
-		// TODO: Check permissions
+								@DefaultValue("0") @QueryParam("page") int page,
+								@DefaultValue("25") @QueryParam("per_page") int perPage) {
+		// TODO: Check permissions and what to do with default values for pagination
 		final User user = us.getById(id);
-		if (user != null) Response.status(Status.NOT_FOUND).build();
+		if (user == null) return Response.status(Status.NOT_FOUND).build();
 		
 		// Search trips belonging to a given user
 		List<TripDTO> tripDTOs = new ArrayList<>();
-		List<Trip> trips = ts.getUserTrips(user, page, perPage);
+		List<Trip> trips = ts.getUserTrips(user);
+
 		if (trips == null || trips.isEmpty()) return Response.noContent().build();
 		
+		// Return trips owned by the user with the param id
 		for (Trip t: trips) tripDTOs.add(new TripDTO(t));
-		
 		return Response.ok(tripDTOs).build();
 	}
 	
@@ -165,12 +155,16 @@ public class UserController extends AuthController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getReviews(@PathParam("id") final int id) {
 		final User user = us.getById(id);
-		if (user != null) Response.status(Status.NOT_FOUND).build();
+		if (user != null) return Response.status(Status.NOT_FOUND).build();
 		
+		// Transform reviews to DTOs
+		List<ReviewDTO> reviewDTOs = new ArrayList<>();
 		List<Review> reviews = rs.getReviews(user);
+		if (reviews == null || reviews.isEmpty()) return Response.status(Status.NOT_FOUND).build();
 		
-		// TODO: Return list of reviews
-		return Response.noContent().build();
+		// Return reviews for a given user id
+		for (Review r: reviews) reviewDTOs.add(new ReviewDTO(r));
+		return Response.ok(reviewDTOs).build();
 	}
 	
 	@GET
@@ -180,25 +174,31 @@ public class UserController extends AuthController {
 		final User user = us.getById(id);
 		if (user != null) Response.status(Status.NOT_FOUND).build();
 		
+		List<HistoryDTO> historyDTOs = new ArrayList<>();
 		List<History> histories = hs.getHistories(user);
+		if (histories == null || histories.isEmpty()) return Response.status(Status.NOT_FOUND).build();
+
 		
-		// TODO: Return list of histories
-		return Response.noContent().build();
+		for (History h: histories) historyDTOs.add(new HistoryDTO(h));
+		return Response.ok(histories).build();
 	}
 	
-	// TODO: Check if there's a more RESTful way to do this
-	// Reservations should be linked to trips. Does this make sense?
 	@GET
 	@Path("/{id}/reservations")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getReservations(@PathParam("id") final int id) {
-		// TODO: Check permissions
+		// TODO: Check permissions and what to do with default values for pagination
 		final User user = us.getById(id);
-		if (user != null) Response.status(Status.NOT_FOUND).build();
+		if (user == null) return Response.status(Status.NOT_FOUND).build();
 		
+		// Search trips belonging to a given user
+		List<TripDTO> tripDTOs = new ArrayList<>();
 		List<Trip> trips = ts.getReservedTrips(user);
+
+		if (trips == null || trips.isEmpty()) return Response.noContent().build();
 		
-		// TODO: Return list of trips
-		return Response.noContent().build();
+		// Return trips owned by the user with the param id
+		for (Trip t: trips) tripDTOs.add(new TripDTO(t));
+		return Response.ok(tripDTOs).build();
 	}
 }
