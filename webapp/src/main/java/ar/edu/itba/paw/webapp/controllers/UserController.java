@@ -34,9 +34,11 @@ import ar.edu.itba.paw.interfaces.HistoryService;
 import ar.edu.itba.paw.interfaces.ReviewService;
 import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.DTO.UserDTO;
 import ar.edu.itba.paw.webapp.auth.Provider;
+import ar.edu.itba.paw.webapp.forms.TripCreateForm;
 import ar.edu.itba.paw.webapp.forms.UserCreateForm;
 import ar.edu.itba.paw.webapp.forms.UserLoginForm;
 
@@ -44,16 +46,16 @@ import java.util.List;
 
 @Path("users")
 @Component
-public class UserController {
+public class UserController extends AuthController {
 
 	@Autowired
 	private UserService us;
 	
 	@Context
 	private UriInfo uriInfo;
-//
-//	@Autowired
-//	private TripService ts;
+
+	@Autowired
+	private TripService ts;
 //
 //	@Autowired
 //	private Provider userAuthProvider;
@@ -101,6 +103,18 @@ public class UserController {
 		} else {
 			return Response.status(Status.NOT_FOUND).build();
 		}
+	}
+	
+	@POST
+	@Path("/trips")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response createTrip(final TripCreateForm form) {
+		// Create trip with logged user as a driver
+		User loggedUser = user();
+		Trip trip = ts.register(form.getTrip(), loggedUser);
+		
+		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(trip.getId())).build();
+		return Response.created(uri).build();
 	}
 
 
