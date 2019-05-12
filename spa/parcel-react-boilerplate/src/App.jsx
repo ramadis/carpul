@@ -11,6 +11,7 @@ import Navbar2 from './components/Navbar2';
 import Home from './pages/Home';
 import { User } from './pages/User';
 import Trips from './pages/Trips';
+import Review from './pages/Review';
 import Error from './pages/Error';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
 					<Route exact path="/" component={Home} />
 					<Route path="/user" component={User} />
 					<Route path="/trips" component={Trips} />
+					<Route path="/review/:id" component={Review} />
 					<Route path="/error/:code" component={Error} />
 					<Route component={() => <Redirect to="/error/404" />} />
 				</Switch>

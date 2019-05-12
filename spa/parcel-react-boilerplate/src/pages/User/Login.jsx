@@ -4,6 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import api from '../../api';
 
+//create your forceUpdate hook
+function useForceUpdate() {
+	const [value, set] = useState(true); //boolean state
+	return () => set(!value); // toggle the state to force render
+}
+
 const urlEncode = ({ username, password }) => {
 	const params = new URLSearchParams();
 	params.append('username', username);
@@ -12,6 +18,7 @@ const urlEncode = ({ username, password }) => {
 };
 
 const Login = ({ dispatch, user }) => {
+	const forceUpdate = useForceUpdate();
 	const [t, i18n] = useTranslation();
 	const [username, setUsername] = useState('rolivera+carpul@itba.edu.ar');
 	const [password, setPassword] = useState('carpulcarpul');
@@ -29,12 +36,16 @@ const Login = ({ dispatch, user }) => {
 				const token = res.headers.authorization;
 				dispatch({ type: 'LOGIN', token });
 
+				localStorage.setItem('token', token);
 				return api.get('/users/1');
 			})
 			.then(res => {
 				dispatch({ type: 'USER_LOADED', user: res.data });
+				forceUpdate();
 			});
 	};
+
+	console.log('User:', user);
 	const isLogged = !!user;
 	return isLogged ? (
 		<Redirect to={`/user/profile/${user.id}`} />

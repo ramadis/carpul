@@ -86,7 +86,7 @@ const translations = {
 			empty_review: 'People are not talking about you yet :(',
 			empty_histories: 'No notifications yet!',
 			empty_reservations: 'No reservations? Start now!',
-			empty_trips: 'Do yo even drive bro?'
+			empty_trips: 'Do you even drive bro?'
 		},
 		unauth: {
 			profile: {

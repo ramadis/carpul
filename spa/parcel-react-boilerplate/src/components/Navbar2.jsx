@@ -32,7 +32,7 @@ const Navbar2 = ({ user }) => {
 					)}
 					{user &&
 						user.id && (
-							<Link to={`/user/${user.id}`} className="login-button">
+							<Link to={`/user/profile/${user.id}`} className="login-button">
 								{t('common.navbar.profile')}
 							</Link>
 						)}

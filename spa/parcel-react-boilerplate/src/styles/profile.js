@@ -107,7 +107,7 @@ export default css`
 		padding: 20px;
 		padding-top: 40px;
 		width: 20vw;
-		background: url('../images/cabin.jpg');
+		background: url('https://static-lswnspabnh.now.sh/images/cabin.jpg');
 		background-size: cover;
 		background-color: rgba(0, 0, 0, 0.2);
 		background-blend-mode: darken;
@@ -256,5 +256,11 @@ export default css`
 		opacity: 0;
 		margin-right: 10px;
 		transition: 0.1s ease-in opacity;
+	}
+	.spinner-class {
+		width: 400px;
+		height: 200px;
+		margin: 100px auto 0;
+		background: white;
 	}
 `;

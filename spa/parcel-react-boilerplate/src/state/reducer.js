@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 const initialState = {
-	token: null,
+	token: localStorage.getItem('token'),
 	user: null,
 	reservations: null
 };

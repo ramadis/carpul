@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import reviewItemCss from '../styles/review_item';
+
 const Hero = ({ user, hero_message }) => {
 	const { t, i18n } = useTranslation();
 
