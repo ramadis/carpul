@@ -170,7 +170,9 @@ public class TripController extends AuthController {
 		if (trip == null) return Response.status(Status.NOT_FOUND).build();
 		
 		// Check that has permissions required
-		if (loggedUser == null || !loggedUser.getId().equals(tripId)) return Response.status(Status.UNAUTHORIZED).build();
+		if (loggedUser == null) return Response.status(Status.UNAUTHORIZED).build();
+		
+		if (!trip.getPassengers().contains(loggedUser)) Response.noContent().build();
 
 		// Check if it's too late
 		Date date = new Date();

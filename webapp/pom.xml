@@ -100,6 +100,14 @@
     <groupId>org.bitbucket.b_c</groupId>
     <artifactId>jose4j</artifactId>
   </dependency>
+  
+            <!-- Work around bug where jersey-spring3 pulls in asm-all-repackaged:jar:2.5.0-b36, which is compiled for JDK9. -->
+            <dependency>
+                <groupId>org.glassfish.hk2.external</groupId>
+                <artifactId>asm-all-repackaged</artifactId>
+                <version>2.4.0</version>
+            </dependency>
+        
 <!--         
         <dependency>
         <groupId>io.jsonwebtoken</groupId>
