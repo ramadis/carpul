@@ -26,28 +26,26 @@ public abstract class AuthController {
 
 	@ModelAttribute
 	public User user() {
-		return us.getByUsername("rolivera+carpul1@itba.edu.ar");
-//		
-//		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		final String username;
-//
-//		if (auth == null || !auth.isAuthenticated() || auth instanceof AnonymousAuthenticationToken) return null;
-//
-//		final Object principal = auth.getPrincipal();
-//
-//		if (principal instanceof Model) return ((Model) principal).getUser();
-//
-//		if (principal instanceof UserDetails) {
-//			username = ((UserDetails)principal).getUsername();
-//		} else {
-//			username = principal.toString();
-//		}
-//
-//		try {
-//			return us.getByUsername(username);
-//		} catch (IllegalStateException e) {
-//			console.error(e.getMessage());
-//			return null;
-//		}
+		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		final String username;
+
+		if (auth == null || !auth.isAuthenticated() || auth instanceof AnonymousAuthenticationToken) return null;
+
+		final Object principal = auth.getPrincipal();
+
+		if (principal instanceof Model) return ((Model) principal).getUser();
+
+		if (principal instanceof UserDetails) {
+			username = ((UserDetails)principal).getUsername();
+		} else {
+			username = principal.toString();
+		}
+
+		try {
+			return us.getByUsername(username);
+		} catch (IllegalStateException e) {
+			console.error(e.getMessage());
+			return null;
+		}
 	}
 }
