@@ -24,12 +24,15 @@ public class EmailServiceImpl implements EmailService {
 
 	public void sendRegistrationEmail(User user) {
 		console.info("Trying to send registration email to {}", user.getUsername());
-		String carpulUrl = "#";
+		String searchURL = "http://pawserver.it.itba.edu.ar/paw-2017b-6/";
+		String driveURL = "http://pawserver.it.itba.edu.ar/paw-2017b-6/trip";
 		String subject = user.getFirst_name() + ", welcome to carpul 🚗";
 		String content = loadFromTemplate("/mails/registration.html");
 		
 		// replace local variables
 		content = content.replace("{USERNAME}", user.getFirst_name());
+		content = content.replace("{SEARCH_URL}", searchURL);
+		content = content.replace("{DRIVE_URL}", driveURL);
 		
 		Mail email = createEmail(from, subject, user.getUsername(), content);
 		sendEmail(email);
@@ -39,13 +42,13 @@ public class EmailServiceImpl implements EmailService {
 		console.info("Trying to send reservation email to {}", user.getUsername());
 		String subject = "Hey " + trip.getDriver().getFirst_name() + ", you have a new reservation!";
 		String content = loadFromTemplate("/mails/reservation.html");
-		String carpulUrl = "#";
+		String carpulURL = "http://pawserver.it.itba.edu.ar/paw-2017b-6/user/" + user.getId();
 		
 		// replace local variables
 		content = content.replace("{USERNAME}", trip.getDriver().getFirst_name());
 		content = content.replace("{DESTINATION}", trip.getTo_city());
 		content = content.replace("{PASSENGER}", user.getFirst_name());
-		content = content.replace("{URL}", carpulUrl + user.getId());
+		content = content.replace("{URL}", carpulURL);
 		
 		Mail email = createEmail(from, subject, trip.getDriver().getUsername(), content);
 		sendEmail(email);
@@ -68,7 +71,7 @@ public class EmailServiceImpl implements EmailService {
 	public void sendDeletionEmail(User user, Trip trip) {
 		console.info("Trying to send trip deleted email to {}", user.getUsername());
 		User u = user;
-		String carpulUrl = "#";
+		String carpulURL = "http://pawserver.it.itba.edu.ar/paw-2017b-6/search?from=" + trip.getFrom_city() + " &to=" + trip.getTo_city() + "&when=" + trip.getEtd();
 		String subject = "🚨 Alert " + u.getFirst_name() + ": Your trip to " + trip.getTo_city() + " was cancelled";
 	    String content = loadFromTemplate("/mails/deletion.html");
 	    
@@ -76,7 +79,7 @@ public class EmailServiceImpl implements EmailService {
 		content = content.replace("{DRIVER}", trip.getDriver().getFirst_name());
 		content = content.replace("{DESTINATION}", trip.getTo_city());
 		content = content.replace("{USERNAME}", user.getFirst_name());
-		content = content.replace("{URL}", carpulUrl);
+		content = content.replace("{URL}", carpulURL);
 		
 		Mail email = createEmail(from, subject, u.getUsername(), content);
 		sendEmail(email);
