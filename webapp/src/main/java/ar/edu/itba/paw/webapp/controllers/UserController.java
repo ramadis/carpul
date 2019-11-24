@@ -88,10 +88,8 @@ public class UserController extends AuthController {
 		// Register new user
 		us.register(user);
 
-		console.info("Start sending registration email");
 		// Send welcome email to user
 		es.sendRegistrationEmail(user);
-		console.info("End sending registration email");
 		
 		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(user.getId())).build();
 
