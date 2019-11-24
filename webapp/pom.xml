@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <artifactId>paw</artifactId>
         <groupId>ar.edu.itba.paw</groupId>
@@ -16,8 +15,8 @@
             <artifactId>postgresql</artifactId>
         </dependency>
         <dependency>
-          <groupId>joda-time</groupId>
-          <artifactId>joda-time</artifactId>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -46,25 +45,25 @@
         </dependency>
 
         <dependency>
-          <groupId>javax.validation</groupId>
-          <artifactId>validation-api</artifactId>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
         </dependency>
         <dependency>
-          <groupId>org.hibernate</groupId>
-          <artifactId>hibernate-validator</artifactId>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
         </dependency>
 
-	    <dependency>
-	      <groupId>ar.edu.itba.paw</groupId>
-	      <artifactId>interfaces</artifactId>
-	      <version>${project.parent.version}</version>
-	    </dependency>
-	    <dependency>
-	      <groupId>ar.edu.itba.paw</groupId>
-	      <artifactId>services</artifactId>
-	      <version>${project.parent.version}</version>
-          <scope>runtime</scope>
-	    </dependency>
+        <dependency>
+            <groupId>ar.edu.itba.paw</groupId>
+            <artifactId>interfaces</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ar.edu.itba.paw</groupId>
+            <artifactId>services</artifactId>
+            <version>${project.parent.version}</version>
+            <!-- <scope>runtime</scope> -->
+        </dependency>
         <dependency>
             <groupId>ar.edu.itba.paw</groupId>
             <artifactId>persistence</artifactId>
@@ -73,46 +72,47 @@
         </dependency>
 
         <dependency>
-	        <groupId>org.glassfish.jersey.containers</groupId>
-	        <artifactId>jersey-container-servlet-core</artifactId>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet-core</artifactId>
         </dependency>
-        
-<dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-    </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.ext</groupId>
-            <artifactId>jersey-spring4</artifactId> </dependency>
-        <dependency>
-        	<groupId>org.glassfish.jersey.core</groupId>
-        	<artifactId>jersey-server</artifactId>
+            <artifactId>jersey-spring4</artifactId>
         </dependency>
         <dependency>
-		  <groupId>org.glassfish.jersey.media</groupId>
-		  <artifactId>jersey-media-json-jackson</artifactId>
-		</dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-jaxb</artifactId>
         </dependency>
-             <dependency>
-    <groupId>org.bitbucket.b_c</groupId>
-    <artifactId>jose4j</artifactId>
-  </dependency>
-  
-            <!-- Work around bug where jersey-spring3 pulls in asm-all-repackaged:jar:2.5.0-b36, which is compiled for JDK9. -->
-            <dependency>
-                <groupId>org.glassfish.hk2.external</groupId>
-                <artifactId>asm-all-repackaged</artifactId>
-                <version>2.4.0</version>
-            </dependency>
-        
-<!--         
+        <dependency>
+            <groupId>org.bitbucket.b_c</groupId>
+            <artifactId>jose4j</artifactId>
+        </dependency>
+
+        <!-- Work around bug where jersey-spring3 pulls in asm-all-repackaged:jar:2.5.0-b36, which is compiled for JDK9. -->
+        <dependency>
+            <groupId>org.glassfish.hk2.external</groupId>
+            <artifactId>asm-all-repackaged</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+
+        <!--         
         <dependency>
         <groupId>io.jsonwebtoken</groupId>
         <artifactId>jjwt</artifactId>
       	</dependency> -->
-        
+
     </dependencies>
 </project>

@@ -30,7 +30,7 @@ import javax.validation.Validator;
 	"ar.edu.itba.paw.services",
 	"ar.edu.itba.paw.persistence"
 })
-public class WebConfig extends WebMvcConfigurerAdapter {
+public class WebConfig {
 	
 	@Value("classpath:schema.sql")
 	private Resource schemaSql;

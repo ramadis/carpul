@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailServiceImpl implements EmailService {
 	private final String from = "hi@carpul.com";
-	private final SendGrid sg = new SendGrid("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");
+	private final SendGrid sg = new SendGrid("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");
     private final static Logger console = LoggerFactory.getLogger(EmailServiceImpl.class);
 
 	public void sendRegistrationEmail(User user) {
@@ -68,6 +68,7 @@ public class EmailServiceImpl implements EmailService {
 	}
 	
 	private void sendEmail(Mail email) {
+		console.info("Sending email...");
 		if (email == null) return;
 		
 	    try {

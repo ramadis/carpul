@@ -71,6 +71,7 @@ public class UserController extends AuthController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createUser(final UserCreateForm form) {
+		console.info("Start creating user");
 		// Check if the user form is valid
 		if (!validator.validate(form).isEmpty()) {
 			return Response.status(Status.BAD_REQUEST).build();
@@ -87,8 +88,10 @@ public class UserController extends AuthController {
 		// Register new user
 		us.register(user);
 
+		console.info("Start sending registration email");
 		// Send welcome email to user
 		es.sendRegistrationEmail(user);
+		console.info("End sending registration email");
 		
 		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(user.getId())).build();
 
