@@ -71,7 +71,7 @@ public class EmailServiceImpl implements EmailService {
 		if (email == null) return;
 		
 	    try {
-	    	  Request request = new Request();
+	      Request request = new Request();
 	      request.setMethod(Method.POST);
 	      request.setEndpoint("mail/send");
 	      request.setBody(email.build());
