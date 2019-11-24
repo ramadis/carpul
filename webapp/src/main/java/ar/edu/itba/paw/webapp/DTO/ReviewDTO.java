@@ -2,14 +2,7 @@ package ar.edu.itba.paw.webapp.DTO;
 
 import java.sql.Timestamp;
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
 import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.Trip;
-import ar.edu.itba.paw.models.User;
 
 public class ReviewDTO {
 	private Integer id;

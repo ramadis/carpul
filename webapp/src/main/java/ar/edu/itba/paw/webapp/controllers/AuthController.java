@@ -8,11 +8,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import ar.edu.itba.paw.interfaces.UserService;
-import ar.edu.itba.paw.webapp.auth.JWTFilter;
 import ar.edu.itba.paw.webapp.auth.Model;
 import ar.edu.itba.paw.models.User;
 

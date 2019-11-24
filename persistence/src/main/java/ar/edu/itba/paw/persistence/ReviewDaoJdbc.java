@@ -66,7 +66,6 @@ public class ReviewDaoJdbc implements ReviewDao {
 		
 		this.connection.query(query, params, (ResultSet rs) -> {
 			do {
-				Review review = new Review();
 				loadResultIntoReview(rs, finalReview);
 			} while(rs.next());
 		});

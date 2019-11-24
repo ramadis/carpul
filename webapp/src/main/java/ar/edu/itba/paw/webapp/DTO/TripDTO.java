@@ -2,8 +2,6 @@ package ar.edu.itba.paw.webapp.DTO;
 
 import java.sql.Timestamp;
 
-import org.slf4j.Logger;
-
 import ar.edu.itba.paw.models.Position;
 import ar.edu.itba.paw.models.Trip;
 

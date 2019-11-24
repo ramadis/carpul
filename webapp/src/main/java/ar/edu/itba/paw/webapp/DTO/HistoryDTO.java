@@ -2,18 +2,7 @@ package ar.edu.itba.paw.webapp.DTO;
 
 import java.sql.Timestamp;
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-
 import ar.edu.itba.paw.models.History;
-import ar.edu.itba.paw.models.Trip;
-import ar.edu.itba.paw.models.User;
 
 public class HistoryDTO {
 	private Integer user_id;

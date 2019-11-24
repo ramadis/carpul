@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.config;
 
-import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -63,8 +62,8 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
 			.and().authorizeRequests()
 				.antMatchers(HttpMethod.POST, "/api/users").anonymous()    // Register
 	            .antMatchers(HttpMethod.POST, "/api/login").anonymous()    // Login
+	            .antMatchers("/api/search**").permitAll()
 				.antMatchers("/api/**").authenticated()
-				.antMatchers("/api/search**").permitAll()
 			.and().authorizeRequests()
 				.anyRequest()
 				.permitAll()
@@ -108,6 +107,7 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
     
     @Bean(name = "JWTSecretKey")
     public RsaJsonWebKey getJWTSecretKey() throws JoseException {
+    	// TODO: Replace with local key file.
         return RsaJwkGenerator.generateJwk(2048);
     }
     
