@@ -38,7 +38,14 @@ public class EmailServiceImpl implements EmailService {
 	public void sendReservationEmail(User user, Trip trip) {
 		console.info("Trying to send reservation email to {}", user.getUsername());
 		String subject = "Hey " + trip.getDriver().getFirst_name() + ", you have a new reservation!";
-	    String content = "Hey " + trip.getDriver().getFirst_name() + " Just FYI: " + user.getFirst_name() + " just reserved your trip to " + trip.getTo_city() + ". Check the details in your Carpul profile!";
+		String content = loadFromTemplate("/mails/reservation.html");
+		String carpulUrl = "#";
+		
+		// replace local variables
+		content = content.replace("{USERNAME}", trip.getDriver().getFirst_name());
+		content = content.replace("{DESTINATION}", trip.getTo_city());
+		content = content.replace("{PASSENGER}", user.getFirst_name());
+		content = content.replace("{URL}", carpulUrl + user.getId());
 		
 		Mail email = createEmail(from, subject, trip.getDriver().getUsername(), content);
 		sendEmail(email);
@@ -46,8 +53,13 @@ public class EmailServiceImpl implements EmailService {
 	
 	public void sendUnreservationEmail(User user, Trip trip) {
 		console.info("Trying to send unreserve email to {}", user.getUsername());
-		String subject = "Hey " + trip.getDriver().getFirst_name() + ", someone just dropped a reservation!";
-	    String content = "Hey " + trip.getDriver().getFirst_name() + " Just FYI: " + user.getFirst_name() + " just dropped a reservation for your trip to " + trip.getTo_city() + ". Check the details in your Carpul profile!";
+		String subject = "Hey " + trip.getDriver().getFirst_name() + ", someone just dropped their reservation 😞";
+		String content = loadFromTemplate("/mails/unreservation.html");
+		
+		// replace local variables
+		content = content.replace("{USERNAME}", trip.getDriver().getFirst_name());
+		content = content.replace("{DESTINATION}", trip.getTo_city());
+		content = content.replace("{PASSENGER}", user.getFirst_name());
 		
 		Mail email = createEmail(from, subject, trip.getDriver().getUsername(), content);
 		sendEmail(email);
@@ -56,9 +68,15 @@ public class EmailServiceImpl implements EmailService {
 	public void sendDeletionEmail(User user, Trip trip) {
 		console.info("Trying to send trip deleted email to {}", user.getUsername());
 		User u = user;
-		
-		String subject = "Alert " + u.getFirst_name() + ", your trip to " + trip.getTo_city() + " was cancelled";
-	    String content = "Hey " + u.getFirst_name() + " Just FYI: " + user.getFirst_name() + " just removed his trip to " + trip.getTo_city() + ". Try to fin another trip to the same place!";
+		String carpulUrl = "#";
+		String subject = "🚨 Alert " + u.getFirst_name() + ": Your trip to " + trip.getTo_city() + " was cancelled";
+	    String content = loadFromTemplate("/mails/deletion.html");
+	    
+		// replace local variables
+		content = content.replace("{DRIVER}", trip.getDriver().getFirst_name());
+		content = content.replace("{DESTINATION}", trip.getTo_city());
+		content = content.replace("{USERNAME}", user.getFirst_name());
+		content = content.replace("{URL}", carpulUrl);
 		
 		Mail email = createEmail(from, subject, u.getUsername(), content);
 		sendEmail(email);
