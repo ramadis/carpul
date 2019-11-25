@@ -141,8 +141,7 @@ public class UserController extends AuthController {
 		// Create trip with logged user as a driver
 		Trip trip = ts.register(form.getTrip(), loggedUser);
 		
-		final URI uri = uriInfo.getBaseUriBuilder().path("trips").path(String.valueOf(trip.getId())).build();
-		return Response.created(uri).build();
+		return Response.status(Status.CREATED).entity(new TripDTO(trip)).build();
 	}
 	
 	@GET
@@ -158,7 +157,7 @@ public class UserController extends AuthController {
 		List<TripDTO> tripDTOs = new ArrayList<>();
 		List<Trip> trips = ts.getUserTrips(user);
 
-		if (trips == null || trips.isEmpty()) return Response.noContent().build();
+		if (trips == null || trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 		
 		// Return trips owned by the user with the param id
 		for (Trip t: trips) tripDTOs.add(new TripDTO(t));
@@ -175,7 +174,7 @@ public class UserController extends AuthController {
 		// Transform reviews to DTOs
 		List<ReviewDTO> reviewDTOs = new ArrayList<>();
 		List<Review> reviews = rs.getReviews(user);
-		if (reviews == null || reviews.isEmpty()) return Response.noContent().build();
+		if (reviews == null || reviews.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 		
 		// Return reviews for a given user id
 		for (Review r: reviews) reviewDTOs.add(new ReviewDTO(r));
@@ -191,7 +190,7 @@ public class UserController extends AuthController {
 		
 		List<HistoryDTO> historyDTOs = new ArrayList<>();
 		List<History> histories = hs.getHistories(user);
-		if (histories == null || histories.isEmpty()) return Response.noContent().build();
+		if (histories == null || histories.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 
 		
 		for (History h: histories) historyDTOs.add(new HistoryDTO(h));

@@ -29,7 +29,7 @@ public class ReviewController extends AuthController {
 		Review review = rs.getReviewById(id);
 		if (review == null) return Response.status(Status.NOT_FOUND).build();
 
-		// TODO: Return List of trips
+		// TODO: Return review
 		return Response.ok(review).build();
 	}
 }

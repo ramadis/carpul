@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controllers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -46,7 +47,7 @@ public class SearchController extends AuthController {
 		List<Trip> trips = user == null ? ts.findByRoute(search) : ts.findByRoute(user, search);
 		
 		// If no trips at all. It's empty.
-		if (trips.isEmpty()) return Response.noContent().build();
+		if (trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 
 		// Generate DTOs
 		for(Trip t: trips) tripDTOs.add(new TripDTO(t));
@@ -73,7 +74,7 @@ public class SearchController extends AuthController {
 		List<Trip> laterTrips = user == null ? ts.findAfterDateByRoute(search) : ts.findAfterDateByRoute(user, search);
 		
 		// If no trips at all. It's empty.
-		if (laterTrips.isEmpty()) return Response.noContent().build();
+		if (laterTrips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 
 		// Generate DTOs
 		for(Trip t: laterTrips) laterTripDTOs.add(new TripDTO(t));

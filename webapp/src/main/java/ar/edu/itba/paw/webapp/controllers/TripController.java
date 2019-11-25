@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.controllers;
 
-import java.net.URI;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -92,10 +91,10 @@ public class TripController extends AuthController {
 		// Persist review
 		Review savedReview = rs.add(review);
 		
-		// TODO: Change this uri returned on creation
-		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(savedReview.getId())).build();
-		
-		return Response.created(uri).build();
+		console.info("Review created successfully.");
+
+		// Return new review with its id
+		return Response.status(Status.CREATED).entity(savedReview).build();
 		
 	}
 
