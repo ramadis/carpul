@@ -170,7 +170,7 @@ public class UserController extends AuthController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getReviews(@PathParam("id") final int id) {
 		final User user = us.getById(id);
-		if (user != null) return Response.status(Status.NOT_FOUND).build();
+		if (user == null) return Response.status(Status.NOT_FOUND).build();
 		
 		// Transform reviews to DTOs
 		List<ReviewDTO> reviewDTOs = new ArrayList<>();
@@ -187,7 +187,7 @@ public class UserController extends AuthController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getHistory(@PathParam("id") final int id) {
 		final User user = us.getById(id);
-		if (user != null) Response.status(Status.NOT_FOUND).build();
+		if (user == null) Response.status(Status.NOT_FOUND).build();
 		
 		List<HistoryDTO> historyDTOs = new ArrayList<>();
 		List<History> histories = hs.getHistories(user);
