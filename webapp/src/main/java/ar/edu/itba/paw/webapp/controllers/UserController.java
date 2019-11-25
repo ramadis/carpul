@@ -38,6 +38,7 @@ import ar.edu.itba.paw.webapp.forms.UserCreateForm;
 import ar.edu.itba.paw.models.User;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Path("users")
@@ -86,14 +87,12 @@ public class UserController extends AuthController {
 		}
 
 		// Register new user
-		us.register(user);
+		user = us.register(user);
 
 		// Send welcome email to user
 		es.sendRegistrationEmail(user);
 		
-		final URI uri = uriInfo.getAbsolutePathBuilder().path(String.valueOf(user.getId())).build();
-
-		return Response.created(uri).build();
+		return Response.status(Status.CREATED).entity(new UserDTO(user)).build();
 	}
 	
 	@GET
@@ -211,7 +210,7 @@ public class UserController extends AuthController {
 		List<TripDTO> tripDTOs = new ArrayList<>();
 		List<Trip> trips = ts.getReservedTrips(user);
 
-		if (trips == null || trips.isEmpty()) return Response.noContent().build();
+		if (trips == null || trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 		
 		// Return trips owned by the user with the param id
 		for (Trip t: trips) tripDTOs.add(new TripDTO(t));
