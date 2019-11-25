@@ -1,3 +1,10 @@
+# TODO 
+
+## FRONT
+
+- [] Remove dummy values (login form, etc)
+- [] Remove navbar from some pages (login, etc?)
+
 
 ![logo](http://pawserver.it.itba.edu.ar/paw-2017b-6/static/images/logo.png)
 ### A cheap carpooling service focused on traveling far away.

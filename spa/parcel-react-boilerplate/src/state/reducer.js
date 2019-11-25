@@ -1,28 +1,31 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
 
 const initialState = {
-	token: localStorage.getItem('token'),
-	user: null,
-	reservations: null
-};
+  token: localStorage.getItem('token'),
+  user: null,
+  reservations: null
+}
 
-export const isLoggedIn = state => !!state.token;
+export const isLoggedIn = state => !!state.token
 
 const user = (state = initialState, action) => {
-	console.log('GOT:', action);
-	switch (action.type) {
-		case 'LOGIN': {
-			return { ...state, token: action.token };
-		}
-		case 'USER_LOADED': {
-			return { ...state, user: action.user };
-		}
-		case 'RESERVATIONS_LOADED': {
-			return { ...state, reservations: action.reservations };
-		}
-		default:
-			return state;
-	}
-};
+  console.log('GOT:', action)
+  switch (action.type) {
+    case 'LOGIN': {
+      return { ...state, token: action.token }
+    }
+    case 'LOGOUT': {
+      return { ...state, token: null, user: null, reservations: null }
+    }
+    case 'USER_LOADED': {
+      return { ...state, user: action.user }
+    }
+    case 'RESERVATIONS_LOADED': {
+      return { ...state, reservations: action.reservations }
+    }
+    default:
+      return state
+  }
+}
 
-export default user;
+export default user
