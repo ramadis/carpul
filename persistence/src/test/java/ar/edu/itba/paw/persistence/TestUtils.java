@@ -55,6 +55,11 @@ public class TestUtils {
 		public static final Double ARRIVAL_LAT = -34.609475;
 		public static final Double ARRIVAL_LON = -58.388214;
 		public static final Timestamp NOW = new Timestamp(System.currentTimeMillis());
+		
+		public static final Integer EXISTING_ID = 1;
+		public static final Integer EXISTING_DRIVER_ID = 2;
+		public static final Integer EXISTING_PASSENGER_ID = 3;
+		public static final Integer NONEXISTING_PASSENGER_ID = 1;
 	
 		private TripUtils () {}
 		
