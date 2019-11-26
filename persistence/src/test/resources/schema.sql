@@ -82,3 +82,6 @@ INSERT INTO trips_users VALUES (4, NOW(), 2, 4);
 
 -- reviews
 INSERT INTO reviews VALUES (2, NOW(), 4, 2, 2, 5, 'Texto del review');
+
+-- history
+INSERT INTO histories VALUES(2, NOW(), 3, 2, TRUE, 'CREATED');

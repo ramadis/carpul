@@ -121,6 +121,12 @@ public class TestUtils {
 		public static final Integer TRIP_ID = 1;
 		public static final String TYPE = "CREATED";
 		public static final Timestamp NOW = new Timestamp(System.currentTimeMillis());
+		
+		public static final Integer EXISTING_ID = 2;
+		public static final Integer EXISTING_DRIVER_ID = 2;
+		public static final Integer EXISTING_TRIP_ID = 1;
+		public static final Integer EXISTING_PASSENGER_ID = 3;
+		public static final Integer NONEXISTING_PASSENGER_ID = 1;
 	
 		private HistoryUtils () {}
 		
