@@ -96,27 +96,17 @@ public class UserController extends AuthController {
 	}
 	
 	@GET
-	@Path("/")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getUser() {
-		final User user = user();
-		
-		if (user != null) {
-			return Response.ok(new UserDTO(user)).build();
-		} else {
-			return Response.status(Status.UNAUTHORIZED).build();
-		}
-	}
-	
-	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	// TODO: This endpoint is working
 	public Response getById(@PathParam("id") final int id) {
 		final User user = us.getById(id);
+		final User loggedUser = user();
 		
 		if (user != null) {
 			return Response.ok(new UserDTO(user)).build();
+		} else if (loggedUser != null) {
+			return Response.ok(new UserDTO(loggedUser)).build();
 		} else {
 			return Response.status(Status.NOT_FOUND).build();
 		}
