@@ -27,8 +27,8 @@ public class TestConfig {
 		final SimpleDriverDataSource ds = new SimpleDriverDataSource();
 		ds.setDriverClass(JDBCDriver.class);
 		ds.setUrl("jdbc:hsqldb:mem:paw");
-		ds.setUsername("ha");
-		ds.setPassword("");
+		ds.setUsername("pawtp");
+		ds.setPassword("pawtp");
 		return ds;
 	}
 	
@@ -43,11 +43,11 @@ public class TestConfig {
         factoryBean.setJpaVendorAdapter(vendorAdapter);
 
         final Properties properties = new Properties();
+        properties.setProperty("hibernate.hbm2ddl.auto", "update");
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
-
         properties.setProperty("hibernate.show_sql", "true");
         properties.setProperty("format_sql", "true");
-
+        
         factoryBean.setJpaProperties(properties);
         return factoryBean;
     }

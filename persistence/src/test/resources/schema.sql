@@ -1,3 +1,9 @@
+DROP TABLE IF EXISTS trips CASCADE;
+DROP TABLE IF EXISTS users CASCADE ;
+DROP TABLE IF EXISTS trips_users CASCADE;
+DROP TABLE IF EXISTS reviews CASCADE;
+DROP TABLE IF EXISTS histories CASCADE;
+
 CREATE TABLE IF NOT EXISTS users (
   id INTEGER IDENTITY PRIMARY KEY,
   created timestamp,
@@ -58,3 +64,7 @@ CREATE TABLE IF NOT EXISTS histories (
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE
 );
+
+INSERT INTO users (id, first_name, last_name, username, phone_number) VALUES (1, 'First', 'Last', 'Username1', 'phone');
+INSERT INTO users (id, first_name, last_name, username, phone_number) VALUES (2, 'First', 'Last', 'Username2', 'phone');
+INSERT INTO users (id, first_name, last_name, username, phone_number) VALUES (3, 'First', 'Last', 'Username3', 'phone');

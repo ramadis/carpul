@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>ar.edu.itba.paw</groupId>
@@ -35,17 +35,17 @@
     <joda.time.version>2.9.9</joda.time.version>
     <sendgrid.version>4.1.2</sendgrid.version>
     <org.tx.version>4.2.6.RELEASE</org.tx.version>
-    		<jetty-version>7.2.2.v20101205</jetty-version>	
-    
+    <jetty-version>7.2.2.v20101205</jetty-version>
+    <mockito.version>2.10.0</mockito.version>
     <jersey.version>3.0-SNAPSHOT</jersey.version>
   </properties>
   <build>
     <plugins>
-    <plugin>
-					<groupId>org.mortbay.jetty</groupId>
-					<artifactId>jetty-maven-plugin</artifactId>
-					<version>${jetty-version}</version>
-				</plugin>
+      <plugin>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>${jetty-version}</version>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-eclipse-plugin</artifactId>
@@ -59,7 +59,7 @@
   </build>
   <dependencyManagement>
     <dependencies>
-    
+
       <dependency>
         <groupId>javax.servlet</groupId>
         <artifactId>jstl</artifactId>
@@ -118,18 +118,17 @@
           </exclusion>
         </exclusions>
       </dependency>
-            <dependency>
-          <groupId>ch.qos.logback</groupId>
-          <artifactId>logback-classic</artifactId>
-          <version>${logback.version}</version>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${logback.version}</version>
       </dependency>
-      
-           <dependency>
+
+      <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>${org.slf4j.version}</version>
       </dependency>
-
 
 
       <dependency>
@@ -207,6 +206,13 @@
       </dependency>
 
       <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>${mockito.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-jdbc</artifactId>
         <version>${org.springframework.version}</version>
@@ -218,57 +224,67 @@
       </dependency>
 
       <!-- JERSEY -->
-      <dependency> <groupId>org.glassfish.jersey.containers</groupId>
-      <artifactId>jersey-container-servlet-core</artifactId>
+      <dependency>
+        <groupId>org.glassfish.jersey.containers</groupId>
+        <artifactId>jersey-container-servlet-core</artifactId>
         <version>${jersey.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.glassfish.jersey.ext</groupId> <artifactId>jersey-spring4</artifactId> <version>${jersey.version}</version>
+        <groupId>org.glassfish.jersey.ext</groupId>
+        <artifactId>jersey-spring4</artifactId>
+        <version>${jersey.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.glassfish.jersey.core</groupId> <artifactId>jersey-server</artifactId> <version>${jersey.version}</version> <exclusions>
-        <exclusion> <groupId>javax.validation</groupId> <artifactId>validation-api</artifactId>
-        </exclusion>
-      </exclusions>
+        <groupId>org.glassfish.jersey.core</groupId>
+        <artifactId>jersey-server</artifactId>
+        <version>${jersey.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <!-- JERSEY JSON -->
       <dependency>
-		  <groupId>org.glassfish.jersey.media</groupId>
-		  <artifactId>jersey-media-json-jackson</artifactId>
+        <groupId>org.glassfish.jersey.media</groupId>
+        <artifactId>jersey-media-json-jackson</artifactId>
         <version>${jersey.version}</version>
       </dependency>
-      
+
       <dependency>
-      	<groupId>org.glassfish.jersey.media</groupId>
-      	<artifactId>jersey-media-jaxb</artifactId>
+        <groupId>org.glassfish.jersey.media</groupId>
+        <artifactId>jersey-media-jaxb</artifactId>
         <version>${jersey.version}</version>
       </dependency>
-       
-<!-- 	  <dependency>
+
+      <!-- 	  <dependency>
         <groupId>io.jsonwebtoken</groupId>
         <artifactId>jjwt</artifactId>
         <version>0.5.1</version>
       </dependency> -->
       <dependency>
-    <groupId>org.bitbucket.b_c</groupId>
-    <artifactId>jose4j</artifactId>
-    <version>${jwt.version}</version>
-  </dependency>
-      
-<dependency>
+        <groupId>org.bitbucket.b_c</groupId>
+        <artifactId>jose4j</artifactId>
+        <version>${jwt.version}</version>
+      </dependency>
+
+      <dependency>
         <groupId>javax.servlet</groupId>
         <artifactId>servlet-api</artifactId>
         <version>${servlet-api.version}</version>
         <scope>provided</scope>
       </dependency>
-   	</dependencies>
+    </dependencies>
   </dependencyManagement>
   <repositories>
     <repository>
       <id>jersey-snapshot</id>
       <url>https://maven.java.net/content/repositories/snapshots/</url>
-      <name>Jersey Snapshots</name> <snapshots>
-      <enabled>true</enabled> </snapshots>
+      <name>Jersey Snapshots</name>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
     </repository>
   </repositories>
 </project>

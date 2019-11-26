@@ -21,6 +21,11 @@ public class TestUtils {
 		public static final String PHONE_NUMBER = "phone";
 		public static final Timestamp NOW = new Timestamp(System.currentTimeMillis());
 		
+		public static final String EXISTING_USERNAME = "Username1";
+		public static final String NONEXISTING_USERNAME = "Username20";
+		public static final Integer EXISTING_ID = 1;
+		public static final Integer NONEXISTING_ID = 900;
+		
 		private UserUtils () {}
 		
 		public static User sampleUser() {

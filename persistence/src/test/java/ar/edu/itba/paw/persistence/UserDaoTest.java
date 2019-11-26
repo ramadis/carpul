@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.interfaces.UserDao;
@@ -17,11 +16,14 @@ import static org.junit.Assert.*;
 
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 @RunWith( SpringJUnit4ClassRunner.class )
 @ContextConfiguration(classes = TestConfig.class)
 @Sql("classpath:schema.sql")
+@Transactional
 public class UserDaoTest {
 	@Autowired
 	private DataSource ds;
@@ -29,22 +31,22 @@ public class UserDaoTest {
 	@Autowired
 	private UserDao userDao;
 	private JdbcTemplate jdbcTemplate;
+
+    @PersistenceContext
+    private EntityManager em;
 	
 	@Before
 	public void setUp() {
 		jdbcTemplate = new JdbcTemplate(ds);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
-		jdbcTemplate.execute("TRUNCATE TABLE users RESTART IDENTITY;");
-		
-		String[] sequences = { "users_id_seq" };
-		for (String sequence : sequences) {
-		    jdbcTemplate.execute("DROP SEQUENCE " + sequence + " IF EXISTS");
-		    jdbcTemplate.execute("CREATE SEQUENCE " + sequence + " as INTEGER");
-		}
 	}
 	
-	public void assertUser(User user) {
+	@Test
+	public void testCreate() {
+        final User user = userDao.create(TestUtils.UserUtils.sampleUser());
+
+		// Asserts
 		assertNotNull(user);
+		assertNotNull(user.getId());
 		assertEquals(TestUtils.UserUtils.USERNAME, user.getUsername());
 		assertEquals(TestUtils.UserUtils.FIRST_NAME, user.getFirst_name());
 		assertEquals(TestUtils.UserUtils.LAST_NAME, user.getLast_name());
@@ -52,43 +54,49 @@ public class UserDaoTest {
 		assertNotNull(user.getCreated());
 	}
 	
-	public User createUser() {
-		User user = TestUtils.UserUtils.sampleUser();
-		return userDao.create(user);
-	}
-	
 	@Test
-	@Transactional
-	public void testCreate() {
-		User user = createUser();
-		
-		// Asserts
-		assertUser(user);
-	}
-	
-	@Test
-	@Transactional
 	public void testGetByUsername() {
-		// Create user
-		assertUser(createUser());
-		
 		// Get user by username
-		final User user = userDao.getByUsername(TestUtils.UserUtils.USERNAME);
+		final User user = userDao.getByUsername(TestUtils.UserUtils.EXISTING_USERNAME);
 		
 		// Asserts
-		assertUser(user);
+		assertNotNull(user);
+		assertEquals(TestUtils.UserUtils.EXISTING_ID, user.getId());
+		assertEquals(TestUtils.UserUtils.EXISTING_USERNAME, user.getUsername());
+		assertEquals(TestUtils.UserUtils.FIRST_NAME, user.getFirst_name());
+		assertEquals(TestUtils.UserUtils.LAST_NAME, user.getLast_name());
+		assertEquals(TestUtils.UserUtils.PHONE_NUMBER, user.getPhone_number());
 	}
 	
 	@Test
-	@Transactional
-	public void testGetById() {
-		// Create user
-		createUser();
-				
-		// Get user by id
-		final User user = userDao.getById(TestUtils.UserUtils.ID);
+	public void testGetByInvalidUsername() {
+		// Get user by username
+		final User user = userDao.getByUsername(TestUtils.UserUtils.NONEXISTING_USERNAME);
 		
 		// Asserts
-		assertUser(user);
+		assertNull(user);
+	}
+		
+	@Test
+	public void testGetById() {
+		// Get user by id
+		final User user = userDao.getById(TestUtils.UserUtils.EXISTING_ID);
+		
+		// Asserts
+		assertNotNull(user);
+		assertEquals(TestUtils.UserUtils.EXISTING_ID, user.getId());
+		assertEquals(TestUtils.UserUtils.EXISTING_USERNAME, user.getUsername());
+		assertEquals(TestUtils.UserUtils.FIRST_NAME, user.getFirst_name());
+		assertEquals(TestUtils.UserUtils.LAST_NAME, user.getLast_name());
+		assertEquals(TestUtils.UserUtils.PHONE_NUMBER, user.getPhone_number());
+	}
+	
+	@Test
+	public void testGetByInvalidId() {
+		// Get user by id
+		final User user = userDao.getById(TestUtils.UserUtils.NONEXISTING_ID);
+		
+		// Asserts
+		assertNull(user);
 	}
 }
