@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS reviews (
   reviewed_id integer,
   trip_id integer,
   stars integer,
+  image blob,
   message varchar(10000),
   FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (reviewed_id) REFERENCES users(id) ON DELETE CASCADE,
@@ -81,7 +82,7 @@ INSERT INTO trips_users VALUES (3, NOW(), 2, 3);
 INSERT INTO trips_users VALUES (4, NOW(), 2, 4);
 
 -- reviews
-INSERT INTO reviews VALUES (2, NOW(), 4, 2, 2, 5, 'Texto del review');
+INSERT INTO reviews (id, created, owner_id, reviewed_id, trip_id, stars, message) VALUES (2, NOW(), 4, 2, 2, 5, 'Texto del review');
 
 -- history
 INSERT INTO histories VALUES(2, NOW(), 3, 2, TRUE, 'CREATED');
