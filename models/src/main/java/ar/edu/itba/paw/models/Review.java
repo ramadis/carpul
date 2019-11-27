@@ -32,6 +32,9 @@ public class Review {
 	@Column(length = 500)
 	private String message;
 	
+    @Column(name = "image")
+    private byte[] image;
+	
 	@Column
 	private Integer stars;
 	
@@ -100,5 +103,13 @@ public class Review {
 	
 	public void setCreated(Timestamp created) {
 		this.created = created;
+	}
+
+	public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(byte[] image) {
+		this.image = image;
 	}
 }

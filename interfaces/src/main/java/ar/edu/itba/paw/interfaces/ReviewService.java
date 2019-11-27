@@ -12,5 +12,6 @@ public interface ReviewService {
 	List<Review> getReviews(User user);
 	Boolean canLeaveReview(Trip trip, User user);
 	Review add(Review review);
+	Review uploadImage(Review review, byte[] image);
 }
 

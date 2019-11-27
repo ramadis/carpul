@@ -12,4 +12,5 @@ public interface ReviewDao {
 	Review add(Review review);
 	Review getReviewById(int id);
 	Boolean canLeaveReview(Trip trip, User user);
+	Review uploadImage(Review review, byte[] image);
 }

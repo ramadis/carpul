@@ -12,6 +12,14 @@ public class ReviewDTO {
 	private Integer stars;
 	private Integer trip;
 	private Timestamp created;
+	private String image;
+	
+	public ReviewDTO() {}
+	
+	public ReviewDTO(Review review, String url) {
+		this(review);
+		this.image = review.getImage() == null ? null : url + "/image"; // Image in dto is just the stringified id of the review
+	}
 	
 	public ReviewDTO (Review review) {
 		this.id = review.getId();
@@ -64,6 +72,13 @@ public class ReviewDTO {
 	}
 	public void setCreated(Timestamp created) {
 		this.created = created;
+	}
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 }

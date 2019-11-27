@@ -17,7 +17,13 @@ public class ReviewDaoHibernate implements ReviewDao {
 
 	@PersistenceContext
 	private EntityManager em;
-
+	
+	public Review uploadImage(Review review, byte[] image) {
+		review.setImage(image);
+		em.merge(review);
+		return review;
+	}
+	
 	public List<Review> getReviews(User user) {
 		String query = "SELECT r FROM Review r WHERE r.reviewed = :reviewed ORDER BY created desc";
 		
@@ -43,8 +49,6 @@ public class ReviewDaoHibernate implements ReviewDao {
 							 .setParameter("trip", trip)
 							 .setParameter("owner", user)
 							 .getResultList();
-		
-		System.out.println(trips.isEmpty());
 		
 		return trips.isEmpty();
 	}

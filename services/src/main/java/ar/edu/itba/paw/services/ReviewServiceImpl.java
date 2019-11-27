@@ -36,6 +36,11 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 	
 	@Transactional
+	public Review uploadImage(Review review, byte[] image) {
+		return reviewDao.uploadImage(review, image);
+	}
+	
+	@Transactional
 	public Review add(Review review) {
 		return reviewDao.add(review);
 	}

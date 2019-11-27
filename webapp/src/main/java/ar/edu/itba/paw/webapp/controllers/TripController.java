@@ -29,6 +29,7 @@ import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.DTO.ReviewDTO;
 import ar.edu.itba.paw.webapp.DTO.UserDTO;
 import ar.edu.itba.paw.webapp.forms.ReviewForm;
 
@@ -70,17 +71,20 @@ public class TripController extends AuthController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addReview(final ReviewForm form, @PathParam("id") final Integer tripId) {
+		User loggedUser = user();
+
 		// Validate review form is schema-compliant
-		if (!validator.validate(form).isEmpty()) {
+		if (form == null || !validator.validate(form).isEmpty()) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		
-		// Check requirements for review are passed
-		User loggedUser = user();
+		// Check requirements for reviewing are passed
 		Trip trip = ts.findById(tripId);
 		if (trip == null) return Response.status(Status.NOT_FOUND).build();
 		boolean wasPassenger = trip.getPassengers().contains(loggedUser);
-		if(loggedUser == null||!wasPassenger) return Response.status(Status.UNAUTHORIZED).build();
+		if (loggedUser == null) return Response.status(Status.UNAUTHORIZED).build();
+		if(!wasPassenger) return Response.status(Status.FORBIDDEN).build();
+		if (!rs.canLeaveReview(trip, loggedUser)) return Response.status(Status.CONFLICT).build();
 		
 		// Compose review
 		Review review = form.getReview();
@@ -94,7 +98,7 @@ public class TripController extends AuthController {
 		console.info("Review created successfully.");
 
 		// Return new review with its id
-		return Response.status(Status.CREATED).entity(savedReview).build();
+		return Response.status(Status.CREATED).entity(new ReviewDTO(savedReview)).build();
 		
 	}
 

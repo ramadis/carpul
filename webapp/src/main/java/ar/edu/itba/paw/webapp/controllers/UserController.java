@@ -14,7 +14,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
-import java.net.URI;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -167,7 +166,7 @@ public class UserController extends AuthController {
 		if (reviews == null || reviews.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 		
 		// Return reviews for a given user id
-		for (Review r: reviews) reviewDTOs.add(new ReviewDTO(r));
+		for (Review r: reviews) reviewDTOs.add(new ReviewDTO(r, uriInfo.getAbsolutePathBuilder().path(String.valueOf(r.getId())).build().toString()));
 		return Response.ok(reviewDTOs).build();
 	}
 	

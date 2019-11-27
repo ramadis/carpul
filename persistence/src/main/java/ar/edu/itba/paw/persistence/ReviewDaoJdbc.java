@@ -30,6 +30,10 @@ public class ReviewDaoJdbc implements ReviewDao {
 
 	@Autowired
 	private TripDao tripDao;
+	
+	public Review uploadImage(Review review, byte[] image) {
+		return review;
+	}
 
 	private void loadResultIntoReview(ResultSet rs, Review review) {
 		try {
