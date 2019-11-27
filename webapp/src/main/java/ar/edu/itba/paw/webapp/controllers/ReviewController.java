@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import ar.edu.itba.paw.interfaces.ReviewService;
 import ar.edu.itba.paw.models.Review;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.DTO.ReviewDTO;
 import ar.edu.itba.paw.webapp.forms.ImageForm;
 
@@ -49,16 +50,17 @@ public class ReviewController extends AuthController {
     @Path("/{id}/image")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadImage(@PathParam("id") Integer id, @BeanParam final ImageForm form){
-		if (!validator.validate(form).isEmpty()) {
+		if (form == null || !validator.validate(form).isEmpty()) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		
 		Review review = rs.getReviewById(id);
+		User loggedUser = user(); 
 		
 		console.info("Uploading image to review {}", id);
 		if (review == null) return Response.status(Status.NOT_FOUND).build();
-		
-		System.out.println(form.getContent());
+		if (review.getOwner().getId() != loggedUser.getId()) return Response.status(Status.FORBIDDEN).build();
+		if (review.getImage() != null) return Response.status(Status.CONFLICT).build();
 		
 		rs.uploadImage(review, form.getContent());
 		return Response.status(Status.CREATED).build();

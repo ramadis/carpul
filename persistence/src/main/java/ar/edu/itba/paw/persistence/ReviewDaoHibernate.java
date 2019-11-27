@@ -36,10 +36,11 @@ public class ReviewDaoHibernate implements ReviewDao {
 	
 	public Review getReviewById(int id) {
 		String query = "SELECT r FROM Review r where r.id = :id";
-		Review review = em.createQuery(query, Review.class)
+		List<Review> reviews = em.createQuery(query, Review.class)
 						.setParameter("id", id)
-						.getSingleResult();
-		return review;
+						.getResultList();
+		
+		return reviews.isEmpty() ? null : reviews.get(0);
 	}
 	
 	public Boolean canLeaveReview(Trip trip, User user) {
