@@ -130,8 +130,8 @@ public class UserController extends AuthController {
 		
 		User loggedUser = user();
 
-		// If trying to create a trip for someone else, fail by unauthorized
-		if (!loggedUser.getId().equals(id)) return Response.status(Status.UNAUTHORIZED).build();
+		// If trying to create a trip for someone else, fail by forbidden
+		if (!loggedUser.getId().equals(id)) return Response.status(Status.FORBIDDEN).build();
 			
 		// Create trip with logged user as a driver
 		Trip trip = ts.register(form.getTrip(), loggedUser);
@@ -226,7 +226,7 @@ public class UserController extends AuthController {
 		
 		console.info("Uploading profile image to user {}", id);
 		if (user == null) return Response.status(Status.NOT_FOUND).build();
-		if (user.getId() != loggedUser.getId()) return Response.status(Status.FORBIDDEN).build();
+		if (!user.getId().equals(loggedUser.getId())) return Response.status(Status.FORBIDDEN).build();
 		
 		us.uploadProfileImage(user, form.getContent());
 		return Response.status(Status.CREATED).build();
@@ -257,7 +257,7 @@ public class UserController extends AuthController {
 		
 		console.info("Uploading cover image to user {}", id);
 		if (user == null) return Response.status(Status.NOT_FOUND).build();
-		if (user.getId() != loggedUser.getId()) return Response.status(Status.FORBIDDEN).build();
+		if (!user.getId().equals(loggedUser.getId())) return Response.status(Status.FORBIDDEN).build();
 		
 		us.uploadCoverImage(user, form.getContent());
 		return Response.status(Status.CREATED).build();
@@ -275,7 +275,7 @@ public class UserController extends AuthController {
 		
 		// Check if profile can be updated
 		if (toUpdate == null) return Response.status(Status.NOT_FOUND).build();
-		if (loggedUser.getId() != toUpdate.getId()) return Response.status(Status.FORBIDDEN).build();
+		if (!loggedUser.getId().equals(toUpdate.getId())) return Response.status(Status.FORBIDDEN).build();
 		if (form == null || !validator.validate(form).isEmpty()) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}

@@ -82,7 +82,6 @@ public class TripController extends AuthController {
 		Trip trip = ts.findById(tripId);
 		if (trip == null) return Response.status(Status.NOT_FOUND).build();
 		boolean wasPassenger = trip.getPassengers().contains(loggedUser);
-		if (loggedUser == null) return Response.status(Status.UNAUTHORIZED).build();
 		if(!wasPassenger) return Response.status(Status.FORBIDDEN).build();
 		if (!rs.canLeaveReview(trip, loggedUser)) return Response.status(Status.CONFLICT).build();
 		
@@ -112,7 +111,7 @@ public class TripController extends AuthController {
 		// Check you have control over the trip
 		Trip trip = ts.findById(tripId);
 		if (trip == null) return Response.status(Status.NOT_FOUND).build();
-		if (loggedUser == null|| !trip.getDriver().equals(loggedUser)) return Response.status(Status.UNAUTHORIZED).build();
+		if (!trip.getDriver().equals(loggedUser)) return Response.status(Status.FORBIDDEN).build();
 		if (trip.getDeleted())return Response.noContent().build();
 		
 		// Delete trip
@@ -131,7 +130,7 @@ public class TripController extends AuthController {
 		
 		// Check that trip exists
 		Trip trip = ts.findById(tripId);
-		if (trip == null || loggedUser == null) return Response.status(Status.NOT_FOUND).build();
+		if (trip == null) return Response.status(Status.NOT_FOUND).build();
 		
 		// Make several checks to ensure the user can reserve the trip
 		Date date = new Date();
@@ -164,8 +163,6 @@ public class TripController extends AuthController {
 		if (trip == null) return Response.status(Status.NOT_FOUND).build();
 		
 		// Check that has permissions required
-		if (loggedUser == null) return Response.status(Status.UNAUTHORIZED).build();
-		
 		if (!trip.getPassengers().contains(loggedUser)) Response.noContent().build();
 
 		// Check if it's too late
@@ -191,7 +188,7 @@ public class TripController extends AuthController {
 		Trip trip = ts.findById(tripId);
 		User loggedUser = user();
 		if (trip == null) return Response.status(Status.NOT_FOUND).build();
-		if (loggedUser == null || !trip.getDriver().equals(loggedUser)) return Response.status(Status.UNAUTHORIZED).build();
+		if (!trip.getDriver().equals(loggedUser)) return Response.status(Status.FORBIDDEN).build();
 		
 		// Find kicked user
 		User user = us.findById(userId);

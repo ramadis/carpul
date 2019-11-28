@@ -59,7 +59,7 @@ public class ReviewController extends AuthController {
 		
 		console.info("Uploading image to review {}", id);
 		if (review == null) return Response.status(Status.NOT_FOUND).build();
-		if (review.getOwner().getId() != loggedUser.getId()) return Response.status(Status.FORBIDDEN).build();
+		if (!review.getOwner().getId().equals(loggedUser.getId())) return Response.status(Status.FORBIDDEN).build();
 		if (review.getImage() != null) return Response.status(Status.CONFLICT).build();
 		
 		rs.uploadImage(review, form.getContent());
