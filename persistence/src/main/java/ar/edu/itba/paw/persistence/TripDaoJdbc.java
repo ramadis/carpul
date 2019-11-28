@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.TripDao;
+import ar.edu.itba.paw.models.Pagination;
 import ar.edu.itba.paw.models.Position;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
@@ -141,7 +142,7 @@ public class TripDaoJdbc implements TripDao {
 		return trips;
 	}
 
-	public List<Trip> getUserTrips(User user) {
+	public List<Trip> getUserTrips(User user, Pagination pagination) {
 		// Get trips owned by a given user
 
 		List<Trip> trips = new ArrayList<>();

@@ -2,6 +2,7 @@ package ar.edu.itba.paw.interfaces;
 
 import java.util.List;
 
+import ar.edu.itba.paw.models.Pagination;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
@@ -9,7 +10,7 @@ import ar.edu.itba.paw.models.User;
 public interface TripDao {
 	Trip create(Trip trip, User driver);
 	Trip findById (Integer tripId);
-	List<Trip> getUserTrips(User user);
+	List<Trip> getUserTrips(User user, Pagination pagination);
 	List<Trip> getReservedTrips(User user);
 	void reserveTrip(Integer tripId, User user);
 	void delete(Integer tripId, User user);

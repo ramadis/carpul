@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.ReviewDao;
 import ar.edu.itba.paw.interfaces.TripDao;
+import ar.edu.itba.paw.models.Pagination;
 import ar.edu.itba.paw.models.Reservation;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
@@ -106,17 +107,16 @@ public class TripDaoHibernate implements TripDao {
 							 .collect(Collectors.toList());
 	}
 
-	public List<Trip> getUserTrips(User user) {
+	public List<Trip> getUserTrips(User user, Pagination pagination) {
 		// Get trips owned by a given user
-		String query = "SELECT t FROM Trip t WHERE t.deleted = FALSE AND t.driver = :user";
+		String query = "FROM Trip t WHERE t.deleted = FALSE AND t.driver = :user";
 
 		List<Trip> trips = em.createQuery(query, Trip.class)
-						     .setParameter("user", user.getId())
+						     .setParameter("user", user)
+						     .setFirstResult(pagination.getPage())
+						     .setMaxResults(pagination.getPer_page())
 						     .getResultList();
 		
-		console.info("GET_USER_TRIPS");
-		console.info(trips.toString());
-
 		return trips;
 	}
 

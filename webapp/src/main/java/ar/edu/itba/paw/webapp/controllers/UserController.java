@@ -26,6 +26,7 @@ import ar.edu.itba.paw.interfaces.ReviewService;
 import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.History;
+import ar.edu.itba.paw.models.Pagination;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.webapp.DTO.ReviewDTO;
@@ -39,6 +40,7 @@ import ar.edu.itba.paw.models.User;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Path("users")
 @Component
@@ -138,18 +140,16 @@ public class UserController extends AuthController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getOwnTrips(@PathParam("id") final int id,
 								@DefaultValue("0") @QueryParam("page") int page,
-								@DefaultValue("25") @QueryParam("per_page") int perPage) {
+								@DefaultValue("5") @QueryParam("per_page") int perPage) {
 		final User user = us.getById(id);
 		if (user == null) return Response.status(Status.NOT_FOUND).build();
 		
 		// Search trips belonging to a given user
-		List<TripDTO> tripDTOs = new ArrayList<>();
-		List<Trip> trips = ts.getUserTrips(user);
-
+		List<Trip> trips = ts.getUserTrips(user, new Pagination(page, perPage));
 		if (trips == null || trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
-		
-		// Return trips owned by the user with the param id
-		for (Trip t: trips) tripDTOs.add(new TripDTO(t));
+	
+		// Return trip DTOs
+		List<TripDTO> tripDTOs = trips.stream().map(trip -> new TripDTO(trip)).collect(Collectors.toList());
 		return Response.ok(tripDTOs).build();
 	}
 	

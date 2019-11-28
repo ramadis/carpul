@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.models.Pagination;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
@@ -53,11 +54,11 @@ public class TripServiceImpl implements TripService {
 		//return user.getReservations().stream().map((reservation) -> reservation.getTrip()).collect(Collectors.toList());
 	}
 
-	public List<Trip> getUserTrips(User user) {
-		List<Trip> trips = user.getDrived_trips();
+	public List<Trip> getUserTrips(User user, Pagination pagination) {
+		List<Trip> trips = tripDao.getUserTrips(user, pagination);
 		
-		return trips.stream().filter((trip) -> !trip.getExpired() && !trip.getDeleted())
-							.distinct()
+		return trips.stream().filter((trip) -> !trip.getExpired())
+							 .distinct()
 							 .collect(Collectors.toList());
 	}
 
