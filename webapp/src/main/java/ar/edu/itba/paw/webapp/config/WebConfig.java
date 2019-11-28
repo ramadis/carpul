@@ -12,6 +12,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import java.util.Properties;
 
@@ -60,6 +61,14 @@ public class WebConfig {
     @Bean
     public Validator validator() {
         return Validation.byDefaultProvider().configure().buildValidatorFactory().getValidator();
+    }
+    
+    @Bean(name = "multipartResolver")
+    public CommonsMultipartResolver multipartResolver() {
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        int maxUploadSize = 5 * 1024 * 1024; // 5MB
+        multipartResolver.setMaxUploadSize(maxUploadSize);
+        return multipartResolver;
     }
 
 	@Bean
