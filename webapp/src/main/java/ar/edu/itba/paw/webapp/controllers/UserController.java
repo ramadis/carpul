@@ -1,10 +1,12 @@
 package ar.edu.itba.paw.webapp.controllers;
 
 import javax.validation.Validator;
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -33,6 +35,7 @@ import ar.edu.itba.paw.webapp.DTO.ReviewDTO;
 import ar.edu.itba.paw.webapp.DTO.HistoryDTO;
 import ar.edu.itba.paw.webapp.DTO.TripDTO;
 import ar.edu.itba.paw.webapp.DTO.UserDTO;
+import ar.edu.itba.paw.webapp.forms.ImageForm;
 import ar.edu.itba.paw.webapp.forms.TripCreateForm;
 import ar.edu.itba.paw.webapp.forms.UserCreateForm;
 import ar.edu.itba.paw.models.User;
@@ -207,5 +210,67 @@ public class UserController extends AuthController {
 		// Return trips owned by the user with the param id
 		List<TripDTO> tripDTOs = trips.stream().map(trip -> new TripDTO(trip)).collect(Collectors.toList());
 		return Response.ok(tripDTOs).build();
+	}
+	
+	@PUT
+    @Path("/{id}/profile/image")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadProfileImage(@PathParam("id") Integer id, @BeanParam final ImageForm form){
+		if (form == null || !validator.validate(form).isEmpty()) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		
+		User user = us.getById(id);
+		User loggedUser = user(); 
+		
+		console.info("Uploading profile image to user {}", id);
+		if (user == null) return Response.status(Status.NOT_FOUND).build();
+		if (user.getId() != loggedUser.getId()) return Response.status(Status.FORBIDDEN).build();
+		
+		us.uploadProfileImage(user, form.getContent());
+		return Response.status(Status.CREATED).build();
+
+    }
+	
+	@GET
+	@Path("/{id}/profile/image")
+	@Produces({"images/jpg", "images/png", "images/gif"})
+	public Response getProfileImage(@PathParam("id") final int id) {
+		User user = us.getById(id);
+		console.info("Getting profile image for id {}", id);
+		if (user == null || user.getProfileImage() == null) return Response.status(Status.NOT_FOUND).build();
+		
+		return Response.ok(user.getProfileImage()).build();
+	}
+	
+	@PUT
+    @Path("/{id}/profile/cover")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadCoverImage(@PathParam("id") Integer id, @BeanParam final ImageForm form){
+		if (form == null || !validator.validate(form).isEmpty()) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		
+		User user = us.getById(id);
+		User loggedUser = user(); 
+		
+		console.info("Uploading cover image to user {}", id);
+		if (user == null) return Response.status(Status.NOT_FOUND).build();
+		if (user.getId() != loggedUser.getId()) return Response.status(Status.FORBIDDEN).build();
+		
+		us.uploadCoverImage(user, form.getContent());
+		return Response.status(Status.CREATED).build();
+
+    }
+	
+	@GET
+	@Path("/{id}/profile/cover")
+	@Produces({"images/jpg", "images/png", "images/gif"})
+	public Response getCoverImage(@PathParam("id") final int id) {
+		User user = us.getById(id);
+		console.info("Getting cover image for id {}", id);
+		if (user == null || user.getCoverImage() == null) return Response.status(Status.NOT_FOUND).build();
+		
+		return Response.ok(user.getCoverImage()).build();
 	}
 }

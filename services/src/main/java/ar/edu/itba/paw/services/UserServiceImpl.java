@@ -48,4 +48,14 @@ public class UserServiceImpl implements UserService {
 	public List<User> getPassengers(Trip trip) {
 		return userDao.getPassengers(trip);
 	}
+	
+	@Transactional
+	public User uploadProfileImage(User user, byte[] image) {
+		return userDao.uploadProfileImage(user, image);
+	}
+
+	@Transactional
+	public User uploadCoverImage(User user, byte[] image) {
+		return userDao.uploadCoverImage(user, image);
+	};
 }

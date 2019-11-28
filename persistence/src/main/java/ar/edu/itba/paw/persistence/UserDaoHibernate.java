@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.UserDao;
+import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 import org.springframework.stereotype.Repository;
@@ -31,6 +32,18 @@ public class UserDaoHibernate implements UserDao {
 			user.setId(rs.getInt("id"));
 		} catch (Exception e) {
 		}
+	}
+	
+	public User uploadProfileImage(User user, byte[] image) {
+		user.setProfileImage(image);
+		em.merge(user);
+		return user;
+	}
+	
+	public User uploadCoverImage(User user, byte[] image) {
+		user.setCoverImage(image);
+		em.merge(user);
+		return user;
 	}
 
 	public static void loadReducedResultIntoUser(ResultSet rs, User user) {

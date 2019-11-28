@@ -41,12 +41,34 @@ public class User implements Serializable {
 	@Column
 	private Timestamp created;
 	
+	@Column
+	private byte[] profileImage;
+	
+	@Column
+	private byte[] coverImage;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_seq")
 	@SequenceGenerator(sequenceName = "users_id_seq", name = "users_id_seq", allocationSize = 1)
 	private Integer id;
 	
 	// METHODS
+	
+	public byte[] getProfileImage () {
+		return profileImage;
+	}
+	
+	public byte[] getCoverImage () {
+		return coverImage;
+	}
+	
+	public void setProfileImage(byte[] profileImage) {
+		this.profileImage = profileImage;
+	}
+	
+	public void setCoverImage(byte[] coverImage) {
+		this.coverImage = coverImage;
+	}
 	
 	public String getFirst_name() {
 		return first_name;
