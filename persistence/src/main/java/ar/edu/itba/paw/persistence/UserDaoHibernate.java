@@ -34,6 +34,14 @@ public class UserDaoHibernate implements UserDao {
 		}
 	}
 	
+	public User update(User toUpdate, User user) {
+		if (user.getFirst_name() != null) toUpdate.setFirst_name(user.getFirst_name());
+		if (user.getLast_name() != null) toUpdate.setLast_name(user.getLast_name());
+		if (user.getPhone_number() != null) toUpdate.setPhone_number(user.getPhone_number());
+		em.merge(toUpdate);
+		return toUpdate;
+	}
+	
 	public User uploadProfileImage(User user, byte[] image) {
 		user.setProfileImage(image);
 		em.merge(user);

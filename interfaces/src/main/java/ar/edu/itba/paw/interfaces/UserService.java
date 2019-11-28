@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.User;
 
 public interface UserService {
 	User register(User user);
+	User update(User toUpdate, User user);
 	User getById(Integer id);
 	User getByUsername(String username);
 	User findById(Integer userId);

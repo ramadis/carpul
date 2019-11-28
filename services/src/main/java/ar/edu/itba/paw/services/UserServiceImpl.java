@@ -50,6 +50,11 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Transactional
+	public User update(User toUpdate, User user) {
+		return userDao.update(toUpdate, user);
+	}
+	
+	@Transactional
 	public User uploadProfileImage(User user, byte[] image) {
 		return userDao.uploadProfileImage(user, image);
 	}

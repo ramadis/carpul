@@ -38,6 +38,7 @@ import ar.edu.itba.paw.webapp.DTO.UserDTO;
 import ar.edu.itba.paw.webapp.forms.ImageForm;
 import ar.edu.itba.paw.webapp.forms.TripCreateForm;
 import ar.edu.itba.paw.webapp.forms.UserCreateForm;
+import ar.edu.itba.paw.webapp.forms.UserUpdateForm;
 import ar.edu.itba.paw.models.User;
 
 import java.util.ArrayList;
@@ -260,8 +261,33 @@ public class UserController extends AuthController {
 		
 		us.uploadCoverImage(user, form.getContent());
 		return Response.status(Status.CREATED).build();
-
     }
+	
+	@PUT
+	@Path("/{id}/profile")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateUser(@PathParam("id") Integer id, final UserUpdateForm form) {
+		console.info("Start updating user");
+		
+		User toUpdate = us.getById(id);
+		User loggedUser = user();
+		
+		// Check if profile can be updated
+		if (toUpdate == null) return Response.status(Status.NOT_FOUND).build();
+		if (loggedUser.getId() != toUpdate.getId()) return Response.status(Status.FORBIDDEN).build();
+		if (form == null || !validator.validate(form).isEmpty()) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		
+		// Get user from form
+		User user = form.getUser();
+		
+		// Update user fields
+		user = us.update(toUpdate, user);
+
+		return Response.ok().entity(new UserDTO(user)).build();
+	}
 	
 	@GET
 	@Path("/{id}/profile/cover")
