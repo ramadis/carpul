@@ -8,6 +8,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.interfaces.ReviewDao;
+import ar.edu.itba.paw.models.Pagination;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
@@ -60,7 +61,7 @@ public class ReviewDaoTest {
 		int expectedReviewsAmount = 1;
 		
 		// Get reviews
-		List<Review> reviews = reviewDao.getReviews(trip);
+		List<Review> reviews = reviewDao.getReviews(trip, new Pagination(0, 100));
 		
 		// Asserts
 		assertEquals(expectedReviewsAmount, reviews.size());
@@ -74,7 +75,7 @@ public class ReviewDaoTest {
 		int expectedReviewsAmount = 1;
 		
 		// Get reviews
-		List<Review> reviews = reviewDao.getReviews(user);
+		List<Review> reviews = reviewDao.getReviews(user, new Pagination(0, 100));
 
 		// Asserts
 		assertEquals(expectedReviewsAmount, reviews.size());

@@ -1,9 +1,8 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.interfaces.ReviewDao;
 import ar.edu.itba.paw.interfaces.TripDao;
 
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,8 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.interfaces.TripService;
-import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.Pagination;
+import ar.edu.itba.paw.models.Reservation;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
@@ -23,9 +22,9 @@ public class TripServiceImpl implements TripService {
 
 	@Autowired
 	private TripDao tripDao;
-
+	
 	@Autowired
-	private UserService us;
+	private ReviewDao reviewDao;
 
 	@Transactional
 	public Trip register(final Trip trip, final User driver) {
@@ -34,7 +33,6 @@ public class TripServiceImpl implements TripService {
 
 	@Transactional
 	public void reserve(Integer tripId, User user) {
-		Trip trip = tripDao.findById(tripId);
 		tripDao.reserveTrip(tripId, user);
 		return;
 	}
@@ -49,9 +47,10 @@ public class TripServiceImpl implements TripService {
 		return trip;
 	}
 
-	public List<Trip> getReservedTrips(User user) {
-		return tripDao.getReservedTrips(user);
-		//return user.getReservations().stream().map((reservation) -> reservation.getTrip()).collect(Collectors.toList());
+	public List<Trip> getReservedTrips(User user, Pagination pagination) {
+		List<Reservation> reserves = tripDao.getReservationsByUser(user, pagination);
+		// TODO: ver si va ese filter
+		return reserves.stream().map(reservation -> reservation.getTrip()).collect(Collectors.toList());
 	}
 
 	public List<Trip> getUserTrips(User user, Pagination pagination) {

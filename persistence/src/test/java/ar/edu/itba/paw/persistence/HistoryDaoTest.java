@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.interfaces.HistoryDao;
 import ar.edu.itba.paw.models.History;
+import ar.edu.itba.paw.models.Pagination;
 import ar.edu.itba.paw.models.User;
 
 import static org.junit.Assert.*;
@@ -51,7 +52,7 @@ public class HistoryDaoTest {
 		int expectedHistoriesAmount = 1;
 		
 		// Get histories by user
-		List<History> histories = historyDao.getHistories(user);
+		List<History> histories = historyDao.getHistories(user, new Pagination(0, 100));
 		
 		assertEquals(expectedHistoriesAmount, histories.size());
 	}

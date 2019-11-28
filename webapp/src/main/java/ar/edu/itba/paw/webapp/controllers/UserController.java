@@ -138,7 +138,7 @@ public class UserController extends AuthController {
 	@GET
 	@Path("/{id}/trips")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getOwnTrips(@PathParam("id") final int id,
+	public Response getTrips(@PathParam("id") final int id,
 								@DefaultValue("0") @QueryParam("page") int page,
 								@DefaultValue("5") @QueryParam("per_page") int perPage) {
 		final User user = us.getById(id);
@@ -156,13 +156,15 @@ public class UserController extends AuthController {
 	@GET
 	@Path("/{id}/reviews")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getReviews(@PathParam("id") final int id) {
+	public Response getReviews(@PathParam("id") final int id,
+			@DefaultValue("0") @QueryParam("page") int page,
+			@DefaultValue("5") @QueryParam("per_page") int perPage) {
 		final User user = us.getById(id);
 		if (user == null) return Response.status(Status.NOT_FOUND).build();
 		
 		// Transform reviews to DTOs
 		List<ReviewDTO> reviewDTOs = new ArrayList<>();
-		List<Review> reviews = rs.getReviews(user);
+		List<Review> reviews = rs.getReviews(user, new Pagination(page, perPage));
 		if (reviews == null || reviews.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 		
 		// Return reviews for a given user id
@@ -173,35 +175,37 @@ public class UserController extends AuthController {
 	@GET
 	@Path("/{id}/history")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getHistory(@PathParam("id") final int id) {
+	public Response getHistory(@PathParam("id") final int id,
+			@DefaultValue("0") @QueryParam("page") int page,
+			@DefaultValue("5") @QueryParam("per_page") int perPage) {
 		final User user = us.getById(id);
 		if (user == null) Response.status(Status.NOT_FOUND).build();
 		
-		List<HistoryDTO> historyDTOs = new ArrayList<>();
-		List<History> histories = hs.getHistories(user);
+		List<History> histories = hs.getHistories(user, new Pagination(page, perPage));
 		if (histories == null || histories.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 
 		
-		for (History h: histories) historyDTOs.add(new HistoryDTO(h));
+		List<HistoryDTO> historyDTOs = histories.stream().map(history -> new HistoryDTO(history)).collect(Collectors.toList());
 		return Response.ok(historyDTOs).build();
 	}
 	
 	@GET
 	@Path("/{id}/reservations")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getReservations(@PathParam("id") final int id) {
+	public Response getReservations(@PathParam("id") final int id,
+			@DefaultValue("0") @QueryParam("page") int page,
+			@DefaultValue("5") @QueryParam("per_page") int perPage) {
 		// TODO: Check permissions and what to do with default values for pagination
 		final User user = us.getById(id);
 		if (user == null) return Response.status(Status.NOT_FOUND).build();
 		
 		// Search trips belonging to a given user
-		List<TripDTO> tripDTOs = new ArrayList<>();
-		List<Trip> trips = ts.getReservedTrips(user);
+		List<Trip> trips = ts.getReservedTrips(user, new Pagination(page, perPage));
 
 		if (trips == null || trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 		
 		// Return trips owned by the user with the param id
-		for (Trip t: trips) tripDTOs.add(new TripDTO(t));
+		List<TripDTO> tripDTOs = trips.stream().map(trip -> new TripDTO(trip)).collect(Collectors.toList());
 		return Response.ok(tripDTOs).build();
 	}
 }

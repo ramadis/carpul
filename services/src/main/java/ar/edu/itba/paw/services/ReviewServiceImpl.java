@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ar.edu.itba.paw.models.Pagination;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
@@ -19,16 +20,16 @@ public class ReviewServiceImpl implements ReviewService {
 	@Autowired
 	private ReviewDao reviewDao;
 	
-	public List<Review> getReviews(User user) {
-		return reviewDao.getReviews(user);
+	public List<Review> getReviews(User user, Pagination pagination) {
+		return reviewDao.getReviews(user, pagination);
 	}
 	
 	public Review getReviewById(int id) {
 		return reviewDao.getReviewById(id);
 	}
 	
-	public List<Review> getReviews(Trip trip) {
-		return reviewDao.getReviews(trip);
+	public List<Review> getReviews(Trip trip, Pagination pagination) {
+		return reviewDao.getReviews(trip, pagination);
 	}
 	
 	public Boolean canLeaveReview(Trip trip, User user) {

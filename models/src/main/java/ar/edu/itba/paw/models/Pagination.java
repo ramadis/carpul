@@ -24,4 +24,8 @@ public class Pagination {
 	public void setPer_page(Integer per_page) {
 		this.per_page = per_page;
 	}
+	
+	public Integer getFirstResult() {
+		return page * per_page;
+	}
 }

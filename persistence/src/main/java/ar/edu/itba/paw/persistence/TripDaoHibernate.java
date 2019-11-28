@@ -109,11 +109,11 @@ public class TripDaoHibernate implements TripDao {
 
 	public List<Trip> getUserTrips(User user, Pagination pagination) {
 		// Get trips owned by a given user
-		String query = "FROM Trip t WHERE t.deleted = FALSE AND t.driver = :user";
+		String query = "FROM Trip t WHERE t.deleted = FALSE AND t.driver = :user ORDER BY etd ASC";
 
 		List<Trip> trips = em.createQuery(query, Trip.class)
 						     .setParameter("user", user)
-						     .setFirstResult(pagination.getPage())
+						     .setFirstResult(pagination.getFirstResult())
 						     .setMaxResults(pagination.getPer_page())
 						     .getResultList();
 		
@@ -129,8 +129,21 @@ public class TripDaoHibernate implements TripDao {
 
 		return reserves.size();
 	}
+	
+	public List<Reservation> getReservationsByUser(User user, Pagination pagination) {
+		String query = "FROM Reservation r WHERE user = :user";
+				
+		List<Reservation> reserves  = em.createQuery(query, Reservation.class)
+										.setParameter("user", user)
+										.setFirstResult(pagination.getFirstResult())
+										.setMaxResults(pagination.getPer_page())
+										.getResultList();
+		
+		return reserves;
+				
+	}
 
-	public List<Trip> getReservedTrips(User user) {
+	public List<Trip> getReservedTrips(User user, Pagination pagination) {
 		List<Trip> trips = user.getReservations().stream().map((reservation) -> reservation.getTrip())
 											.filter((trip) -> reviewDao.canLeaveReview(trip, user))
 											.collect(Collectors.toList());

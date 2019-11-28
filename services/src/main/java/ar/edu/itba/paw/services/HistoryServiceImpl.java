@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.models.History;
+import ar.edu.itba.paw.models.Pagination;
 import ar.edu.itba.paw.models.User;
 
 @Service
@@ -18,12 +19,8 @@ public class HistoryServiceImpl implements  HistoryService {
 	@Autowired
 	private HistoryDao historyDao;
 	
-	public List<History> getHistories(User user) {
-		return historyDao.getHistories(user);
-	}
-	
-	public List<History> getHistoriesByPage(User user, Integer page) {
-		return historyDao.getHistoriesByPage(user, page);
+	public List<History> getHistories(User user, Pagination pagination) {
+		return historyDao.getHistories(user, pagination);
 	}
 	
 	@Transactional
