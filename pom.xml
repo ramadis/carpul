@@ -38,6 +38,8 @@
     <jetty-version>7.2.2.v20101205</jetty-version>
     <mockito.version>2.10.0</mockito.version>
     <jersey.version>3.0-SNAPSHOT</jersey.version>
+    <commons-beanutils.version>1.9.3</commons-beanutils.version>
+    <commons-fileupload.version>1.3.2</commons-fileupload.version>
   </properties>
   <build>
     <plugins>
@@ -245,7 +247,19 @@
           </exclusion>
         </exclusions>
       </dependency>
-      
+      <!-- SOCKETS -->
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-websocket</artifactId>
+        <version>${org.springframework.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-messaging</artifactId>
+        <version>${org.springframework.version}</version>
+      </dependency>
+
       <!-- JERSEY JSON -->
       <dependency>
         <groupId>org.glassfish.jersey.media</groupId>
@@ -269,6 +283,17 @@
         <groupId>org.glassfish.jersey.media</groupId>
         <artifactId>jersey-media-multipart</artifactId>
         <version>${jersey.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>commons-beanutils</groupId>
+        <artifactId>commons-beanutils</artifactId>
+        <version>${commons-beanutils.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-fileupload</groupId>
+        <artifactId>commons-fileupload</artifactId>
+        <version>${commons-fileupload.version}</version>
       </dependency>
 
       <!-- 	  <dependency>
