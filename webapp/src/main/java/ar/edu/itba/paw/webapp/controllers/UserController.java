@@ -117,6 +117,14 @@ public class UserController extends AuthController {
 		}
 	}
 	
+	@GET
+	@Path("/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCurrentUser() {
+		final User user = user();
+		return Response.ok(new UserDTO(user)).build();
+	}
+	
 	@POST
 	@Path("/{id}/trips")
 	@Consumes(MediaType.APPLICATION_JSON)
