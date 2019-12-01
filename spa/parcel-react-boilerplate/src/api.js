@@ -1,33 +1,27 @@
-import axios from 'axios'
+import axios from "axios";
 
-const auth = () => localStorage.getItem('token')
+const auth = () => localStorage.getItem("token");
+
+export const API_URL = "http://localhost:8090/api";
 
 const instance = axios.create({
-  baseURL: 'http://c2af0ed0.ngrok.io/api',
+  baseURL: API_URL,
   transformRequest: [
-    function (data, headers) {
-      const token = auth()
+    function(data, headers) {
+      const token = auth();
 
       if (token) {
-        headers['Authorization'] = token
+        headers["Authorization"] = token;
       } else {
-        delete headers.Authorization
+        delete headers.Authorization;
       }
 
-      return data
+      return data;
     }
   ]
-})
+});
 
 export const getUser = userId =>
-  instance.get(`/users/${userId}`).then(res => res.data)
+  instance.get(`/users/${userId}`).then(res => res.data);
 
-// instance.interceptors.request.use(config => {
-
-//   instance.defaults.headers.common['Authorization'] = token
-
-//   console.log({ token })
-//   return config
-// })
-
-export default instance
+export default instance;

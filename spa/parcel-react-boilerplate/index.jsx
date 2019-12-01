@@ -8,10 +8,7 @@ import './css/datetime.component.css';
 import App from './src/App';
 import './i18n';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import rootReducer from './src/state/reducer';
-
-const store = createStore(rootReducer);
+import store from './src/state/store';
 
 ReactDOM.render(
 	<Provider store={store}>

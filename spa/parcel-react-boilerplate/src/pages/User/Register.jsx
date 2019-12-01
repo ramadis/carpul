@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import api from '../../api'
+import {signupUser } from '../../services/User';
 
 const Register = () => {
+  // TODO: Add form validation
   const [first_name, setFirstName] = useState('')
   const [last_name, setLastName] = useState('')
   const [phone_number, setPhone] = useState('')
@@ -11,11 +12,7 @@ const Register = () => {
   const [password, setPassword] = useState('')
   const { t, i18n } = useTranslation()
 
-  const register = () => {
-    const url = '/users'
-
-    api.post(url, { first_name, last_name, phone_number, username, password })
-  }
+  const register = () => signupUser({ first_name, last_name, phone_number, username, password })
 
   const setFormField = setter => event => setter(event.target.value)
 
