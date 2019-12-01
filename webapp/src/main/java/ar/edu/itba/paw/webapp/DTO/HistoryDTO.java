@@ -5,34 +5,37 @@ import java.sql.Timestamp;
 import ar.edu.itba.paw.models.History;
 
 public class HistoryDTO {
-	private Integer user_id;
-	private Integer trip_id;
+	private UserDTO user;
+	private TripDTO trip;
 	private String type;
 	private Timestamp created;
 	private Boolean own;
 	private Integer id;
 	
 	public HistoryDTO (History history) {
-		this.user_id = history.getRelated().getId();
-		this.trip_id = history.getTrip().getId();
+		this.trip = new TripDTO(history.getTrip());
+		this.user = new UserDTO(history.getRelated());
 		this.type = history.getType();
 		this.own = history.getOwn();
 		this.id = history.getId();
 		this.created =history.getCreated();
 	}
+	public UserDTO getUser() {
+		return user;
+	}
+
+	public void setUser(UserDTO user) {
+		this.user = user;
+	}
+
+	public TripDTO getTrip() {
+		return trip;
+	}
+
+	public void setTrip(TripDTO trip) {
+		this.trip = trip;
+	}
 	
-	public Integer getUser_id() {
-		return user_id;
-	}
-	public void setUser_id(Integer user_id) {
-		this.user_id = user_id;
-	}
-	public Integer getTrip_id() {
-		return trip_id;
-	}
-	public void setTrip_id(Integer trip_id) {
-		this.trip_id = trip_id;
-	}
 	public String getType() {
 		return type;
 	}

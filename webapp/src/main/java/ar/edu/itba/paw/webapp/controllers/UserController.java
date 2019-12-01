@@ -79,7 +79,7 @@ public class UserController extends AuthController {
 	public Response createUser(final UserCreateForm form) {
 		console.info("Start creating user");
 		// Check if the user form is valid
-		if (!validator.validate(form).isEmpty()) {
+		if (form == null || !validator.validate(form).isEmpty()) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		
