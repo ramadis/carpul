@@ -21,9 +21,10 @@ import { connect } from "react-redux";
 import MDSpinner from "react-md-spinner";
 import api from "../../api";
 
-import { getProfileById } from "../../services/User.js";
-import { getReservationsByUser } from "../../services/Reservation.js";
-import { getHistoryByUser } from "../../services/History.js";
+import { getProfileById } from "../../services/User";
+import { getReservationsByUser } from "../../services/Reservation";
+import { getHistoryByUser } from "../../services/History";
+import { getReviewsByUser } from "../../services/Review";
 
 // function deleteTrip(id) {
 //   var confirmate = confirm('Are you sure you want to delete this trip?');
@@ -51,29 +52,28 @@ import { getHistoryByUser } from "../../services/History.js";
 const Profile = ({
   token,
   trips = [],
-  reviews = [],
   hero_message,
   loggedUser,
   dispatch
 }) => {
   const { t, i18n } = useTranslation();
+  const [reviews, setReviews] = useState([]);
   const [reservations, setReservations] = useState([]);
   const [histories, setHistories] = useState([]);
   const [user, setUser] = useState(null);
   const { userId } = useParams();
   const isLogged = !!token;
-  const isLoading = !user || !reservations || !histories;
+  const isLoading = !user || !reservations || !histories || !reviews;
 
   useEffect(() => {
     const fetchUsers = async () => {
         getProfileById(userId).then(setUser);
         getReservationsByUser(userId).then(setReservations);
         getHistoryByUser(userId).then(setHistories);
+        getReviewsByUser(userId).then(setReviews);
     };
     fetchUsers();
   }, []);
-
-  console.log(histories);
 
   return (
     <React.Fragment>

@@ -22,8 +22,8 @@ export const getReviewById = async id => {
   return review;
 };
 
-export const reviewTrip = async (id, review) => {
-  const review = await POSTwithAuth(`/trips/${id}/reviews`, review).then(
+export const reviewTrip = async (id, reviewContent) => {
+  const review = await POSTwithAuth(`/trips/${id}/reviews`, reviewContent).then(
     res => {
       if (res.isRawResponse) {
         // TODO: Handle specific error messages
