@@ -8,6 +8,8 @@ const urlEncode = ({ username, password }) => {
   return params;
 };
 
+export const isLoggedIn = () => !!localStorage.getItem("token");
+
 export const loginUser = async (username, password) => {
   const encodedData = urlEncode({ username, password });
   const token = await fetch(`${API_URL}/login`, {

@@ -16,8 +16,6 @@ const Login = ({ dispatch, user }) => {
     setLoading(true);
     try {
       await loginUser(username, password);
-      const user = await getProfile();
-      dispatch({ type: "USER_LOADED", user });
     } catch (e) {
       setLoading(false);
     }

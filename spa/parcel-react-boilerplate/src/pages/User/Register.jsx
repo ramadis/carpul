@@ -15,7 +15,7 @@ const Register = ({ dispatch, user }) => {
   const { t, i18n } = useTranslation();
 
   const register = async () => {
-    const user = await signupUser({
+    await signupUser({
       first_name,
       last_name,
       phone_number,
@@ -23,7 +23,6 @@ const Register = ({ dispatch, user }) => {
       password
     });
     await loginUser(username, password);
-    dispatch({ type: "USER_LOADED", user });
   };
 
   const setFormField = setter => event => setter(event.target.value);
