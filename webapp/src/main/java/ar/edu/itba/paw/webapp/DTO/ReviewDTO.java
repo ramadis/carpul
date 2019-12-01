@@ -6,11 +6,11 @@ import ar.edu.itba.paw.models.Review;
 
 public class ReviewDTO {
 	private Integer id;
-	private Integer ownerId;
+	private UserDTO owner;
+	private TripDTO trip;
 	private Integer reviewedId;
 	private String message;
 	private Integer stars;
-	private Integer trip;
 	private Timestamp created;
 	private String image;
 	
@@ -23,11 +23,11 @@ public class ReviewDTO {
 	
 	public ReviewDTO (Review review) {
 		this.id = review.getId();
-		this.ownerId = review.getOwner().getId();
+		this.owner = new UserDTO(review.getOwner());
 		this.reviewedId = review.getReviewed().getId();
 		this.message = review.getMessage();
 		this.stars = review.getStars();
-		this.trip = review.getTrip().getId();
+		this.trip = new TripDTO(review.getTrip());
 		this.created = review.getCreated();
 	}
 	
@@ -36,12 +36,6 @@ public class ReviewDTO {
 	}
 	public void setId(Integer id) {
 		this.id = id;
-	}
-	public Integer getOwnerId() {
-		return ownerId;
-	}
-	public void setOwnerId(Integer ownerId) {
-		this.ownerId = ownerId;
 	}
 	public Integer getReviewedId() {
 		return reviewedId;
@@ -61,12 +55,6 @@ public class ReviewDTO {
 	public void setStars(Integer stars) {
 		this.stars = stars;
 	}
-	public Integer getTrip() {
-		return trip;
-	}
-	public void setTrip(Integer trip) {
-		this.trip = trip;
-	}
 	public Timestamp getCreated() {
 		return created;
 	}
@@ -79,6 +67,22 @@ public class ReviewDTO {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public UserDTO getOwner() {
+		return owner;
+	}
+
+	public void setOwner(UserDTO owner) {
+		this.owner = owner;
+	}
+
+	public TripDTO getTrip() {
+		return trip;
+	}
+
+	public void setTrip(TripDTO trip) {
+		this.trip = trip;
 	}
 
 }
