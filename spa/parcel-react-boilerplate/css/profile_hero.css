@@ -23,6 +23,16 @@
 	padding-left: 25px;
 }
 
+.profile-hero-container.editable {
+	cursor: pointer;
+}
+
+.profile-hero-container.editable:hover {
+	background: linear-gradient(0deg,rgba(0,0,0,0.3),rgba(0,0,0,0.3)), url('../images/hero-profile.jpg');
+	background-size: cover;
+	cursor: pointer;
+}
+
 .profile-user-container {
 	color: white;
 	margin-top: 10px;

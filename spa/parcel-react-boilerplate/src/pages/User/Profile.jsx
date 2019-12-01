@@ -52,6 +52,7 @@ const Profile = ({
   reviews = [],
   histories = [],
   hero_message,
+  loggedUser,
   dispatch
 }) => {
   const { t, i18n } = useTranslation();
@@ -97,7 +98,7 @@ const Profile = ({
         </div>
       ) : (
         <React.Fragment>
-          <Hero user={user} hero_message={t("user.profile.hero")} />
+          <Hero user={user} hero_message={t("user.profile.hero")} editable={ user.id === loggedUser.id } />
 
           <section className="profile-container">
             {(reservations.length > 0 ||
@@ -214,7 +215,7 @@ const Profile = ({
 };
 
 export default connect(({ user, reservations, token }) => ({
-  user,
+  loggedUser: user,
   reservations,
   token
 }))(Profile);
