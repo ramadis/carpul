@@ -22,6 +22,7 @@ import MDSpinner from "react-md-spinner";
 import api from "../../api";
 
 import { getProfileById } from "../../services/User.js";
+import { getReservationsByUser } from "../../services/Reservation.js";
 
 // function deleteTrip(id) {
 //   var confirmate = confirm('Are you sure you want to delete this trip?');
@@ -64,27 +65,12 @@ const Profile = ({
 
   useEffect(() => {
     const fetchUsers = async () => {
-      if (isLogged) {
         getProfileById(userId).then(setUser);
-
-        api
-          .get(`/users/${userId}/reservations`)
-          .then(res => res.data)
-          .then(reservations => {
-            // TODO: Remove this when rama fixes it from 204 to 200
-            const actualRes = reservations === "" ? [] : reservations;
-
-            setReservations(actualRes);
-          });
-      }
+        getReservationsByUser(userId).then(setReservations);
     };
 
     fetchUsers();
   }, []);
-
-  if (!isLogged) {
-    return <Redirect to="/user/login" />;
-  }
 
   return (
     <React.Fragment>

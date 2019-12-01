@@ -24,7 +24,7 @@ module.exports = methods.reduce((pv, cv) => {
     const isUnauthorized = res.status == 403 || res.status == 401;
 
     if (isUnauthorized) {
-      // alertError({ title: 'Error de sesión', message: 'Por seguridad, tenemos que pedirte tus datos nuevamente' });
+      console.log("IS UNAUTHORIZED");
       await unlogUser();
       res.ok = false;
     }

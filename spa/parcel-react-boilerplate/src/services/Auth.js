@@ -29,7 +29,7 @@ export const loginUser = async (username, password) => {
 };
 
 export const unlogUser = async () => {
+  localStorage.removeItem("token");
+  setTimeout(() => (window.location.href = "/login"));
   store.dispatch("LOGOUT");
-  await localStorage.removeItem("token");
-  window.location.href = "/login";
 };
