@@ -2,23 +2,23 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 
-const HistoryItem = ({ review }) => {
+const HistoryItem = ({ history }) => {
 	const { t, i18n } = useTranslation();
 	const fmtetd = format(history.trip.etd, 'DD/MM/YYYY');
-	const fmtdate = format(history.created.time, 'DD/MM/YYYY HH:mm');
+	const fmtdate = format(history.created, 'DD/MM/YYYY HH:mm');
 	return (
-		<li class="review-item-container">
+		<li className="review-item-container">
 			<img
 				width="50"
 				height="50"
-				src="https://ui-avatars.com/api/?rounded=true&size=200&background=e36f4a&color=fff&name=${history.related.first_name} ${history.related.last_name}"
+				src={`https://ui-avatars.com/api/?rounded=true&size=200&background=e36f4a&color=fff&name=${history.user.first_name} ${history.user.last_name}`}
 				alt=""
 			/>
-			<div class="review-item-content history-content">
+			<div className="review-item-content history-content">
 				{history.type === 'RESERVE' && (
-					<span class="review-message">
+					<span className="review-message">
 						{t('history.item.message', {
-							'0': history.related.first_name,
+							'0': history.user.first_name,
 							'1': t('history.item.reserved'),
 							'2': history.trip.to_city,
 							'3': fmtetd,
@@ -27,9 +27,9 @@ const HistoryItem = ({ review }) => {
 					</span>
 				)}
 				{history.type === 'UNRESERVE' && (
-					<span class="review-message">
+					<span className="review-message">
 						{t('history.item.message', {
-							'0': history.related.first_name,
+							'0': history.user.first_name,
 							'1': t('history.item.unreserved'),
 							'2': history.trip.to_city,
 							'3': fmtetd,
@@ -37,8 +37,8 @@ const HistoryItem = ({ review }) => {
 						})}
 					</span>
 				)}
-				{history.type === DELETE && (
-					<span class="review-message">
+				{history.type === 'DELETE' && (
+					<span className="review-message">
 						{t('history.item.deleted_message', {
 							'0': history.trip.to_city,
 							'1': fmtetd,
@@ -47,7 +47,7 @@ const HistoryItem = ({ review }) => {
 					</span>
 				)}
 				{history.type === 'KICKED' && (
-					<span class="review-message">
+					<span className="review-message">
 						{t('history.item.kicked_message', {
 							'0': history.trip.to_city,
 							'1': fmtetd,
@@ -55,7 +55,7 @@ const HistoryItem = ({ review }) => {
 						})}
 					</span>
 				)}
-				<span class="review-meta">
+				<span className="review-meta">
 					{t('history.item.happened', { '0': fmtetd })}
 				</span>
 			</div>

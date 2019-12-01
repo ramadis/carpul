@@ -23,6 +23,7 @@ import api from "../../api";
 
 import { getProfileById } from "../../services/User.js";
 import { getReservationsByUser } from "../../services/Reservation.js";
+import { getHistoryByUser } from "../../services/History.js";
 
 // function deleteTrip(id) {
 //   var confirmate = confirm('Are you sure you want to delete this trip?');
@@ -51,26 +52,28 @@ const Profile = ({
   token,
   trips = [],
   reviews = [],
-  histories = [],
   hero_message,
   loggedUser,
   dispatch
 }) => {
   const { t, i18n } = useTranslation();
-  const [reservations, setReservations] = useState(null);
+  const [reservations, setReservations] = useState([]);
+  const [histories, setHistories] = useState([]);
   const [user, setUser] = useState(null);
   const { userId } = useParams();
   const isLogged = !!token;
-  const isLoading = !user || !reservations;
+  const isLoading = !user || !reservations || !histories;
 
   useEffect(() => {
     const fetchUsers = async () => {
         getProfileById(userId).then(setUser);
         getReservationsByUser(userId).then(setReservations);
+        getHistoryByUser(userId).then(setHistories);
     };
-
     fetchUsers();
   }, []);
+
+  console.log(histories);
 
   return (
     <React.Fragment>
