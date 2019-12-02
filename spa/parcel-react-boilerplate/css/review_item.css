@@ -12,6 +12,10 @@
   color: #ADADAD;
 }
 
+.review-meta.review-trip {
+  display: inline !important;
+}
+
 .history-content {
   max-width: 15vw;
   line-height: 20px;

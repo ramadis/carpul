@@ -29,9 +29,8 @@ const Review = ({ review }) => {
             <span className={`stars-${review.stars}`} />
           )}
           <span className="review-message">{review.message}</span>
-          <span className="review-meta">
-            {t("review.item.from")}<span className="bold inline">{review.trip.from_city}</span>{t("review.item.to")}
-            <span className="bold inline">{review.trip.to_city}</span>
+          <span className="review-meta review-trip">
+            {t("review.item.from")}<span className="bold inline">{review.trip.from_city}</span>{t("review.item.to")}<span className="bold inline">{review.trip.to_city}</span>
           </span>
         </div>
       </li>
