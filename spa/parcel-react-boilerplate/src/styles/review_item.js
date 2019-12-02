@@ -31,6 +31,13 @@ export default css`
     color: #5a5a5a;
   }
 
+  .review-message.read-more-button {
+    cursor: pointer;
+    display: block;
+    margin-top: 5px;
+    font-weight: bold;
+  }
+
   .review-item-container .inline {
     display: inline;
   }
