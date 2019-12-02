@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.DTO;
 
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import ar.edu.itba.paw.models.Position;
 import ar.edu.itba.paw.models.Trip;
@@ -16,7 +18,8 @@ public class TripDTO {
 	private PositionDTO departure;
 	private PositionDTO arrival;
 	private Integer occupied_seats;
-	private Integer driver_id;
+	private UserDTO driver;
+	private List<UserDTO> passengers;
 	private Boolean expired;
 	
 	public TripDTO() {}
@@ -32,7 +35,8 @@ public class TripDTO {
 		this.departure = new PositionDTO(new Position(trip.getDeparture_lat(), trip.getDeparture_lon()));
 		this.arrival = new PositionDTO(new Position(trip.getArrival_lat(), trip.getArrival_lon()));
 		this.occupied_seats = trip.getOccupied_seats();
-		this.driver_id = trip.getDriver().getId();
+		this.driver = new UserDTO(trip.getDriver());
+		this.passengers = trip.getPassengers().stream().map(passenger -> new UserDTO(passenger)).collect(Collectors.toList());
 		this.expired = trip.getExpired();
 	}
 	
@@ -96,17 +100,28 @@ public class TripDTO {
 	public void setOccupied_seats(Integer occupied_seats) {
 		this.occupied_seats = occupied_seats;
 	}
-	public Integer getDriver_id() {
-		return driver_id;
-	}
-	public void setDriver_id(Integer driver_id) {
-		this.driver_id = driver_id;
-	}
 	public Boolean getExpired() {
 		return expired;
 	}
 	public void setExpired(Boolean expired) {
 		this.expired = expired;
 	}
+
+	public UserDTO getDriver() {
+		return driver;
+	}
+
+	public void setDriver(UserDTO driver) {
+		this.driver = driver;
+	}
+
+	public List<UserDTO> getPassengers() {
+		return passengers;
+	}
+
+	public void setPassengers(List<UserDTO> passengers) {
+		this.passengers = passengers;
+	}
+	
 }
 
