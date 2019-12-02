@@ -2,22 +2,15 @@ import React, { useState, useEffect } from "react";
 import { withTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import { format } from "date-fns";
-import MDSpinner from "react-md-spinner";
 
 import profileHeroCss from "../../styles/profile_hero";
 import poolListCss from "../../styles/pool_list";
 import profileCss from "../../styles/profile";
 import reviewItemCss from "../../styles/review_item";
 
-import { getUser } from "../../api";
-
-// <fmt:formatDate value="${trip.etd}" var="fmtetddate" pattern="dd/MM/yyyy"/>
-// <fmt:formatDate value="${trip.etd}" var="fmtetdtime" pattern="HH:mm"/>
-// <fmt:formatDate value="${trip.eta}" var="fmtetadate" pattern="dd/MM/yyyy"/>
-// <fmt:formatDate value="${trip.eta}" var="fmtetatime" pattern="HH:mm"/>
-
 // TODO:
 const deleteTrip = () => {};
+const kickPassenger = () => {};
 
 const Trip = ({ t, trip }) => {
   const fmtetddate = format(trip.etd, "DD/MM/YYYY");
@@ -105,9 +98,9 @@ const Trip = ({ t, trip }) => {
                     </div>
                   </div>
                   <a
-                    onclick="kickout(${passenger.id}, ${trip.id})"
+                    onClick={kickPassenger}
                     type="button"
-                    class="kick-hitchhiker"
+                    className="kick-hitchhiker"
                     href="#"
                   >
                     <img
