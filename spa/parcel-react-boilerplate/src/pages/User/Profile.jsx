@@ -16,6 +16,7 @@ import ReviewItem from "../../components/ReviewItem";
 import HistoryItem from "../../components/HistoryItem";
 import Loading from "../../components/Loading";
 import TripPast from "./TripPast";
+import Trip from "./Trip";
 import Destiny from "./TripPast";
 import { connect } from "react-redux";
 import MDSpinner from "react-md-spinner";
@@ -25,6 +26,7 @@ import { getProfileById } from "../../services/User";
 import { getReservationsByUser } from "../../services/Reservation";
 import { getHistoryByUser } from "../../services/History";
 import { getReviewsByUser } from "../../services/Review";
+import { getTripsByUser } from "../../services/Trip";
 
 // function deleteTrip(id) {
 //   var confirmate = confirm('Are you sure you want to delete this trip?');
@@ -49,31 +51,33 @@ import { getReviewsByUser } from "../../services/Review";
 //     location.reload();
 //   }
 // }
-const Profile = ({
-  token,
-  trips = [],
-  hero_message,
-  loggedUser,
-  dispatch
-}) => {
+const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
   const { t, i18n } = useTranslation();
   const [reviews, setReviews] = useState([]);
+  const [trips, setTrips] = useState([]);
   const [reservations, setReservations] = useState([]);
   const [histories, setHistories] = useState([]);
   const [user, setUser] = useState(null);
   const { userId } = useParams();
   const isLogged = !!token;
-  const isLoading = !user || !reservations || !histories || !reviews;
+  const isLoading = !user || !reservations || !histories || !reviews || !trips;
 
   useEffect(() => {
     const fetchUsers = async () => {
-        getProfileById(userId).then(setUser);
-        getReservationsByUser(userId).then(setReservations);
-        getHistoryByUser(userId).then(setHistories);
-        getReviewsByUser(userId).then(setReviews);
+      getProfileById(userId).then(setUser);
+      getReservationsByUser(userId).then(setReservations);
+      getHistoryByUser(userId).then(setHistories);
+      getReviewsByUser(userId).then(setReviews);
+      getTripsByUser(userId).then(setTrips);
     };
     fetchUsers();
   }, []);
+
+  if (user) {
+    window.document.title = `Carpul | ${user.first_name} ${
+      user.last_name
+    } is awesome`;
+  }
 
   return (
     <React.Fragment>
@@ -87,7 +91,11 @@ const Profile = ({
         </div>
       ) : (
         <React.Fragment>
-          <Hero user={user} hero_message={t("user.profile.hero")} editable={ user.id === loggedUser.id } />
+          <Hero
+            user={user}
+            hero_message={t("user.profile.hero")}
+            editable={user.id === loggedUser.id}
+          />
 
           <section className="profile-container">
             {(reservations.length > 0 ||
