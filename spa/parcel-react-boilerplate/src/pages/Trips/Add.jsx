@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { connect } from "react-redux";
 import MDSpinner from "react-md-spinner";
+import DatePicker from "react-datepicker";
+import { addHours } from "date-fns";
 
 import Hero from "../../components/Hero";
 
+import "react-datepicker/dist/react-datepicker.css";
 import profileHeroCss from "../../styles/profile_hero";
 import poolListCss from "../../styles/pool_list";
 import profileCss from "../../styles/profile";
@@ -18,6 +21,8 @@ import reviewItemCss from "../../styles/review_item";
 
 function Add({ user }) {
   const { t, i18n } = useTranslation();
+  const [ETD, setETD] = useState(new Date());
+  const [ETA, setETA] = useState(addHours(new Date(), 4));
   const isLoading = !user;
 
   const Loading = (
@@ -139,45 +144,54 @@ function Add({ user }) {
             </span>
 
             <label path="etd" className="field-label" htmlFor="etd">
-              {t("trip.add.edt")}
+              {t("trip.add.etd")}
             </label>
-            <input
-              required
-              id="etd"
-              readOnly={true}
-              required={true}
-              className="field"
-              type="text"
-              name="etd_mask"
+            <DatePicker
+              selected={ETD}
+              onChange={date => setETD(date)}
+              showTimeSelect
+              timeFormat="HH:mm"
+              todayButton="Today"
+              timeCaption="time"
+              placeholderText="Click to select a date"
+              minDate={new Date()}
+              timeIntervals={15}
+              customInput={
+                <input required={true} className="field" name="etd_mask" />
+              }
+              dateFormat="dd/MM/yy HH:mm"
             />
             <input
               required={true}
-              min="1"
-              max="20"
+              value={ETD}
               className="field hide"
-              path="etd"
-              type="text"
+              type="number"
               name="etd"
             />
 
             <label path="eta" className="field-label" htmlFor="eta">
               {t("trip.add.eta")}
             </label>
-            <input
-              required={true}
-              readOnly={true}
-              id="eta"
-              className="field"
-              type="text"
-              name="eta_mask"
+            <DatePicker
+              selected={ETA}
+              onChange={date => setETA(date)}
+              showTimeSelect
+              timeFormat="HH:mm"
+              todayButton="Today"
+              timeCaption="time"
+              placeholderText="Click to select a date"
+              minDate={new Date()}
+              timeIntervals={15}
+              customInput={
+                <input required={true} className="field" name="eta_mask" />
+              }
+              dateFormat="dd/MM/yy HH:mm"
             />
             <input
               required={true}
-              min="1"
-              max="20"
+              value={ETA}
               className="field hide"
-              path="eta"
-              type="text"
+              type="number"
               name="eta"
             />
           </div>

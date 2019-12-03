@@ -24,6 +24,7 @@
 		"properties-to-json": "^0.1.4",
 		"query-string": "^6.0.0",
 		"react": "^16.9.0",
+		"react-datepicker": "^2.10.1",
 		"react-dom": "^16.9.0",
 		"react-dropzone": "^10.2.1",
 		"react-i18next": "^10.1.1",
