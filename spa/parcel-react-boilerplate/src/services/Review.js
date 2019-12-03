@@ -36,7 +36,19 @@ export const reviewTrip = async (id, reviewContent) => {
 };
 
 export const addReviewImage = async (id, image) => {
-  const review = await POSTwithAuth(`/reviews/${id}/image`, image).then(res => {
+  // prepare data
+  const data = new FormData();
+  data.append("file", image.file);
+
+  // make request
+  const review = await POSTwithAuth(
+    `/reviews/${id}/image`,
+    {
+      isRaw: true,
+      content: data,
+    },
+    { "Content-Type": null }
+  ).then(res => {
     if (res.isRawResponse) {
       // TODO: Handle specific error messages
       return;

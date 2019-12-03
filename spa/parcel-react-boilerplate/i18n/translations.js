@@ -158,13 +158,14 @@ const translations = {
   },
   review: {
     add: {
-      dropzone: "Upload a picture",
+      dropzone: "Upload an optional picture of the trip",
       page_title: "Carpul | Leave your mark",
       hero: "How was your trip?",
       title: "Add a new review",
       subtitle:
         "{{0}}, leave a message for future travelers. How was your trip with {{1}} from {{2}} to {{3}}?",
       message: "Rate your trip and leave a message for next travelers",
+      placeholder: "Write a few words...",
       submit: "Leave your mark",
     },
     item: {
