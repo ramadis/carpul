@@ -1,13 +1,10 @@
 const token = "98d02695e58b23";
 export const getMap = (places = []) => {
-  const markers = places
-    .map(
-      place =>
-        place.position &&
-        `${place.position.latitude},${place.position.longitude}`
-    )
-    .join("|");
-  return `https://maps.locationiq.com/v2/staticmap?key=${token}&size=500x300&markers=size:small|color:red|${markers}`;
+  const [origin, destination] = places.map(
+    place =>
+      place.position && `${place.position.latitude},${place.position.longitude}`
+  );
+  return `https://maps.locationiq.com/v2/staticmap?key=${token}&size=500x300&markers=size:small|color:red|${origin}&markers=size:small|color:blue|${destination}`;
 };
 
 export const autocompletePlaces = async search => {
@@ -26,6 +23,7 @@ export const autocompletePlaces = async search => {
 };
 
 export const formatCity = place => {
+  return place.display_name;
   const data = [
     place.address.city || place.address.town,
     place.address.city === place.address.state ? null : place.address.state,

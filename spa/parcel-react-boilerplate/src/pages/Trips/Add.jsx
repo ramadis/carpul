@@ -24,8 +24,8 @@ import reviewItemCss from "../../styles/review_item";
 
 function Add({ user }) {
   const { t, i18n } = useTranslation();
-  const [ETD, setETD] = useState(new Date());
-  const [ETA, setETA] = useState(addHours(new Date(), 4));
+  const [ETD, setETD] = useState();
+  const [ETA, setETA] = useState();
   const [from, setFrom] = useState({});
   const [to, setTo] = useState({});
   const isLoading = !user;
@@ -71,6 +71,7 @@ function Add({ user }) {
                 setFrom({
                   city: formatCity(place),
                   position: { latitude: place.lat, longitude: place.lon },
+                  raw: place,
                 })
               }
             >
@@ -93,6 +94,7 @@ function Add({ user }) {
                 setTo({
                   city: formatCity(place),
                   position: { latitude: place.lat, longitude: place.lon },
+                  raw: place,
                 })
               }
             >
@@ -143,7 +145,6 @@ function Add({ user }) {
               timeFormat="HH:mm"
               todayButton="Today"
               timeCaption="time"
-              placeholderText="Click to select a date"
               minDate={new Date()}
               timeIntervals={15}
               customInput={
@@ -170,7 +171,6 @@ function Add({ user }) {
               timeFormat="HH:mm"
               todayButton="Today"
               timeCaption="time"
-              placeholderText="Click to select a date"
               minDate={new Date()}
               timeIntervals={15}
               customInput={
