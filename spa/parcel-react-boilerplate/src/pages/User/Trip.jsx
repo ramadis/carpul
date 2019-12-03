@@ -97,11 +97,10 @@ const Trip = ({ t, trip }) => {
                       <span>{passenger.phone_number}</span>
                     </div>
                   </div>
-                  <a
+                  <button
                     onClick={kickPassenger}
                     type="button"
                     className="kick-hitchhiker"
-                    href="#"
                   >
                     <img
                       src="/static/images/delete.png"
@@ -109,7 +108,7 @@ const Trip = ({ t, trip }) => {
                       width="20px"
                       alt=""
                     />
-                  </a>
+                  </button>
                 </div>
               </a>
             ))}

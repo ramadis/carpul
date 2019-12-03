@@ -6,12 +6,12 @@ import {
   Route,
   Switch,
   Link,
-  Redirect
+  Redirect,
 } from "react-router-dom";
 import Navbar2 from "./components/Navbar2";
 import Home from "./pages/Home";
 import { User } from "./pages/User";
-import Trips from "./pages/Trips";
+import { Trips } from "./pages/Trips";
 import Review from "./pages/Review";
 import Error from "./pages/Error";
 
@@ -25,7 +25,7 @@ function App({ token, user, dispatch }) {
     }
   };
 
-	loadSession();
+  loadSession();
   return (
     <Router>
       <React.Fragment>
