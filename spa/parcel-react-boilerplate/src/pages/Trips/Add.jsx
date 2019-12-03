@@ -6,6 +6,9 @@ import DatePicker from "react-datepicker";
 import { addHours } from "date-fns";
 
 import Hero from "../../components/Hero";
+import PlacesAutocomplete from "../../components/PlacesAutocomplete";
+
+import { formatCity } from "../../services/Places.js";
 
 import "react-datepicker/dist/react-datepicker.css";
 import profileHeroCss from "../../styles/profile_hero";
@@ -23,6 +26,7 @@ function Add({ user }) {
   const { t, i18n } = useTranslation();
   const [ETD, setETD] = useState(new Date());
   const [ETA, setETA] = useState(addHours(new Date(), 4));
+  const [from, setFrom] = useState({});
   const isLoading = !user;
 
   const Loading = (
@@ -62,14 +66,25 @@ function Add({ user }) {
             <label path="from_city" className="field-label" htmlFor="from_city">
               {t("trip.add.from_city")}
             </label>
-            <input
-              required={true}
-              readOnly={true}
-              className="field off-field"
-              path="from_city"
-              type="text"
-              name="from_city"
-            />
+
+            <PlacesAutocomplete
+              value={from.city}
+              handleSelect={place =>
+                setFrom({
+                  city: formatCity(place),
+                  position: { latitude: place.lat, longitude: place.lon },
+                })
+              }
+            >
+              <input
+                required={true}
+                value={from.city}
+                onChange={e => setFrom({ city: e.target.value })}
+                className="field"
+                type="text"
+                name="from_city"
+              />
+            </PlacesAutocomplete>
             <input
               required={true}
               readOnly={true}
