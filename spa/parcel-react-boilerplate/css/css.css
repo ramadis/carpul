@@ -168,6 +168,17 @@ hr {
   background: #f9f9f9;
 }
 
+.label-error {
+  color: #d03030;
+  font-size: 12px;
+  padding-top: 5px;
+}
+
+.field.error {
+  border-color: #d03030;
+  background: #fff1f1;
+}
+
 .field.review-textarea {
   margin-top: 0;
   min-height: 200px;

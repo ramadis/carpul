@@ -163,7 +163,7 @@ const Review = ({ user }) => {
               </Field>
             </div>
 
-            <div className="actions">
+            <div className="actions" style={{ marginBottom: 10 }}>
               <button type="submit" onClick={review} className="login-button">
                 {loading ? <MDSpinner size={24} /> : t("review.add.submit")}
               </button>
