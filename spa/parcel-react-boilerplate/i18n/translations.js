@@ -5,15 +5,15 @@ const translations = {
       create: "Create account",
       logout: "Logout",
       login: "Login",
-      profile: "Profile"
-    }
+      profile: "Profile",
+    },
   },
   error: {
     base: {
       page_title: "Carpul | Yikes!",
       title: "So... this is awkward.",
-      subtitle: "(yep, this is a {{0}} error page)"
-    }
+      subtitle: "(yep, this is a {{0}} error page)",
+    },
   },
   history: {
     item: {
@@ -28,8 +28,8 @@ const translations = {
         "The driver just deleted his trip to {{0}} on {{1}}. {{2}}",
       kicked_message:
         "The driver just kicked you from his trip to {{0}} on {{1}}. {{2}}",
-      happened: "Happened on {{0}}"
-    }
+      happened: "Happened on {{0}}",
+    },
   },
   user: {
     trip: {
@@ -42,11 +42,11 @@ const translations = {
       arrive_single: "Arrive",
       departing: "Departing from {{0}}",
       arrive: "Arrive on {{0}} on {{1}} at {{2}}",
-      unreserve: "Unreserve"
+      unreserve: "Unreserve",
     },
     trip_past: {
       review: "Review",
-      message: "Review your trip to"
+      message: "Review your trip to",
     },
     login: {
       page_title: "Carpul | Enter a world of adventures",
@@ -56,7 +56,7 @@ const translations = {
       username: "Username",
       password: "Password",
       submit: "Login",
-      create: "Create account"
+      create: "Create account",
     },
     register: {
       page_title: "Carpul | Welcome to a new adventurer life",
@@ -68,7 +68,7 @@ const translations = {
       username: "Username",
       password: "Password (At least 6 chars)",
       submit: "Create account",
-      login: "Login"
+      login: "Login",
     },
     profile: {
       page_title: "Carpul | {{0}} {{1}} is awesome",
@@ -86,7 +86,7 @@ const translations = {
       empty_review: "People are not talking about you yet :(",
       empty_histories: "No notifications yet!",
       empty_reservations: "No reservations? Start now!",
-      empty_trips: "Do you even drive bro?"
+      empty_trips: "Do you even drive bro?",
     },
     unauth: {
       profile: {
@@ -94,9 +94,9 @@ const translations = {
         page_title: "Carpul | {{0}} {{1}} is awesome too",
         hero: "Welcome to {{0}}s place.",
         empty_review: "People are not talking about {{0}} yet :(",
-        is_hitch: "{{0}} is driving to places"
-      }
-    }
+        is_hitch: "{{0}} is driving to places",
+      },
+    },
   },
   trip: {
     add: {
@@ -111,12 +111,12 @@ const translations = {
       eta: "Estimated date and time of arrival",
       submit: "Start the adventure!",
       subtitle:
-        "Move the markers in the map to select where are you arriving and departing from. Click the marker to see which is which."
+        "Move the markers in the map to select where are you arriving and departing from. Click the marker to see which is which.",
     },
     individual: {
       title: "This is the trip you were looking for",
-      page_title: "Carpul | Travel cheap with carpul"
-    }
+      page_title: "Carpul | Travel cheap with carpul",
+    },
   },
   home: {
     index: {
@@ -132,8 +132,8 @@ const translations = {
       leave_on: "Leave on",
       just_price: "For just",
       no_trips: "No trips in the near future, sorry! :/",
-      suggestions: "These are some trips you might find interesting ;)"
-    }
+      suggestions: "These are some trips you might find interesting ;)",
+    },
   },
   search: {
     search: {
@@ -143,7 +143,7 @@ const translations = {
       on: "On",
       trips: "These are the options to go to {{0}} on {{1}}",
       no_trips: "Sorry, no adventure to {{0}} at this time :(",
-      later_trips: "These are the options to go to {{0}} after {{1}}"
+      later_trips: "These are the options to go to {{0}} after {{1}}",
     },
     item: {
       from: "Leave from",
@@ -153,25 +153,26 @@ const translations = {
       each: "each",
       reserve: "Reserve",
       unreserve: "Unreserve",
-      available: "available"
-    }
+      available: "available",
+    },
   },
   review: {
     add: {
+      dropzone: "Upload a picture",
       page_title: "Carpul | Leave your mark",
       hero: "How was your trip?",
       title: "Add a new review",
       subtitle:
         "{{0}}, leave a message for future travelers. How was your trip with {{1}} from {{2}} to {{3}}?",
       message: "Rate your trip and leave a message for next travelers",
-      submit: "Leave your mark"
+      submit: "Leave your mark",
     },
     item: {
       no_stars: "No stars",
       from: "From",
       to: "to",
-      trip: "From {{0}} to {{1}}"
-    }
+      trip: "From {{0}} to {{1}}",
+    },
   },
   Pattern: {
     userCreateForm: {
@@ -179,22 +180,22 @@ const translations = {
         "Your name should only contain letters (You should talk with your parents about this)",
       last_name:
         "Your name should only contain letters (You should talk with your parents about this)",
-      phone_number: "Phone number should have only numbers"
+      phone_number: "Phone number should have only numbers",
     },
     searchForm: {
       to: "Arrival city should only contain letters",
-      from: "Departure city should only contain letters"
+      from: "Departure city should only contain letters",
     },
     tripCreateForm: {
       from_city: "Departure city should only contain letters",
-      to_city: "Arrival city should only contain letters"
-    }
+      to_city: "Arrival city should only contain letters",
+    },
   },
   Size: "Field should be between {{2}} and {{1}} characters",
   NotBlank: "Field should not be empty",
   NotNull: "Field should not be empty",
   Min: "Field should be at least {{1}}",
-  Max: "Field should be at least {{1}}"
+  Max: "Field should be at least {{1}}",
 };
 
 export default translations;

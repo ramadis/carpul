@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import Hero from "../components/Hero";
+import React, { useState, useEffect, useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";
 import { connect } from "react-redux";
 import MDSpinner from "react-md-spinner";
@@ -9,10 +9,28 @@ import Rating from "react-rating";
 import { getTripById } from "../services/Trip.js";
 import { reviewTrip } from "../services/Review.js";
 
+import Hero from "../components/Hero";
+
 import profileHeroCss from "../styles/profile_hero";
 import poolListCss from "../styles/pool_list";
 import profileCss from "../styles/profile";
 import reviewItemCss from "../styles/review_item";
+
+const Dropzone = () => {
+  const { t, i18n } = useTranslation();
+
+  const onDrop = useCallback(acceptedFiles => {
+    // Do something with the files
+  }, []);
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  return (
+    <div {...getRootProps()}>
+      <input {...getInputProps()} />
+      <p>{t("review.add.dropzone")}</p>
+    </div>
+  );
+};
 
 const Review = ({ user }) => {
   const { t, i18n } = useTranslation();
@@ -28,7 +46,7 @@ const Review = ({ user }) => {
     getTripById(tripId).then(setTrip);
   }, []);
 
-  window.document.title = `Carpul | Leave your mark`;
+  window.document.title = t("review.add.page_title");
 
   const isLoading = !user || !trip;
 
@@ -71,6 +89,7 @@ const Review = ({ user }) => {
               {t("review.add.message")}
             </label>
             <Rating initialRating={stars} onChange={setStars} />
+            <Dropzone />
             <textarea
               value={message}
               onChange={e => setMessage(e.target.value)}
