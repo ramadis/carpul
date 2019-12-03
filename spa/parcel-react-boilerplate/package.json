@@ -24,6 +24,7 @@
 		"react-dom": "^16.9.0",
 		"react-i18next": "^10.1.1",
 		"react-md-spinner": "^0.3.0",
+		"react-rating": "^2.0.3",
 		"react-redux": "^6.0.0",
 		"react-router-dom": "^5.1.2",
 		"reboot.css": "^1.0.1",
