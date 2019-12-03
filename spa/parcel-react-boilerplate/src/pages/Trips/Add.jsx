@@ -8,7 +8,7 @@ import { addHours } from "date-fns";
 import Hero from "../../components/Hero";
 import PlacesAutocomplete from "../../components/PlacesAutocomplete";
 
-import { formatCity } from "../../services/Places.js";
+import { formatCity, getMap } from "../../services/Places.js";
 
 import "react-datepicker/dist/react-datepicker.css";
 import profileHeroCss from "../../styles/profile_hero";
@@ -58,10 +58,7 @@ function Add({ user }) {
           <h3>{t("trip.add.title")}</h3>
           <h2>{t("trip.add.subtitle")}</h2>
 
-          <div
-            id="map"
-            style={{ width: "100%", height: "400px", margin: "10px 0" }}
-          />
+          <img src={getMap([from, to])} />
 
           <div className="field-container">
             <label path="from_city" className="field-label" htmlFor="from_city">
