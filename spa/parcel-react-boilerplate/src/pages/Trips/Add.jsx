@@ -142,15 +142,15 @@ function Add({ user }) {
               selected={ETD}
               onChange={date => setETD(date)}
               showTimeSelect
-              timeFormat="HH:mm"
-              todayButton="Today"
+              timeFormat={t("trip.add.time")}
+              todayButton={t("trip.add.today")}
               timeCaption="time"
               minDate={new Date()}
               timeIntervals={15}
               customInput={
                 <input required={true} className="field" name="etd_mask" />
               }
-              dateFormat="dd/MM/yy HH:mm"
+              dateFormat={t("trip.add.timestamp")}
             />
             <input
               readOnly={true}
@@ -168,15 +168,15 @@ function Add({ user }) {
               selected={ETA}
               onChange={date => setETA(date)}
               showTimeSelect
-              timeFormat="HH:mm"
-              todayButton="Today"
+              timeFormat={t("trip.add.time")}
+              todayButton={t("trip.add.today")}
               timeCaption="time"
               minDate={new Date()}
               timeIntervals={15}
               customInput={
                 <input required={true} className="field" name="eta_mask" />
               }
-              dateFormat="dd/MM/yy HH:mm"
+              dateFormat={t("trip.add.timestamp")}
             />
             <input
               required={true}
