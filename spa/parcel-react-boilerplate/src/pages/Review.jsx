@@ -30,6 +30,7 @@ const UploadedImageContainer = styled.div`
 const RemoveImageButton = styled.button`
   position: absolute;
   top: -5;
+  cursor: pointer;
   left: -10;
   border-radius: 50%;
   height: 25px;
@@ -78,21 +79,21 @@ const Review = ({ user }) => {
 
   window.document.title = t("review.add.page_title");
 
-  const isLoading = !user || !trip;
+  const isLoading = !user && !trip;
 
-  if (isLoading) {
-    return (
-      <React.Fragment>
-        <style jsx>{poolListCss}</style>
-        <style jsx>{profileCss}</style>
-        <style jsx>{reviewItemCss}</style>
-        <style jsx>{profileHeroCss}</style>
-        <div className="flex-center spinner-class">
-          <MDSpinner size={36} />
-        </div>
-      </React.Fragment>
-    );
-  }
+  const Loading = (
+    <React.Fragment>
+      <style jsx>{poolListCss}</style>
+      <style jsx>{profileCss}</style>
+      <style jsx>{reviewItemCss}</style>
+      <style jsx>{profileHeroCss}</style>
+      <div className="flex-center spinner-class">
+        <MDSpinner size={36} />
+      </div>
+    </React.Fragment>
+  );
+
+  if (isLoading) return Loading;
 
   return (
     <React.Fragment>
@@ -102,72 +103,76 @@ const Review = ({ user }) => {
       <style jsx>{profileHeroCss}</style>
       <Hero hero_message={t("review.add.hero")} user={user} />
 
-      <div className="profile-form-container flex-center">
-        <div className="new-trip-form" action="../review/${trip.id}">
-          <h3>{t("review.add.title")}</h3>
-          <h2>
-            {t("review.add.subtitle", {
-              "0": user.first_name,
-              "1": trip.driver.first_name,
-              "2": trip.from_city,
-              "3": trip.to_city,
-            })}
-          </h2>
+      {trip ? (
+        <div className="profile-form-container flex-center">
+          <div className="new-trip-form" action="../review/${trip.id}">
+            <h3>{t("review.add.title")}</h3>
+            <h2>
+              {t("review.add.subtitle", {
+                "0": user.first_name,
+                "1": trip.driver.first_name,
+                "2": trip.from_city,
+                "3": trip.to_city,
+              })}
+            </h2>
 
-          <div className="field-container">
-            <label path="message" className="field-label" htmlFor="message">
-              {t("review.add.message")}
-            </label>
-            <Field>
-              {image ? (
-                <UploadedImageContainer className="uploaded-image-container">
-                  <img
-                    src={image.URL}
-                    height={100}
-                    width={(100 * image.element.width) / image.element.height}
-                  />
-                  <RemoveImageButton onClick={() => setImage(null)}>
-                    X
-                  </RemoveImageButton>
-                </UploadedImageContainer>
-              ) : (
-                <Dropzone onLoad={onImageLoaded} />
-              )}
-            </Field>
-            <Field>
-              <Rating
-                initialRating={stars}
-                onChange={setStars}
-                emptySymbol={
-                  <FontAwesomeIcon icon={faStar} size="1x" color="#808080" />
-                }
-                fullSymbol={
-                  <FontAwesomeIcon icon={faStar} size="1x" color="#f39c12" />
-                }
-              />
-            </Field>
-            <Field>
-              <textarea
-                value={message}
-                onChange={e => setMessage(e.target.value)}
-                className="field review-textarea"
-                placeholder={t("review.add.placeholder")}
-                required={true}
-                multiline="true"
-                name="message"
-                path="message"
-                type="text"
-              />
-            </Field>
-          </div>
+            <div className="field-container">
+              <label path="message" className="field-label" htmlFor="message">
+                {t("review.add.message")}
+              </label>
+              <Field>
+                {image ? (
+                  <UploadedImageContainer className="uploaded-image-container">
+                    <img
+                      src={image.URL}
+                      height={100}
+                      width={(100 * image.element.width) / image.element.height}
+                    />
+                    <RemoveImageButton onClick={() => setImage(null)}>
+                      X
+                    </RemoveImageButton>
+                  </UploadedImageContainer>
+                ) : (
+                  <Dropzone onLoad={onImageLoaded} />
+                )}
+              </Field>
+              <Field>
+                <Rating
+                  initialRating={stars}
+                  onChange={setStars}
+                  emptySymbol={
+                    <FontAwesomeIcon icon={faStar} size="1x" color="#808080" />
+                  }
+                  fullSymbol={
+                    <FontAwesomeIcon icon={faStar} size="1x" color="#f39c12" />
+                  }
+                />
+              </Field>
+              <Field>
+                <textarea
+                  value={message}
+                  onChange={e => setMessage(e.target.value)}
+                  className="field review-textarea"
+                  placeholder={t("review.add.placeholder")}
+                  required={true}
+                  multiline="true"
+                  name="message"
+                  path="message"
+                  type="text"
+                />
+              </Field>
+            </div>
 
-          <div className="actions">
-            <button type="submit" onClick={review} className="login-button">
-              {loading ? <MDSpinner size={24} /> : t("review.add.submit")}
-            </button>
+            <div className="actions">
+              <button type="submit" onClick={review} className="login-button">
+                {loading ? <MDSpinner size={24} /> : t("review.add.submit")}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        Loading
+      )}
     </React.Fragment>
   );
 };
