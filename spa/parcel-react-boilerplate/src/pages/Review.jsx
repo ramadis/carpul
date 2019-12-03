@@ -23,6 +23,21 @@ const Field = styled.div`
   margin-top: 10px;
 `;
 
+const UploadedImageContainer = styled.div`
+  position: relative;
+`;
+
+const RemoveImageButton = styled.button`
+  position: absolute;
+  top: -5;
+  left: -10;
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
+  background: #e36f49;
+  color: white;
+`;
+
 const Review = ({ user }) => {
   const { t, i18n } = useTranslation();
   const { id: tripId } = useParams();
@@ -105,11 +120,16 @@ const Review = ({ user }) => {
             </label>
             <Field>
               {image ? (
-                <img
-                  src={image.URL}
-                  height={100}
-                  width={(100 * image.element.width) / image.element.height}
-                />
+                <UploadedImageContainer className="uploaded-image-container">
+                  <img
+                    src={image.URL}
+                    height={100}
+                    width={(100 * image.element.width) / image.element.height}
+                  />
+                  <RemoveImageButton onClick={() => setImage(null)}>
+                    X
+                  </RemoveImageButton>
+                </UploadedImageContainer>
               ) : (
                 <Dropzone onLoad={onImageLoaded} />
               )}
