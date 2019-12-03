@@ -69,7 +69,7 @@ public class ReviewController extends AuthController {
 	
 	@GET
 	@Path("/{id}/image")
-	@Produces({"images/jpg", "images/png", "images/gif"})
+	@Produces({"image/jpg", "image/png", "image/gif", "image/jpeg"})
 	public Response getImageById(@PathParam("id") final int id) {
 		Review review = rs.getReviewById(id);
 		console.info("Getting image for id {}", id);

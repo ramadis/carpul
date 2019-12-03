@@ -243,7 +243,7 @@ public class UserController extends AuthController {
 	
 	@GET
 	@Path("/{id}/profile/image")
-	@Produces({"images/jpg", "images/png", "images/gif"})
+	@Produces({"image/jpg", "image/png", "image/gif", "image/jpeg"})
 	public Response getProfileImage(@PathParam("id") final int id) {
 		User user = us.getById(id);
 		console.info("Getting profile image for id {}", id);

@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.validation.Validator;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -30,6 +31,7 @@ import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.DTO.ReviewDTO;
+import ar.edu.itba.paw.webapp.DTO.TripDTO;
 import ar.edu.itba.paw.webapp.DTO.UserDTO;
 import ar.edu.itba.paw.webapp.forms.ReviewForm;
 
@@ -56,11 +58,13 @@ public class TripController extends AuthController {
 	@Autowired
     private Validator validator;
 	
-	
+	@GET
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("id") final int id) {
-		final User user = us.getById(id);
-		if (user != null) {
-			return Response.ok(new UserDTO(user)).build();
+		final Trip trip = ts.findById(id);
+		if (trip != null) {
+			return Response.ok(new TripDTO(trip)).build();
 		} else {
 			return Response.status(Status.NOT_FOUND).build();
 		}
