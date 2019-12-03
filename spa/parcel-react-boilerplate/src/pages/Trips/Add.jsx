@@ -27,6 +27,7 @@ function Add({ user }) {
   const [ETD, setETD] = useState(new Date());
   const [ETA, setETA] = useState(addHours(new Date(), 4));
   const [from, setFrom] = useState({});
+  const [to, setTo] = useState({});
   const isLoading = !user;
 
   const Loading = (
@@ -85,51 +86,28 @@ function Add({ user }) {
                 name="from_city"
               />
             </PlacesAutocomplete>
-            <input
-              required={true}
-              readOnly={true}
-              className="field hide"
-              path="etd_latitude"
-              type="text"
-              name="etd_latitude"
-            />
-            <input
-              required={true}
-              readOnly={true}
-              className="field hide"
-              path="etd_longitude"
-              type="text"
-              name="etd_longitude"
-            />
 
             <label path="to_city" className="field-label" htmlFor="to_city">
               {t("trip.add.to_city")}
             </label>
-            <input
-              required={true}
-              readOnly={true}
-              className="field off-field"
-              path="to_city"
-              type="text"
-              name="to_city"
-            />
-            <input
-              required={true}
-              readOnly={true}
-              className="field hide"
-              path="eta_latitude"
-              type="text"
-              name="eta_latitude"
-            />
-            <input
-              required={true}
-              readOnly={true}
-              className="field hide"
-              path="eta_longitude"
-              type="text"
-              name="eta_longitude"
-            />
-
+            <PlacesAutocomplete
+              value={to.city}
+              handleSelect={place =>
+                setTo({
+                  city: formatCity(place),
+                  position: { latitude: place.lat, longitude: place.lon },
+                })
+              }
+            >
+              <input
+                required={true}
+                value={to.city}
+                onChange={e => setTo({ city: e.target.value })}
+                className="field"
+                type="text"
+                name="from_city"
+              />
+            </PlacesAutocomplete>
             <label path="seats" className="field-label" htmlFor="seats">
               {t("trip.add.seats")}
             </label>
@@ -177,6 +155,7 @@ function Add({ user }) {
               dateFormat="dd/MM/yy HH:mm"
             />
             <input
+              readOnly={true}
               required={true}
               value={ETD}
               className="field hide"

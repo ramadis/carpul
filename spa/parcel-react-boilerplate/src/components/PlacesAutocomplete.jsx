@@ -80,7 +80,7 @@ export default class PlacesAutocomplete extends Component {
           <ResultsContainer>
             <ResultList>
               {this.state.results.map(result => (
-                <Result onClick={() => this.select(result)}>
+                <Result key={result.osm_id} onClick={() => this.select(result)}>
                   {result.display_name}
                 </Result>
               ))}
