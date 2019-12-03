@@ -4,6 +4,9 @@ import { connect } from "react-redux";
 import MDSpinner from "react-md-spinner";
 import { useParams } from "react-router-dom";
 import Rating from "react-rating";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import styled from "styled-components";
 
 import { getTripById } from "../services/Trip.js";
 import { reviewTrip, addReviewImage } from "../services/Review.js";
@@ -15,6 +18,10 @@ import profileHeroCss from "../styles/profile_hero";
 import poolListCss from "../styles/pool_list";
 import profileCss from "../styles/profile";
 import reviewItemCss from "../styles/review_item";
+
+const Field = styled.div`
+  margin-top: 10px;
+`;
 
 const Review = ({ user }) => {
   const { t, i18n } = useTranslation();
@@ -96,27 +103,42 @@ const Review = ({ user }) => {
             <label path="message" className="field-label" htmlFor="message">
               {t("review.add.message")}
             </label>
-            <Rating initialRating={stars} onChange={setStars} />
-            {image ? (
-              <img
-                src={image.URL}
-                height={100}
-                width={(100 * image.element.width) / image.element.height}
+            <Field>
+              {image ? (
+                <img
+                  src={image.URL}
+                  height={100}
+                  width={(100 * image.element.width) / image.element.height}
+                />
+              ) : (
+                <Dropzone onLoad={onImageLoaded} />
+              )}
+            </Field>
+            <Field>
+              <Rating
+                initialRating={stars}
+                onChange={setStars}
+                emptySymbol={
+                  <FontAwesomeIcon icon={faStar} size="1x" color="#808080" />
+                }
+                fullSymbol={
+                  <FontAwesomeIcon icon={faStar} size="1x" color="#f39c12" />
+                }
               />
-            ) : (
-              <Dropzone onLoad={onImageLoaded} />
-            )}
-            <textarea
-              value={message}
-              onChange={e => setMessage(e.target.value)}
-              className="field"
-              placeholder={t("review.add.placeholder")}
-              required={true}
-              multiline="true"
-              name="message"
-              path="message"
-              type="text"
-            />
+            </Field>
+            <Field>
+              <textarea
+                value={message}
+                onChange={e => setMessage(e.target.value)}
+                className="field review-textarea"
+                placeholder={t("review.add.placeholder")}
+                required={true}
+                multiline="true"
+                name="message"
+                path="message"
+                type="text"
+              />
+            </Field>
           </div>
 
           <div className="actions">
