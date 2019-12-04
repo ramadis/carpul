@@ -42,7 +42,7 @@ const Home = ({ match, trips }) => {
                 {t("home.index.from")}
               </label>
               <PlacesAutocomplete
-                style={{ display: "inline" }}
+                style={{ display: "inline", paddingRight: 10 }}
                 value={origin.city}
                 handleSelect={place => {
                   setOrigin({
@@ -67,7 +67,7 @@ const Home = ({ match, trips }) => {
                 {t("home.index.to")}
               </label>
               <PlacesAutocomplete
-                style={{ display: "inline" }}
+                style={{ display: "inline", paddingRight: 10 }}
                 value={destination.city}
                 handleSelect={place => {
                   setDestination({
