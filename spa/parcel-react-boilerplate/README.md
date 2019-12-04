@@ -16,3 +16,23 @@ yarn
 yarn start
 yarn build
 ```
+
+# TODO
+
+- [ ] Agregar mensajes (de error y de éxito)
+- [ ] Kickear pasajeros
+- [ ] Eliminar viajes
+- [ ] Vista de resultados
+- [ ] Vista de suscribirse al viaje
+- [ ] Agregar validaciones al form de signup
+- [ ] Agregar features a la vista de resultados
+- [ ] Paginación en frontend
+- [ ] Polling de historias
+- [ ] Pasar las cosas por la store de redux
+- [ ] Chequear permisos de los endpoints.
+- [ ] Ver de reestructurar controllers
+- [ ] Agregar vista de update user
+- [ ] Chequear cache.
+- [ ] Agregar sistema de building
+- [ ] Testear deployado
+- [ ] Testear que los endpoints devuelvan lo que tienen que devolver

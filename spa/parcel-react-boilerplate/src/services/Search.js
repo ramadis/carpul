@@ -1,12 +1,16 @@
-import { GETwithAuth } from "./Utils";
+import { GETwithAuth } from './Utils'
 
-export const search = async params => {
-  const results = await GETwithAuth(`/search`).then(res => {
+export const search = async ({ to, from, when }) => {
+  const query = encodeURIComponent({ to, from, when })
+
+  const results = await GETwithAuth(
+    `/search?to=${to}&from=${from}&when=${when}`
+  ).then(res => {
     if (res.isRawResponse) {
       // TODO: Handle specific error messages
-      return;
+      return
     }
-    return res;
-  });
-  return results;
-};
+    return res
+  })
+  return results
+}

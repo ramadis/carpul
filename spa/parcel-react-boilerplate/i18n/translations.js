@@ -143,9 +143,9 @@ const translations = {
       from: "From",
       to: "To",
       on: "On",
-      trips: "These are the options to go to {{0}} on {{1}}",
-      no_trips: "Sorry, no adventure to {{0}} at this time :(",
-      later_trips: "These are the options to go to {{0}} after {{1}}",
+      trips: "These are the options to go to {{to}} on {{when}}",
+      no_trips: "Sorry, no adventure to {{to}} at this time :(",
+      later_trips: "These are the options to go to {{to}} after {{when}}",
     },
     item: {
       from: "Leave from",
