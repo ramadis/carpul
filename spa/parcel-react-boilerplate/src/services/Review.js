@@ -1,4 +1,5 @@
 import { GETwithAuth, POSTwithAuth } from "./Utils";
+import { NotificationManager } from "react-notifications";
 
 export const getReviewsByUser = async id => {
   const reviews = await GETwithAuth(`/users/${id}/reviews`).then(res => {
@@ -26,6 +27,15 @@ export const reviewTrip = async (id, reviewContent) => {
   const review = await POSTwithAuth(`/trips/${id}/reviews`, reviewContent).then(
     res => {
       if (res.isRawResponse) {
+        const errors = {
+          400: "The review content seems to have some problems.",
+          default: "And we don't know what it is. Sorry :(",
+        };
+        console.log(res);
+        NotificationManager.error(
+          errors[res.status] || errors.default,
+          "Something went wrong"
+        );
         // TODO: Handle specific error messages
         return;
       }

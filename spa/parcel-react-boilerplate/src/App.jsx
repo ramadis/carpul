@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
+import { NotificationContainer } from "react-notifications";
 import {
   BrowserRouter as Router,
   Route,
@@ -14,6 +15,8 @@ import { User } from "./pages/User";
 import { Trips } from "./pages/Trips";
 import Review from "./pages/Review";
 import Error from "./pages/Error";
+
+import "react-notifications/lib/notifications.css";
 
 import { getProfile } from "./services/User.js";
 
@@ -38,6 +41,7 @@ function App({ token, user, dispatch }) {
           <Route path="/error/:code" component={Error} />
           <Route component={() => <Redirect to="/error/404" />} />
         </Switch>
+        <NotificationContainer />
       </React.Fragment>
     </Router>
   );

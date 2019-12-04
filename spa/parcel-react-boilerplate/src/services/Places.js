@@ -12,7 +12,7 @@ export const autocompletePlaces = async search => {
 
   try {
     const res = await fetch(
-      `https://us1.locationiq.com/v1/search.php?key=${token}&q=${query}&format=json&countrycodes=ar&addressdetails=1`
+      `https://us1.locationiq.com/v1/search.php?key=${token}&q=${query}&format=json&countrycodes=ar&addressdetails=1&normalizecity=1`
     );
 
     return res.ok ? await res.json() : [];
