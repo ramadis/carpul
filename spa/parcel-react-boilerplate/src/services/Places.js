@@ -23,11 +23,7 @@ export const autocompletePlaces = async search => {
 };
 
 export const formatCity = place => {
-  return place.display_name;
-  const data = [
-    place.address.city || place.address.town,
-    place.address.city === place.address.state ? null : place.address.state,
-    place.address.country,
-  ];
-  return data.filter(Boolean).join(", ");
+  return (
+    place.address.city || place.address.town || place.address.city_district
+  );
 };

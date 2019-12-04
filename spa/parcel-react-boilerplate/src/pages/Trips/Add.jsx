@@ -11,6 +11,7 @@ import Hero from "../../components/Hero";
 import PlacesAutocomplete from "../../components/PlacesAutocomplete";
 
 import { formatCity, getMap } from "../../services/Places.js";
+import { createTripByUser } from "../../services/Trip.js";
 
 import "react-datepicker/dist/react-datepicker.css";
 import profileHeroCss from "../../styles/profile_hero";
@@ -25,14 +26,31 @@ function Add({ user }) {
   const [ETAdirty, setETAdirty] = useState(false);
   const [ETDdirty, setETDdirty] = useState(false);
   const [from, setFrom] = useState({});
+  const [to, setTo] = useState({});
   const { handleSubmit, register, errors, triggerValidation } = useForm({
     mode: "onChange",
   });
-  const [to, setTo] = useState({});
 
-  const onSubmit = values => {
-    if (isEmpty(checkErrors(errors))) return; // there are still errors
-    console.log(values);
+  const onSubmit = async values => {
+    console.log(values, checkErrors(errors));
+    if (!isEmpty(checkErrors(errors)))
+      return console.error("There are errors on the form");
+    console.log(from);
+    const payload = {
+      cost: values.cost,
+      seats: values.seats,
+      to_city: formatCity(to.raw),
+      etd: new Date(ETD).getTime(),
+      eta: new Date(ETA).getTime(),
+      from_city: formatCity(from.raw),
+      etd_latitude: Number(from.position.latitude),
+      etd_longitude: Number(from.position.longitude),
+      eta_latitude: Number(to.position.latitude),
+      eta_longitude: Number(to.position.longitude),
+    };
+
+    await createTripByUser(user.id, payload);
+    alert("Trip created");
   };
 
   const checkErrors = err => {
@@ -87,9 +105,9 @@ function Add({ user }) {
               value={from.city}
               handleSelect={place => {
                 setFrom({
-                  city: formatCity(place),
+                  city: place.display_name,
                   position: { latitude: place.lat, longitude: place.lon },
-                  selected: formatCity(place),
+                  selected: place.display_name,
                   raw: place,
                 });
                 setTimeout(() => triggerValidation({ name: "from" }), 300);
@@ -119,10 +137,10 @@ function Add({ user }) {
               value={to.city}
               handleSelect={place => {
                 setTo({
-                  city: formatCity(place),
+                  city: place.display_name,
                   position: { latitude: place.lat, longitude: place.lon },
                   raw: place,
-                  selected: formatCity(place),
+                  selected: place.display_name,
                 });
                 setTimeout(() => triggerValidation({ name: "to" }), 300);
               }}
