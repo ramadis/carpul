@@ -4,7 +4,7 @@ import {
   Route,
   Link,
   Redirect,
-  useParams
+  useParams,
 } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import profileHeroCss from "../../styles/profile_hero";
@@ -165,7 +165,7 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
                 <section className="destinys-container">
                   <h3>{t("user.profile.trips")}</h3>
 
-                  <Link className="no-margin login-button" to="/user/trip">
+                  <Link className="no-margin login-button" to="/trips/add">
                     {t("user.profile.new")}
                   </Link>
 
@@ -214,5 +214,5 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
 export default connect(({ user, reservations, token }) => ({
   loggedUser: user,
   reservations,
-  token
+  token,
 }))(Profile);
