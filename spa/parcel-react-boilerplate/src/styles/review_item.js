@@ -6,6 +6,10 @@ export default css`
     margin-bottom: 20px;
   }
 
+  .review-item-content {
+    margin-top: 5px;
+  }
+
   .review-item-container img {
     margin-right: 10px;
   }

@@ -1,9 +1,17 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
+import Rating from "react-rating";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import styled from "styled-components";
 
 import profileCss from "../styles/profile";
 import reviewItemCss from "../styles/review_item";
+
+const StarsContainer = styled.div`
+  margin-bottom: 5px;
+`;
 
 const Message = ({ review }) => {
   const maxDisplayLength = 50;
@@ -61,11 +69,18 @@ const Review = ({ review }) => {
           alt=""
         />
         <div className="review-item-content">
-          {review.stars === 0 ? (
-            <span className="review-meta">{t("review.item.no_stars")}</span>
-          ) : (
-            <span className={`stars-${review.stars}`} />
-          )}
+          <StarsContainer>
+            <Rating
+              initialRating={review.stars}
+              readonly={true}
+              emptySymbol={
+                <FontAwesomeIcon icon={faStar} size="xs" color="#808080" />
+              }
+              fullSymbol={
+                <FontAwesomeIcon icon={faStar} size="xs" color="#f39c12" />
+              }
+            />
+          </StarsContainer>
           <Message review={review} />
           <span className="review-meta review-trip">
             {t("review.item.from")}
