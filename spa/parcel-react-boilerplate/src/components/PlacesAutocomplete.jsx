@@ -68,10 +68,10 @@ export default class PlacesAutocomplete extends Component {
 
   render() {
     let { results, disabled } = this.state;
-    const { children } = this.props;
+    const { children, style } = this.props;
 
     return (
-      <div>
+      <div style={style}>
         {React.cloneElement(children, {
           onFocus: this.handleFocus,
           onBlur: this.handleBlur,
