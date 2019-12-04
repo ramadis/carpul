@@ -32,10 +32,10 @@ function Add({ user }) {
   });
 
   const onSubmit = async values => {
-    console.log(values, checkErrors(errors));
-    if (!isEmpty(checkErrors(errors)))
+    if (!isEmpty(checkErrors(errors))) {
       return console.error("There are errors on the form");
-    console.log(from);
+    }
+
     const payload = {
       cost: values.cost,
       seats: values.seats,
@@ -254,7 +254,11 @@ function Add({ user }) {
           </div>
 
           <div className="actions" style={{ marginBottom: 10 }}>
-            <button type="submit" className="login-button">
+            <button
+              disabled={!(isEmpty(checkErrors(errors)) && ETAdirty)}
+              type="submit"
+              className="login-button"
+            >
               {t("trip.add.submit")}
             </button>
           </div>
