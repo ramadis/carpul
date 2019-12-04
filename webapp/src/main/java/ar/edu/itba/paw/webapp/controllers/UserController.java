@@ -132,7 +132,7 @@ public class UserController extends AuthController {
 	// TODO: This endpoint is working
 	public Response createTrip(final TripCreateForm form, @PathParam("id") final int id) {
 		// Check if the trip form is valid
-		if (!validator.validate(form).isEmpty()) {
+		if (form == null || !validator.validate(form).isEmpty()) {
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		
