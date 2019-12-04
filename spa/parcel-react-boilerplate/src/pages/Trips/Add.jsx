@@ -5,6 +5,7 @@ import { addHours } from "date-fns";
 import MDSpinner from "react-md-spinner";
 import DatePicker from "react-datepicker";
 import useForm from "react-hook-form";
+import { isEmpty } from "lodash";
 
 import Hero from "../../components/Hero";
 import PlacesAutocomplete from "../../components/PlacesAutocomplete";
@@ -21,15 +22,30 @@ function Add({ user }) {
   const { t, i18n } = useTranslation();
   const [ETD, setETD] = useState();
   const [ETA, setETA] = useState();
+  const [ETAdirty, setETAdirty] = useState(false);
+  const [ETDdirty, setETDdirty] = useState(false);
   const [from, setFrom] = useState({});
-  const { handleSubmit, register, errors } = useForm({ mode: "onChange" });
+  const { handleSubmit, register, errors, triggerValidation } = useForm({
+    mode: "onChange",
+  });
   const [to, setTo] = useState({});
 
   const onSubmit = values => {
+    if (isEmpty(checkErrors(errors))) return; // there are still errors
     console.log(values);
   };
 
-  console.log(errors);
+  const checkErrors = err => {
+    const errors = { ...err };
+
+    if (ETDdirty && !ETD) errors.etd = { type: "required" };
+    if (ETAdirty && !ETA) errors.eta = { type: "required" };
+    if (ETD >= ETA) errors.eta = { type: "invalid" };
+
+    return errors;
+  };
+
+  const formErrors = checkErrors(errors);
 
   const isLoading = !user;
   const Loading = (
@@ -69,46 +85,65 @@ function Add({ user }) {
 
             <PlacesAutocomplete
               value={from.city}
-              handleSelect={place =>
+              handleSelect={place => {
                 setFrom({
                   city: formatCity(place),
                   position: { latitude: place.lat, longitude: place.lon },
+                  selected: formatCity(place),
                   raw: place,
-                })
-              }
+                });
+                setTimeout(() => triggerValidation({ name: "from" }), 300);
+              }}
             >
               <input
                 value={from.city}
                 onChange={e => setFrom({ city: e.target.value })}
                 className={`field ${errors.from && "error"}`}
                 type="text"
-                ref={register({ required: "error" })}
+                ref={register({
+                  required: "error",
+                  validate: { invalid: value => value === from.selected },
+                })}
                 name="from"
               />
             </PlacesAutocomplete>
+            {errors.from && errors.from.type === "invalid" ? (
+              <label className="label-error">
+                Select the place from the list
+              </label>
+            ) : null}
             <label className="field-label" htmlFor="to">
               {t("trip.add.to_city")}
             </label>
             <PlacesAutocomplete
               value={to.city}
-              handleSelect={place =>
+              handleSelect={place => {
                 setTo({
                   city: formatCity(place),
                   position: { latitude: place.lat, longitude: place.lon },
                   raw: place,
-                })
-              }
+                  selected: formatCity(place),
+                });
+                setTimeout(() => triggerValidation({ name: "to" }), 300);
+              }}
             >
               <input
-                required={true}
                 value={to.city}
                 onChange={e => setTo({ city: e.target.value })}
                 className={`field ${errors.to && "error"}`}
-                ref={register({ required: "error" })}
+                ref={register({
+                  required: "error",
+                  validate: { invalid: value => value === to.selected },
+                })}
                 type="text"
                 name="to"
               />
             </PlacesAutocomplete>
+            {errors.to && errors.to.type === "invalid" ? (
+              <label className="label-error">
+                Select the place from the list
+              </label>
+            ) : null}
             <label className="field-label" htmlFor="seats">
               {t("trip.add.seats")}
             </label>
@@ -155,6 +190,7 @@ function Add({ user }) {
             <DatePicker
               selected={ETD}
               onChange={date => setETD(date)}
+              onBlur={() => setETDdirty(true)}
               showTimeSelect
               timeFormat={t("trip.add.time")}
               todayButton={t("trip.add.today")}
@@ -163,8 +199,7 @@ function Add({ user }) {
               timeIntervals={15}
               customInput={
                 <input
-                  className={`field ${errors.etd && "error"}`}
-                  ref={register({ required: "error" })}
+                  className={`field ${formErrors.etd && "error"}`}
                   name="etd"
                 />
               }
@@ -177,6 +212,7 @@ function Add({ user }) {
             <DatePicker
               selected={ETA}
               onChange={date => setETA(date)}
+              onBlur={() => setETAdirty(true)}
               showTimeSelect
               timeFormat={t("trip.add.time")}
               todayButton={t("trip.add.today")}
@@ -186,13 +222,17 @@ function Add({ user }) {
               customInput={
                 <input
                   required={true}
-                  ref={register({ required: "error" })}
-                  className={`field ${errors.eta && "error"}`}
+                  className={`field ${formErrors.eta && "error"}`}
                   name="eta"
                 />
               }
               dateFormat={t("trip.add.timestamp")}
             />
+            {formErrors.eta && formErrors.eta.type === "invalid" ? (
+              <label className="label-error">
+                The arrival date should be after the departure
+              </label>
+            ) : null}
           </div>
 
           <div className="actions" style={{ marginBottom: 10 }}>
