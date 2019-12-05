@@ -66,8 +66,7 @@ const Search = ({}) => {
     search({ to, from, when }).finally(res => setTrips(res || exRep));
   }, []);
 
-  console.log(parse(when));
-  const searchDate = format(new Date(when), "DD/MM/YYYY");
+  const searchDate = format(new Date(Number(when)), "DD/MM/YYYY");
 
   return (
     <div>
