@@ -32,7 +32,7 @@ public class TripDaoHibernate implements TripDao {
 	private ReviewDao reviewDao;
 
 	public Trip create(Trip trip, User driver) {
-		console.info("Persistance: Creating trip");
+		console.info("Persistence: Creating trip");
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		trip.setDriver(driver);
 		trip.setCreated(now);
@@ -42,7 +42,7 @@ public class TripDaoHibernate implements TripDao {
 	}
 
 	public void reserveTrip(Integer tripId, User user) {
-		console.info("Persistance: Reserving trip");
+		console.info("Persistence: Reserving trip");
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		Trip trip = findById(tripId);
 
@@ -70,7 +70,7 @@ public class TripDaoHibernate implements TripDao {
 	}
 
 	public void delete(Integer tripId, User user) {
-		console.info("Persistance: Deleting trip");
+		console.info("Persistence: Deleting trip");
 		Trip trip = findById(tripId);
 
 		if (trip != null) {
@@ -83,7 +83,7 @@ public class TripDaoHibernate implements TripDao {
 
 	public List<Trip> findByRoute(Search search, Pagination pagination, User driver) {
 		// Get available trips by a route
-		console.info("Persistance: Searching trips");
+		console.info("Persistence: Searching trips");
 		String operator = driver == null ? "is not null" : "!= :driver";
 		String query = "FROM Trip t WHERE t.deleted = FALSE AND lower(t.from_city) LIKE :from AND lower(t.to_city) LIKE :to AND etd >= :when AND (SELECT count(r.id) FROM Reservation r WHERE r.trip = t) < t.seats AND t.driver " + operator + " ORDER BY etd ASC";
 		
@@ -104,7 +104,7 @@ public class TripDaoHibernate implements TripDao {
 
 
 	public List<Trip> getUserTrips(User user, Pagination pagination) {
-		console.info("Persistance: Get owned trips");
+		console.info("Persistence: Get owned trips");
 		// Get trips owned by a given user
 		String query = "FROM Trip t WHERE t.deleted = FALSE AND t.driver = :user ORDER BY eta ASC";
 
@@ -118,7 +118,7 @@ public class TripDaoHibernate implements TripDao {
 	}
 
 	public List<Reservation> getReservationsByUser(User user, Pagination pagination) {
-		console.info("Persistance: Get reservations");
+		console.info("Persistence: Get reservations");
 		String query = "FROM Reservation r WHERE user = :user";
 				
 		List<Reservation> reserves  = em.createQuery(query, Reservation.class)
@@ -141,8 +141,9 @@ public class TripDaoHibernate implements TripDao {
 	}
 	
 	public List<Trip> getSuggestions(String origin, Pagination pagination, User driver) {
-		String queryCount = "SELECT count(t.id) FROM Trip t WHERE t.deleted = FALSE AND lower(t.from_city) LIKE :from";
-		String query = "FROM Trip t WHERE t.deleted = FALSE AND lower(t.from_city) LIKE :from ORDER BY etd ASC";
+		console.info("Persistence: Get suggestions");
+		String queryCount = "SELECT count(t.id) FROM Trip t WHERE t.deleted = FALSE AND t.etd > CURRENT_TIMESTAMP() AND lower(t.from_city) LIKE :from";
+		String query = "FROM Trip t WHERE t.deleted = FALSE AND t.etd > CURRENT_TIMESTAMP() AND lower(t.from_city) LIKE :from ORDER BY etd ASC";
 		Long count = em.createQuery(queryCount, Long.class).setParameter("from", "%" + origin.toLowerCase() + "%").getSingleResult();
 		List<Trip> trips = em.createQuery(query, Trip.class)
 							 .setParameter("from", "%" + origin.toLowerCase() + "%")
@@ -151,7 +152,7 @@ public class TripDaoHibernate implements TripDao {
 							 .getResultList();
 		
 		if (trips.size() < pagination.getPer_page()) {
-			query = "FROM Trip t WHERE t.deleted = FALSE AND lower(t.from_city) NOT LIKE :from ORDER BY etd ASC";
+			query = "FROM Trip t WHERE t.deleted = FALSE AND t.etd > CURRENT_TIMESTAMP() AND lower(t.from_city) NOT LIKE :from ORDER BY etd ASC";
 			trips = em.createQuery(query, Trip.class)
 								 .setParameter("from", "%" + origin.toLowerCase() + "%")
 								 .setFirstResult((int) Math.max(pagination.getFirstResult() - count, 0))
