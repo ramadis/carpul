@@ -127,7 +127,7 @@ function Add({ user }) {
             </PlacesAutocomplete>
             {errors.from && errors.from.type === "invalid" ? (
               <label className="label-error">
-                Select the place from the list
+                {t("trip.add.errors.place.invalid")}
               </label>
             ) : null}
             <label className="field-label" htmlFor="to">
@@ -159,7 +159,7 @@ function Add({ user }) {
             </PlacesAutocomplete>
             {errors.to && errors.to.type === "invalid" ? (
               <label className="label-error">
-                Select the place from the list
+                {t("trip.add.errors.place.invalid")}
               </label>
             ) : null}
             <label className="field-label" htmlFor="seats">
@@ -173,12 +173,12 @@ function Add({ user }) {
             />
             {errors.seats && errors.seats.type === "max" ? (
               <label className="label-error">
-                The amount of seats should be smaller than 20
+                {t("trip.add.errors.seats.max")}
               </label>
             ) : null}
             {errors.seats && errors.seats.type === "min" ? (
               <label className="label-error">
-                The amount of seats should be greater than 1
+                {t("trip.add.errors.seats.min")}
               </label>
             ) : null}
 
@@ -193,12 +193,12 @@ function Add({ user }) {
             />
             {errors.cost && errors.cost.type === "max" ? (
               <label className="label-error">
-                The cost of your trip should be smaller than $10.000
+                {t("trip.add.errors.cost.max")}
               </label>
             ) : null}
             {errors.cost && errors.cost.type === "min" ? (
               <label className="label-error">
-                The cost of your trip should be greater than $0
+                {t("trip.add.errors.cost.min")}
               </label>
             ) : null}
 
@@ -248,7 +248,7 @@ function Add({ user }) {
             />
             {formErrors.eta && formErrors.eta.type === "invalid" ? (
               <label className="label-error">
-                The arrival date should be after the departure
+                {t("trip.add.errors.date.invalid")}
               </label>
             ) : null}
           </div>

@@ -137,6 +137,27 @@ const translations = {
       eta: "Estimated date and time of arrival*",
       submit: "Start the adventure!",
       subtitle: "Set up your trip so we can show everybody.",
+      errors: {
+        place: {
+          invalid: "Select the place from the list.",
+        },
+        seats: {
+          min:
+            "The amount of seats should be at least  1... you are sharing, right?",
+          max:
+            "The amount of seats should be smaller than 20. No buses allowed, sorry.",
+        },
+        cost: {
+          min:
+            "The cost of your trip should be greater than $0. Charge some money!",
+          max:
+            "The cost of your trip should be smaller than $10.000. People ain't *that* rich.",
+        },
+        date: {
+          invalid:
+            "The arrival date should be after the departure... or are you traveling through time?",
+        },
+      },
     },
     individual: {
       title: "This is the trip you were looking for",
