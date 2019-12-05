@@ -7,6 +7,9 @@ public class UserDTO {
     private String first_name;
     private String last_name;
     private Timestamp created;
+    private Integer rating;
+    private String image;
+    private String cover;
     private long id;
 
     public UserDTO() {}
@@ -17,6 +20,7 @@ public class UserDTO {
         this.setFirst_name(user.getFirst_name());
         this.setCreated(user.getCreated());
         this.setLast_name(user.getLast_name());
+        this.rating = user.getRating();
     }
 
     public long getId() {
@@ -58,4 +62,33 @@ public class UserDTO {
 	public void setCreated(Timestamp created) {
 		this.created = created;
 	}
+
+	public Integer getRating() {
+		return rating;
+	}
+
+	public void setRating(Integer rating) {
+		this.rating = rating;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public String getCover() {
+		return cover;
+	}
+
+	public void setCover(String cover) {
+		this.cover = cover;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+	
 }
