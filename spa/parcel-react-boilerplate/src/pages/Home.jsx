@@ -1,26 +1,32 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
-import { useTranslation } from 'react-i18next'
-import { isEmpty } from 'lodash'
-import DatePicker from 'react-datepicker'
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { connect } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { isEmpty } from "lodash";
+import DatePicker from "react-datepicker";
 
-import { getCity } from '../services/Places.js'
-import { routes } from '../services/routes.js'
+import { getCity } from "../services/Places.js";
+import { getSuggestions } from "../services/Search.js";
+import { routes } from "../services/Routes.js";
 
-import SmallItem from '../components/SmallItem'
-import PlacesAutocomplete from '../components/PlacesAutocomplete'
+import SmallItem from "../components/SmallItem";
+import PlacesAutocomplete from "../components/PlacesAutocomplete";
 
-import 'react-datepicker/dist/react-datepicker.css'
-import poolListCss from '../styles/pool_list'
-import mapsCss from '../styles/maps'
-import homeCss from '../styles/home'
+import "react-datepicker/dist/react-datepicker.css";
+import poolListCss from "../styles/pool_list";
+import mapsCss from "../styles/maps";
+import homeCss from "../styles/home";
 
-const Home = ({ match, trips }) => {
-  const { t } = useTranslation()
-  const [origin, setOrigin] = useState({ city: '' })
-  const [destination, setDestination] = useState({ city: '' })
-  const [datetime, setDatetime] = useState()
-  trips = []
+const Home = ({ user }) => {
+  const { t } = useTranslation();
+  const [origin, setOrigin] = useState({ city: "" });
+  const [destination, setDestination] = useState({ city: "" });
+  const [datetime, setDatetime] = useState();
+  const [trips, setTrips] = useState([]);
+
+  useEffect(() => {
+    getSuggestions().then(setTrips);
+  }, []);
 
   return (
     <React.Fragment>
@@ -28,128 +34,128 @@ const Home = ({ match, trips }) => {
       <style jsx>{mapsCss}</style>
       <style jsx>{homeCss}</style>
 
-      <div className='home-hero-container flex-center'>
-        <div className='home-content-container'>
-          <div className='titles'>
-            <h1 className='title'>{t('home.index.title1')}</h1>
-            <h1 className='title'>{t('home.index.title2')}</h1>
+      <div className="home-hero-container flex-center">
+        <div className="home-content-container">
+          <div className="titles">
+            <h1 className="title">{t("home.index.title1")}</h1>
+            <h1 className="title">{t("home.index.title2")}</h1>
           </div>
 
-          <h2 className='subtitle'>{t('home.index.subtitle')}</h2>
+          <h2 className="subtitle">{t("home.index.subtitle")}</h2>
 
           <div>
-            <div className='searchbar'>
-              <label className='searchbar-label' htmlFor='from'>
-                {t('home.index.from')}
+            <div className="searchbar">
+              <label className="searchbar-label" htmlFor="from">
+                {t("home.index.from")}
               </label>
               <PlacesAutocomplete
-                style={{ display: 'inline', paddingRight: 10 }}
+                style={{ display: "inline", paddingRight: 10 }}
                 value={origin.city}
                 handleSelect={place => {
                   setOrigin({
                     city: getCity(place),
                     position: { latitude: place.lat, longitude: place.lon },
                     selected: getCity(place),
-                    raw: place
-                  })
+                    raw: place,
+                  });
                 }}
               >
                 <input
                   value={origin.city}
                   onChange={e => setOrigin({ city: e.target.value })}
                   className={`searchbar-input`}
-                  type='text'
-                  placeholder='Origin'
-                  tabIndex='1'
-                  name='from'
+                  type="text"
+                  placeholder="Origin"
+                  tabIndex="1"
+                  name="from"
                 />
               </PlacesAutocomplete>
-              <label path='to' className='searchbar-label' htmlFor='to'>
-                {t('home.index.to')}
+              <label path="to" className="searchbar-label" htmlFor="to">
+                {t("home.index.to")}
               </label>
               <PlacesAutocomplete
-                style={{ display: 'inline', paddingRight: 10 }}
+                style={{ display: "inline", paddingRight: 10 }}
                 value={destination.city}
                 handleSelect={place => {
                   setDestination({
                     city: getCity(place),
                     position: { latitude: place.lat, longitude: place.lon },
                     selected: getCity(place),
-                    raw: place
-                  })
+                    raw: place,
+                  });
                 }}
               >
                 <input
                   value={destination.city}
                   onChange={e => setDestination({ city: e.target.value })}
                   className={`searchbar-input`}
-                  type='text'
-                  placeholder='Destination'
-                  tabIndex='2'
-                  name='to'
+                  type="text"
+                  placeholder="Destination"
+                  tabIndex="2"
+                  name="to"
                 />
               </PlacesAutocomplete>
-              <label path='when' className='searchbar-label' htmlFor='when'>
-                {t('home.index.on')}
+              <label path="when" className="searchbar-label" htmlFor="when">
+                {t("home.index.on")}
               </label>
               <DatePicker
                 selected={datetime}
                 onChange={date => setDatetime(date)}
                 showTimeSelect
-                timeFormat={t('trip.add.time')}
-                todayButton={t('trip.add.today')}
-                timeCaption='time'
+                timeFormat={t("trip.add.time")}
+                todayButton={t("trip.add.today")}
+                timeCaption="time"
                 minDate={new Date()}
-                placeholderText='Time range'
+                placeholderText="Time range"
                 timeIntervals={15}
                 customInput={
                   <input
-                    className='searchbar-input'
-                    name='when'
-                    type='text'
-                    tabIndex='3'
+                    className="searchbar-input"
+                    name="when"
+                    type="text"
+                    tabIndex="3"
                   />
                 }
-                dateFormat={t('trip.add.timestamp')}
+                dateFormat={t("trip.add.timestamp")}
               />
               <a
                 disabled={
                   !datetime && !isEmpty(origin) && !isEmpty(destination)
                 }
-                className='login-button searchbar-button'
-                name='button'
-                tabIndex='4'
+                className="login-button searchbar-button"
+                name="button"
+                tabIndex="4"
                 href={routes.search({
                   from: origin,
                   to: destination,
-                  date: datetime
+                  date: datetime,
                 })}
               >
-                {t('home.index.submit')}
+                {t("home.index.submit")}
               </a>
             </div>
           </div>
         </div>
       </div>
-      <div className='trips-recommendations-container'>
+      <div
+        className="trips-recommendations-container"
+        style={{ marginBottom: 20 }}
+      >
         {trips.length === 0 ? (
-          <h1>{t('home.index.no_trips')}</h1>
+          <h1>{t("home.index.no_trips")}</h1>
         ) : (
           <React.Fragment>
-            <h1>{t('home.index.suggestions')}</h1>
-            <div className='trip-recommendation-list'>
+            <h1>{t("home.index.suggestions")}</h1>
+            <div className="trip-recommendation-list">
               {trips.map(trip => (
-                <SmallItem trip={trip} />
+                <SmallItem key={trip.id} trip={trip} />
               ))}
             </div>
           </React.Fragment>
         )}
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-// TODO
-// <script src="<c:url value='/static/js/search_time.js' />" charset="utf-8"></script>
-
-export default Home
+export default connect(state => ({ user: state.user }))(Home);

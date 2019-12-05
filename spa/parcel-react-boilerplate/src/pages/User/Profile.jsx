@@ -7,20 +7,22 @@ import {
   useParams,
 } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { connect } from "react-redux";
+import MDSpinner from "react-md-spinner";
+
 import profileHeroCss from "../../styles/profile_hero";
 import poolListCss from "../../styles/pool_list";
 import profileCss from "../../styles/profile";
 import reviewItemCss from "../../styles/review_item";
+
 import Hero from "../../components/Hero";
 import ReviewItem from "../../components/ReviewItem";
 import HistoryItem from "../../components/HistoryItem";
 import Loading from "../../components/Loading";
+
 import TripPast from "./TripPast";
 import Trip from "./Trip";
 import Destiny from "./TripPast";
-import { connect } from "react-redux";
-import MDSpinner from "react-md-spinner";
-import api from "../../api";
 
 import { getProfileById } from "../../services/User";
 import { getReservationsByUser } from "../../services/Reservation";
@@ -28,22 +30,6 @@ import { getHistoryByUser } from "../../services/History";
 import { getReviewsByUser } from "../../services/Review";
 import { getTripsByUser } from "../../services/Trip";
 
-// function deleteTrip(id) {
-//   var confirmate = confirm('Are you sure you want to delete this trip?');
-//   if (confirmate) {
-//     $.post('../trip/' + id + '/delete');
-//     location.reload();
-//   }
-// }
-//
-// function kickout(id, tripId) {
-//   var confirmate = confirm('Are you sure you want to remove this passenger from you trip?');
-//   if (confirmate) {
-//     $.post('../trip/' + tripId + '/unreserve/' + id);
-//     location.reload();
-//   }
-// }
-//
 // function unreserve(id) {
 //   var confirmate = confirm('Are you sure you want to unreserve this trip?');
 //   if (confirmate) {

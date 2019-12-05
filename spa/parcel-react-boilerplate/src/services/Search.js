@@ -15,7 +15,7 @@ export const search = async ({ to, from, when }) => {
   return results;
 };
 
-export const getSuggestions = async ({ origin }) => {
+export const getSuggestions = async origin => {
   const results = await GETwithAuth(
     `/search/suggestions?origin=${origin}`
   ).then(res => {
