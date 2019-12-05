@@ -1,7 +1,7 @@
 .home-hero-container {
   position: relative;
   width: 100%;
-  background-image: url('../images/home-hero.jpg');
+  background-image: url("../images/home-hero.jpg");
   background-size: cover;
   height: 500px;
   background-color: #00c4ff;
@@ -9,7 +9,7 @@
 }
 
 input[readonly].searchbar-input {
-	padding-left: 10px;
+  padding-left: 10px;
 }
 
 .home-content-container {
@@ -17,7 +17,7 @@ input[readonly].searchbar-input {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center
+  align-items: center;
 }
 
 .home-error-bar {
@@ -31,7 +31,6 @@ input[readonly].searchbar-input {
 .home-error-bar.form-error {
   color: white;
 }
-
 
 .title {
   margin: 0;
