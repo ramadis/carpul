@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { isEmpty } from "lodash";
 import DatePicker from "react-datepicker";
 
-import { getCity } from "../services/Places.js";
+import { getCity, getLocation } from "../services/Places.js";
 import { getSuggestions } from "../services/Search.js";
 import { routes } from "../services/Routes.js";
 
@@ -25,7 +25,11 @@ const Home = ({ user }) => {
   const [trips, setTrips] = useState([]);
 
   useEffect(() => {
-    getSuggestions().then(setTrips);
+    const fetches = async () => {
+      const city = await getLocation();
+      getSuggestions(city).then(setTrips);
+    };
+    fetches();
   }, []);
 
   return (
