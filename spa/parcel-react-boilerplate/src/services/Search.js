@@ -16,9 +16,8 @@ export const search = async ({ to, from, when }) => {
 };
 
 export const getSuggestions = async origin => {
-  const results = await GETwithAuth(
-    `/search/suggestions?origin=${origin}`
-  ).then(res => {
+  const query = origin ? `?origin=${origin}` : "";
+  const results = await GETwithAuth(`/search/suggestions${query}`).then(res => {
     if (res.isRawResponse) {
       // TODO: Handle specific error messages
       return;

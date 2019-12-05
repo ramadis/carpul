@@ -29,8 +29,8 @@ const Home = ({ user }) => {
   useEffect(() => {
     setLoading(true);
     const fetches = async () => {
-      const city = await getLocation();
-      if (!origin.city) setOrigin({ city });
+      const city = await getLocation().catch(e => console.error(e));
+      if (!origin.city && city) setOrigin({ city });
       await getSuggestions(city).then(setTrips);
       setLoading(false);
     };
