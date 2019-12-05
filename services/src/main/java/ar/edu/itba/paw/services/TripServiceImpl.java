@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.ReviewDao;
 import ar.edu.itba.paw.interfaces.TripDao;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,9 +24,6 @@ public class TripServiceImpl implements TripService {
 	@Autowired
 	private TripDao tripDao;
 	
-	@Autowired
-	private ReviewDao reviewDao;
-
 	@Transactional
 	public Trip register(final Trip trip, final User driver) {
 		return tripDao.create(trip, driver);
@@ -66,47 +64,15 @@ public class TripServiceImpl implements TripService {
 		tripDao.delete(tripId, user);
 	}
 
-	private List<Trip> filterExpired(List<Trip> trips) {
-		return trips.stream().filter((trip) -> !trip.getExpired() && !trip.getDeleted()).collect(Collectors.toList());
+	public List<Trip> getSuggestions(String origin, Pagination pagination, User driver) {
+		// TODO: improve this
+		List<Trip> trips = Collections.EMPTY_LIST;
+		return trips;
 	}
 
-	public List<Trip> findByRoute(User user, Search search) {
-		List<Trip> trips = tripDao.findByRouteWithDateComparision(user, search, "=");
-		
-		for(Trip trip: trips) {
-			trip.setReserved(trip.getPassengers().contains(user));
-		}
-		
-		return filterExpired(trips);
+	public List<Trip> findByRoute(Search search, Pagination pagination, User driver) {
+		List<Trip> trips = tripDao.findByRoute(search, pagination, driver);
+		return trips;
 	}
 
-	public List<Trip> getSuggestions(User user, Search search) {
-		List<Trip> trips = user == null ? findAfterDateByRoute(search) : findAfterDateByRoute(user, search);
-		
-		for(Trip trip: trips) {
-			trip.setReserved(trip.getPassengers().contains(user));
-		}
-		
-		return trips.subList(0, trips.size() >= 10 ? 9 : trips.size());
-
-	}
-
-	public List<Trip> findAfterDateByRoute(User user, Search search) {
-		List<Trip> trips = tripDao.findByRouteWithDateComparision(user, search, ">");
-		
-		for(Trip trip: trips) {
-			trip.setReserved(trip.getPassengers().contains(user));
-		}
-		
-		return filterExpired(trips);	}
-
-	public List<Trip> findByRoute(Search search) {
-		List<Trip> trips = tripDao.findByRouteWithDateComparision(search, "=");
-		return filterExpired(trips);
-	}
-
-	public List<Trip> findAfterDateByRoute(Search search) {
-		List<Trip> trips = tripDao.findByRouteWithDateComparision(search, ">");
-		return filterExpired(trips);
-	}
 }

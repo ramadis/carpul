@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -78,34 +79,27 @@ public class TripDaoHibernate implements TripDao {
 		return;
 	}
 
-	public List<Trip> findByRouteWithDateComparision(Search search, String comparision) {
+	public List<Trip> findByRoute(Search search, Pagination pagination, User driver) {
 		// Get available trips by a route
-		String query = "SELECT t FROM Trip t WHERE t.deleted = FALSE AND lower(t.from_city) LIKE :from AND lower(t.to_city) LIKE :to ORDER BY etd ASC";
-
-		List<Trip> trips = em.createQuery(query, Trip.class)
-						     .setParameter("from", "%" + search.getFrom().toLowerCase() + "%")
-						     .setParameter("to", "%" + search.getTo().toLowerCase() + "%")
-						     .getResultList();
-
-		if (comparision == ">" ) {
-			return trips.stream().filter((trip) -> trip.getEtd().after(search.getWhen()))
-								.filter((trip) -> trip.getPassengers().size() < trip.getSeats())
-								 .collect(Collectors.toList());
-		} else if (comparision == "=") {
-			return trips.stream().filter((trip) -> trip.getEtd().equals(search.getWhen()))
-					.filter((trip) -> trip.getPassengers().size() < trip.getSeats())
-					 .collect(Collectors.toList());
+		
+		String operator = driver == null ? "is not null" : "!= :driver";
+		String query = "FROM Trip t WHERE t.deleted = FALSE AND lower(t.from_city) LIKE :from AND lower(t.to_city) LIKE :to AND etd >= :when AND (SELECT count(r.id) FROM Reservation r WHERE r.trip = t) < t.seats AND t.driver " + operator + " ORDER BY etd ASC";
+		
+		TypedQuery<Trip> partialQuery = em.createQuery(query, Trip.class)
+										  .setParameter("from", "%" + search.getFrom().toLowerCase() + "%")
+										  .setParameter("to", "%" + search.getTo().toLowerCase() + "%")
+										  .setParameter("when", search.getWhen());
+		
+		if (driver == null) {
+			return partialQuery.getResultList();
 		}
+		
+		List<Trip> trips = partialQuery.setParameter("driver", driver)
+						     		   .getResultList();
 
 		return trips;
 	}
 
-	public List<Trip> findByRouteWithDateComparision(User user, Search search, String comparision) {
-		List<Trip> trips = findByRouteWithDateComparision(search, comparision);
-
-		return trips.stream().filter((trip) -> !trip.getDriver().equals(user))
-							 .collect(Collectors.toList());
-	}
 
 	public List<Trip> getUserTrips(User user, Pagination pagination) {
 		// Get trips owned by a given user

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ar.edu.itba.paw.interfaces.TripService;
+import ar.edu.itba.paw.models.Pagination;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.webapp.DTO.TripDTO;
@@ -30,21 +32,25 @@ public class SearchController extends AuthController {
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response searchAllView(@QueryParam("from") String from,
-								  @QueryParam("to") String to,
-								  @QueryParam("when") Long when) {
+	public Response search(@QueryParam("from") String from,
+						   @QueryParam("to") String to,
+						   @QueryParam("when") Long when,
+						   @DefaultValue("false") @QueryParam("exclude_driver") Boolean excludeDriver,
+						   @DefaultValue("0") @QueryParam("page") int page,
+						   @DefaultValue("5") @QueryParam("per_page") int perPage) {
+		
 		// Create a valid search model.
 		Search search = new Search();
-		search.setFrom(from.split(",")[0]);
-		search.setTo(to.split(",")[0]);
+		search.setFrom(from);
+		search.setTo(to);
 		search.setWhen(when);
 		
 		// Get logged user
 		User user = user();
-
+		
 		// Get trips to this search
 		List<TripDTO> tripDTOs = new ArrayList<>();
-		List<Trip> trips = user == null ? ts.findByRoute(search) : ts.findByRoute(user, search);
+		List<Trip> trips = ts.findByRoute(search, new Pagination(page, perPage), excludeDriver ? user : null);
 		
 		// If no trips at all. It's empty.
 		if (trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
@@ -55,46 +61,24 @@ public class SearchController extends AuthController {
 	}
 	
 	@GET
-	@Path("/future")
+	@Path("/suggestions")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response searchAllViewFuture(@QueryParam("from") String from,
-								  @QueryParam("to") String to,
-								  @QueryParam("when") Long when) {
-		// Create a valid search model.
-		Search search = new Search();
-		search.setFrom(from.split(",")[0]);
-		search.setTo(to.split(",")[0]);
-		search.setWhen(when);
-
+	public Response suggest(@DefaultValue("buenos aires") @QueryParam("origin") String origin,
+							@DefaultValue("false") @QueryParam("exclude_driver") Boolean excludeDriver,
+						 	@DefaultValue("0") @QueryParam("page") int page,
+						 	@DefaultValue("5") @QueryParam("per_page") int perPage) {
 		// Get logged user
 		User user = user();
 
 		// Get trips to this search
-		List<TripDTO> laterTripDTOs = new ArrayList<>();
-		List<Trip> laterTrips = user == null ? ts.findAfterDateByRoute(search) : ts.findAfterDateByRoute(user, search);
+		List<TripDTO> tripDTOs = new ArrayList<>();
+		List<Trip> trips = ts.getSuggestions(origin, new Pagination(page, perPage), excludeDriver ? null : user);
 		
 		// If no trips at all. It's empty.
-		if (laterTrips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
+		if (trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 
 		// Generate DTOs
-		for(Trip t: laterTrips) laterTripDTOs.add(new TripDTO(t));
-		return Response.ok(laterTripDTOs).build();
+		for(Trip t: trips) tripDTOs.add(new TripDTO(t));
+		return Response.ok(tripDTOs).build();
 	}
-
-	// TODO: Check wtf is this view.
-//	@RequestMapping(value = "/search/{tripId}", method = RequestMethod.GET)
-//	public ModelAndView searchAllView(@PathVariable("tripId") final Integer tripId,
-//									 @RequestParam("from") String from,
-//									 @RequestParam("to") String to,
-//									 @RequestParam("when") Timestamp when) {
-//		// Get trip by id
-//		List<Trip> trips = new ArrayList<>();
-//		trips.add(ts.findById(tripId));
-//
-//		// Expose view
-//		final ModelAndView mav = new ModelAndView("trips/individual");
-//		mav.addObject("trips", trips);
-//		mav.addObject("is_searching", true);
-//		return mav;
-//	}
 }
