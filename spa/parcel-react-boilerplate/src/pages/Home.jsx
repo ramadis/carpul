@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { isEmpty } from "lodash";
 import DatePicker from "react-datepicker";
+import MDSpinner from "react-md-spinner";
 
 import { getCity, getLocation } from "../services/Places.js";
 import { getSuggestions } from "../services/Search.js";
@@ -23,11 +24,14 @@ const Home = ({ user }) => {
   const [destination, setDestination] = useState({ city: "" });
   const [datetime, setDatetime] = useState();
   const [trips, setTrips] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     const fetches = async () => {
       const city = await getLocation();
-      getSuggestions(city).then(setTrips);
+      await getSuggestions(city).then(setTrips);
+      setLoading(false);
     };
     fetches();
   }, []);
@@ -143,9 +147,11 @@ const Home = ({ user }) => {
       </div>
       <div
         className="trips-recommendations-container"
-        style={{ marginBottom: 20 }}
+        style={{ marginBottom: 20, paddingTop: 20 }}
       >
-        {trips.length === 0 ? (
+        {loading ? (
+          <MDSpinner />
+        ) : trips.length === 0 ? (
           <h1>{t("home.index.no_trips")}</h1>
         ) : (
           <React.Fragment>
