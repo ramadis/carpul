@@ -74,7 +74,7 @@ const Review = ({ review }) => {
               initialRating={review.stars}
               readonly={true}
               emptySymbol={
-                <FontAwesomeIcon icon={faStar} size="xs" color="#808080" />
+                <FontAwesomeIcon icon={faStar} size="xs" color="#f4f4f4" />
               }
               fullSymbol={
                 <FontAwesomeIcon icon={faStar} size="xs" color="#f39c12" />

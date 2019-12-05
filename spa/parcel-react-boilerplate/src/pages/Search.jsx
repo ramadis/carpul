@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { format, parse } from "date-fns";
+import Rating from "react-rating";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 import {
   BrowserRouter as Router,
   Route,
@@ -125,11 +128,16 @@ const Trip = ({ trip }) => {
         </div>
         <div className="user-name">{trip.driver.first_name}</div>
         <span className="user-rating">
-          <img src="<c:url value='/static/images/star.png' />" />
-          <img src="<c:url value='/static/images/star.png' />" />
-          <img src="<c:url value='/static/images/star.png' />" />
-          <img src="<c:url value='/static/images/star.png' />" />
-          <img src="<c:url value='/static/images/star.png' />" />
+          <Rating
+            initialRating={trip.driver.rating}
+            readonly={true}
+            emptySymbol={
+              <FontAwesomeIcon icon={faStar} size="xs" color="#f4f4f4" />
+            }
+            fullSymbol={
+              <FontAwesomeIcon icon={faStar} size="xs" color="#f39c12" />
+            }
+          />
         </span>
       </div>
 
