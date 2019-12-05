@@ -88,7 +88,9 @@ public class TripDaoHibernate implements TripDao {
 		TypedQuery<Trip> partialQuery = em.createQuery(query, Trip.class)
 										  .setParameter("from", "%" + search.getFrom().toLowerCase() + "%")
 										  .setParameter("to", "%" + search.getTo().toLowerCase() + "%")
-										  .setParameter("when", search.getWhen());
+										  .setParameter("when", search.getWhen())
+										  .setFirstResult(pagination.getFirstResult())
+										  .setMaxResults(pagination.getPer_page());
 		
 		if (driver == null) {
 			return partialQuery.getResultList();
