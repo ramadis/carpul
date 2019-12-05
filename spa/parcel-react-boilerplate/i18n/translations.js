@@ -62,13 +62,36 @@ const translations = {
       page_title: "Carpul | Welcome to a new adventurer life",
       title: "Who are you?",
       subtitle: "Share something about you.",
-      first_name: "First name",
-      last_name: "Last name",
+      first_name: "First name*",
+      last_name: "Last name*",
       phone_number: "Phone number",
-      username: "Username",
-      password: "Password (At least 6 chars)",
+      username: "Email*",
+      password: "Password (at least 6 chars)*",
       submit: "Create account",
       login: "Login",
+      errors: {
+        name: {
+          min:
+            "Your name is really that short? Try writing a few characters more.",
+          max: "Your name is really that long? Try removing a few characters.",
+          pattern: "Your name should be written in letters. Regular letters.",
+        },
+        phone: {
+          max:
+            "There's something wrong with your phone. Maybe try deleting a few numbers?",
+          pattern:
+            "Your phone should be only numbers. No letters, no spaces, no weird emojis.",
+        },
+        username: {
+          min: "Your email should be at least 5 characters long, doesn't it?",
+          pattern: "Your email should be... well, an email.",
+        },
+        password: {
+          min:
+            "Your password should be at least 6 characters long to be a *little* secure.",
+          max: "Your password should be have at most 100 characters.",
+        },
+      },
     },
     profile: {
       page_title: "Carpul | {{0}} {{1}} is awesome",

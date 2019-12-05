@@ -2,36 +2,28 @@ import React, { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { connect } from "react-redux";
+import { isEmpty } from "lodash";
+import useForm from "react-hook-form";
+
 import { signupUser } from "../../services/User";
 import { loginUser } from "../../services/Auth";
 
-const Register = ({ dispatch, user }) => {
-  // TODO: Add form validation
-  const [first_name, setFirstName] = useState("");
-  const [last_name, setLastName] = useState("");
-  const [phone_number, setPhone] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+const Register = ({ user }) => {
   const { t, i18n } = useTranslation();
+  const { handleSubmit, register, errors, triggerValidation } = useForm({
+    mode: "onChange",
+  });
 
-  const register = async () => {
-    await signupUser({
-      first_name,
-      last_name,
-      phone_number,
-      username,
-      password
-    });
-    await loginUser(username, password);
+  const onSubmit = async values => {
+    await signupUser(values);
+    await loginUser(values.username, values.password);
   };
-
-  const setFormField = setter => event => setter(event.target.value);
 
   const isLogged = !!user;
   if (isLogged) return <Redirect to={`/user/profile/${user.id}`} />;
   return (
     <div className="flex-center full-height">
-      <div className="user-form">
+      <form onSubmit={handleSubmit(onSubmit)} className="user-form">
         <div className="top-border" />
         <div className="text-container">
           <span>carpul</span>
@@ -42,86 +34,139 @@ const Register = ({ dispatch, user }) => {
         </div>
 
         <div className="field-container">
-          <label path="first_name" className="field-label" htmlFor="first_name">
+          <label className="field-label" htmlFor="first_name">
             {t("user.register.first_name")}
           </label>
           <input
-            required
-            className="field"
-            path="first_name"
+            className={`field ${errors.first_name && "error"}`}
+            ref={register({
+              required: "error",
+              minLength: 2,
+              maxLength: 30,
+              pattern: /^[A-Za-z]+$/,
+            })}
             type="text"
             name="first_name"
-            value={first_name}
-            onChange={setFormField(setFirstName)}
           />
+          {errors.first_name && errors.first_name.type === "minLength" ? (
+            <label className="label-error">
+              {t("user.register.errors.name.min")}
+            </label>
+          ) : null}
+          {errors.first_name && errors.first_name.type === "maxLength" ? (
+            <label className="label-error">
+              {t("user.register.errors.name.max")}
+            </label>
+          ) : null}
+          {errors.first_name && errors.first_name.type === "pattern" ? (
+            <label className="label-error">
+              {t("user.register.errors.name.pattern")}
+            </label>
+          ) : null}
 
-          <label path="last_name" className="field-label" htmlFor="last_name">
+          <label className="field-label" htmlFor="last_name">
             {t("user.register.last_name")}
           </label>
           <input
-            required
-            className="field"
-            path="last_name"
+            className={`field ${errors.last_name && "error"}`}
+            ref={register({ required: "error", minLength: 2, maxLength: 20 })}
             type="text"
             name="last_name"
-            value={last_name}
-            onChange={setFormField(setLastName)}
           />
+          {errors.last_name && errors.last_name.type === "minLength" ? (
+            <label className="label-error">
+              {t("user.register.errors.name.min")}
+            </label>
+          ) : null}
+          {errors.last_name && errors.last_name.type === "maxLength" ? (
+            <label className="label-error">
+              {t("user.register.errors.name.max")}
+            </label>
+          ) : null}
+          {errors.last_name && errors.last_name.type === "pattern" ? (
+            <label className="label-error">
+              {t("user.register.errors.name.pattern")}
+            </label>
+          ) : null}
 
-          <label
-            path="phone_number"
-            className="field-label"
-            htmlFor="phone_number"
-          >
+          <label className="field-label" htmlFor="phone_number">
             {t("user.register.phone_number")}
           </label>
           <input
-            required
-            className="field"
-            path="phone_number"
+            className={`field ${errors.phone_number && "error"}`}
+            ref={register({ maxLength: 20, pattern: /^\d*$/ })}
             type="text"
             name="phone_number"
-            value={phone_number}
-            onChange={setFormField(setPhone)}
           />
+          {errors.phone_number && errors.phone_number.type === "maxLength" ? (
+            <label className="label-error">
+              {t("user.register.errors.phone.max")}
+            </label>
+          ) : null}
+          {errors.phone_number && errors.phone_number.type === "pattern" ? (
+            <label className="label-error">
+              {t("user.register.errors.phone.pattern")}
+            </label>
+          ) : null}
 
-          <label path="username" className="field-label" htmlFor="username">
+          <label className="field-label" htmlFor="username">
             {t("user.register.username")}
           </label>
           <input
-            required
-            className="field"
+            className={`field ${errors.username && "error"}`}
             name="username"
-            path="username"
+            ref={register({
+              required: "error",
+              minLength: 5,
+              pattern: /^\S+@\S+$/,
+            })}
             type="email"
-            value={username}
-            onChange={setFormField(setUsername)}
           />
+          {errors.username && errors.username.type === "minLength" ? (
+            <label className="label-error">
+              {t("user.register.errors.username.min")}
+            </label>
+          ) : null}
+          {errors.username && errors.username.type === "pattern" ? (
+            <label className="label-error">
+              {t("user.register.errors.username.pattern")}
+            </label>
+          ) : null}
 
-          <label path="password" className="field-label" htmlFor="password">
+          <label className="field-label" htmlFor="password">
             {t("user.register.password")}
           </label>
           <input
-            required
-            className="field"
-            pattern=".{6,100}"
-            path="password"
+            className={`field ${errors.password && "error"}`}
+            ref={register({ required: "error", minLength: 6, maxLength: 100 })}
             type="password"
             name="password"
-            value={password}
-            onChange={setFormField(setPassword)}
           />
+          {errors.password && errors.password.type === "minLength" ? (
+            <label className="label-error">
+              {t("user.register.errors.password.min")}
+            </label>
+          ) : null}
+          {errors.password && errors.password.type === "maxLength" ? (
+            <label className="label-error">
+              {t("user.register.errors.password.max")}
+            </label>
+          ) : null}
         </div>
 
         <div className="actions">
           <Link to="/user/login" className="create-account">
             {t("user.register.login")}
           </Link>
-          <button type="submit" className="login-button" onClick={register}>
+          <button
+            type="submit"
+            className="login-button"
+            disabled={!isEmpty(errors)}
+          >
             {t("user.register.submit")}
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
