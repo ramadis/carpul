@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 
 import { search } from "../services/search";
+import { reserveByTrip, unreserveByTrip } from "../services/Reservation";
 
 import poolListCss from "../styles/pool_list";
 
@@ -176,26 +177,20 @@ const Trip = ({ trip }) => {
               </span>
 
               {!trip.reserved && (
-                <form
-                  className="inline-block"
-                  method="post"
-                  action="${url}trip/${trip.id}/reserve"
+                <button
+                  className="login-button inline-block"
+                  onClick={() => reserveByTrip(trip.id)}
                 >
-                  <button className="login-button">
-                    {t("search.item.reserve")}
-                  </button>
-                </form>
+                  {t("search.item.reserve")}
+                </button>
               )}
               {trip.reserved && (
-                <form
-                  className="inline-block"
-                  method="post"
-                  action="${url}trip/${trip.id}/unreserve"
+                <button
+                  className="inline-block login-button main-color"
+                  onClick={() => unreserveByTrip(trip.id)}
                 >
-                  <button className="login-button main-color">
-                    {t("search.item.unreserve")}
-                  </button>
-                </form>
+                  {t("search.item.unreserve")}
+                </button>
               )}
             </div>
           </div>
