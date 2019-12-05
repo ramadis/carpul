@@ -2,7 +2,7 @@ import axios from "axios";
 
 const auth = () => localStorage.getItem("token");
 
-export const API_URL = "http://feb3206c.ngrok.io/api";
+export const API_URL = "http://localhost:8090/api";
 
 const instance = axios.create({
   baseURL: API_URL,
@@ -17,8 +17,8 @@ const instance = axios.create({
       }
 
       return data;
-    }
-  ]
+    },
+  ],
 });
 
 export const getUser = userId =>

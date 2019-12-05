@@ -31,7 +31,7 @@ module.exports = methods.reduce((pv, cv) => {
         headers,
       })
     );
-    const isUnauthorized = res.status == 403 || res.status == 401;
+    const isUnauthorized = res.status == 401;
 
     if (isUnauthorized) {
       console.log("IS UNAUTHORIZED");

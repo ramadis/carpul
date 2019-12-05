@@ -3,14 +3,13 @@ import { withTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import { format } from "date-fns";
 
+import { cancelTrip } from "../../services/Trip";
+import { cancelReservation } from "../../services/Reservation";
+
 import profileHeroCss from "../../styles/profile_hero";
 import poolListCss from "../../styles/pool_list";
 import profileCss from "../../styles/profile";
 import reviewItemCss from "../../styles/review_item";
-
-// TODO:
-const deleteTrip = () => {};
-const kickPassenger = () => {};
 
 const Trip = ({ t, trip }) => {
   const fmtetddate = format(trip.etd, "DD/MM/YYYY");
@@ -73,32 +72,34 @@ const Trip = ({ t, trip }) => {
             </a>
             <button
               className="destiny-unreserve-button"
-              onClick={() => deleteTrip(trip.id)}
+              onClick={() => cancelTrip(trip.id)}
             >
               {t("user.trip.delete")}
             </button>
             {trip.passengers.length > 0 ? <hr /> : null}
             {trip.passengers.map(passenger => (
-              <a href={`/user/${passenger.id}`}>
+              <div href={`/user/${passenger.id}`}>
                 <div className="driver">
                   <div className="driver-item-data">
-                    <img
-                      width="50"
-                      height="50"
-                      src={`https://ui-avatars.com/api/?rounded=true&size=150&background=e36f4a&color=fff&name=${
-                        passenger.first_name
-                      } ${passenger.last_name}`}
-                      alt=""
-                    />
-                    <div className="driver-info">
-                      <span className="driver-name">
-                        {passenger.first_name} {passenger.last_name}
-                      </span>
-                      <span>{passenger.phone_number}</span>
-                    </div>
+                    <a href={`/user/${passenger.id}`}>
+                      <img
+                        width="50"
+                        height="50"
+                        src={`https://ui-avatars.com/api/?rounded=true&size=150&background=e36f4a&color=fff&name=${
+                          passenger.first_name
+                        } ${passenger.last_name}`}
+                        alt=""
+                      />
+                      <div className="driver-info">
+                        <span className="driver-name">
+                          {passenger.first_name} {passenger.last_name}
+                        </span>
+                        <span>{passenger.phone_number}</span>
+                      </div>
+                    </a>
                   </div>
                   <button
-                    onClick={kickPassenger}
+                    onClick={() => cancelReservation(passenger.id, trip.id)}
                     type="button"
                     className="kick-hitchhiker"
                   >
@@ -110,7 +111,7 @@ const Trip = ({ t, trip }) => {
                     />
                   </button>
                 </div>
-              </a>
+              </div>
             ))}
           </div>
         </li>
