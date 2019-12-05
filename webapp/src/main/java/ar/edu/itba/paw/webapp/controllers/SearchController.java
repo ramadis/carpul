@@ -63,7 +63,7 @@ public class SearchController extends AuthController {
 	@GET
 	@Path("/suggestions")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response suggest(@DefaultValue("buenos aires") @QueryParam("origin") String origin,
+	public Response suggest(@DefaultValue("'") @QueryParam("origin") String origin,
 							@DefaultValue("false") @QueryParam("exclude_driver") Boolean excludeDriver,
 						 	@DefaultValue("0") @QueryParam("page") int page,
 						 	@DefaultValue("5") @QueryParam("per_page") int perPage) {
