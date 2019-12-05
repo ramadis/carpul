@@ -30,6 +30,7 @@ const Home = ({ user }) => {
     setLoading(true);
     const fetches = async () => {
       const city = await getLocation();
+      if (!origin.city) setOrigin({ city });
       await getSuggestions(city).then(setTrips);
       setLoading(false);
     };
