@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.interfaces.ReviewDao;
 import ar.edu.itba.paw.interfaces.TripDao;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,7 +45,7 @@ public class TripServiceImpl implements TripService {
 
 	public List<Trip> getReservedTrips(User user, Pagination pagination) {
 		List<Reservation> reserves = tripDao.getReservationsByUser(user, pagination);
-		// TODO: ver si va ese filter
+		// TODO: ver si va este filter
 		return reserves.stream().map(reservation -> reservation.getTrip()).collect(Collectors.toList());
 	}
 
@@ -66,7 +64,7 @@ public class TripServiceImpl implements TripService {
 
 	public List<Trip> getSuggestions(String origin, Pagination pagination, User driver) {
 		// TODO: improve this
-		List<Trip> trips = Collections.EMPTY_LIST;
+		List<Trip> trips = tripDao.getSuggestions(origin, pagination, driver);
 		return trips;
 	}
 

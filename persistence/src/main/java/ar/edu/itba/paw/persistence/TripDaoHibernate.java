@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import java.sql.Timestamp;
@@ -33,6 +32,7 @@ public class TripDaoHibernate implements TripDao {
 	private ReviewDao reviewDao;
 
 	public Trip create(Trip trip, User driver) {
+		console.info("Persistance: Creating trip");
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		trip.setDriver(driver);
 		trip.setCreated(now);
@@ -42,6 +42,7 @@ public class TripDaoHibernate implements TripDao {
 	}
 
 	public void reserveTrip(Integer tripId, User user) {
+		console.info("Persistance: Reserving trip");
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		Trip trip = findById(tripId);
 
@@ -56,6 +57,7 @@ public class TripDaoHibernate implements TripDao {
 	}
 
 	public void unreserveTrip(Integer tripId, User user) {
+		console.info("Persistance: Unreserving trip");
 		String query = "SELECT r FROM Reservation r WHERE trip.id = :tripId AND user = :user";
 
 		List<Reservation> reservations = em.createQuery(query, Reservation.class)
@@ -68,7 +70,7 @@ public class TripDaoHibernate implements TripDao {
 	}
 
 	public void delete(Integer tripId, User user) {
-		
+		console.info("Persistance: Deleting trip");
 		Trip trip = findById(tripId);
 
 		if (trip != null) {
@@ -81,7 +83,7 @@ public class TripDaoHibernate implements TripDao {
 
 	public List<Trip> findByRoute(Search search, Pagination pagination, User driver) {
 		// Get available trips by a route
-		
+		console.info("Persistance: Searching trips");
 		String operator = driver == null ? "is not null" : "!= :driver";
 		String query = "FROM Trip t WHERE t.deleted = FALSE AND lower(t.from_city) LIKE :from AND lower(t.to_city) LIKE :to AND etd >= :when AND (SELECT count(r.id) FROM Reservation r WHERE r.trip = t) < t.seats AND t.driver " + operator + " ORDER BY etd ASC";
 		
@@ -92,9 +94,7 @@ public class TripDaoHibernate implements TripDao {
 										  .setFirstResult(pagination.getFirstResult())
 										  .setMaxResults(pagination.getPer_page());
 		
-		if (driver == null) {
-			return partialQuery.getResultList();
-		}
+		if (driver == null) return partialQuery.getResultList();
 		
 		List<Trip> trips = partialQuery.setParameter("driver", driver)
 						     		   .getResultList();
@@ -104,6 +104,7 @@ public class TripDaoHibernate implements TripDao {
 
 
 	public List<Trip> getUserTrips(User user, Pagination pagination) {
+		console.info("Persistance: Get owned trips");
 		// Get trips owned by a given user
 		String query = "FROM Trip t WHERE t.deleted = FALSE AND t.driver = :user ORDER BY eta ASC";
 
@@ -116,17 +117,8 @@ public class TripDaoHibernate implements TripDao {
 		return trips;
 	}
 
-	private Integer getPassengerAmount(Trip trip) {
-		String query = "SELECT r FROM Reservation r WHERE trip = :trip";
-
-		List<Reservation> reserves = em.createQuery(query, Reservation.class)
-  								     .setParameter("trip", trip)
-								     .getResultList();
-
-		return reserves.size();
-	}
-	
 	public List<Reservation> getReservationsByUser(User user, Pagination pagination) {
+		console.info("Persistance: Get reservations");
 		String query = "FROM Reservation r WHERE user = :user";
 				
 		List<Reservation> reserves  = em.createQuery(query, Reservation.class)
@@ -146,6 +138,28 @@ public class TripDaoHibernate implements TripDao {
 
 		return trips;
 
+	}
+	
+	public List<Trip> getSuggestions(String origin, Pagination pagination, User driver) {
+		String query = "FROM Trip t WHERE t.deleted = FALSE AND lower(t.from_city) LIKE :from ORDER BY etd ASC";
+		Integer count = em.createQuery(query, Integer.class).setParameter("from", "%" + origin.toLowerCase() + "%").getMaxResults();
+		List<Trip> trips = em.createQuery(query, Trip.class)
+							 .setParameter("from", "%" + origin.toLowerCase() + "%")
+							 .setFirstResult(pagination.getFirstResult())
+							 .setMaxResults(pagination.getPer_page())
+							 .getResultList();
+		
+		if (trips.size() < pagination.getPer_page()) {
+			query = "FROM Trip t WHERE t.deleted = FALSE AND lower(t.from_city) NOT LIKE :from ORDER BY etd ASC";
+			trips = em.createQuery(query, Trip.class)
+								 .setParameter("from", "%" + origin.toLowerCase() + "%")
+								 .setFirstResult(Math.max(pagination.getFirstResult() - count, 0))
+								 .setMaxResults(pagination.getPer_page())
+								 .getResultList();
+			return trips;
+		}
+		
+		return trips;
 	}
 
 	private Boolean isReserved(Trip trip) {
