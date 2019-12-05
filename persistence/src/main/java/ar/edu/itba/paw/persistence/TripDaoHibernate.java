@@ -141,8 +141,9 @@ public class TripDaoHibernate implements TripDao {
 	}
 	
 	public List<Trip> getSuggestions(String origin, Pagination pagination, User driver) {
+		String queryCount = "SELECT count(t.id) FROM Trip t WHERE t.deleted = FALSE AND lower(t.from_city) LIKE :from";
 		String query = "FROM Trip t WHERE t.deleted = FALSE AND lower(t.from_city) LIKE :from ORDER BY etd ASC";
-		Integer count = em.createQuery(query, Integer.class).setParameter("from", "%" + origin.toLowerCase() + "%").getMaxResults();
+		Long count = em.createQuery(queryCount, Long.class).setParameter("from", "%" + origin.toLowerCase() + "%").getSingleResult();
 		List<Trip> trips = em.createQuery(query, Trip.class)
 							 .setParameter("from", "%" + origin.toLowerCase() + "%")
 							 .setFirstResult(pagination.getFirstResult())
@@ -153,7 +154,7 @@ public class TripDaoHibernate implements TripDao {
 			query = "FROM Trip t WHERE t.deleted = FALSE AND lower(t.from_city) NOT LIKE :from ORDER BY etd ASC";
 			trips = em.createQuery(query, Trip.class)
 								 .setParameter("from", "%" + origin.toLowerCase() + "%")
-								 .setFirstResult(Math.max(pagination.getFirstResult() - count, 0))
+								 .setFirstResult((int) Math.max(pagination.getFirstResult() - count, 0))
 								 .setMaxResults(pagination.getPer_page())
 								 .getResultList();
 			return trips;
