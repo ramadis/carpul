@@ -92,6 +92,20 @@ hr {
   box-shadow: 0px 0px 28px 0px rgba(0, 0, 0, 0.63);
 }
 
+.login-button.hard-edges {
+  border-radius: 0;
+  line-height: 1.5;
+  height: 43px;
+}
+
+.login-button.inverted {
+  background: #e36f4a;
+}
+
+.login-button.inverted:hover {
+  background: #6cd298;
+}
+
 .login-button {
   margin-left: 10px;
   padding: 10px 15px;

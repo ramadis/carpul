@@ -36,9 +36,14 @@ const HeaderContainer = styled.div`
   padding: 0 30px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 `;
 
-const Search = ({}) => {
+const SearchContainer = styled.div`
+  display: flex;
+`;
+
+const Search = ({ user }) => {
   const { t, i18n } = useTranslation();
   const [trips, setTrips] = useState([]);
   const { to, from, when } = useQuery();
@@ -77,18 +82,23 @@ const Search = ({}) => {
       <style jsx>{poolListCss}</style>
 
       <HeaderContainer>
-        <div className="destination-container">
-          <span className="bold m-r-5">{t("search.search.from")}</span>
-          <span className="clear">{from}</span>
-        </div>
-        <div className="destination-container">
-          <span className="bold m-r-5">{t("search.search.to")}</span>
-          <span className="clear">{to}</span>
-        </div>
-        <div className="destination-container">
-          <span className="bold m-r-5">{t("search.search.on")}</span>
-          <span className="clear">{searchDate}</span>
-        </div>
+        <SearchContainer>
+          <div className="destination-container">
+            <span className="bold m-r-5">{t("search.search.from")}</span>
+            <span className="clear">{from}</span>
+          </div>
+          <div className="destination-container">
+            <span className="bold m-r-5">{t("search.search.to")}</span>
+            <span className="clear">{to}</span>
+          </div>
+          <div className="destination-container">
+            <span className="bold m-r-5">{t("search.search.on")}</span>
+            <span className="clear">{searchDate}</span>
+          </div>
+        </SearchContainer>
+        <Link to="/trips/add" className="login-button inverted hard-edges">
+          {t("search.search.create")}
+        </Link>
       </HeaderContainer>
 
       <div className="list-container">
@@ -220,4 +230,4 @@ const Trip = ({ trip }) => {
     </div>
   );
 };
-export default Search;
+export default connect(state => ({ user: state.user }))(Search);
