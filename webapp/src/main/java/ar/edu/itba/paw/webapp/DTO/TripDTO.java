@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import ar.edu.itba.paw.models.Position;
 import ar.edu.itba.paw.models.Trip;
+import ar.edu.itba.paw.models.User;
 
 public class TripDTO {
 	private Integer id;
@@ -21,8 +22,14 @@ public class TripDTO {
 	private UserDTO driver;
 	private List<UserDTO> passengers;
 	private Boolean expired;
+	private Boolean reserved;
 	
 	public TripDTO() {}
+	
+	public TripDTO(Trip trip, User loggedUser) {
+		this(trip);
+		this.reserved = trip.getPassengers().contains(loggedUser);
+	}
 	
 	public TripDTO(Trip trip) {
 		this.id = trip.getId();
@@ -121,6 +128,14 @@ public class TripDTO {
 
 	public void setPassengers(List<UserDTO> passengers) {
 		this.passengers = passengers;
+	}
+
+	public Boolean getReserved() {
+		return reserved;
+	}
+
+	public void setReserved(Boolean reserved) {
+		this.reserved = reserved;
 	}
 	
 }

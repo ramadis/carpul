@@ -56,7 +56,7 @@ public class SearchController extends AuthController {
 		if (trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 
 		// Generate DTOs
-		for(Trip t: trips) tripDTOs.add(new TripDTO(t));
+		for(Trip t: trips) tripDTOs.add(new TripDTO(t, user));
 		return Response.ok(tripDTOs).build();
 	}
 	
