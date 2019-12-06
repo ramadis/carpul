@@ -138,108 +138,112 @@ const Search = ({ user }) => {
 const Trip = ({ trip }) => {
   const { t } = useTranslation();
   return (
-    <div className="pool-item flex-center">
-      <div className="user-info flex space-around align-center column h-150">
-        <div className="user-image">
-          <img
-            src={`https://ui-avatars.com/api/?rounded=true&size=85&background=e36f4a&color=fff&name=${
-              trip.driver.first_name
-            } ${trip.driver.last_name}`}
-            alt=""
-          />
-        </div>
-        <div className="user-name">{trip.driver.first_name}</div>
-        <span className="user-rating">
-          <Rating
-            initialRating={trip.driver.rating}
-            readonly={true}
-            emptySymbol={
-              <FontAwesomeIcon icon={faStar} size="xs" color="#f4f4f4" />
-            }
-            fullSymbol={
-              <FontAwesomeIcon icon={faStar} size="xs" color="#f39c12" />
-            }
-          />
-        </span>
-      </div>
+    <React.Fragment>
+      <style jsx>{poolListCss}</style>
 
-      <div className="pool-info">
-        <div className="map-container">
-          <img
-            src={`https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyCKIU4-Ijaeex54obPySJ7kXLwLnrV5BRA&size=1200x200&markers=color:green|label:A|${
-              trip.departure.latitude
-            }, ${trip.departure.longitude}&markers=color:blue|label:B|${
-              trip.arrival.latitude
-            }, ${trip.arrival.longitude}&path=color:0x0000ff80|weight:1|${
-              trip.arrival.latitude
-            }, ${trip.arrival.longitude}|${trip.departure.latitude}, ${
-              trip.departure.longitude
-            }`}
-            style={{ width: "100%", height: "100%" }}
-          />
+      <div className="pool-item flex-center">
+        <div className="user-info flex space-around align-center column h-150">
+          <div className="user-image">
+            <img
+              src={`https://ui-avatars.com/api/?rounded=true&size=85&background=e36f4a&color=fff&name=${
+                trip.driver.first_name
+              } ${trip.driver.last_name}`}
+              alt=""
+            />
+          </div>
+          <div className="user-name">{trip.driver.first_name}</div>
+          <span className="user-rating">
+            <Rating
+              initialRating={trip.driver.rating}
+              readonly={true}
+              emptySymbol={
+                <FontAwesomeIcon icon={faStar} size="xs" color="#f4f4f4" />
+              }
+              fullSymbol={
+                <FontAwesomeIcon icon={faStar} size="xs" color="#f39c12" />
+              }
+            />
+          </span>
         </div>
-        <div className="bg-white">
-          <div className="price-container flex space-between align-center">
-            <span className="clear gray sz-13">
-              {t("search.item.from")}
-              <span className="bold black"> {trip.from_city}</span>
-              {t("search.item.on_low")}
-              <span className="bold black">
-                {format(trip.etd, "DD/MM/YYYY")}
-              </span>
-              {t("search.item.at")}
-              <span className="bold black">{format(trip.etd, "HH:mm")}</span>
-              <br />
-              {t("search.item.arrive")}
-              <span className="bold black"> {trip.to_city}</span>
-              {t("search.item.on_low")}
-              <span className="bold black">
-                {format(trip.eta, "DD/MM/YYYY")}
-              </span>
-              {t("search.item.at")}
-              <span className="bold black">{format(trip.eta, "HH:mm")}</span>
-            </span>
-            <div>
-              <span className="price gray">
+
+        <div className="pool-info">
+          <div className="map-container">
+            <img
+              src={`https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyCKIU4-Ijaeex54obPySJ7kXLwLnrV5BRA&size=1200x200&markers=color:green|label:A|${
+                trip.departure.latitude
+              }, ${trip.departure.longitude}&markers=color:blue|label:B|${
+                trip.arrival.latitude
+              }, ${trip.arrival.longitude}&path=color:0x0000ff80|weight:1|${
+                trip.arrival.latitude
+              }, ${trip.arrival.longitude}|${trip.departure.latitude}, ${
+                trip.departure.longitude
+              }`}
+              style={{ width: "100%", height: "100%" }}
+            />
+          </div>
+          <div className="bg-white">
+            <div className="price-container flex space-between align-center">
+              <span className="clear gray sz-13">
+                {t("search.item.from")}
+                <span className="bold black"> {trip.from_city}</span>
+                {t("search.item.on_low")}
                 <span className="bold black">
-                  ${trip.cost}/{t("search.item.each")}
+                  {format(trip.etd, "DD/MM/YYYY")}
                 </span>
+                {t("search.item.at")}
+                <span className="bold black">{format(trip.etd, "HH:mm")}</span>
+                <br />
+                {t("search.item.arrive")}
+                <span className="bold black"> {trip.to_city}</span>
+                {t("search.item.on_low")}
+                <span className="bold black">
+                  {format(trip.eta, "DD/MM/YYYY")}
+                </span>
+                {t("search.item.at")}
+                <span className="bold black">{format(trip.eta, "HH:mm")}</span>
               </span>
+              <div>
+                <span className="price gray">
+                  <span className="bold black">
+                    ${trip.cost}/{t("search.item.each")}
+                  </span>
+                </span>
 
-              {!trip.reserved && (
-                <button
-                  className="login-button inline-block"
-                  onClick={() => reserveByTrip(trip.id)}
-                >
-                  {t("search.item.reserve")}
-                </button>
-              )}
-              {trip.reserved && (
-                <button
-                  className="inline-block login-button main-color"
-                  onClick={() => unreserveByTrip(trip.id)}
-                >
-                  {t("search.item.unreserve")}
-                </button>
-              )}
+                {!trip.reserved && (
+                  <button
+                    className="login-button inline-block"
+                    onClick={() => reserveByTrip(trip.id)}
+                  >
+                    {t("search.item.reserve")}
+                  </button>
+                )}
+                {trip.reserved && (
+                  <button
+                    className="inline-block login-button main-color"
+                    onClick={() => unreserveByTrip(trip.id)}
+                  >
+                    {t("search.item.unreserve")}
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
 
-          <div className="pool-features flex space-between align-center">
-            <div className="features-container" />
-            <div className="seats-container">
-              <span className="seats bold gray">
-                <img
-                  className="seats-icon"
-                  src="<c:url value='/static/images/seats.png' />"
-                />
-                {trip.available_seats} {t("search.item.available")}
-              </span>
+            <div className="pool-features flex space-between align-center">
+              <div className="features-container" />
+              <div className="seats-container">
+                <span className="seats bold gray">
+                  <img
+                    className="seats-icon"
+                    src="<c:url value='/static/images/seats.png' />"
+                  />
+                  {trip.available_seats} {t("search.item.available")}
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 export default connect(state => ({ user: state.user }))(Search);
