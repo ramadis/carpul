@@ -27,6 +27,14 @@ function useQuery() {
   );
 }
 
+const SearchInput = styled.input`
+  border: 0;
+  border-bottom: solid 1px #858585;
+  font-size: 15px;
+  width: 200px;
+  padding: 5px;
+`;
+
 const HeaderContainer = styled.div`
   background: white;
   height: 45px;
@@ -85,15 +93,19 @@ const Search = ({ user }) => {
         <SearchContainer>
           <div className="destination-container">
             <span className="bold m-r-5">{t("search.search.from")}</span>
-            <span className="clear">{from}</span>
+            <SearchInput className="clear" value={from} />
           </div>
           <div className="destination-container">
             <span className="bold m-r-5">{t("search.search.to")}</span>
-            <span className="clear">{to}</span>
+            <SearchInput className="clear" value={to} />
           </div>
           <div className="destination-container">
             <span className="bold m-r-5">{t("search.search.on")}</span>
-            <span className="clear">{searchDate}</span>
+            <SearchInput
+              className="clear"
+              style={{ width: 100 }}
+              value={searchDate}
+            />
           </div>
         </SearchContainer>
         <Link to="/trips/add" className="login-button inverted hard-edges">
