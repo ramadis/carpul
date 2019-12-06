@@ -57,30 +57,30 @@ const Search = ({ user }) => {
   const { to, from, when } = useQuery();
 
   useEffect(() => {
-    const exRep = [
-      {
-        id: 58,
-        etd: 1576101600000,
-        eta: 1576706400000,
-        from_city: "Buenos aires",
-        to_city: "Pinamar",
-        cost: 100.0,
-        seats: 4,
-        departure: { latitude: -36.3789925, longitude: -60.3855889 },
-        arrival: { latitude: -37.1099492, longitude: -56.8539007 },
-        occupied_seats: 0,
-        driver: {
-          username: "juli",
-          first_name: "Julian",
-          last_name: "Antonielli",
-          created: 1507678063362,
-          id: 2,
-        },
-        passengers: [],
-        expired: false,
-      },
-    ];
-    search({ to, from, when }).finally(res => setTrips(res || exRep));
+    // const exRep = [
+    //   {
+    //     id: 58,
+    //     etd: 1576101600000,
+    //     eta: 1576706400000,
+    //     from_city: "Buenos aires",
+    //     to_city: "Pinamar",
+    //     cost: 100.0,
+    //     seats: 4,
+    //     departure: { latitude: -36.3789925, longitude: -60.3855889 },
+    //     arrival: { latitude: -37.1099492, longitude: -56.8539007 },
+    //     occupied_seats: 0,
+    //     driver: {
+    //       username: "juli",
+    //       first_name: "Julian",
+    //       last_name: "Antonielli",
+    //       created: 1507678063362,
+    //       id: 2,
+    //     },
+    //     passengers: [],
+    //     expired: false,
+    //   },
+    // ];
+    search({ to, from, when }).then(setTrips);
   }, []);
 
   const searchDate = format(new Date(Number(when)), "DD/MM/YYYY");

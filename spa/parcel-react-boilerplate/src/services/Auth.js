@@ -14,7 +14,7 @@ export const loginUser = async (username, password) => {
   const encodedData = urlEncode({ username, password });
   const token = await fetch(`${API_URL}/login`, {
     method: "POST",
-    body: encodedData
+    body: encodedData,
   }).then(res => {
     if (res.ok) {
       const token = res.headers.get("Authorization");
@@ -30,6 +30,6 @@ export const loginUser = async (username, password) => {
 
 export const unlogUser = async () => {
   localStorage.removeItem("token");
-  setTimeout(() => (window.location.href = "/login"));
+  setTimeout(() => (window.location.href = "/user/login"));
   store.dispatch("LOGOUT");
 };
