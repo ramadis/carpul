@@ -83,7 +83,7 @@ const Search = ({ user }) => {
     search({ to, from, when }).then(setTrips);
   }, []);
 
-  const searchDate = format(new Date(Number(when)), "DD/MM/YYYY");
+  const searchDate = format(new Date(Number(when)), "DD/MM/YYYY HH:mm");
 
   return (
     <div>
@@ -103,7 +103,7 @@ const Search = ({ user }) => {
             <span className="bold m-r-5">{t("search.search.on")}</span>
             <SearchInput
               className="clear"
-              style={{ width: 100 }}
+              style={{ width: 130 }}
               value={searchDate}
             />
           </div>
