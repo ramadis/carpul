@@ -91,15 +91,6 @@ const Search = ({ user }) => {
     //     expired: false,
     //   },
     // ];
-    setTimeout(() => {
-      debugger;
-      const divs = [
-        ...document.querySelectorAll("#mapDiv > div:nth-child(2)"),
-        ...document.querySelectorAll("#mapDiv > div:nth-child(3)"),
-      ];
-      console.log(divs);
-      divs.forEach(div => (div.hidden = true));
-    }, 10000);
     search({ to, from, when }).then(setTrips);
   }, [params]);
 
