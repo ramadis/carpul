@@ -111,7 +111,12 @@ const Search = ({ user }) => {
         {trips.length > 0 && (
           <React.Fragment>
             <span className="list-subtitle">
-              {t("search.search.trips", { to, when: searchDate })}
+              {to
+                ? t("search.search.trips", { to, when: searchDate })
+                : t("search.search.trips_no_to", {
+                    origin: from,
+                    when: searchDate,
+                  })}
             </span>
             {trips.map(trip => (
               <Trip trip={trip} key={trip.id} />
