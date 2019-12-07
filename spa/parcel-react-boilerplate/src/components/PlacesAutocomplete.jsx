@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { autocompletePlaces, getCity } from "../services/Places";
 
 const ResultsContainer = styled.div`
+  left: 0;
   border: 1px solid darkgray;
   border-radius: 5px;
   margin-top: 10px;
@@ -70,7 +71,7 @@ export default class PlacesAutocomplete extends Component {
     const { children, style } = this.props;
 
     return (
-      <div style={style}>
+      <Container style={style}>
         {React.cloneElement(children, {
           onFocus: this.handleFocus,
           onBlur: this.handleBlur,
@@ -86,7 +87,7 @@ export default class PlacesAutocomplete extends Component {
             </ResultList>
           </ResultsContainer>
         ) : null}
-      </div>
+      </Container>
     );
   }
 }
