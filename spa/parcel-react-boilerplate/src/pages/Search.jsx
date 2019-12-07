@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { format, parse } from "date-fns";
 import Rating from "react-rating";
+import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -17,7 +18,11 @@ import { useLocation } from "react-router-dom";
 
 import { search } from "../services/search";
 import { reserveByTrip, unreserveByTrip } from "../services/Reservation";
+import { getCity } from "../services/Places.js";
 
+import PlacesAutocomplete from "../components/PlacesAutocomplete";
+
+import "react-datepicker/dist/react-datepicker.css";
 import poolListCss from "../styles/pool_list";
 
 function useQuery() {
@@ -90,24 +95,7 @@ const Search = ({ user }) => {
       <style jsx>{poolListCss}</style>
 
       <HeaderContainer>
-        <SearchContainer>
-          <div className="destination-container">
-            <span className="bold m-r-5">{t("search.search.from")}</span>
-            <SearchInput className="clear" value={from} />
-          </div>
-          <div className="destination-container">
-            <span className="bold m-r-5">{t("search.search.to")}</span>
-            <SearchInput className="clear" value={to} />
-          </div>
-          <div className="destination-container">
-            <span className="bold m-r-5">{t("search.search.on")}</span>
-            <SearchInput
-              className="clear"
-              style={{ width: 130 }}
-              value={searchDate}
-            />
-          </div>
-        </SearchContainer>
+        <SearchBar />
         <Link to="/trips/add" className="login-button inverted hard-edges">
           {t("search.search.create")}
         </Link>
@@ -132,6 +120,111 @@ const Search = ({ user }) => {
         )}
       </div>
     </div>
+  );
+};
+
+const encodeQueryParams = function(obj) {
+  var str = [];
+  for (var p in obj)
+    if (obj.hasOwnProperty(p)) {
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+    }
+  return str.join("&");
+};
+
+const SearchBar = ({ onSearch }) => {
+  const { t, i18n } = useTranslation();
+  const { to, from, when } = useQuery();
+
+  const [origin, setOrigin] = useState({ city: from });
+  const [destination, setDestination] = useState({ city: to });
+  const [datetime, setDatetime] = useState(new Date(Number(when)));
+
+  const searchDate = format(new Date(Number(when)), "DD/MM/YYYY HH:mm");
+
+  const { protocol, host, pathname } = window.location;
+  if (history.pushState) {
+    const query = `?${encodeQueryParams({
+      from: origin.city,
+      to: destination.city,
+      when: datetime.getTime(),
+    })}`;
+    var newurl = `${protocol}//${host + pathname + query}`;
+    window.history.pushState({ path: newurl }, "", newurl);
+  }
+
+  return (
+    <SearchContainer>
+      <div className="destination-container">
+        <span className="bold m-r-5">{t("search.search.from")}</span>
+        <PlacesAutocomplete
+          style={{ display: "inline", paddingRight: 10 }}
+          value={origin.city}
+          handleSelect={place => {
+            setOrigin({
+              city: getCity(place),
+              position: { latitude: place.lat, longitude: place.lon },
+              selected: getCity(place),
+              raw: place,
+            });
+          }}
+        >
+          <SearchInput
+            value={origin.city}
+            onChange={e => setOrigin({ city: e.target.value })}
+            className="clear"
+            type="text"
+            tabIndex="1"
+          />
+        </PlacesAutocomplete>
+      </div>
+      <div className="destination-container">
+        <span className="bold m-r-5">{t("search.search.to")}</span>
+        <PlacesAutocomplete
+          style={{ display: "inline", paddingRight: 10 }}
+          value={destination.city}
+          handleSelect={place => {
+            setDestination({
+              city: getCity(place),
+              position: { latitude: place.lat, longitude: place.lon },
+              selected: getCity(place),
+              raw: place,
+            });
+          }}
+        >
+          <SearchInput
+            value={destination.city}
+            onChange={e => setDestination({ city: e.target.value })}
+            className="clear"
+            type="text"
+            tabIndex="1"
+          />
+        </PlacesAutocomplete>
+      </div>
+      <div className="destination-container">
+        <span className="bold m-r-5">{t("search.search.on")}</span>
+        <DatePicker
+          selected={datetime}
+          onChange={date => setDatetime(date)}
+          showTimeSelect
+          timeFormat={t("trip.add.time")}
+          todayButton={t("trip.add.today")}
+          timeCaption="time"
+          minDate={new Date()}
+          placeholderText="Time range"
+          timeIntervals={15}
+          customInput={
+            <SearchInput
+              className="clear"
+              style={{ width: 130 }}
+              value={searchDate}
+              type="text"
+            />
+          }
+          dateFormat={t("trip.add.timestamp")}
+        />
+      </div>
+    </SearchContainer>
   );
 };
 
