@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { connect } from 'react-redux'
 import logo from '../../images/logo.png'
+import { routes } from '../App'
 
 const Navbar2 = ({ user }) => {
   const { t, i18n } = useTranslation()
@@ -15,22 +16,22 @@ const Navbar2 = ({ user }) => {
         </Link>
         <div className='actions'>
           {(!user || !user.id) && (
-            <Link to='/user/register' className='create-account bold m-r-10'>
+            <Link to={routes.register} className='create-account bold m-r-10'>
               {t('common.navbar.create')}
             </Link>
           )}
           {user && user.id && (
-            <Link to='/user/logout' className='create-account bold m-r-10'>
+            <Link to={routes.logOut} className='create-account bold m-r-10'>
               {t('common.navbar.logout')}
             </Link>
           )}
           {(!user || !user.id) && (
-            <Link to='/user/login' className='login-button'>
+            <Link to={routes.login} className='login-button'>
               {t('common.navbar.login')}
             </Link>
           )}
           {user && user.id && (
-            <Link to={`/user/profile/${user.id}`} className='login-button'>
+            <Link to={routes.profile(user.id)} className='login-button'>
               {t('common.navbar.profile')}
             </Link>
           )}

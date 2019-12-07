@@ -16,10 +16,26 @@ import { Trips } from './pages/Trips'
 import Review from './pages/Review'
 import Error from './pages/Error'
 import Search from './pages/Search'
+import Trip from './pages/User/Trip'
+import TripPast from './pages/User/TripPast'
+import Login from './pages/User/Login'
+import Register from './pages/User/Register'
+import Profile from './pages/User/Profile'
+import Logout from './pages/User/Logout'
+import Add from "./pages/Trips/Add";
+import Single from "./pages/Trips/Single";
 
 import 'react-notifications/lib/notifications.css'
 
 import { getProfile } from './services/User.js'
+
+export const routes = {
+  trip: userId => `/user/${userId}/trip`,
+  profile: userId => `/user/${userId}`,
+  login: `/login`,
+  register: `/register`,
+  logOut: `/logout`
+}
 
 function App ({ token, user, dispatch }) {
   const loadSession = async () => {
@@ -36,11 +52,18 @@ function App ({ token, user, dispatch }) {
         <Navbar2 />
         <Switch>
           <Route exact path='/' component={Home} />
-          <Route path='/user' component={User} />
           <Route path='/trips' component={Trips} />
           <Route path='/review/:id' component={Review} />
           <Route path='/error/:code' component={Error} />
           <Route path='/search' component={Search} />
+          <Route path='/login' exact component={Login} />
+          <Route path='/logout' exact component={Logout} />
+          <Route path='/register' exact component={Register} />
+          <Route path='/user/trip_past' component={TripPast} />
+          <Route path='/user/:userId/trip' exact component={Trip} />
+          <Route path='/user/:userId' exact component={Profile} />
+          <Route path='/trips/add' exact component={Add} />
+          <Route path='/trips/:id' exact component={Single} />
           <Route component={() => <Redirect to='/error/404' />} />
         </Switch>
         <NotificationContainer />

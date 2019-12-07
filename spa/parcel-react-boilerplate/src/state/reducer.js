@@ -1,8 +1,15 @@
 import { combineReducers } from 'redux'
 
+const hidrateUser = () => {
+  try {
+    return JSON.parse(localStorage.getItem('user'))
+  } catch (e) {
+    return null
+  }
+}
 const initialState = {
   token: localStorage.getItem('token'),
-  user: null,
+  user: hidrateUser(),
   reservations: null
 }
 
