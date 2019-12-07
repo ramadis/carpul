@@ -36,7 +36,7 @@ export default css`
   }
 
   .pool-info {
-    background: red;
+    background: #f4f4f4;
     border-radius: 5px;
     overflow: hidden;
   }

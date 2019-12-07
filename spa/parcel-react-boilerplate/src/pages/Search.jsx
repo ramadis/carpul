@@ -261,8 +261,32 @@ const SearchBar = ({ onSearch = () => null }) => {
   );
 };
 
+const ImageContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  position: relative;
+  width: 100%;
+  background-size: cover;
+  height: 100%;
+`;
+
+const PathLink = styled.a`
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+`;
+
 const Trip = ({ trip }) => {
   const { t } = useTranslation();
+
+  const getStyle = () => {
+    const seed = `${trip.to_city}`.replace(/\s/g, "");
+    return {
+      backgroundImage: `url(https://picsum.photos/seed/${seed}/600/300)`,
+    };
+  };
+
   return (
     <React.Fragment>
       <style jsx>{poolListCss}</style>
@@ -294,18 +318,19 @@ const Trip = ({ trip }) => {
 
         <div className="pool-info">
           <div className="map-container">
-            <img
-              src={`https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyCKIU4-Ijaeex54obPySJ7kXLwLnrV5BRA&size=1200x200&markers=color:green|label:A|${
-                trip.departure.latitude
-              }, ${trip.departure.longitude}&markers=color:blue|label:B|${
-                trip.arrival.latitude
-              }, ${trip.arrival.longitude}&path=color:0x0000ff80|weight:1|${
-                trip.arrival.latitude
-              }, ${trip.arrival.longitude}|${trip.departure.latitude}, ${
-                trip.departure.longitude
-              }`}
-              style={{ width: "100%", height: "100%" }}
-            />
+            <ImageContainer style={getStyle()}>
+              <PathLink
+                className="destiny-time map-trigger login-button"
+                target="iframe"
+                href={`https://www.google.com/maps/embed/v1/directions?key=AIzaSyCNS1Xx_AGiNgyperC3ovLBiTdsMlwnuZU&origin=${
+                  trip.departure.latitude
+                }, ${trip.departure.longitude}&destination=${
+                  trip.arrival.latitude
+                }, ${trip.arrival.longitude}`}
+              >
+                {t("user.trip.map")}
+              </PathLink>
+            </ImageContainer>
           </div>
           <div className="bg-white">
             <div className="price-container flex space-between align-center">

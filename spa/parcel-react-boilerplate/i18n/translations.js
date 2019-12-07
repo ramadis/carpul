@@ -36,7 +36,7 @@ const translations = {
       earning: "earning",
       nil: "nothing yet",
       delete: "Delete trip",
-      map: "See adventure on the map",
+      map: "See planned route",
       depart: "Depart from {{0}} on {{1}} at {{2}}",
       depart_single: "Depart",
       arrive_single: "Arrive",

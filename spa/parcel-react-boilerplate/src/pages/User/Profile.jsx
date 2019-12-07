@@ -166,7 +166,7 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
                       {t("user.profile.empty_trips")}
                     </h3>
                   )}
-                </section>{" "}
+                </section>
               </React.Fragment>
             )}
 
