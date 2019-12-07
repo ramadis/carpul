@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { isEmpty } from "lodash";
 import DatePicker from "react-datepicker";
 import MDSpinner from "react-md-spinner";
+import Masonry from "react-masonry-css";
 
 import { getCity, getLocation } from "../services/Places.js";
 import { getSuggestions } from "../services/Search.js";
@@ -17,6 +18,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import poolListCss from "../styles/pool_list";
 import mapsCss from "../styles/maps";
 import homeCss from "../styles/home";
+import masonryCss from "../../css/masonry.css";
 
 const Home = ({ user }) => {
   const { t } = useTranslation();
@@ -42,6 +44,7 @@ const Home = ({ user }) => {
       <style jsx>{poolListCss}</style>
       <style jsx>{mapsCss}</style>
       <style jsx>{homeCss}</style>
+      <style jsx>{masonryCss}</style>
 
       <div className="home-hero-container flex-center">
         <div className="home-content-container">
@@ -158,9 +161,15 @@ const Home = ({ user }) => {
           <React.Fragment>
             <h1>{t("home.index.suggestions")}</h1>
             <div className="trip-recommendation-list">
-              {trips.map(trip => (
-                <SmallItem key={trip.id} trip={trip} />
-              ))}
+              <Masonry
+                breakpointCols={3}
+                className="my-masonry-grid"
+                columnClassName="my-masonry-grid_column"
+              >
+                {trips.map(trip => (
+                  <SmallItem key={trip.id} trip={trip} />
+                ))}
+              </Masonry>
             </div>
           </React.Fragment>
         )}
