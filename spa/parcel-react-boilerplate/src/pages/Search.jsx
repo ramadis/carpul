@@ -25,6 +25,7 @@ import PlacesAutocomplete from "../components/PlacesAutocomplete";
 
 import "react-datepicker/dist/react-datepicker.css";
 import poolListCss from "../styles/pool_list";
+import imgSeats from "../../images/seats.png";
 
 function useQuery() {
   return [...new URLSearchParams(useLocation().search).entries()].reduce(
@@ -350,10 +351,7 @@ const Trip = ({ trip }) => {
               <div className="features-container" />
               <div className="seats-container">
                 <span className="seats bold gray">
-                  <img
-                    className="seats-icon"
-                    src="<c:url value='/static/images/seats.png' />"
-                  />
+                  <img className="seats-icon" src={imgSeats} />
                   {trip.available_seats} {t("search.item.available")}
                 </span>
               </div>
