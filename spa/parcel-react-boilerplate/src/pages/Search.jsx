@@ -91,6 +91,15 @@ const Search = ({ user }) => {
     //     expired: false,
     //   },
     // ];
+    setTimeout(() => {
+      debugger;
+      const divs = [
+        ...document.querySelectorAll("#mapDiv > div:nth-child(2)"),
+        ...document.querySelectorAll("#mapDiv > div:nth-child(3)"),
+      ];
+      console.log(divs);
+      divs.forEach(div => (div.hidden = true));
+    }, 10000);
     search({ to, from, when }).then(setTrips);
   }, [params]);
 
@@ -277,6 +286,14 @@ const PathLink = styled.a`
   right: 10px;
 `;
 
+const MapView = styled.iframe`
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+`;
+
 const Trip = ({ trip }) => {
   const { t } = useTranslation();
 
@@ -319,17 +336,13 @@ const Trip = ({ trip }) => {
         <div className="pool-info">
           <div className="map-container">
             <ImageContainer style={getStyle()}>
-              <PathLink
-                className="destiny-time map-trigger login-button"
-                target="iframe"
-                href={`https://www.google.com/maps/embed/v1/directions?key=AIzaSyCNS1Xx_AGiNgyperC3ovLBiTdsMlwnuZU&origin=${
+              <MapView
+                src={`https://www.google.com/maps/embed/v1/directions?key=AIzaSyCNS1Xx_AGiNgyperC3ovLBiTdsMlwnuZU&origin=${
                   trip.departure.latitude
                 }, ${trip.departure.longitude}&destination=${
                   trip.arrival.latitude
                 }, ${trip.arrival.longitude}`}
-              >
-                {t("user.trip.map")}
-              </PathLink>
+              />
             </ImageContainer>
           </div>
           <div className="bg-white">
