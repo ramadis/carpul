@@ -8,7 +8,7 @@ export const search = async ({ to, from, when }) => {
   ).then(res => {
     if (res.isRawResponse) {
       // TODO: Handle specific error messages
-      return;
+      return [];
     }
     return res;
   });

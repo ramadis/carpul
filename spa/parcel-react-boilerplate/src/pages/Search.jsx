@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { format, parse } from "date-fns";
 import Rating from "react-rating";
 import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { isEqual, memoize } from "lodash";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import {
   BrowserRouter as Router,
@@ -59,7 +60,14 @@ const SearchContainer = styled.div`
 const Search = ({ user }) => {
   const { t, i18n } = useTranslation();
   const [trips, setTrips] = useState([]);
-  const { to, from, when } = useQuery();
+  const rawParams = useQuery();
+  const [params, setParams] = useState(rawParams);
+  const { to, from, when } = params;
+
+  const handleSearch = a => {
+    console.log(a);
+    setParams(a);
+  };
 
   useEffect(() => {
     // const exRep = [
@@ -86,7 +94,7 @@ const Search = ({ user }) => {
     //   },
     // ];
     search({ to, from, when }).then(setTrips);
-  }, []);
+  }, [params]);
 
   const searchDate = format(new Date(Number(when)), "DD/MM/YYYY HH:mm");
 
@@ -95,7 +103,7 @@ const Search = ({ user }) => {
       <style jsx>{poolListCss}</style>
 
       <HeaderContainer>
-        <SearchBar />
+        <SearchBar onSearch={handleSearch} />
         <Link to="/trips/add" className="login-button inverted hard-edges">
           {t("search.search.create")}
         </Link>
@@ -132,7 +140,7 @@ const encodeQueryParams = function(obj) {
   return str.join("&");
 };
 
-const SearchBar = ({ onSearch }) => {
+const SearchBar = ({ onSearch = () => null }) => {
   const { t, i18n } = useTranslation();
   const { to, from, when } = useQuery();
 
@@ -141,6 +149,15 @@ const SearchBar = ({ onSearch }) => {
   const [datetime, setDatetime] = useState(new Date(Number(when)));
 
   const searchDate = format(new Date(Number(when)), "DD/MM/YYYY HH:mm");
+
+  const pushSearch = value => {
+    onSearch({
+      from: origin.city,
+      to: destination.city,
+      when: datetime.getTime(),
+      ...value,
+    });
+  };
 
   const { protocol, host, pathname } = window.location;
   if (history.pushState) {
@@ -167,11 +184,15 @@ const SearchBar = ({ onSearch }) => {
               selected: getCity(place),
               raw: place,
             });
+            pushSearch({ from: getCity(place) });
           }}
         >
           <SearchInput
             value={origin.city}
-            onChange={e => setOrigin({ city: e.target.value })}
+            onChange={e => {
+              setOrigin({ city: e.target.value });
+              pushSearch({ to: e.target.value });
+            }}
             className="clear"
             type="text"
             tabIndex="1"
@@ -190,11 +211,15 @@ const SearchBar = ({ onSearch }) => {
               selected: getCity(place),
               raw: place,
             });
+            pushSearch({ to: getCity(place) });
           }}
         >
           <SearchInput
             value={destination.city}
-            onChange={e => setDestination({ city: e.target.value })}
+            onChange={e => {
+              setDestination({ city: e.target.value });
+              pushSearch({ to: e.target.value });
+            }}
             className="clear"
             type="text"
             tabIndex="1"
@@ -205,7 +230,10 @@ const SearchBar = ({ onSearch }) => {
         <span className="bold m-r-5">{t("search.search.on")}</span>
         <DatePicker
           selected={datetime}
-          onChange={date => setDatetime(date)}
+          onChange={date => {
+            setDatetime(date);
+            pushSearch({ when: date.getTime() });
+          }}
           showTimeSelect
           timeFormat={t("trip.add.time")}
           todayButton={t("trip.add.today")}
