@@ -10,13 +10,20 @@ import reviewItemCss from "../styles/review_item";
 const SmallItem = ({ user, trip, hero_message }) => {
   const { t, i18n } = useTranslation();
 
+  const getStyle = () => {
+    const seed = `${trip.to_city}`.replace(/\s/g, "");
+    return {
+      backgroundImage: `url(https://picsum.photos/seed/${seed}/200/300)`,
+    };
+  };
+
   return (
     <Fragment>
       <style jsx>{poolListCss}</style>
       <style jsx>{profileCss}</style>
       <style jsx>{reviewItemCss}</style>
       <style jsx>{profileHeroCss}</style>
-      <div className="pool-item flex-center">
+      <div className="pool-item flex-center" style={getStyle()}>
         <div className="pool-info small-pool-info">
           <div className="header-container">
             <span className="bold header">
