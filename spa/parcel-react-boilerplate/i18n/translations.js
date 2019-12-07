@@ -191,6 +191,7 @@ const translations = {
       trips_no_to:
         "These are some options to travel from {{ origin }} on {{when}}",
       no_trips: "Sorry, no adventure to {{to}} at this time :(",
+      no_trips_no_to: "Sorry, no adventures from {{origin}} at this time :(",
       later_trips: "These are the options to go to {{to}} after {{when}}",
       create: "Create your own trip",
     },

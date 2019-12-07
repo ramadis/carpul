@@ -126,7 +126,9 @@ const Search = ({ user }) => {
 
         {trips.length === 0 && (
           <span className="list-subtitle">
-            {t("search.search.no_trips", { to })}
+            {to
+              ? t("search.search.no_trips", { to })
+              : t("search.search.no_trips_no_to", { origin: from })}
           </span>
         )}
       </div>
