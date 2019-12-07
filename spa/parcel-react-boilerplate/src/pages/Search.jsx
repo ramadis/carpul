@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { format, parse } from "date-fns";
 import Rating from "react-rating";
 import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { isEqual, memoize } from "lodash";
+import { debounce } from "lodash";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import {
   BrowserRouter as Router,
@@ -64,10 +64,7 @@ const Search = ({ user }) => {
   const [params, setParams] = useState(rawParams);
   const { to, from, when } = params;
 
-  const handleSearch = a => {
-    console.log(a);
-    setParams(a);
-  };
+  const handleSearch = debounce(setParams, 1000);
 
   useEffect(() => {
     // const exRep = [
@@ -191,7 +188,7 @@ const SearchBar = ({ onSearch = () => null }) => {
             value={origin.city}
             onChange={e => {
               setOrigin({ city: e.target.value });
-              pushSearch({ to: e.target.value });
+              pushSearch({ from: e.target.value });
             }}
             className="clear"
             type="text"
