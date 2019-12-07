@@ -107,7 +107,7 @@ const Search = ({ user }) => {
         </Link>
       </HeaderContainer>
 
-      <div className="list-container">
+      <div className="list-container" style={{ marginBottom: 20 }}>
         {trips.length > 0 && (
           <React.Fragment>
             <span className="list-subtitle">
