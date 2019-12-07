@@ -23,6 +23,7 @@ public class TripDTO {
 	private List<UserDTO> passengers;
 	private Boolean expired;
 	private Boolean reserved;
+	private Integer available_seats;
 	
 	public TripDTO() {}
 	
@@ -45,6 +46,7 @@ public class TripDTO {
 		this.driver = new UserDTO(trip.getDriver());
 		this.passengers = trip.getPassengers().stream().map(passenger -> new UserDTO(passenger)).collect(Collectors.toList());
 		this.expired = trip.getExpired();
+		this.available_seats = this.seats - this.occupied_seats;
 	}
 	
 	public Integer getId() {
@@ -136,6 +138,14 @@ public class TripDTO {
 
 	public void setReserved(Boolean reserved) {
 		this.reserved = reserved;
+	}
+
+	public Integer getAvailable_seats() {
+		return available_seats;
+	}
+
+	public void setAvailable_seats(Integer available_seats) {
+		this.available_seats = available_seats;
 	}
 	
 }
