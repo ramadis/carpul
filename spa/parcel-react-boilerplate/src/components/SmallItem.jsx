@@ -5,7 +5,9 @@ import styled from "styled-components";
 import MDSpinner from "react-md-spinner";
 import { Redirect } from "react-router-dom";
 import { reserveByTrip, unreserveByTrip } from "../services/Reservation";
+import { confirmAlert } from "react-confirm-alert";
 
+import "react-confirm-alert/src/react-confirm-alert.css";
 import profileHeroCss from "../styles/profile_hero";
 import poolListCss from "../styles/pool_list";
 import profileCss from "../styles/profile";
@@ -42,15 +44,21 @@ const Header = styled.h4`
 const SmallItem = ({ user, trip, hero_message }) => {
   const { t, i18n } = useTranslation();
   const [requestLoading, setRequestLoading] = useState(false);
-  const [reserved, setReserved] = useState(false);
+  const [redirect, setRedirect] = useState("");
 
   const reserve = async () => {
     setRequestLoading(true);
     await reserveByTrip(trip.id);
-    setReserved(true);
+    setRedirect(`/trips/${trip.id}/reserved`);
   };
 
-  if (reserved) return <Redirect to={`/trips/${trip.id}/reserved`} />;
+  const unreserve = async () => {
+    setRequestLoading(true);
+    await unreserveByTrip(trip.id);
+    setRedirect(`/trips/${trip.id}/unreserved`);
+  };
+
+  if (redirect) return <Redirect to={redirect} />;
 
   const getStyle = () => {
     const seed = `${trip.to_city}`.replace(/\s/g, "");
@@ -86,8 +94,32 @@ const SmallItem = ({ user, trip, hero_message }) => {
             <span className="bold"> ${trip.cost}</span>
           </div>
           {trip.reserved ? (
-            <button className="inline-block CTA login-button main-color">
-              {t("search.item.unreserve")}
+            <button
+              className="inline-block CTA login-button main-color"
+              disabled={requestLoading}
+              onClick={() => {
+                confirmAlert({
+                  title: "Are you sure you want to unreserve this trip?",
+                  message:
+                    "Once you unreserve your place might be taken really quick.",
+                  buttons: [
+                    {
+                      label: "Unreserve",
+                      onClick: unreserve,
+                    },
+                    {
+                      label: "Cancel",
+                      onClick: () => null,
+                    },
+                  ],
+                });
+              }}
+            >
+              {requestLoading ? (
+                <MDSpinner size={16} />
+              ) : (
+                t("search.item.unreserve")
+              )}
             </button>
           ) : (
             <button
