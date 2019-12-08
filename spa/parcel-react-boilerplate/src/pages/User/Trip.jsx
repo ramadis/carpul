@@ -41,22 +41,22 @@ const Trip = ({ t, trip }) => {
                 </span>
               </span>
             )}
-            <span className="destiny-name">{trip.to_city}</span>
-            <span className="destiny-time">{trip.from_city}</span>
+            <div className="destiny-name">{trip.to_city}</div>
+            <div className="destiny-time">{trip.from_city}</div>
             <div className="destiny-timetable">
               <div className="destiny-timerow">
-                <span className="destiny-time-titlespan">
+                <div className="destiny-time-titlespan">
                   {t("user.trip.depart_single")}
-                </span>
-                <span>{fmtetddate}</span>
-                <span className="destiny-time-span">{fmtetdtime}</span>
+                </div>
+                <div>{fmtetddate}</div>
+                <div className="destiny-time-span">{fmtetdtime}</div>
               </div>
               <div className="destiny-timerow">
-                <span className="destiny-time-titlespan">
+                <div className="destiny-time-titlespan">
                   {t("user.trip.arrive_single")}
-                </span>
-                <span>{fmtetadate}</span>
-                <span className="destiny-time-span">{fmtetatime}</span>
+                </div>
+                <div>{fmtetadate}</div>
+                <div className="destiny-time-span">{fmtetatime}</div>
               </div>
             </div>
             <a
