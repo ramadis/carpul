@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { connect } from "react-redux";
 import MDSpinner from "react-md-spinner";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Confetti from "react-confetti";
 
 import { useWindowSize } from "../../utils/hooks.js";
 
 import { getTripById } from "../../services/Trip.js";
 
-import Trip from "../User/Trip";
+import Reservation from "../User/Reservation";
 
 import profileHeroCss from "../../styles/profile_hero";
 import poolListCss from "../../styles/pool_list";
@@ -52,11 +52,35 @@ function Reserved({ user }) {
       <style jsx>{reviewItemCss}</style>
       <style jsx>{profileHeroCss}</style>
       <ConfettiContainer />
-      <div className="profile-form-container flex-center">
+      <div
+        className="profile-form-container flex-center"
+        style={{ marginTop: 20 }}
+      >
         <div className="new-trip-form">
           <h3>{t("reservation.title")}</h3>
           <h2>{t("reservation.subtitle")}</h2>
-          <Trip trip={trip} />
+          <Reservation trip={trip} />
+          <h2 style={{ marginTop: 10 }}>
+            Contact your driver to the email{" "}
+            <a
+              href={`mailto:${trip.driver.username}`}
+              style={{ color: "#e36f4a" }}
+            >
+              {trip.driver.username}
+            </a>
+          </h2>
+          <Link
+            className="login-button empty-button"
+            to={`/user/${user.id}`}
+            style={{
+              display: "inline-block",
+              width: "auto",
+              marginTop: 10,
+              marginLeft: 0,
+            }}
+          >
+            Check out the trip in your profile
+          </Link>
         </div>
       </div>
     </React.Fragment>
