@@ -23,17 +23,16 @@ yarn build
 - [x] Add confetti (https://alampros.github.io/react-confetti/?path=/story/props-demos--snow) en pagina de trip reservado
 - [x] Cuando ves el perfil al que le comentaste aparece el string gigante. (Tambien tienen un detalle de ui que no dividen el comentario en varias lineas, todo en una). Sospecho que este comportamiento pasa en todos los campos, no lo comprobe.
 - [x] No hay feedback al reservar simplemente se recarga la home del usuario
+- [x] Add confirm modal (https://ga-mo.github.io/react-confirm-alert/demo/) (unreserve)
+- [x] No hay feedback al dereservar, simplemente se recarga la home del usuario
+- [x] Agregar vista de “desreservar”
+- [x] Cuando ves el perfil al que le comentaste aparece el string gigante. (Tambien tienen un detalle de ui que no dividen el comentario en varias lineas, todo en una). Sospecho que este comportamiento pasa en todos los campos, no lo comprobe.
 
-- [\] Agregar perfiles de otros
-    Falta desreservar
-- [\] Vista de resultados: Checkear que esté todo bien (Search.jsx)
-- [ ] Agregar features a la vista de resultados: Cuales?
+- [\] Agregar perfiles de otros: falta desreservar
+- [ ] Agregar features a la vista de resultados: (Mostar carteles tipo, para este dia tenes estas opciones: ... Sino, para el futuro estas otras...)
 - [ ] Paginación en frontend
-- [ ] Polling de historias
-- [ ] Add confirm modal (https://ga-mo.github.io/react-confirm-alert/demo/)
-- [ ] Pasar las cosas por la store de redux
-- [ ] Agregar vista de “desreservar”
 - [ ] Agregar tests de frontend
-- [ ] Perfil: imagen de review deformada: https://puu.sh/EMXkB/587abd123f.png. No se cuando pasa
-- [ ] No hay feedback al dereservar, simplemente se recarga la home del usuario
-- [ ] Checkear que todas las rutas estén bien, ponerlas mas lindas (Metí todo en App.jsx para verlo mas facil)
+- [ ] Polling de historias
+- [ ] Checkear que todas las rutas estén bien, ponerlas mas lindas Metí todo en App.jsx para verlo mas facil
+- [ ] Pasar las cosas por la store de redux
+- [ ] Perfil: imagen de review deformada: https://puu.sh/EMXkB/587abd123f.png No se cuando pasa
