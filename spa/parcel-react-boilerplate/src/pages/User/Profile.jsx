@@ -288,10 +288,10 @@ const EmptyProfile = () => {
       <EmptyProfileContainer>
         <SectionHeader empty>{t("user.profile.empty_title")}</SectionHeader>
         <h4 className="empty-subtitle">{t("user.profile.empty_subtitle")}</h4>
-        <Link className="no-margin login-button empty-button" to="/user/trip">
+        <Link className="login-button empty-button" to="/trips/add">
           {t("user.profile.empty_new")}
         </Link>
-        <Link className="no-margin login-button empty-button" to="/">
+        <Link className="login-button empty-button" to="/">
           {t("user.profile.empty_find")}
         </Link>
       </EmptyProfileContainer>
