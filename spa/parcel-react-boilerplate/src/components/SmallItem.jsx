@@ -7,6 +7,8 @@ import { Redirect } from "react-router-dom";
 import { reserveByTrip, unreserveByTrip } from "../services/Reservation";
 import { confirmAlert } from "react-confirm-alert";
 
+import ConfirmationModal from "../components/ConfirmationModal";
+
 import "react-confirm-alert/src/react-confirm-alert.css";
 import profileHeroCss from "../styles/profile_hero";
 import poolListCss from "../styles/pool_list";
@@ -99,19 +101,19 @@ const SmallItem = ({ user, trip, hero_message }) => {
               disabled={requestLoading}
               onClick={() => {
                 confirmAlert({
-                  title: "Are you sure you want to unreserve this trip?",
-                  message:
-                    "Once you unreserve your place might be taken really quick.",
-                  buttons: [
+                  customUI: ConfirmationModal([
                     {
-                      label: "Unreserve",
+                      danger: true,
+                      label: t("reservation.unreserve.confirmation.unreserve"),
                       onClick: unreserve,
                     },
                     {
-                      label: "Cancel",
+                      label: t("reservation.unreserve.confirmation.cancel"),
                       onClick: () => null,
                     },
-                  ],
+                  ]),
+                  title: t("reservation.unreserve.confirmation.title"),
+                  message: t("reservation.unreserve.confirmation.subtitle"),
                 });
               }}
             >

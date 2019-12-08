@@ -26,6 +26,14 @@ const translations = {
     profile: "Check out the trip in your profile",
     learn: " | Click here to learn more about your driver",
     cost: "For just ",
+    unreserve: {
+      confirmation: {
+        title: "Are you sure you want to unreserve this trip?",
+        subtitle: "Once you unreserve, your place might be taken very quickly.",
+        unreserve: "Unreserve",
+        cancel: "Cancel",
+      },
+    },
   },
   history: {
     item: {
