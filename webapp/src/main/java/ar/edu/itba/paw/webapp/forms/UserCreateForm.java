@@ -23,7 +23,7 @@ public class UserCreateForm {
 	private String last_name;
 	
 	@Size(max = 20)
-	@Pattern(regexp = "[0-9]+")
+	@Pattern(regexp = "[0-9]*")
 	private String phone_number;
 	
 	@Size(min = 6, max = 100)
