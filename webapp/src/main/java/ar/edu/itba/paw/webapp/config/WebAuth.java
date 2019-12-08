@@ -117,5 +117,3 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
 		.antMatchers("/styles/**", "/scripts/**", "/images/**", "/favicon.ico", "/static/**", "/403");
 	}
 }
-//
-//}

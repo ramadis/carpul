@@ -29,7 +29,6 @@ public class Service implements UserDetailsService {
 			final User user = us.getByUsername(username);
 			if (username == "" || user == null) throw new UsernameNotFoundException("No user found by the name " + username);
 			
-			console.info("User with username {} found successfully", username);
 			final Collection<GrantedAuthority> authorities = new HashSet<>();
 			
 			authorities.add(new SimpleGrantedAuthority("USER"));

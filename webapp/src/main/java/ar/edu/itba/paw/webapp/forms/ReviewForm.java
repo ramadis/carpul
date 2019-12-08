@@ -14,7 +14,7 @@ import ar.edu.itba.paw.models.Review;
 
 public class ReviewForm {
 	@NotBlank
-	@Size(min = 0, max = 300)
+	@Size(min = 10, max = 300)
 	private String message;
 	
 	@NotNull
