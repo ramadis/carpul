@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { format, parse } from "date-fns";
+import MDSpinner from "react-md-spinner";
 import Rating from "react-rating";
 import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -288,8 +289,10 @@ const MapView = styled.iframe`
 const Trip = ({ trip }) => {
   const { t } = useTranslation();
   const [reserved, setReserved] = useState(false);
+  const [requestLoading, setRequestLoading] = useState(false);
 
   const reserve = async () => {
+    setRequestLoading(true);
     await reserveByTrip(trip.id);
     setReserved(true);
   };
@@ -374,10 +377,15 @@ const Trip = ({ trip }) => {
 
                 {!trip.reserved && (
                   <button
+                    disabled={requestLoading}
                     className="login-button inline-block"
                     onClick={reserve}
                   >
-                    {t("search.item.reserve")}
+                    {requestLoading ? (
+                      <MDSpinner size={16} />
+                    ) : (
+                      t("search.item.reserve")
+                    )}
                   </button>
                 )}
                 {trip.reserved && (
