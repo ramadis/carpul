@@ -31,7 +31,6 @@ export const reviewTrip = async (id, reviewContent) => {
           400: "The review content seems to have some problems.",
           default: "And we don't know what it is. Sorry :(",
         };
-        console.log(res);
         NotificationManager.error(
           errors[res.status] || errors.default,
           "Something went wrong"

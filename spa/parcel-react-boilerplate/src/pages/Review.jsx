@@ -7,6 +7,7 @@ import Rating from "react-rating";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
+import { isEmpty } from "lodash";
 
 import { getTripById } from "../services/Trip.js";
 import { reviewTrip, addReviewImage } from "../services/Review.js";
@@ -48,6 +49,7 @@ const Review = ({ user }) => {
   const [stars, setStars] = useState(0);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({ clean: true });
 
   const onImageLoaded = (imageURL, imageRAW, file) => {
     const image = new Image();
@@ -139,7 +141,14 @@ const Review = ({ user }) => {
               <Field>
                 <Rating
                   initialRating={stars}
-                  onChange={setStars}
+                  onChange={stars => {
+                    setStars(stars);
+                    errors.message ||
+                    message.length < 10 ||
+                    message.length > 300
+                      ? setErrors({ message: true })
+                      : setErrors({});
+                  }}
                   emptySymbol={
                     <FontAwesomeIcon icon={faStar} size="1x" color="#808080" />
                   }
@@ -147,11 +156,28 @@ const Review = ({ user }) => {
                     <FontAwesomeIcon icon={faStar} size="1x" color="#f39c12" />
                   }
                 />
+                {errors.stars ? (
+                  <div style={{ marginTop: 5 }}>
+                    <label className="label-error">
+                      {t("review.add.errors.stars")}
+                    </label>
+                  </div>
+                ) : null}
               </Field>
               <Field>
                 <textarea
                   value={message}
-                  onChange={e => setMessage(e.target.value)}
+                  onChange={e => {
+                    const message = e.target.value;
+                    setMessage(message);
+                    if (message.length < 10 || message.length > 300) {
+                      setErrors(
+                        stars === 0
+                          ? { stars: true, message: true }
+                          : { message: true }
+                      );
+                    } else setErrors(stars === 0 ? { stars: true } : {});
+                  }}
                   className="field review-textarea"
                   placeholder={t("review.add.placeholder")}
                   required={true}
@@ -161,10 +187,20 @@ const Review = ({ user }) => {
                   type="text"
                 />
               </Field>
+              {errors.message ? (
+                <label className="label-error">
+                  {t("review.add.errors.message")}
+                </label>
+              ) : null}
             </div>
 
             <div className="actions" style={{ marginBottom: 10 }}>
-              <button type="submit" onClick={review} className="login-button">
+              <button
+                type="submit"
+                disabled={!isEmpty(errors)}
+                onClick={review}
+                className="login-button"
+              >
                 {loading ? <MDSpinner size={24} /> : t("review.add.submit")}
               </button>
             </div>

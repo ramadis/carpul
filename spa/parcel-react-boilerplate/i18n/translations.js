@@ -233,6 +233,11 @@ const translations = {
       message: "Rate your trip and leave a message for next travelers",
       placeholder: "Write a few words...",
       submit: "Leave your mark",
+      errors: {
+        stars: "Try giving a few stars to your driver.",
+        message:
+          "The message should have more than 10 characters, and less than 300.",
+      },
     },
     item: {
       no_stars: "No stars",
