@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { connect } from "react-redux";
 import MDSpinner from "react-md-spinner";
+import styled from "styled-components";
 import { useParams, Link } from "react-router-dom";
 import Confetti from "react-confetti";
+import AddToCalendar from "react-add-to-calendar";
 
 import { useWindowSize } from "../../utils/hooks.js";
 
@@ -11,6 +13,7 @@ import { getTripById } from "../../services/Trip.js";
 
 import Reservation from "../User/Reservation";
 
+import "react-add-to-calendar/dist/react-add-to-calendar.css";
 import profileHeroCss from "../../styles/profile_hero";
 import poolListCss from "../../styles/pool_list";
 import profileCss from "../../styles/profile";
@@ -20,6 +23,11 @@ const ConfettiContainer = () => {
   const { width, height } = useWindowSize();
   return <Confetti recycle={false} width={width} height={height} />;
 };
+
+const LinksContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
 function Reserved({ user }) {
   const { t, i18n } = useTranslation();
@@ -61,7 +69,7 @@ function Reserved({ user }) {
           <h2>{t("reservation.subtitle")}</h2>
           <Reservation trip={trip} />
           <h2 style={{ marginTop: 10 }}>
-            Contact your driver to the email{" "}
+            {t("reservation.contact")}
             <a
               href={`mailto:${trip.driver.username}`}
               style={{ color: "#e36f4a" }}
@@ -69,18 +77,29 @@ function Reserved({ user }) {
               {trip.driver.username}
             </a>
           </h2>
-          <Link
-            className="login-button empty-button"
-            to={`/user/${user.id}`}
-            style={{
-              display: "inline-block",
-              width: "auto",
-              marginTop: 10,
-              marginLeft: 0,
-            }}
-          >
-            Check out the trip in your profile
-          </Link>
+          <LinksContainer>
+            <Link
+              className="login-button empty-button"
+              to={`/user/${user.id}`}
+              style={{
+                display: "inline-block",
+                width: "auto",
+                marginLeft: 0,
+              }}
+            >
+              {t("reservation.profile")}
+            </Link>
+            <AddToCalendar
+              buttonTemplate={{ "calendar-plus-o": "left" }}
+              event={{
+                title: `Carpul: ${trip.from_city} to ${trip.to_city}`,
+                description: "Your adventure awaits",
+                location: trip.from_city,
+                startTime: new Date(trip.etd),
+                endTime: new Date(trip.eta),
+              }}
+            />
+          </LinksContainer>
         </div>
       </div>
     </React.Fragment>

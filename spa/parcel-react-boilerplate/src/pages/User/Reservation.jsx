@@ -27,7 +27,7 @@ const Reservation = ({ t, trip }) => {
         <li className="destiny-item trip-item" style={{ width: "auto" }}>
           <div className="inline-block no-margin">
             <span className="destiny-cost">
-              For just
+              {t("reservation.cost")}
               <span className="bold" style={{ display: "inline" }}>
                 ${trip.cost * trip.occupied_seats}
               </span>
@@ -78,7 +78,7 @@ const Reservation = ({ t, trip }) => {
                       <span className="driver-name">
                         {trip.driver.first_name} {trip.driver.last_name}
                       </span>
-                      <span> | Click here to learn more about your driver</span>
+                      <span>{t("reservation.learn")}</span>
                     </div>
                   </div>
                 </div>

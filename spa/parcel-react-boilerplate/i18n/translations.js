@@ -22,6 +22,10 @@ const translations = {
     title: "Reservation submitted successfully",
     subtitle:
       "All set for your future trip. Here are the details and a way to contact your driver. Good luck in your adventure!",
+    contact: "Contact your driver to the email ",
+    profile: "Check out the trip in your profile",
+    learn: " | Click here to learn more about your driver",
+    cost: "For just ",
   },
   history: {
     item: {
