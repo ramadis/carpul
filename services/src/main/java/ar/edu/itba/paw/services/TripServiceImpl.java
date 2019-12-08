@@ -52,9 +52,7 @@ public class TripServiceImpl implements TripService {
 	public List<Trip> getUserTrips(User user, Pagination pagination) {
 		List<Trip> trips = tripDao.getUserTrips(user, pagination);
 		
-		return trips.stream().filter((trip) -> !trip.getExpired())
-							 .distinct()
-							 .collect(Collectors.toList());
+		return trips;
 	}
 
 	@Transactional

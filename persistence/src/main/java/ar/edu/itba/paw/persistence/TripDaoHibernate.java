@@ -106,7 +106,7 @@ public class TripDaoHibernate implements TripDao {
 	public List<Trip> getUserTrips(User user, Pagination pagination) {
 		console.info("Persistence: Get owned trips");
 		// Get trips owned by a given user
-		String query = "FROM Trip t WHERE t.deleted = FALSE AND t.driver = :user ORDER BY eta ASC";
+		String query = "FROM Trip t WHERE t.deleted = FALSE AND t.driver = :user ORDER BY etd DESC";
 
 		List<Trip> trips = em.createQuery(query, Trip.class)
 						     .setParameter("user", user)
