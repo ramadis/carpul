@@ -24,7 +24,7 @@ const Message = ({ review }) => {
     return (
       <React.Fragment>
         <style jsx>{reviewItemCss}</style>
-        <span className="review-message">{review.message}</span>
+        <div className="review-message">{review.message}</div>
       </React.Fragment>
     );
   }
@@ -33,7 +33,7 @@ const Message = ({ review }) => {
     return (
       <React.Fragment>
         <style jsx>{reviewItemCss}</style>
-        <span className="review-message">{review.message}</span>
+        <div className="review-message">{review.message}</div>
       </React.Fragment>
     );
   }
@@ -41,12 +41,12 @@ const Message = ({ review }) => {
   return (
     <React.Fragment>
       <style jsx>{reviewItemCss}</style>
-      <span className="review-message">
+      <div className="review-message">
         {review.message.substr(0, maxDisplayLength)}...
-      </span>
-      <span className="review-message read-more-button" onClick={readMore}>
+      </div>
+      <div className="review-message read-more-button" onClick={readMore}>
         Read more
-      </span>
+      </div>
     </React.Fragment>
   );
 };

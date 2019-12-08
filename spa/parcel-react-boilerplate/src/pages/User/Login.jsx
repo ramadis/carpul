@@ -49,7 +49,7 @@ const Login = ({ dispatch, user }) => {
     <Redirect to={`/user/${user.id}`} />
   ) : (
     <div className="flex-center full-height">
-      <div className="user-form">
+      <form className="user-form">
         <div className="top-border" />
         <div className="text-container">
           <span>carpul</span>
@@ -97,7 +97,7 @@ const Login = ({ dispatch, user }) => {
             {loading ? <MDSpinner size={16} /> : t("user.login.submit")}
           </LoginButton>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

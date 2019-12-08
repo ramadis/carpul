@@ -129,7 +129,7 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
               {isOwnProfile && (
                 <ReservationsSection reservations={reservations} />
               )}
-              <TripsSection trips={trips} />
+              <TripsSection isOwnProfile={isOwnProfile} trips={trips} />
             </ProfileContainer>
           )}
         </React.Fragment>
