@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import Rating from "react-rating";
@@ -16,15 +16,22 @@ const StarsContainer = styled.div`
 const Message = ({ review }) => {
   const maxDisplayLength = 50;
   const [full, setFull] = useState(false);
-  const readMore = () => {
-    setFull(true);
-  };
+  const readMore = () => setFull(true);
+  const message = (review.message || "").split("\n").map(
+    line =>
+      line && (
+        <Fragment>
+          <style jsx>{reviewItemCss}</style>
+          <p>{line}</p>
+        </Fragment>
+      )
+  );
 
   if (review.message.length <= maxDisplayLength) {
     return (
       <React.Fragment>
         <style jsx>{reviewItemCss}</style>
-        <div className="review-message">{review.message}</div>
+        <div className="review-message">{message}</div>
       </React.Fragment>
     );
   }
@@ -33,7 +40,7 @@ const Message = ({ review }) => {
     return (
       <React.Fragment>
         <style jsx>{reviewItemCss}</style>
-        <div className="review-message">{review.message}</div>
+        <div className="review-message">{message}</div>
       </React.Fragment>
     );
   }

@@ -30,9 +30,13 @@ export default css`
   }
 
   .review-message {
-    max-width: 360px;
+    width: 360px;
     word-wrap: break-word;
     color: #5a5a5a;
+  }
+
+  .review-message > p {
+    margin: 0 !important;
   }
 
   .review-message.read-more-button {
