@@ -1,6 +1,9 @@
 const translations = {
   common: {
-    hero: { title: "Have been sharing adventures for {{0}} days" },
+    hero: {
+      title: "Have been sharing adventures for {{0}} days",
+      first_day: "New to a life of adventures",
+    },
     navbar: {
       create: "Create account",
       logout: "Logout",
