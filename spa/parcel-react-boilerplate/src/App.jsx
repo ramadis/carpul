@@ -23,6 +23,7 @@ import Profile from "./pages/User/Profile";
 import Logout from "./pages/User/Logout";
 import Add from "./pages/Trips/Add";
 import Single from "./pages/Trips/Single";
+import Reserved from "./pages/Trips/Reserved";
 
 import "react-notifications/lib/notifications.css";
 
@@ -63,6 +64,7 @@ function App({ token, user, dispatch }) {
           <Route path="/user/:userId" exact component={Profile} />
           <Route path="/trips/add" exact component={Add} />
           <Route path="/trips/:id" exact component={Single} />
+          <Route path="/trips/:tripId/reserved" exact component={Reserved} />
           <Route component={() => <Redirect to="/error/404" />} />
         </Switch>
         <NotificationContainer />

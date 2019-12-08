@@ -287,6 +287,14 @@ const MapView = styled.iframe`
 
 const Trip = ({ trip }) => {
   const { t } = useTranslation();
+  const [reserved, setReserved] = useState(false);
+
+  const reserve = async () => {
+    await reserveByTrip(trip.id);
+    setReserved(true);
+  };
+
+  if (reserved) return <Redirect to={`/trips/${trip.id}/reserved`} />;
 
   const getStyle = () => {
     const seed = `${trip.to_city}`.replace(/\s/g, "");
@@ -367,7 +375,7 @@ const Trip = ({ trip }) => {
                 {!trip.reserved && (
                   <button
                     className="login-button inline-block"
-                    onClick={() => reserveByTrip(trip.id)}
+                    onClick={reserve}
                   >
                     {t("search.item.reserve")}
                   </button>

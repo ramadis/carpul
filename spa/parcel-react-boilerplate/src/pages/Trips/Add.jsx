@@ -59,6 +59,7 @@ function Add({ user }) {
     if (ETDdirty && !ETD) errors.etd = { type: "required" };
     if (ETAdirty && !ETA) errors.eta = { type: "required" };
     if (ETD >= ETA) errors.eta = { type: "invalid" };
+    if (ETD < new Date()) errors.etd = { type: "invalid" };
 
     return errors;
   };
@@ -223,6 +224,11 @@ function Add({ user }) {
               }
               dateFormat={t("trip.add.timestamp")}
             />
+            {formErrors.etd && formErrors.etd.type === "invalid" ? (
+              <label className="label-error">
+                {t("trip.add.errors.etd.invalid")}
+              </label>
+            ) : null}
 
             <label className="field-label" htmlFor="eta">
               {t("trip.add.eta")}

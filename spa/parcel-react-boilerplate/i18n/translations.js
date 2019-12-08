@@ -18,6 +18,11 @@ const translations = {
       subtitle: "(yep, this is a {{0}} error page)",
     },
   },
+  reservation: {
+    title: "Reservation submitted successfully",
+    subtitle:
+      "All set for your future trip. Here are the details and a way to contact your driver. Good luck in your adventure!",
+  },
   history: {
     item: {
       reserved: "reserved",
@@ -159,6 +164,10 @@ const translations = {
         date: {
           invalid:
             "The arrival date should be after the departure... or are you traveling through time?",
+        },
+        etd: {
+          invalid:
+            "The departure date should be in the future... or are you traveling through time?",
         },
       },
     },
