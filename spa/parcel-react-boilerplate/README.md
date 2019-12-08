@@ -25,7 +25,7 @@ yarn build
 - [x] Vista de suscribirse al viaje
 - [ ] Agregar features a la vista de resultados
 - [ ] Paginación en frontend
-- [ ] Viaje actual vs expirado en el perfil
+- [x] Viaje actual vs expirado en el perfil
 - [ ] Polling de historias
 - [ ] Add confirm modal (https://ga-mo.github.io/react-confirm-alert/demo/)
 - [x] Add confetti (https://alampros.github.io/react-confetti/?path=/story/props-demos--snow)

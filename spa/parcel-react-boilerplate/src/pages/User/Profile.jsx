@@ -23,7 +23,7 @@ import Loading from "../../components/Loading";
 
 import TripPast from "./TripPast";
 import Trip from "./Trip";
-import Destiny from "./TripPast";
+import Destiny from "./Reservation";
 
 import { getProfileById } from "../../services/User";
 import { getReservationsByUser } from "../../services/Reservation";
@@ -236,7 +236,7 @@ const ReservationsSection = ({ reservations }) => {
             reservation.expired ? (
               <TripPast reservation={reservation} key={reservation.id} />
             ) : (
-              <Destiny reservation={reservation} key={reservation.id} />
+              <Destiny trip={reservation} key={reservation.id} />
             )
           )}
         </List>
