@@ -25,44 +25,44 @@ const HistoryItem = ({ history }) => {
         />
         <div className="review-item-content history-content">
           {history.type === "RESERVE" && (
-            <span className="review-message">
+            <div className="review-message">
               {t("history.item.message", {
                 "0": history.user.first_name,
                 "1": t("history.item.reserved"),
                 "2": history.trip.to_city,
                 "3": fmtetd,
-                "4": t("history.item.all_set")
+                "4": t("history.item.all_set"),
               })}
-            </span>
+            </div>
           )}
           {history.type === "UNRESERVE" && (
-            <span className="review-message">
+            <div className="review-message">
               {t("history.item.message", {
                 "0": history.user.first_name,
                 "1": t("history.item.unreserved"),
                 "2": history.trip.to_city,
                 "3": fmtetd,
-                "4": t("history.item.bummer")
+                "4": t("history.item.bummer"),
               })}
-            </span>
+            </div>
           )}
           {history.type === "DELETE" && (
-            <span className="review-message">
+            <div className="review-message">
               {t("history.item.deleted_message", {
                 "0": history.trip.to_city,
                 "1": fmtetd,
-                "2": t("history.item.just_deleted")
+                "2": t("history.item.just_deleted"),
               })}
-            </span>
+            </div>
           )}
           {history.type === "KICKED" && (
-            <span className="review-message">
+            <div className="review-message">
               {t("history.item.kicked_message", {
                 "0": history.trip.to_city,
                 "1": fmtetd,
-                "2": t("history.item.just_deleted")
+                "2": t("history.item.just_deleted"),
               })}
-            </span>
+            </div>
           )}
           <span className="review-meta">
             {t("history.item.happened", { "0": fmtetd })}

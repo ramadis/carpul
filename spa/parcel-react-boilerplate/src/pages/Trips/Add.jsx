@@ -10,7 +10,7 @@ import { isEmpty } from "lodash";
 import Hero from "../../components/Hero";
 import PlacesAutocomplete from "../../components/PlacesAutocomplete";
 
-import { formatCity, getMap } from "../../services/Places.js";
+import { getCity, getMap } from "../../services/Places.js";
 import { createTripByUser } from "../../services/Trip.js";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -39,10 +39,10 @@ function Add({ user }) {
     const payload = {
       cost: values.cost,
       seats: values.seats,
-      to_city: formatCity(to.raw),
+      to_city: getCity(to.raw),
       etd: new Date(ETD).getTime(),
       eta: new Date(ETA).getTime(),
-      from_city: formatCity(from.raw),
+      from_city: getCity(from.raw),
       etd_latitude: Number(from.position.latitude),
       etd_longitude: Number(from.position.longitude),
       eta_latitude: Number(to.position.latitude),

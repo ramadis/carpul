@@ -1,4 +1,4 @@
-import css from 'styled-jsx/css'
+import css from "styled-jsx/css";
 
 export default css`
   .my-masonry-grid {
@@ -6,6 +6,7 @@ export default css`
     margin-left: -30px; /* gutter size offset */
     width: auto;
   }
+
   .my-masonry-grid_column {
     padding-left: 30px; /* gutter size */
     background-clip: padding-box;
@@ -24,4 +25,4 @@ export default css`
     width: 300px;
     margin-bottom: 30px;
   }
-`
+`;

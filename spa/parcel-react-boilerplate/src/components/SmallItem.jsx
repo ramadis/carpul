@@ -23,6 +23,7 @@ const SmallItem = ({ user, trip, hero_message }) => {
       <style jsx>{profileCss}</style>
       <style jsx>{reviewItemCss}</style>
       <style jsx>{profileHeroCss}</style>
+
       <div className="pool-item flex-center" style={getStyle()}>
         <div className="pool-info small-pool-info">
           <div className="header-container">
