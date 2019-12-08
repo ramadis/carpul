@@ -46,6 +46,7 @@ const translations = {
   user: {
     trip: {
       earning: "Earning",
+      join_cost: "Join this trip for",
       nil: "nothing yet",
       delete: "Delete trip",
       map: "See planned route",
@@ -115,13 +116,24 @@ const translations = {
       find: "Going somewhere? Find a trip",
       new: "Take some people to a new destiny",
       empty_title: "Seems like you don't have much to do here yet.",
-      empty_subtitle: "Why not starting right now?",
+      empty_subtitle: "Why not start right now?",
       empty_new: "Take some people to a new destiny",
       empty_find: "Find somewhere incredible to travel cheap",
-      empty_review: "People are not talking about you yet :(",
+      empty_review: "Nothing here yet :(",
       empty_histories: "No notifications yet!",
       empty_reservations: "No reservations? Start now!",
       empty_trips: "Do you even drive bro?",
+    },
+    profileOther: {
+      page_title: "Carpul | {{0}} {{1}} is awesome",
+      hero: "Welcome to {{user}}'s place.",
+      reviews: "People say about this driver",
+      trips: "They're driving",
+      empty_title: "Seems like this driver hasn't done much yet.",
+      empty_subtitle: "Looking for a trip?",
+      empty_find: "Find somewhere incredible to travel cheap",
+      empty_review: "People haven't talked about this driver yet :(",
+      empty_trips: "No planned trips yet",
     },
     unauth: {
       profile: {
