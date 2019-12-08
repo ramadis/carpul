@@ -33,6 +33,7 @@ import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.webapp.DTO.ReviewDTO;
 import ar.edu.itba.paw.webapp.DTO.HistoryDTO;
+import ar.edu.itba.paw.webapp.DTO.ReservationDTO;
 import ar.edu.itba.paw.webapp.DTO.TripDTO;
 import ar.edu.itba.paw.webapp.DTO.UserDTO;
 import ar.edu.itba.paw.webapp.forms.ImageForm;
@@ -161,8 +162,13 @@ public class UserController extends AuthController {
 		if (trips == null || trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 	
 		// Return trip DTOs
-		List<TripDTO> tripDTOs = trips.stream().map(trip -> new TripDTO(trip)).collect(Collectors.toList());
-		return Response.ok(tripDTOs).build();
+		if (user.getId().equals(id)) {			
+			List<TripDTO> tripDTOs = trips.stream().map(trip -> new TripDTO(trip)).collect(Collectors.toList());
+			return Response.ok(tripDTOs).build();
+		} else {
+			List<ReservationDTO> tripDTOs = trips.stream().map(trip -> new ReservationDTO(trip)).collect(Collectors.toList());
+			return Response.ok(tripDTOs).build();
+		}
 	}
 	
 	@GET
@@ -217,7 +223,7 @@ public class UserController extends AuthController {
 		if (trips == null || trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 		
 		// Return trips owned by the user with the param id
-		List<TripDTO> tripDTOs = trips.stream().map(trip -> new TripDTO(trip)).collect(Collectors.toList());
+		List<ReservationDTO> tripDTOs = trips.stream().map(trip -> new ReservationDTO(trip, user)).collect(Collectors.toList());
 		return Response.ok(tripDTOs).build();
 	}
 	

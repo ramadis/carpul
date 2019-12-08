@@ -30,6 +30,7 @@ import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.DTO.ReservationDTO;
 import ar.edu.itba.paw.webapp.DTO.ReviewDTO;
 import ar.edu.itba.paw.webapp.DTO.TripDTO;
 import ar.edu.itba.paw.webapp.DTO.UserDTO;
@@ -63,8 +64,13 @@ public class TripController extends AuthController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("id") final int id) {
 		final Trip trip = ts.findById(id);
+		final User user = user();
 		if (trip != null) {
-			return Response.ok(new TripDTO(trip)).build();
+			if (trip.getDriver().equals(user)) {
+				return Response.ok(new TripDTO(trip)).build();
+			} else {
+				return Response.ok(new ReservationDTO(trip)).build();
+			}
 		} else {
 			return Response.status(Status.NOT_FOUND).build();
 		}

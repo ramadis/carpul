@@ -5,10 +5,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import ar.edu.itba.paw.models.Position;
+import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 
-public class TripDTO {
+public class ReservationDTO {
 	private Integer id;
 	private Timestamp etd;
 	private Timestamp eta;
@@ -20,13 +21,20 @@ public class TripDTO {
 	private PositionDTO arrival;
 	private Integer occupied_seats;
 	private UserDTO driver;
-	private List<UserDTO> passengers;
 	private Boolean expired;
+	private Boolean reserved;
+	private Boolean reviewed;
 	private Integer available_seats;
 	
-	public TripDTO() {}
+	public ReservationDTO() {}
 	
-	public TripDTO(Trip trip) {
+	public ReservationDTO(Trip trip, User loggedUser) {
+		this(trip);
+		this.reserved = trip.getPassengers().contains(loggedUser);
+		this.reviewed = expired && trip.getReviews().stream().map(review -> review.getOwner()).collect(Collectors.toList()).contains(loggedUser);
+	}
+	
+	public ReservationDTO(Trip trip) {
 		this.id = trip.getId();
 		this.etd = trip.getEtd();
 		this.eta = trip.getEta();
@@ -38,7 +46,6 @@ public class TripDTO {
 		this.arrival = new PositionDTO(new Position(trip.getArrival_lat(), trip.getArrival_lon()));
 		this.occupied_seats = trip.getOccupied_seats();
 		this.driver = new UserDTO(trip.getDriver());
-		this.passengers = trip.getPassengers().stream().map(passenger -> new UserDTO(passenger)).collect(Collectors.toList());
 		this.expired = trip.getExpired();
 		this.available_seats = this.seats - this.occupied_seats;
 	}
@@ -118,12 +125,12 @@ public class TripDTO {
 		this.driver = driver;
 	}
 
-	public List<UserDTO> getPassengers() {
-		return passengers;
+	public Boolean getReserved() {
+		return reserved;
 	}
 
-	public void setPassengers(List<UserDTO> passengers) {
-		this.passengers = passengers;
+	public void setReserved(Boolean reserved) {
+		this.reserved = reserved;
 	}
 
 	public Integer getAvailable_seats() {
@@ -132,6 +139,14 @@ public class TripDTO {
 
 	public void setAvailable_seats(Integer available_seats) {
 		this.available_seats = available_seats;
+	}
+
+	public Boolean getReviewed() {
+		return reviewed;
+	}
+
+	public void setReviewed(Boolean reviewed) {
+		this.reviewed = reviewed;
 	}
 	
 }
