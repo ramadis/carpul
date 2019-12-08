@@ -42,7 +42,7 @@ import { getTripsByUser } from "../../services/Trip";
 const ProfileContainer = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
 `;
 
 const setData = setter => data => setter({ data, loading: false });
@@ -123,7 +123,7 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
           {areAllEmpty ? (
             <EmptyProfile />
           ) : (
-            <ProfileContainer className="profile-container">
+            <ProfileContainer>
               <ReviewsSection reviews={reviews} />
               {isOwnProfile && <HistoriesSection histories={histories} />}
               {isOwnProfile && (

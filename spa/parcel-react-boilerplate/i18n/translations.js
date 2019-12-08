@@ -45,7 +45,7 @@ const translations = {
   },
   user: {
     trip: {
-      earning: "earning",
+      earning: "Earning",
       nil: "nothing yet",
       delete: "Delete trip",
       map: "See planned route",

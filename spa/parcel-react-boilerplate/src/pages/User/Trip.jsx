@@ -28,14 +28,14 @@ const Trip = ({ t, trip }) => {
           <div className="inline-block no-margin">
             {trip.occupied_seats === 0 ? (
               <span className="destiny-cost">
-                {t("user.trip.earning")}
+                <span>{t("user.trip.earning")} </span>
                 <span className="bold" style={{ display: "inline" }}>
                   {t("user.trip.nil")}
                 </span>
               </span>
             ) : (
               <span className="destiny-cost">
-                {t("user.trip.earning")}
+                <span>{t("user.trip.earning")} </span>
                 <span className="bold" style={{ display: "inline" }}>
                   ${trip.cost * trip.occupied_seats}
                 </span>

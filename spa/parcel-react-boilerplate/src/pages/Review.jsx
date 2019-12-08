@@ -1,31 +1,33 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useTranslation } from "react-i18next";
-import { connect } from "react-redux";
-import MDSpinner from "react-md-spinner";
-import { useParams } from "react-router-dom";
-import Rating from "react-rating";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import styled from "styled-components";
+import React, { useState, useEffect, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import { connect } from 'react-redux'
+import MDSpinner from 'react-md-spinner'
+import { useParams, useHistory } from 'react-router-dom'
+import Rating from 'react-rating'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faStar } from '@fortawesome/free-solid-svg-icons'
+import styled from 'styled-components'
+import { NotificationManager } from 'react-notifications'
 
-import { getTripById } from "../services/Trip.js";
-import { reviewTrip, addReviewImage } from "../services/Review.js";
+import { getTripById } from '../services/Trip.js'
+import { reviewTrip, addReviewImage } from '../services/Review.js'
 
-import Hero from "../components/Hero";
-import Dropzone from "../components/Dropzone";
+import Hero from '../components/Hero'
+import Dropzone from '../components/Dropzone'
 
-import profileHeroCss from "../styles/profile_hero";
-import poolListCss from "../styles/pool_list";
-import profileCss from "../styles/profile";
-import reviewItemCss from "../styles/review_item";
+import profileHeroCss from '../styles/profile_hero'
+import poolListCss from '../styles/pool_list'
+import profileCss from '../styles/profile'
+import reviewItemCss from '../styles/review_item'
+import { routes } from '../App'
 
 const Field = styled.div`
   margin-top: 10px;
-`;
+`
 
 const UploadedImageContainer = styled.div`
   position: relative;
-`;
+`
 
 const RemoveImageButton = styled.button`
   position: absolute;
@@ -37,49 +39,59 @@ const RemoveImageButton = styled.button`
   width: 25px;
   background: #e36f49;
   color: white;
-`;
+`
 
 const Review = ({ user }) => {
-  const { t, i18n } = useTranslation();
-  const { id: tripId } = useParams();
+  const { t, i18n } = useTranslation()
+  const { id: tripId } = useParams()
+  const history = useHistory()
 
-  const [image, setImage] = useState();
-  const [trip, setTrip] = useState();
-  const [stars, setStars] = useState(0);
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState()
+  const [trip, setTrip] = useState()
+  const [stars, setStars] = useState(0)
+  const [message, setMessage] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const onImageLoaded = (imageURL, imageRAW, file) => {
-    const image = new Image();
-    image.src = imageURL;
+    const image = new Image()
+    image.src = imageURL
     image.onload = () =>
       setImage({
         URL: imageURL,
         RAW: imageRAW,
         element: image,
-        file,
-      });
-  };
+        file
+      })
+  }
 
   const review = async () => {
     try {
-      setLoading(true);
-      const review = await reviewTrip(trip.id, { stars, message });
-      if (image) await addReviewImage(review.id, image);
-      setLoading(false);
-    } catch (e) {
-      setLoading(false);
-      console.error(e);
+      setLoading(true)
+      const review = await reviewTrip(trip.id, { stars, message })
+      if (image) await addReviewImage(review.id, image)
+
+      NotificationManager.success('Review updated successfully!')
+      history.push(routes.profile(user.id))
+      setLoading(false)
+    } catch (error) {
+      console.error(error)
+      NotificationManager.error(error.message.subtitle, error.message.title)
+      
+      if (error.code === 409) {
+        history.push(routes.profile(user.id))
+      }
+
+      setLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    getTripById(tripId).then(setTrip);
-  }, []);
+    getTripById(tripId).then(setTrip)
+  }, [])
 
-  window.document.title = t("review.add.page_title");
+  window.document.title = t('review.add.page_title')
 
-  const isLoading = !user && !trip;
+  const isLoading = !user && !trip
 
   const Loading = (
     <React.Fragment>
@@ -87,13 +99,13 @@ const Review = ({ user }) => {
       <style jsx>{profileCss}</style>
       <style jsx>{reviewItemCss}</style>
       <style jsx>{profileHeroCss}</style>
-      <div className="flex-center spinner-class">
+      <div className='flex-center spinner-class'>
         <MDSpinner size={36} />
       </div>
     </React.Fragment>
-  );
+  )
 
-  if (isLoading) return Loading;
+  if (isLoading) return Loading
 
   return (
     <React.Fragment>
@@ -101,28 +113,28 @@ const Review = ({ user }) => {
       <style jsx>{profileCss}</style>
       <style jsx>{reviewItemCss}</style>
       <style jsx>{profileHeroCss}</style>
-      <Hero hero_message={t("review.add.hero")} user={user} />
+      <Hero hero_message={t('review.add.hero')} user={user} />
 
       {trip ? (
-        <div className="profile-form-container flex-center">
-          <div className="new-trip-form" action="../review/${trip.id}">
-            <h3>{t("review.add.title")}</h3>
+        <div className='profile-form-container flex-center'>
+          <div className='new-trip-form' action='../review/${trip.id}'>
+            <h3>{t('review.add.title')}</h3>
             <h2>
-              {t("review.add.subtitle", {
-                "0": user.first_name,
-                "1": trip.driver.first_name,
-                "2": trip.from_city,
-                "3": trip.to_city,
+              {t('review.add.subtitle', {
+                '0': user.first_name,
+                '1': trip.driver.first_name,
+                '2': trip.from_city,
+                '3': trip.to_city
               })}
             </h2>
 
-            <div className="field-container">
-              <label path="message" className="field-label" htmlFor="message">
-                {t("review.add.message")}
+            <div className='field-container'>
+              <label path='message' className='field-label' htmlFor='message'>
+                {t('review.add.message')}
               </label>
               <Field>
                 {image ? (
-                  <UploadedImageContainer className="uploaded-image-container">
+                  <UploadedImageContainer className='uploaded-image-container'>
                     <img
                       src={image.URL}
                       height={100}
@@ -141,10 +153,10 @@ const Review = ({ user }) => {
                   initialRating={stars}
                   onChange={setStars}
                   emptySymbol={
-                    <FontAwesomeIcon icon={faStar} size="1x" color="#808080" />
+                    <FontAwesomeIcon icon={faStar} size='1x' color='#808080' />
                   }
                   fullSymbol={
-                    <FontAwesomeIcon icon={faStar} size="1x" color="#f39c12" />
+                    <FontAwesomeIcon icon={faStar} size='1x' color='#f39c12' />
                   }
                 />
               </Field>
@@ -152,20 +164,20 @@ const Review = ({ user }) => {
                 <textarea
                   value={message}
                   onChange={e => setMessage(e.target.value)}
-                  className="field review-textarea"
-                  placeholder={t("review.add.placeholder")}
-                  required={true}
-                  multiline="true"
-                  name="message"
-                  path="message"
-                  type="text"
+                  className='field review-textarea'
+                  placeholder={t('review.add.placeholder')}
+                  required
+                  multiline='true'
+                  name='message'
+                  path='message'
+                  type='text'
                 />
               </Field>
             </div>
 
-            <div className="actions" style={{ marginBottom: 10 }}>
-              <button type="submit" onClick={review} className="login-button">
-                {loading ? <MDSpinner size={24} /> : t("review.add.submit")}
+            <div className='actions' style={{ marginBottom: 10 }}>
+              <button type='submit' onClick={review} className='login-button'>
+                {loading ? <MDSpinner size={24} /> : t('review.add.submit')}
               </button>
             </div>
           </div>
@@ -174,7 +186,7 @@ const Review = ({ user }) => {
         Loading
       )}
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default connect(state => ({ user: state.user }))(Review);
+export default connect(state => ({ user: state.user }))(Review)

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const auth = () => localStorage.getItem("token");
 
-export const API_URL = "http://localhost:8090/api";
+export const API_URL = "http://d705cb27.ngrok.io/api";
 
 const instance = axios.create({
   baseURL: API_URL,
