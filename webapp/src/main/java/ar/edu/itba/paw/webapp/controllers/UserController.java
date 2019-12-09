@@ -155,6 +155,7 @@ public class UserController extends AuthController {
 								@DefaultValue("0") @QueryParam("page") int page,
 								@DefaultValue("5") @QueryParam("per_page") int perPage) {
 		final User user = us.getById(id);
+		final User loggedUser = user();
 		if (user == null) return Response.status(Status.NOT_FOUND).build();
 		
 		// Search trips belonging to a given user
@@ -162,11 +163,11 @@ public class UserController extends AuthController {
 		if (trips == null || trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 	
 		// Return trip DTOs
-		if (user.getId().equals(id)) {			
+		if (loggedUser.getId().equals(id)) {			
 			List<TripDTO> tripDTOs = trips.stream().map(trip -> new TripDTO(trip)).collect(Collectors.toList());
 			return Response.ok(tripDTOs).build();
 		} else {
-			List<ReservationDTO> tripDTOs = trips.stream().map(trip -> new ReservationDTO(trip)).collect(Collectors.toList());
+			List<ReservationDTO> tripDTOs = trips.stream().map(trip -> new ReservationDTO(trip, loggedUser)).collect(Collectors.toList());
 			return Response.ok(tripDTOs).build();
 		}
 	}
