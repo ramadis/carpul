@@ -69,9 +69,9 @@ const DeleteTripButton = ({ tripId }) => {
 
 const PassengerList = ({ trip }) => {
   const { t } = useTranslation();
-
   return trip.passengers.length === 0 ? null : (
     <React.Fragment>
+      <style jsx>{profileCss}</style>
       <hr />
       {trip.passengers.map(passenger => (
         <div href={`/user/${passenger.id}`}>
@@ -213,11 +213,11 @@ const Trip = ({ trip, isOwner }) => {
       <style jsx>{reviewItemCss}</style>
       <style jsx>{profileHeroCss}</style>
       <React.Fragment>
-        <li className="destiny-item trip-item" data-id="${trip.id}">
+        <li className="destiny-item trip-item">
           <div className="inline-block no-margin">
             {isOwner && <EarningSection trip={trip} />}
             <div className="destiny-name">{trip.to_city}</div>
-            <div className="destiny-time">{trip.from_city}</div>
+            <div className="destiny-time">From {trip.from_city}</div>
             <div className="destiny-timetable">
               <div className="destiny-timerow">
                 <div className="destiny-time-titlespan">

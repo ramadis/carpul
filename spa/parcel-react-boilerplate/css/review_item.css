@@ -17,12 +17,10 @@
 }
 
 .history-content {
-  max-width: 15vw;
   line-height: 20px;
 }
 
 .review-message {
-  width: 360px;
   word-wrap: break-word;
   color: #5a5a5a;
 }

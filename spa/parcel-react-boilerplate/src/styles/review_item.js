@@ -4,10 +4,12 @@ export default css`
   .review-item-container {
     display: flex;
     margin-bottom: 20px;
+    max-width: 400px;
   }
 
   .review-item-content {
     margin-top: 5px;
+    width: calc(100% - 85px);
   }
 
   .review-item-container img {
@@ -25,12 +27,10 @@ export default css`
   }
 
   .history-content {
-    max-width: 15vw;
     line-height: 20px;
   }
 
   .review-message {
-    width: 360px;
     word-wrap: break-word;
     color: #5a5a5a;
   }

@@ -7,7 +7,7 @@ function TripPast({ reservation }) {
   return (
     <React.Fragment>
       <style jsx>{profileCss}</style>
-      <li className="destiny-item past-item" data-id="${reservation.id}">
+      <li className="destiny-item past-item" style={{ width: "auto" }}>
         <div className="inline-block no-margin">
           <div className="destiny-cost">{t("user.trip_past.message")}</div>
           <span className="destiny-name">{reservation.to_city}</span>

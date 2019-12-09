@@ -75,10 +75,10 @@ const Reservation = ({ t, trip }) => {
                       alt=""
                     />
                     <div className="driver-info">
-                      <span className="driver-name">
+                      <div className="driver-name">
                         {trip.driver.first_name} {trip.driver.last_name}
-                      </span>
-                      <span>{t("reservation.learn")}</span>
+                      </div>
+                      <div>{t("reservation.learn")}</div>
                     </div>
                   </div>
                 </div>
