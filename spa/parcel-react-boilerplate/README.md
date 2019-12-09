@@ -18,6 +18,7 @@ yarn build
 ```
 
 # TODO
+
 - [x] Vista de suscribirse al viaje
 - [x] Viaje actual vs expirado en el perfil
 - [x] Add confetti (https://alampros.github.io/react-confetti/?path=/story/props-demos--snow) en pagina de trip reservado
@@ -27,8 +28,8 @@ yarn build
 - [x] No hay feedback al dereservar, simplemente se recarga la home del usuario
 - [x] Agregar vista de “desreservar”
 - [x] Cuando ves el perfil al que le comentaste aparece el string gigante. (Tambien tienen un detalle de ui que no dividen el comentario en varias lineas, todo en una). Sospecho que este comportamiento pasa en todos los campos, no lo comprobe.
+- [x] Agregar perfiles de otros
 
-- [\] Agregar perfiles de otros: falta desreservar
 - [ ] Agregar features a la vista de resultados: (Mostar carteles tipo, para este dia tenes estas opciones: ... Sino, para el futuro estas otras...)
 - [ ] Paginación en frontend
 - [ ] Agregar tests de frontend
