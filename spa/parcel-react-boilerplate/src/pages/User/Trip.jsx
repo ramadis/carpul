@@ -120,13 +120,12 @@ const CostInfo = ({ trip }) => {
   const { t } = useTranslation();
 
   return (
-    <CostInfoContainer>
-      <span>{t("user.trip.join_cost")} </span>
+    <span className="destiny-cost">
+      <span>{t("reservation.cost")} </span>
       <span className="bold" style={{ display: "inline" }}>
         ${trip.cost}
       </span>
-      <span>.</span>
-    </CostInfoContainer>
+    </span>
   );
 };
 const ReserveButtonStyle = styled.button`
@@ -215,7 +214,11 @@ const Trip = ({ trip, isOwner }) => {
       <React.Fragment>
         <li className="destiny-item trip-item">
           <div className="inline-block no-margin">
-            {isOwner && <EarningSection trip={trip} />}
+            {isOwner ? (
+              <EarningSection trip={trip} />
+            ) : (
+              <CostInfo trip={trip} />
+            )}
             <div className="destiny-name">{trip.to_city}</div>
             <div className="destiny-time">From {trip.from_city}</div>
             <div className="destiny-timetable">
@@ -247,7 +250,6 @@ const Trip = ({ trip, isOwner }) => {
             </a>
             {isOwner && <DeleteTripButton tripId={trip.id} />}
             {isOwner && <PassengerList trip={trip} />}
-            {!isOwner && <CostInfo trip={trip} />}
             {!isOwner && <ReserveButton trip={trip} />}
           </div>
         </li>
