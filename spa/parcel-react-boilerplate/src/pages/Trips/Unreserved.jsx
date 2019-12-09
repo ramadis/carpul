@@ -10,8 +10,10 @@ import AddToCalendar from "react-add-to-calendar";
 import { useWindowSize } from "../../utils/hooks.js";
 
 import { getTripById } from "../../services/Trip.js";
+import { search } from "../../services/Search.js";
 
 import Reservation from "../User/Reservation";
+import { Trip } from "../Search";
 
 import "react-add-to-calendar/dist/react-add-to-calendar.css";
 import profileHeroCss from "../../styles/profile_hero";
@@ -28,9 +30,20 @@ function Reserved({ user }) {
   const { t, i18n } = useTranslation();
   const { tripId } = useParams();
   const [trip, setTrip] = useState();
+  const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
-    getTripById(tripId).then(setTrip);
+    const fetches = async () => {
+      const trip = await getTripById(tripId);
+      setTrip(trip);
+      search({
+        to: trip.to_city,
+        from: trip.from_city,
+        when: trip.etd,
+        per_page: 6,
+      }).then(setSuggestions);
+    };
+    fetches();
   }, []);
 
   const isLoading = !user || !trip;
@@ -56,28 +69,18 @@ function Reserved({ user }) {
       <style jsx>{profileHeroCss}</style>
       <div
         className="profile-form-container flex-center"
-        style={{ marginTop: 20 }}
+        style={{ marginTop: 20, flexDirection: "column", marginBottom: 20 }}
       >
         <div className="new-trip-form">
-          <h3>You've unreserved your trip to {trip.to_city}</h3>
-          <h2>
-            Not everything is lost though! May we suggest you a few other
-            alternatives to your destination?
-          </h2>
-          <Reservation trip={trip} />
-          <LinksContainer>
-            <Link
-              className="login-button empty-button"
-              to={`/user/${user.id}`}
-              style={{
-                display: "inline-block",
-                width: "auto",
-                marginLeft: 0,
-              }}
-            >
-              {t("reservation.profile")}
-            </Link>
-          </LinksContainer>
+          <h3>{t("reservation.unreserve.title", { city: trip.to_city })}</h3>
+          <h2>{t("reservation.unreserve.subtitle")}</h2>
+        </div>
+        <div>
+          {suggestions
+            .filter(suggestion => suggestion.id !== trip.id)
+            .map(suggestion => (
+              <Trip key={suggestion.id} trip={suggestion} />
+            ))}
         </div>
       </div>
     </React.Fragment>

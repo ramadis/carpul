@@ -1,10 +1,9 @@
 import { GETwithAuth } from "./Utils";
+import { query } from "../utils/fetch";
 
-export const search = async ({ to, from, when }) => {
-  const query = encodeURIComponent({ to, from, when });
-
+export const search = async ({ to, from, when, page, per_page }) => {
   const results = await GETwithAuth(
-    `/search?to=${to}&from=${from}&when=${when}`
+    `/search${query({ to, from, when, page, per_page })}`
   ).then(res => {
     if (res.isRawResponse) {
       // TODO: Handle specific error messages

@@ -1,38 +1,38 @@
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { connect } from 'react-redux'
-import { format, parse } from 'date-fns'
-import MDSpinner from 'react-md-spinner'
-import Rating from 'react-rating'
-import DatePicker from 'react-datepicker'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { debounce } from 'lodash'
-import { faStar } from '@fortawesome/free-solid-svg-icons'
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { connect } from "react-redux";
+import { format, parse } from "date-fns";
+import MDSpinner from "react-md-spinner";
+import Rating from "react-rating";
+import DatePicker from "react-datepicker";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { debounce } from "lodash";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Link,
-  Redirect
-} from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import { useLocation } from 'react-router-dom'
+  Redirect,
+} from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 
-import { search } from '../services/search'
-import { reserveByTrip, unreserveByTrip } from '../services/Reservation'
-import { getCity } from '../services/Places.js'
+import { search } from "../services/search";
+import { reserveByTrip, unreserveByTrip } from "../services/Reservation";
+import { getCity } from "../services/Places.js";
 
-import PlacesAutocomplete from '../components/PlacesAutocomplete'
+import PlacesAutocomplete from "../components/PlacesAutocomplete";
 
-import 'react-datepicker/dist/react-datepicker.css'
-import poolListCss from '../styles/pool_list'
-import imgSeats from '../../images/seats.png'
+import "react-datepicker/dist/react-datepicker.css";
+import poolListCss from "../styles/pool_list";
+import imgSeats from "../../images/seats.png";
 
-function useQuery () {
+function useQuery() {
   return [...new URLSearchParams(useLocation().search).entries()].reduce(
     (ac, [key, val]) => ({ ...ac, [key]: val }),
     {}
-  )
+  );
 }
 
 const SearchInput = styled.input`
@@ -41,7 +41,7 @@ const SearchInput = styled.input`
   font-size: 15px;
   width: 200px;
   padding: 5px;
-`
+`;
 
 const HeaderContainer = styled.div`
   background: white;
@@ -53,61 +53,58 @@ const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`
+`;
 
 const SearchContainer = styled.div`
   display: flex;
-`
+`;
 
 const SpinnerContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 80px 0;
-`
+`;
 
 const Spinner = () => {
   return (
     <SpinnerContainer>
       <MDSpinner size={36} />
     </SpinnerContainer>
-  )
-}
+  );
+};
 
 const TripInfoContainer = styled.div`
   width: 700px;
   background: #f4f4f4;
   border-radius: 5px;
   overflow: hidden;
-`
+`;
 
 const Search = ({ user }) => {
-  const { t, i18n } = useTranslation()
-  const [trips, setTrips] = useState([])
-  const rawParams = useQuery()
-  const [params, setParams] = useState(rawParams)
-  const [loading, setLoading] = useState(true)
-  const { to, from, when } = params
+  const { t, i18n } = useTranslation();
+  const [trips, setTrips] = useState([]);
+  const rawParams = useQuery();
+  const [params, setParams] = useState(rawParams);
+  const [loading, setLoading] = useState(true);
+  const { to, from, when } = params;
 
-  const handleSearch = debounce(setParams, 1000)
+  const handleSearch = debounce(setParams, 1000);
 
-  useEffect(
-    () => {
-      // TODO: Handle errors
-      setLoading(true)
-      search({ to, from, when })
-        .then(setTrips)
-        .finally(() => setLoading(false))
-    },
-    [params]
-  )
+  useEffect(() => {
+    // TODO: Handle errors
+    setLoading(true);
+    search({ to, from, when })
+      .then(setTrips)
+      .finally(() => setLoading(false));
+  }, [params]);
 
-  const whenDate = new Date(Number(when))
+  const whenDate = new Date(Number(when));
 
-  const searchDate = format(whenDate, 'DD/MM/YYYY HH:mm')
+  const searchDate = format(whenDate, "DD/MM/YYYY HH:mm");
 
-  const dateDayMonthYear = format(whenDate, 'DD/MM/YYYY')
-  const whenTime = format(whenDate, 'HH:mm')
+  const dateDayMonthYear = format(whenDate, "DD/MM/YYYY");
+  const whenTime = format(whenDate, "HH:mm");
 
   return (
     <div>
@@ -115,12 +112,12 @@ const Search = ({ user }) => {
 
       <HeaderContainer>
         <SearchBar onSearch={handleSearch} />
-        <Link to='/trips/add' className='login-button inverted hard-edges'>
-          {t('search.search.create')}
+        <Link to="/trips/add" className="login-button inverted hard-edges">
+          {t("search.search.create")}
         </Link>
       </HeaderContainer>
 
-      <div className='list-container' style={{ marginBottom: 20 }}>
+      <div className="list-container" style={{ marginBottom: 20 }}>
         {loading && <Spinner />}
         {!loading && trips.length > 0 && (
           <React.Fragment>
@@ -140,8 +137,8 @@ const Search = ({ user }) => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
 const Subtitle = styled.span`
   color: #868686;
@@ -149,167 +146,167 @@ const Subtitle = styled.span`
   display: block;
   margin: 20px 0;
   font-size: 20px;
-`
+`;
 
 const tripsMessage = (t, { to, from, when, time }) => {
   if (!to && !from) {
-    return t('search.search.trips_no_to_no_from', { when, time })
+    return t("search.search.trips_no_to_no_from", { when, time });
   }
 
-  if (!to) return t('search.search.trips_no_to', { from, when, time })
+  if (!to) return t("search.search.trips_no_to", { from, when, time });
 
-  if (!from) return t('search.search.trips_no_from', { to, when, time })
+  if (!from) return t("search.search.trips_no_from", { to, when, time });
 
-  return t('search.search.trips', { to, from, when, time })
-}
+  return t("search.search.trips", { to, from, when, time });
+};
 
 const TripsSubtitle = ({ to, from, when, time }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
-  return <Subtitle>{tripsMessage(t, { to, from, when, time })}</Subtitle>
-}
+  return <Subtitle>{tripsMessage(t, { to, from, when, time })}</Subtitle>;
+};
 
 const noTripsMessage = (t, { to, from }) => {
-  if (!to && !from) return t('search.search.no_trips_no_to_no_from')
+  if (!to && !from) return t("search.search.no_trips_no_to_no_from");
 
-  if (!to) return t('search.search.no_trips_no_to', { from })
+  if (!to) return t("search.search.no_trips_no_to", { from });
 
-  if (!from) return t('search.search.no_trips_no_from', { to })
+  if (!from) return t("search.search.no_trips_no_from", { to });
 
-  return t('search.search.no_trips', { to, from })
-}
+  return t("search.search.no_trips", { to, from });
+};
 
 const NoTripsSubtitle = ({ to, from }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
-  return <Subtitle>{noTripsMessage(t, { to, from })}</Subtitle>
-}
+  return <Subtitle>{noTripsMessage(t, { to, from })}</Subtitle>;
+};
 
-const encodeQueryParams = function (obj) {
-  var str = []
+const encodeQueryParams = function(obj) {
+  var str = [];
   for (var p in obj) {
     if (obj.hasOwnProperty(p)) {
-      str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]))
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
     }
   }
-  return str.join('&')
-}
+  return str.join("&");
+};
 
 const SearchBar = ({ onSearch = () => null }) => {
-  const { t, i18n } = useTranslation()
-  const { to, from, when } = useQuery()
+  const { t, i18n } = useTranslation();
+  const { to, from, when } = useQuery();
 
-  const [origin, setOrigin] = useState({ city: from })
-  const [destination, setDestination] = useState({ city: to })
-  const [datetime, setDatetime] = useState(new Date(Number(when)))
+  const [origin, setOrigin] = useState({ city: from });
+  const [destination, setDestination] = useState({ city: to });
+  const [datetime, setDatetime] = useState(new Date(Number(when)));
 
-  const searchDate = format(new Date(Number(when)), 'DD/MM/YYYY HH:mm')
+  const searchDate = format(new Date(Number(when)), "DD/MM/YYYY HH:mm");
 
   const pushSearch = value => {
     onSearch({
       from: origin.city,
       to: destination.city,
       when: datetime.getTime(),
-      ...value
-    })
-  }
+      ...value,
+    });
+  };
 
-  const { protocol, host, pathname } = window.location
+  const { protocol, host, pathname } = window.location;
   if (history.pushState) {
     const query = `?${encodeQueryParams({
       from: origin.city,
       to: destination.city,
-      when: datetime.getTime()
-    })}`
-    var newurl = `${protocol}//${host + pathname + query}`
-    window.history.pushState({ path: newurl }, '', newurl)
+      when: datetime.getTime(),
+    })}`;
+    var newurl = `${protocol}//${host + pathname + query}`;
+    window.history.pushState({ path: newurl }, "", newurl);
   }
 
   return (
     <SearchContainer>
-      <div className='destination-container'>
-        <span className='bold m-r-5'>{t('search.search.from')}</span>
+      <div className="destination-container">
+        <span className="bold m-r-5">{t("search.search.from")}</span>
         <PlacesAutocomplete
-          style={{ display: 'inline', paddingRight: 10 }}
+          style={{ display: "inline", paddingRight: 10 }}
           value={origin.city}
           handleSelect={place => {
             setOrigin({
               city: getCity(place),
               position: { latitude: place.lat, longitude: place.lon },
               selected: getCity(place),
-              raw: place
-            })
-            pushSearch({ from: getCity(place) })
+              raw: place,
+            });
+            pushSearch({ from: getCity(place) });
           }}
         >
           <SearchInput
             value={origin.city}
             onChange={e => {
-              setOrigin({ city: e.target.value })
-              pushSearch({ from: e.target.value })
+              setOrigin({ city: e.target.value });
+              pushSearch({ from: e.target.value });
             }}
-            className='clear'
-            type='text'
-            tabIndex='1'
+            className="clear"
+            type="text"
+            tabIndex="1"
           />
         </PlacesAutocomplete>
       </div>
-      <div className='destination-container'>
-        <span className='bold m-r-5'>{t('search.search.to')}</span>
+      <div className="destination-container">
+        <span className="bold m-r-5">{t("search.search.to")}</span>
         <PlacesAutocomplete
-          style={{ display: 'inline', paddingRight: 10 }}
+          style={{ display: "inline", paddingRight: 10 }}
           value={destination.city}
           handleSelect={place => {
             setDestination({
               city: getCity(place),
               position: { latitude: place.lat, longitude: place.lon },
               selected: getCity(place),
-              raw: place
-            })
-            pushSearch({ to: getCity(place) })
+              raw: place,
+            });
+            pushSearch({ to: getCity(place) });
           }}
         >
           <SearchInput
             value={destination.city}
             onChange={e => {
-              setDestination({ city: e.target.value })
-              pushSearch({ to: e.target.value })
+              setDestination({ city: e.target.value });
+              pushSearch({ to: e.target.value });
             }}
-            className='clear'
-            type='text'
-            tabIndex='1'
+            className="clear"
+            type="text"
+            tabIndex="1"
           />
         </PlacesAutocomplete>
       </div>
-      <div className='destination-container'>
-        <span className='bold m-r-5'>{t('search.search.on')}</span>
+      <div className="destination-container">
+        <span className="bold m-r-5">{t("search.search.on")}</span>
         <DatePicker
           selected={datetime}
           onChange={date => {
-            setDatetime(date)
-            pushSearch({ when: date.getTime() })
+            setDatetime(date);
+            pushSearch({ when: date.getTime() });
           }}
           showTimeSelect
-          timeFormat={t('trip.add.time')}
-          todayButton={t('trip.add.today')}
-          timeCaption='time'
+          timeFormat={t("trip.add.time")}
+          todayButton={t("trip.add.today")}
+          timeCaption="time"
           minDate={new Date()}
-          placeholderText='Time range'
+          placeholderText="Time range"
           timeIntervals={15}
           customInput={
             <SearchInput
-              className='clear'
+              className="clear"
               style={{ width: 130 }}
               value={searchDate}
-              type='text'
+              type="text"
             />
           }
-          dateFormat={t('trip.add.timestamp')}
+          dateFormat={t("trip.add.timestamp")}
         />
       </div>
     </SearchContainer>
-  )
-}
+  );
+};
 
 const ImageContainer = styled.div`
   display: flex;
@@ -319,13 +316,13 @@ const ImageContainer = styled.div`
   width: 100%;
   background-size: cover;
   height: 100%;
-`
+`;
 
 const PathLink = styled.a`
   position: absolute;
   bottom: 10px;
   right: 10px;
-`
+`;
 
 const MapView = styled.iframe`
   position: absolute;
@@ -333,59 +330,59 @@ const MapView = styled.iframe`
   top: 0;
   height: 100%;
   width: 100%;
-`
+`;
 
-const Trip = ({ trip }) => {
-  const { t } = useTranslation()
-  const [reserved, setReserved] = useState(false)
-  const [requestLoading, setRequestLoading] = useState(false)
+export const Trip = ({ trip }) => {
+  const { t } = useTranslation();
+  const [reserved, setReserved] = useState(false);
+  const [requestLoading, setRequestLoading] = useState(false);
 
   const reserve = async () => {
-    setRequestLoading(true)
-    await reserveByTrip(trip.id)
-    setReserved(true)
-  }
+    setRequestLoading(true);
+    await reserveByTrip(trip.id);
+    setReserved(true);
+  };
 
-  if (reserved) return <Redirect to={`/trips/${trip.id}/reserved`} />
+  if (reserved) return <Redirect to={`/trips/${trip.id}/reserved`} />;
 
   const getStyle = () => {
-    const seed = `${trip.to_city}`.replace(/\s/g, '')
+    const seed = `${trip.to_city}`.replace(/\s/g, "");
     return {
-      backgroundImage: `url(https://picsum.photos/seed/${seed}/600/300)`
-    }
-  }
+      backgroundImage: `url(https://picsum.photos/seed/${seed}/600/300)`,
+    };
+  };
 
   return (
     <React.Fragment>
       <style jsx>{poolListCss}</style>
 
-      <div className='pool-item flex-center'>
-        <div className='user-info flex space-around align-center column h-150'>
-          <div className='user-image'>
+      <div className="pool-item flex-center">
+        <div className="user-info flex space-around align-center column h-150">
+          <div className="user-image">
             <img
               src={`https://ui-avatars.com/api/?rounded=true&size=85&background=e36f4a&color=fff&name=${
                 trip.driver.first_name
               } ${trip.driver.last_name}`}
-              alt=''
+              alt=""
             />
           </div>
-          <div className='user-name'>{trip.driver.first_name}</div>
-          <span className='user-rating'>
+          <div className="user-name">{trip.driver.first_name}</div>
+          <span className="user-rating">
             <Rating
               initialRating={trip.driver.rating}
               readonly
               emptySymbol={
-                <FontAwesomeIcon icon={faStar} size='xs' color='#e2e2e2' />
+                <FontAwesomeIcon icon={faStar} size="xs" color="#e2e2e2" />
               }
               fullSymbol={
-                <FontAwesomeIcon icon={faStar} size='xs' color='#f39c12' />
+                <FontAwesomeIcon icon={faStar} size="xs" color="#f39c12" />
               }
             />
           </span>
         </div>
 
         <TripInfoContainer>
-          <div className='map-container'>
+          <div className="map-container">
             <ImageContainer style={getStyle()}>
               <MapView
                 src={`https://www.google.com/maps/embed/v1/directions?key=AIzaSyCNS1Xx_AGiNgyperC3ovLBiTdsMlwnuZU&origin=${
@@ -396,66 +393,66 @@ const Trip = ({ trip }) => {
               />
             </ImageContainer>
           </div>
-          <div className='bg-white'>
-            <div className='price-container flex space-between align-center'>
-              <span className='clear gray sz-13'>
-                {t('search.item.from')}
-                <span className='bold black'> {trip.from_city}</span>
-                <span> {t('search.item.on_low')} </span>
-                <span className='bold black'>
-                  {format(trip.etd, 'DD/MM/YYYY')}
+          <div className="bg-white">
+            <div className="price-container flex space-between align-center">
+              <span className="clear gray sz-13">
+                {t("search.item.from")}
+                <span className="bold black"> {trip.from_city}</span>
+                <span> {t("search.item.on_low")} </span>
+                <span className="bold black">
+                  {format(trip.etd, "DD/MM/YYYY")}
                 </span>
-                <span> {t('search.item.at')} </span>
-                <span className='bold black'>{format(trip.etd, 'HH:mm')}</span>
+                <span> {t("search.item.at")} </span>
+                <span className="bold black">{format(trip.etd, "HH:mm")}</span>
                 <span>.</span>
                 <br />
-                <span>{t('search.item.arrive')}</span>
-                <span className='bold black'> {trip.to_city}</span>
-                <span> {t('search.item.on_low')} </span>
-                <span className='bold black'>
-                  {format(trip.eta, 'DD/MM/YYYY')}
+                <span>{t("search.item.arrive")}</span>
+                <span className="bold black"> {trip.to_city}</span>
+                <span> {t("search.item.on_low")} </span>
+                <span className="bold black">
+                  {format(trip.eta, "DD/MM/YYYY")}
                 </span>
-                <span> {t('search.item.at')} </span>
-                <span className='bold black'>{format(trip.eta, 'HH:mm')}</span>
+                <span> {t("search.item.at")} </span>
+                <span className="bold black">{format(trip.eta, "HH:mm")}</span>
                 <span>.</span>
               </span>
               <div>
-                <span className='price gray'>
-                  <span className='bold black'>
-                    ${trip.cost}/{t('search.item.each')}
+                <span className="price gray">
+                  <span className="bold black">
+                    ${trip.cost}/{t("search.item.each")}
                   </span>
                 </span>
 
                 {!trip.reserved && (
                   <button
                     disabled={requestLoading}
-                    className='login-button inline-block'
+                    className="login-button inline-block"
                     onClick={reserve}
                   >
                     {requestLoading ? (
                       <MDSpinner size={16} />
                     ) : (
-                      t('search.item.reserve')
+                      t("search.item.reserve")
                     )}
                   </button>
                 )}
                 {trip.reserved && (
                   <button
-                    className='inline-block login-button main-color'
+                    className="inline-block login-button main-color"
                     onClick={() => unreserveByTrip(trip.id)}
                   >
-                    {t('search.item.unreserve')}
+                    {t("search.item.unreserve")}
                   </button>
                 )}
               </div>
             </div>
 
-            <div className='pool-features flex space-between align-center'>
-              <div className='features-container' />
-              <div className='seats-container'>
-                <span className='seats bold gray'>
-                  <img className='seats-icon' src={imgSeats} />
-                  {trip.available_seats} {t('search.item.available')}
+            <div className="pool-features flex space-between align-center">
+              <div className="features-container" />
+              <div className="seats-container">
+                <span className="seats bold gray">
+                  <img className="seats-icon" src={imgSeats} />
+                  {trip.available_seats} {t("search.item.available")}
                 </span>
               </div>
             </div>
@@ -463,6 +460,6 @@ const Trip = ({ trip }) => {
         </TripInfoContainer>
       </div>
     </React.Fragment>
-  )
-}
-export default connect(state => ({ user: state.user }))(Search)
+  );
+};
+export default connect(state => ({ user: state.user }))(Search);
