@@ -3,11 +3,13 @@ import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import styled from "styled-components";
 import MDSpinner from "react-md-spinner";
-import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { reserveByTrip, unreserveByTrip } from "../services/Reservation";
 import { confirmAlert } from "react-confirm-alert";
 
 import ConfirmationModal from "../components/ConfirmationModal";
+
+import { routes } from "../App";
 
 import "react-confirm-alert/src/react-confirm-alert.css";
 import profileHeroCss from "../styles/profile_hero";
@@ -46,21 +48,19 @@ const Header = styled.h4`
 const SmallItem = ({ user, trip, hero_message }) => {
   const { t, i18n } = useTranslation();
   const [requestLoading, setRequestLoading] = useState(false);
-  const [redirect, setRedirect] = useState("");
+  const history = useHistory();
 
   const reserve = async () => {
     setRequestLoading(true);
     await reserveByTrip(trip.id);
-    setRedirect(`/trips/${trip.id}/reserved`);
+    history.push(routes.reservedTrip(trip.id));
   };
 
   const unreserve = async () => {
     setRequestLoading(true);
     await unreserveByTrip(trip.id);
-    setRedirect(`/trips/${trip.id}/unreserved`);
+    history.push(routes.unreservedTrip(trip.id));
   };
-
-  if (redirect) return <Redirect to={redirect} />;
 
   const getStyle = () => {
     const seed = `${trip.to_city}`.replace(/\s/g, "");

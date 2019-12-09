@@ -8,10 +8,12 @@ import DatePicker from "react-datepicker";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { debounce } from "lodash";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { confirmAlert } from "react-confirm-alert";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
+  useHistory,
   Link,
   Redirect,
 } from "react-router-dom";
@@ -22,7 +24,9 @@ import { search } from "../services/search";
 import { reserveByTrip, unreserveByTrip } from "../services/Reservation";
 import { getCity } from "../services/Places.js";
 
+import ConfirmationModal from "../components/ConfirmationModal";
 import PlacesAutocomplete from "../components/PlacesAutocomplete";
+import { routes } from "../App";
 
 import "react-datepicker/dist/react-datepicker.css";
 import poolListCss from "../styles/pool_list";
@@ -336,14 +340,19 @@ export const Trip = ({ trip }) => {
   const { t } = useTranslation();
   const [reserved, setReserved] = useState(false);
   const [requestLoading, setRequestLoading] = useState(false);
+  const history = useHistory();
 
   const reserve = async () => {
     setRequestLoading(true);
     await reserveByTrip(trip.id);
-    setReserved(true);
+    history.push(routes.reservedTrip(trip.id));
   };
 
-  if (reserved) return <Redirect to={`/trips/${trip.id}/reserved`} />;
+  const unreserve = async () => {
+    setRequestLoading(true);
+    await unreserveByTrip(trip.id);
+    history.push(routes.unreservedTrip(trip.id));
+  };
 
   const getStyle = () => {
     const seed = `${trip.to_city}`.replace(/\s/g, "");
@@ -439,9 +448,36 @@ export const Trip = ({ trip }) => {
                 {trip.reserved && (
                   <button
                     className="inline-block login-button main-color"
-                    onClick={() => unreserveByTrip(trip.id)}
+                    disabled={requestLoading}
+                    onClick={() =>
+                      confirmAlert({
+                        customUI: ConfirmationModal([
+                          {
+                            danger: true,
+                            label: t(
+                              "reservation.unreserve.confirmation.unreserve"
+                            ),
+                            onClick: unreserve,
+                          },
+                          {
+                            label: t(
+                              "reservation.unreserve.confirmation.cancel"
+                            ),
+                            onClick: () => null,
+                          },
+                        ]),
+                        title: t("reservation.unreserve.confirmation.title"),
+                        message: t(
+                          "reservation.unreserve.confirmation.subtitle"
+                        ),
+                      })
+                    }
                   >
-                    {t("search.item.unreserve")}
+                    {requestLoading ? (
+                      <MDSpinner size={16} />
+                    ) : (
+                      t("search.item.unreserve")
+                    )}
                   </button>
                 )}
               </div>

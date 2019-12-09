@@ -31,6 +31,7 @@ import "react-notifications/lib/notifications.css";
 import { getProfile } from "./services/User.js";
 
 export const routes = {
+  unreservedTrip: tripId => `/trips/${tripId}/unreserved`,
   reservedTrip: tripId => `/trips/${tripId}/reserved`,
   trip: userId => `/user/${userId}/trip`,
   profile: userId => `/user/${userId}`,
