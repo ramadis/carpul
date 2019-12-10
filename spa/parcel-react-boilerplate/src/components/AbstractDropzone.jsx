@@ -58,9 +58,10 @@ export default ({ onLoad, children, extra = {} }) => {
     ...extra,
   });
 
+  const inputProps = { ...getInputProps() };
   return (
     <Container {...getRootProps({ isDragActive, isDragAccept, isDragReject })}>
-      <input {...getInputProps()} />
+      <input {...inputProps} />
       {children}
     </Container>
   );

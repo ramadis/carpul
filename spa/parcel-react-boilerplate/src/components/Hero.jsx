@@ -48,18 +48,21 @@ const Hero = ({ user, hero_message, editable }) => {
           style={coverImage}
         >
           <div className="profile-hero-alignment">
-            <Dropzone
-              onLoad={onImageLoaded(updateProfileImageById)}
-              extra={{ noDragEventsBubbling: true }}
-            >
-              <img
-                width="100"
-                height="100"
-                className="profile-image"
-                src={user.image || defaultProfileImageSrc}
-                alt=""
-              />
-            </Dropzone>
+            <div onClick={e => e.stopPropagation()}>
+              <Dropzone
+                onLoad={onImageLoaded(updateProfileImageById)}
+                extra={{ noDragEventsBubbling: true }}
+              >
+                <img
+                  width="100"
+                  height="100"
+                  className="profile-image"
+                  src={user.image || defaultProfileImageSrc}
+                  alt=""
+                />
+              </Dropzone>
+            </div>
+
             <div className="profile-user-container">
               <span className="profile-user-name">{user.first_name}</span>
               {user.rating >= 0 && (
