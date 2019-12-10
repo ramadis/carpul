@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.webapp.controllers;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.validation.Validator;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
@@ -21,6 +24,7 @@ import org.springframework.stereotype.Component;
 import ar.edu.itba.paw.interfaces.ReviewService;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.DTO.ErrorDTO;
 import ar.edu.itba.paw.webapp.DTO.ReviewDTO;
 import ar.edu.itba.paw.webapp.forms.ImageForm;
 
@@ -51,8 +55,13 @@ public class ReviewController extends AuthController {
     @Path("/{id}/image")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadImage(@PathParam("id") Integer id, @BeanParam final ImageForm form){
-		if (form == null || !validator.validate(form).isEmpty()) {
-			return Response.status(Status.BAD_REQUEST).build();
+		if (form == null) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), "form", "form is null")).build();
+		}
+		
+		if (!validator.validate(form).isEmpty()) {
+			List<ErrorDTO> errors = validator.validate(form).stream().map(validation -> new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), validation.getPropertyPath() + "", validation.getMessage())).collect(Collectors.toList());
+			return Response.status(Status.BAD_REQUEST).entity(errors).build();
 		}
 		
 		Review review = rs.getReviewById(id);

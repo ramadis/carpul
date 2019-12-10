@@ -32,6 +32,7 @@ import ar.edu.itba.paw.models.Pagination;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.webapp.DTO.ReviewDTO;
+import ar.edu.itba.paw.webapp.DTO.ErrorDTO;
 import ar.edu.itba.paw.webapp.DTO.HistoryDTO;
 import ar.edu.itba.paw.webapp.DTO.ReservationDTO;
 import ar.edu.itba.paw.webapp.DTO.TripDTO;
@@ -79,11 +80,17 @@ public class UserController extends AuthController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createUser(final UserCreateForm form) {
-		console.info("Start creating user");
 		// Check if the user form is valid
-		if (form == null || !validator.validate(form).isEmpty()) {
-			return Response.status(Status.BAD_REQUEST).build();
+		if (form == null) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), "form", "form is null")).build();
 		}
+		
+		if (!validator.validate(form).isEmpty()) {
+			List<ErrorDTO> errors = validator.validate(form).stream().map(validation -> new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), validation.getPropertyPath() + "", validation.getMessage())).collect(Collectors.toList());
+			return Response.status(Status.BAD_REQUEST).entity(errors).build();
+		}
+
+		console.info("Controller: Start creating user {}", form.getUsername());
 		
 		// Get user from form
 		User user = form.getUser();
@@ -135,9 +142,16 @@ public class UserController extends AuthController {
 	// TODO: This endpoint is working
 	public Response createTrip(final TripCreateForm form, @PathParam("id") final int id) {
 		// Check if the trip form is valid
-		if (form == null || !validator.validate(form).isEmpty()) {
-			return Response.status(Status.BAD_REQUEST).build();
+		if (form == null) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), "form", "form is null")).build();
 		}
+		
+		if (!validator.validate(form).isEmpty()) {
+			List<ErrorDTO> errors = validator.validate(form).stream().map(validation -> new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), validation.getPropertyPath() + "", validation.getMessage())).collect(Collectors.toList());
+			return Response.status(Status.BAD_REQUEST).entity(errors).build();
+		}
+
+		console.info("Controller: Start creating trip from {} to {}", form.getFrom_city(), form.getTo_city());
 		
 		User loggedUser = user();
 
@@ -237,14 +251,19 @@ public class UserController extends AuthController {
     @Path("/{id}/profile/image")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadProfileImage(@PathParam("id") Integer id, @BeanParam final ImageForm form){
-		if (form == null || !validator.validate(form).isEmpty()) {
-			return Response.status(Status.BAD_REQUEST).build();
+		if (form == null) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), "form", "form is null")).build();
 		}
 		
+		if (!validator.validate(form).isEmpty()) {
+			List<ErrorDTO> errors = validator.validate(form).stream().map(validation -> new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), validation.getPropertyPath() + "", validation.getMessage())).collect(Collectors.toList());
+			return Response.status(Status.BAD_REQUEST).entity(errors).build();
+		}
+
 		User user = us.getById(id);
 		User loggedUser = user(); 
 		
-		console.info("Uploading profile image to user {}", id);
+		console.info("Controller: Add profile image for user {}", loggedUser.getUsername());
 		if (user == null) return Response.status(Status.NOT_FOUND).build();
 		if (!user.getId().equals(loggedUser.getId())) return Response.status(Status.FORBIDDEN).build();
 		
@@ -268,8 +287,13 @@ public class UserController extends AuthController {
     @Path("/{id}/profile/cover")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadCoverImage(@PathParam("id") Integer id, @BeanParam final ImageForm form){
-		if (form == null || !validator.validate(form).isEmpty()) {
-			return Response.status(Status.BAD_REQUEST).build();
+		if (form == null) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), "form", "form is null")).build();
+		}
+		
+		if (!validator.validate(form).isEmpty()) {
+			List<ErrorDTO> errors = validator.validate(form).stream().map(validation -> new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), validation.getPropertyPath() + "", validation.getMessage())).collect(Collectors.toList());
+			return Response.status(Status.BAD_REQUEST).entity(errors).build();
 		}
 		
 		User user = us.getById(id);

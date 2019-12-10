@@ -5,6 +5,8 @@ public class ErrorDTO {
 	private String title;
 	private String message;
 	
+	public ErrorDTO() { }
+	
 	public ErrorDTO(int code, String title, String message) {
 		this.code = code;
 		this.title = title;

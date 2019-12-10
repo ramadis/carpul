@@ -3,6 +3,8 @@ package ar.edu.itba.paw.webapp.controllers;
 import java.net.URI;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Validator;
 import javax.ws.rs.Consumes;
@@ -31,6 +33,7 @@ import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.DTO.ErrorDTO;
 import ar.edu.itba.paw.webapp.DTO.ReservationDTO;
 import ar.edu.itba.paw.webapp.DTO.ReviewDTO;
 import ar.edu.itba.paw.webapp.DTO.TripDTO;
@@ -85,8 +88,13 @@ public class TripController extends AuthController {
 		User loggedUser = user();
 
 		// Validate review form is schema-compliant
-		if (form == null || !validator.validate(form).isEmpty()) {
-			return Response.status(Status.BAD_REQUEST).build();
+		if (form == null) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), "form", "form is null")).build();
+		}
+		
+		if (!validator.validate(form).isEmpty()) {
+			List<ErrorDTO> errors = validator.validate(form).stream().map(validation -> new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), validation.getPropertyPath() + "", validation.getMessage())).collect(Collectors.toList());
+			return Response.status(Status.BAD_REQUEST).entity(errors).build();
 		}
 		
 		// Check requirements for reviewing are passed
