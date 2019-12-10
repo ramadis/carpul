@@ -55,7 +55,7 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
   const isLoadingUser = user === null;
 
   // Yeah, `userId` is a string........
-  const isOwnProfile = userId === `${loggedUser.id}`;
+  const isOwnProfile = loggedUser && userId === `${loggedUser.id}`;
 
   const translationPrefix = isOwnProfile ? "user.profile" : "user.profileOther";
 

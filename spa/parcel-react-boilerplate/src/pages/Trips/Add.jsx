@@ -11,7 +11,7 @@ import Hero from "../../components/Hero";
 import PlacesAutocomplete from "../../components/PlacesAutocomplete";
 
 import { getCity, getMap } from "../../services/Places.js";
-import { createTripByUser } from "../../services/Trip.js";
+import { createTrip } from "../../services/Trip.js";
 
 import "react-datepicker/dist/react-datepicker.css";
 import profileHeroCss from "../../styles/profile_hero";
@@ -49,7 +49,7 @@ function Add({ user }) {
       eta_longitude: Number(to.position.longitude),
     };
 
-    await createTripByUser(user.id, payload);
+    await createTrip(payload);
     alert("Trip created");
   };
 

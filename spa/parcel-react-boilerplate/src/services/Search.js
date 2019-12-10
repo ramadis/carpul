@@ -15,9 +15,12 @@ export const search = async ({ to, from, when, page, per_page }) => {
 };
 
 export const getSuggestions = async origin => {
-  const query = origin ? `?origin=${origin}` : "";
   const results = await GETwithAuth(
-    `/search/suggestions${query}&per_page=20`
+    `/search/suggestions${query({
+      origin,
+      per_page: 20,
+      exclude_driver: true,
+    })}`
   ).then(res => {
     if (res.isRawResponse) {
       // TODO: Handle specific error messages

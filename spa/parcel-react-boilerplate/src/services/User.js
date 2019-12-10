@@ -47,7 +47,7 @@ export const updateCoverImageById = async (id, image) => {
   data.append("file", image.file);
 
   const user = await PUTwithAuth(
-    `/users/${id}/profile/cover`,
+    `/users/${id}/cover`,
     {
       isRaw: true,
       content: data,
@@ -69,7 +69,7 @@ export const updateProfileImageById = async (id, image) => {
   data.append("file", image.file);
 
   const user = await PUTwithAuth(
-    `/users/${id}/profile/image`,
+    `/users/${id}/image`,
     {
       isRaw: true,
       content: data,

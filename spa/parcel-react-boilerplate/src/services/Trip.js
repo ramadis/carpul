@@ -1,7 +1,7 @@
 import { GETwithAuth, DELETEwithAuth, POSTwithAuth } from "./Utils";
 
-export const createTripByUser = async (id, trip) => {
-  const trips = await POSTwithAuth(`/users/${id}/trips`, trip).then(res => {
+export const createTrip = async trip => {
+  const trips = await POSTwithAuth(`/trips`, trip).then(res => {
     if (res.isRawResponse) {
       // TODO: Handle specific error messages
       return;
