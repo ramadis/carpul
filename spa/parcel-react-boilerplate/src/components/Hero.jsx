@@ -2,10 +2,15 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { connect } from "react-redux";
 import { differenceInDays } from "date-fns";
+import styled from "styled-components";
+
+const NullDropzone = styled.div``;
 
 import { updateCoverImageById, updateProfileImageById } from "../services/User";
 
 import AbstractDropzone from "./AbstractDropzone";
+
+import profileCss from "../styles/profile";
 
 const Hero = ({ user, hero_message, editable }) => {
   const { t } = useTranslation();
@@ -14,6 +19,12 @@ const Hero = ({ user, hero_message, editable }) => {
     user.first_name
   } ${user.last_name}`;
   const daysRegistered = differenceInDays(new Date(), new Date(user.created));
+
+  const coverImage = user.cover && {
+    backgroundImage: `url(${user.cover})`,
+  };
+
+  const Dropzone = editable ? AbstractDropzone : NullDropzone;
 
   const onImageLoaded = callback => (imageURL, imageRAW, file) => {
     const image = new Image();
@@ -29,20 +40,26 @@ const Hero = ({ user, hero_message, editable }) => {
 
   return (
     <React.Fragment>
-      <AbstractDropzone onLoad={onImageLoaded(updateCoverImageById)}>
-        <div className={`profile-hero-container ${editableClass}`}>
+      <style jsx>{profileCss}</style>
+
+      <Dropzone onLoad={onImageLoaded(updateCoverImageById)}>
+        <div
+          className={`profile-hero-container ${editableClass}`}
+          style={coverImage}
+        >
           <div className="profile-hero-alignment">
-            <AbstractDropzone
+            <Dropzone
               onLoad={onImageLoaded(updateProfileImageById)}
               extra={{ noDragEventsBubbling: true }}
             >
               <img
                 width="100"
                 height="100"
+                className="profile-image"
                 src={user.image || defaultProfileImageSrc}
                 alt=""
               />
-            </AbstractDropzone>
+            </Dropzone>
             <div className="profile-user-container">
               <span className="profile-user-name">{user.first_name}</span>
               {user.rating >= 0 && (
@@ -56,7 +73,7 @@ const Hero = ({ user, hero_message, editable }) => {
             </div>
           </div>
         </div>
-      </AbstractDropzone>
+      </Dropzone>
       <div className="profile-hero-catchphrase">
         <span>{hero_message}</span>
       </div>

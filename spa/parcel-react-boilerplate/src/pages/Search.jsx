@@ -342,6 +342,10 @@ export const Trip = ({ trip }) => {
   const [requestLoading, setRequestLoading] = useState(false);
   const history = useHistory();
 
+  const defaultProfile = `https://ui-avatars.com/api/?rounded=true&size=85&background=e36f4a&color=fff&name=${
+    trip.driver.first_name
+  } ${trip.driver.last_name}`;
+
   const reserve = async () => {
     setRequestLoading(true);
     await reserveByTrip(trip.id);
@@ -369,12 +373,7 @@ export const Trip = ({ trip }) => {
         <Link to={`/user/${trip.driver.id}`}>
           <div className="user-info flex space-around align-center column h-150">
             <div className="user-image">
-              <img
-                src={`https://ui-avatars.com/api/?rounded=true&size=85&background=e36f4a&color=fff&name=${
-                  trip.driver.first_name
-                } ${trip.driver.last_name}`}
-                alt=""
-              />
+              <img src={trip.driver.image || defaultProfile} alt="" />
             </div>
             <div className="user-name" style={{ color: "black" }}>
               {trip.driver.first_name}

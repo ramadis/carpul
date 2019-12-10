@@ -7,6 +7,11 @@ export default css`
     justify-content: center;
   }
 
+  .profile-image {
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
   .reviews-container {
     flex-grow: 2;
   }
