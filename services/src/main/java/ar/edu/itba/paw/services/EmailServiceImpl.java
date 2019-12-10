@@ -21,7 +21,7 @@ public class EmailServiceImpl implements EmailService {
 	private final String from = "hi@carpul.com";
 	private final SendGrid sg = new SendGrid("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");
     private final static Logger console = LoggerFactory.getLogger(EmailServiceImpl.class);
-
+    
 	public void sendRegistrationEmail(User user) {
 		console.info("Trying to send registration email to {}", user.getUsername());
 		String searchURL = "http://pawserver.it.itba.edu.ar/paw-2017b-6/";
@@ -56,7 +56,7 @@ public class EmailServiceImpl implements EmailService {
 	
 	public void sendUnreservationEmail(User user, Trip trip) {
 		console.info("Trying to send unreserve email to {}", user.getUsername());
-		String subject = "Hey " + trip.getDriver().getFirst_name() + ", someone just dropped their reservation 😞";
+		String subject = "😞 Hey " + trip.getDriver().getFirst_name() + ", someone just dropped their reservation";
 		String content = loadFromTemplate("/mails/unreservation.html");
 		
 		// replace local variables

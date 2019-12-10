@@ -157,15 +157,6 @@ public class TripDaoHibernate implements TripDao {
 				
 	}
 
-	public List<Trip> getReservedTrips(User user, Pagination pagination) {
-		List<Trip> trips = user.getReservations().stream().map((reservation) -> reservation.getTrip())
-											.filter((trip) -> reviewDao.canLeaveReview(trip, user))
-											.collect(Collectors.toList());
-
-		return trips;
-
-	}
-	
 	public List<Trip> getSuggestions(String origin, Pagination pagination, User driver) {
 		console.info("Persistence: Get suggestions");
 		String queryCount = "SELECT count(t.id) FROM Trip t WHERE t.deleted = FALSE AND t.etd > CURRENT_TIMESTAMP() AND lower(t.from_city) LIKE :from";

@@ -33,12 +33,8 @@ public class TripServiceImpl implements TripService {
 		return;
 	}
 	
-	public Boolean areReservationConflicts(Trip trip, User user) {
-		return tripDao.areReservationConflicts(trip, user);
-	}
-	
-	public Boolean areDrivingConflicts(Trip trip, User user){
-		return tripDao.areDrivingConflicts(trip, user);
+	public Boolean areTimeConflicts(Trip trip, User user) {
+		return tripDao.areReservationConflicts(trip, user) || tripDao.areDrivingConflicts(trip, user);
 	}
 
 	@Transactional
