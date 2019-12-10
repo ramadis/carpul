@@ -42,8 +42,6 @@ export default ({ onLoad, children, extra = {} }) => {
     readers.then(results => onLoad(...results));
   }, []);
 
-  console.log({ ...extra });
-
   const {
     getRootProps,
     getInputProps,
