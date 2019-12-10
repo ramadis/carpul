@@ -90,7 +90,7 @@ const Login = ({ dispatch, user }) => {
           />
         </div>
         <div className="actions">
-          <Link to="/user/register" className="create-account">
+          <Link to="/register" className="create-account">
             {t("user.login.create")}
           </Link>
           <LoginButton type="submit" onClick={login} disabled={loading}>

@@ -20,7 +20,7 @@ const Register = ({ user }) => {
   };
 
   const isLogged = !!user;
-  if (isLogged) return <Redirect to={`/user/profile/${user.id}`} />;
+  if (isLogged) return <Redirect to={`/user/${user.id}`} />;
   return (
     <div className="flex-center full-height">
       <form onSubmit={handleSubmit(onSubmit)} className="user-form">
@@ -155,7 +155,7 @@ const Register = ({ user }) => {
         </div>
 
         <div className="actions">
-          <Link to="/user/login" className="create-account">
+          <Link to="/login" className="create-account">
             {t("user.register.login")}
           </Link>
           <button
