@@ -65,7 +65,7 @@ const Reservation = ({ t, trip }) => {
             <a href={`/user/${trip.driver.id}`}>
               <div href={`/user/${trip.driver.id}`}>
                 <div className="driver">
-                  <div className="driver-item-data">
+                  <div className="driver-item-data flex-center">
                     <img
                       width="50"
                       height="50"

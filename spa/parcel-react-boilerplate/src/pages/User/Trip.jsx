@@ -14,6 +14,7 @@ import { cancelTrip } from "../../services/Trip";
 import { cancelReservation } from "../../services/Reservation";
 import { reserveByTrip, unreserveByTrip } from "../../services/Reservation";
 
+import imgDelete from "../../../images/delete.png";
 import profileHeroCss from "../../styles/profile_hero";
 import poolListCss from "../../styles/pool_list";
 import profileCss from "../../styles/profile";
@@ -59,6 +60,12 @@ const Button = styled.button`
   }
 `;
 
+const DeleteButton = styled.button`
+  background: transparent;
+  border: none;
+  cursor: pointer;
+`;
+
 const DeleteTripButton = ({ tripId }) => {
   const { t } = useTranslation();
 
@@ -69,6 +76,26 @@ const DeleteTripButton = ({ tripId }) => {
 
 const PassengerList = ({ trip }) => {
   const { t } = useTranslation();
+
+  const askCancel = passenger => () =>
+    confirmAlert({
+      customUI: ConfirmationModal([
+        {
+          danger: true,
+          label: t("reservation.cancel.confirmation.unreserve"),
+          onClick: () => cancelReservation(passenger.id, trip.id),
+        },
+        {
+          label: t("reservation.cancel.confirmation.cancel"),
+          onClick: () => null,
+        },
+      ]),
+      title: t("reservation.cancel.confirmation.title", {
+        passenger: passenger.first_name,
+      }),
+      message: t("reservation.cancel.confirmation.subtitle"),
+    });
+
   return trip.passengers.length === 0 ? null : (
     <React.Fragment>
       <style jsx>{profileCss}</style>
@@ -94,18 +121,13 @@ const PassengerList = ({ trip }) => {
                 </div>
               </a>
             </div>
-            <button
-              onClick={() => cancelReservation(passenger.id, trip.id)}
+            <DeleteButton
+              onClick={askCancel(passenger)}
               type="button"
               className="kick-hitchhiker"
             >
-              <img
-                src="/static/images/delete.png"
-                height="20px"
-                width="20px"
-                alt=""
-              />
-            </button>
+              <img src={imgDelete} height="20px" width="20px" alt="" />
+            </DeleteButton>
           </div>
         </div>
       ))}

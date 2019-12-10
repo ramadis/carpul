@@ -31,14 +31,6 @@ import { getHistoryByUser } from "../../services/History";
 import { getReviewsByUser } from "../../services/Review";
 import { getTripsByUser } from "../../services/Trip";
 
-// function unreserve(id) {
-//   var confirmate = confirm('Are you sure you want to unreserve this trip?');
-//   if (confirmate) {
-//     $.post('../trip/' + id + '/unreserve');
-//     location.reload();
-//   }
-// }
-
 const ProfileContainer = styled.div`
   width: 100%;
   display: flex;

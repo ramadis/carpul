@@ -26,6 +26,15 @@ const translations = {
     profile: "Check out the trip in your profile",
     learn: "Click here to learn more about your driver",
     cost: "For just ",
+    cancel: {
+      confirmation: {
+        title: "Are you sure you want to cancel {{passenger}} reservation?",
+        subtitle:
+          "Adventures are much more fun when they are shared with other people!",
+        unreserve: "Cancel reservation",
+        cancel: "Close",
+      },
+    },
     unreserve: {
       confirmation: {
         title: "Are you sure you want to unreserve this trip?",
