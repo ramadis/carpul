@@ -2,13 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { NotificationContainer } from "react-notifications";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Link,
-  Redirect,
-} from "react-router-dom";
+import { Router, Route, Switch, Link, Redirect } from "react-router-dom";
 import Navbar2 from "./components/Navbar2";
 import Home from "./pages/Home";
 // import { Trips } from "./pages/Trips";
@@ -30,6 +24,8 @@ import "react-notifications/lib/notifications.css";
 
 import { getProfile } from "./services/User.js";
 
+import history, { initializeHistory } from "./utils/routes";
+
 export const routes = {
   unreservedTrip: tripId => `/trips/${tripId}/unreserved`,
   reservedTrip: tripId => `/trips/${tripId}/reserved`,
@@ -39,6 +35,9 @@ export const routes = {
   register: `/register`,
   logOut: `/logout`,
 };
+
+// initialize history object and routes storage
+initializeHistory(window.location);
 
 function App({ token, user, dispatch }) {
   const loadSession = async () => {
@@ -50,7 +49,7 @@ function App({ token, user, dispatch }) {
 
   loadSession();
   return (
-    <Router>
+    <Router history={history}>
       <React.Fragment>
         <Navbar2 />
         <Switch>

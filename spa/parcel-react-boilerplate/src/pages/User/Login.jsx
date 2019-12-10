@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { connect } from "react-redux";
-import { loginUser } from "../../services/Auth";
-import { getProfile } from "../../services/User";
 import MDSpinner from "react-md-spinner";
 import { NotificationManager } from "react-notifications";
 import styled from "styled-components";
+
+import { loginUser } from "../../services/Auth";
+import { getProfile } from "../../services/User";
+
+import { getPreviousPath } from "../../utils/routes";
 
 const LoginButton = styled.button`
   width: 70px;
