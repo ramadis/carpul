@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.DTO;
 
+import java.net.URI;
 import java.sql.Timestamp;
 
 import ar.edu.itba.paw.models.History;
@@ -12,9 +13,9 @@ public class HistoryDTO {
 	private Boolean own;
 	private Integer id;
 	
-	public HistoryDTO (History history) {
-		this.trip = new TripDTO(history.getTrip());
-		this.user = new UserDTO(history.getRelated());
+	public HistoryDTO (History history, URI uri) {
+		this.trip = new TripDTO(history.getTrip(), uri);
+		this.user = new UserDTO(history.getRelated(), uri.toString() + history.getRelated().getId());
 		this.type = history.getType();
 		this.own = history.getOwn();
 		this.id = history.getId();

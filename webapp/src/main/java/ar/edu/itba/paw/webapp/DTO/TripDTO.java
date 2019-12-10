@@ -1,8 +1,12 @@
 package ar.edu.itba.paw.webapp.DTO;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.ws.rs.core.UriInfo;
 
 import ar.edu.itba.paw.models.Position;
 import ar.edu.itba.paw.models.Trip;
@@ -26,7 +30,7 @@ public class TripDTO {
 	
 	public TripDTO() {}
 	
-	public TripDTO(Trip trip) {
+	public TripDTO(Trip trip, URI uri) {
 		this.id = trip.getId();
 		this.etd = trip.getEtd();
 		this.eta = trip.getEta();
@@ -37,8 +41,8 @@ public class TripDTO {
 		this.departure = new PositionDTO(new Position(trip.getDeparture_lat(), trip.getDeparture_lon()));
 		this.arrival = new PositionDTO(new Position(trip.getArrival_lat(), trip.getArrival_lon()));
 		this.occupied_seats = trip.getOccupied_seats();
-		this.driver = new UserDTO(trip.getDriver());
-		this.passengers = trip.getPassengers().stream().map(passenger -> new UserDTO(passenger)).collect(Collectors.toList());
+		this.driver = new UserDTO(trip.getDriver(), uri.toString() + trip.getDriver().getId());
+		this.passengers = trip.getPassengers().stream().map(passenger -> new UserDTO(passenger, uri.toString() + passenger.getId())).collect(Collectors.toList());
 		this.expired = trip.getExpired();
 		this.available_seats = this.seats - this.occupied_seats;
 	}

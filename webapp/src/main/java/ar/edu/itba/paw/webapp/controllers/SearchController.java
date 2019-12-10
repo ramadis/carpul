@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controllers;
 
+import java.net.URI;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -11,8 +12,10 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,6 +34,9 @@ public class SearchController extends AuthController {
 
 	@Autowired
 	private TripService ts;
+	
+	@Context
+	private UriInfo uriInfo;
 
 	@GET
 	@Path("/")
@@ -59,7 +65,8 @@ public class SearchController extends AuthController {
 		if (trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 
 		// Generate DTOs
-		for(Trip t: trips) tripDTOs.add(new ReservationDTO(t, user));
+		final URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
+		for(Trip t: trips) tripDTOs.add(new ReservationDTO(t, user, userUri));
 		return Response.ok(tripDTOs).build();
 	}
 	
@@ -81,7 +88,8 @@ public class SearchController extends AuthController {
 		if (trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 		
 		// Generate DTOs
-		for(Trip t: trips) tripDTOs.add(new ReservationDTO(t, user));
+		final URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
+		for(Trip t: trips) tripDTOs.add(new ReservationDTO(t, user, userUri));
 		return Response.ok(tripDTOs).build();
 	}
 }

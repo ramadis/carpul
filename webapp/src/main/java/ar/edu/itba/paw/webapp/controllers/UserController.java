@@ -149,11 +149,13 @@ public class UserController extends AuthController {
 		if (trips == null || trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 	
 		// Return trip DTOs
+		URI uri = uriInfo.getBaseUriBuilder().path("/users/").build();
 		if (loggedUser != null && loggedUser.getId().equals(id)) {			
-			List<TripDTO> tripDTOs = trips.stream().map(trip -> new TripDTO(trip)).collect(Collectors.toList());
+			List<TripDTO> tripDTOs = trips.stream().map(trip -> new TripDTO(trip, uri)).collect(Collectors.toList());
 			return Response.ok(tripDTOs).build();
 		} else {
-			List<ReservationDTO> tripDTOs = trips.stream().map(trip -> new ReservationDTO(trip, loggedUser)).collect(Collectors.toList());
+			final URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
+			List<ReservationDTO> tripDTOs = trips.stream().map(trip -> new ReservationDTO(trip, loggedUser, userUri)).collect(Collectors.toList());
 			return Response.ok(tripDTOs).build();
 		}
 	}
@@ -175,7 +177,8 @@ public class UserController extends AuthController {
 		if (reviews == null || reviews.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 		
 		// Return reviews for a given user id
-		for (Review r: reviews) reviewDTOs.add(new ReviewDTO(r, uriInfo.getAbsolutePathBuilder().path(String.valueOf(r.getId())).build().toString()));
+		URI uri = uriInfo.getBaseUriBuilder().path("/users/").build();
+		for (Review r: reviews) reviewDTOs.add(new ReviewDTO(r, uriInfo.getAbsolutePathBuilder().path(String.valueOf(r.getId())).build().toString(), uri));
 		return Response.ok(reviewDTOs).build();
 	}
 	
@@ -193,8 +196,8 @@ public class UserController extends AuthController {
 		List<History> histories = hs.getHistories(user, new Pagination(page, perPage));
 		if (histories == null || histories.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 
-		
-		List<HistoryDTO> historyDTOs = histories.stream().map(history -> new HistoryDTO(history)).collect(Collectors.toList());
+		URI uri = uriInfo.getBaseUriBuilder().path("/users/").build();
+		List<HistoryDTO> historyDTOs = histories.stream().map(history -> new HistoryDTO(history, uri)).collect(Collectors.toList());
 		return Response.ok(historyDTOs).build();
 	}
 	
@@ -215,7 +218,8 @@ public class UserController extends AuthController {
 		if (trips == null || trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 		
 		// Return trips owned by the user with the param id
-		List<ReservationDTO> tripDTOs = trips.stream().map(trip -> new ReservationDTO(trip, user)).collect(Collectors.toList());
+		final URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
+		List<ReservationDTO> tripDTOs = trips.stream().map(trip -> new ReservationDTO(trip, user, userUri)).collect(Collectors.toList());
 		return Response.ok(tripDTOs).build();
 	}
 	

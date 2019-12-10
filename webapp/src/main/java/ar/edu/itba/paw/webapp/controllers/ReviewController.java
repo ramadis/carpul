@@ -52,8 +52,8 @@ public class ReviewController extends AuthController {
 		Review review = rs.getReviewById(id);
 		if (review == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "review not found")).build();
 
-		// TODO: Return review
-		return Response.ok(new ReviewDTO(review)).build();
+		URI uri = uriInfo.getBaseUriBuilder().path("/users/").build();
+		return Response.ok(new ReviewDTO(review, uri)).build();
 	}
 	
 	@PUT

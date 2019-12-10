@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.DTO;
 
+import java.net.URI;
 import java.sql.Timestamp;
 
 import ar.edu.itba.paw.models.Review;
@@ -16,18 +17,18 @@ public class ReviewDTO {
 	
 	public ReviewDTO() {}
 	
-	public ReviewDTO(Review review, String url) {
-		this(review);
+	public ReviewDTO(Review review, String url, URI uri) {
+		this(review, uri);
 		this.image = review.getImage() == null ? null : url + "/image"; // Image in dto is just the stringified id of the review
 	}
 	
-	public ReviewDTO (Review review) {
+	public ReviewDTO (Review review, URI uri) {
 		this.id = review.getId();
-		this.owner = new UserDTO(review.getOwner());
+		this.owner = new UserDTO(review.getOwner(), uri.toString() + review.getOwner().getId());
 		this.reviewedId = review.getReviewed().getId();
 		this.message = review.getMessage();
 		this.stars = review.getStars();
-		this.trip = new TripDTO(review.getTrip());
+		this.trip = new TripDTO(review.getTrip(), uri);
 		this.created = review.getCreated();
 	}
 	

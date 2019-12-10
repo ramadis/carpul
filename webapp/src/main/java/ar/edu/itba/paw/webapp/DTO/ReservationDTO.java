@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.DTO;
 
+import java.net.URI;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,13 +29,13 @@ public class ReservationDTO {
 	
 	public ReservationDTO() {}
 	
-	public ReservationDTO(Trip trip, User loggedUser) {
-		this(trip);
+	public ReservationDTO(Trip trip, User loggedUser, URI uri) {
+		this(trip, uri);
 		this.reserved = trip.getPassengers().contains(loggedUser);
 		this.reviewed = expired && trip.getReviews().stream().map(review -> review.getOwner()).collect(Collectors.toList()).contains(loggedUser);
 	}
 	
-	public ReservationDTO(Trip trip) {
+	public ReservationDTO(Trip trip, URI uri) {
 		this.id = trip.getId();
 		this.etd = trip.getEtd();
 		this.eta = trip.getEta();
@@ -45,7 +46,7 @@ public class ReservationDTO {
 		this.departure = new PositionDTO(new Position(trip.getDeparture_lat(), trip.getDeparture_lon()));
 		this.arrival = new PositionDTO(new Position(trip.getArrival_lat(), trip.getArrival_lon()));
 		this.occupied_seats = trip.getOccupied_seats();
-		this.driver = new UserDTO(trip.getDriver());
+		this.driver = new UserDTO(trip.getDriver(), uri.toString() + trip.getDriver().getId());
 		this.expired = trip.getExpired();
 		this.available_seats = this.seats - this.occupied_seats;
 	}

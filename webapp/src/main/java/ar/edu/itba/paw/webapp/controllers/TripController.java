@@ -73,9 +73,11 @@ public class TripController extends AuthController {
 		if (trip != null) {
 			console.info("Controller: Gettingtrip from {} to {}", trip.getFrom_city(), trip.getTo_city());
 			if (trip.getDriver().equals(user)) {
-				return Response.ok(new TripDTO(trip)).build();
+				URI uri = uriInfo.getBaseUriBuilder().path("/users/").build();
+				return Response.ok(new TripDTO(trip, uri)).build();
 			} else {
-				return Response.ok(new ReservationDTO(trip)).build();
+				final URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
+				return Response.ok(new ReservationDTO(trip, userUri)).build();
 			}
 		} else {
 			return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "Trip not found")).build();
@@ -109,7 +111,8 @@ public class TripController extends AuthController {
 		Trip trip = ts.register(form.getTrip(), loggedUser);
 		
 		final URI uri = uriInfo.getBaseUriBuilder().path("/trips/{id}").build(trip.getId());
-		return Response.created(uri).entity(new TripDTO(trip)).build();
+		URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
+		return Response.created(uri).entity(new TripDTO(trip, userUri)).build();
 	}
 	
 	@POST
@@ -150,7 +153,8 @@ public class TripController extends AuthController {
 		
 		// Return new review with its id
 		final URI uri = uriInfo.getBaseUriBuilder().path("/reviews/{id}").build(savedReview.getId());
-		return Response.created(uri).entity(new ReviewDTO(savedReview)).build();
+		URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
+		return Response.created(uri).entity(new ReviewDTO(savedReview, userUri)).build();
 		
 	}
 
