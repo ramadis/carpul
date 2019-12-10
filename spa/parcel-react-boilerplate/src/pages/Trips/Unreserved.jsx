@@ -31,22 +31,24 @@ function Reserved({ user }) {
   const { tripId } = useParams();
   const [trip, setTrip] = useState();
   const [suggestions, setSuggestions] = useState([]);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetches = async () => {
       const trip = await getTripById(tripId);
       setTrip(trip);
-      search({
+      await search({
         to: trip.to_city,
         from: trip.from_city,
         when: trip.etd,
         per_page: 6,
-      }).then(setSuggestions);
+      }).then(trips => setSuggestions(trips.filter(t => t.id !== trip.id)));
+      setLoading(false);
     };
     fetches();
   }, []);
 
-  const isLoading = !user || !trip;
+  const showLoading = !user || !trip || isLoading;
   const Loading = (
     <React.Fragment>
       <style jsx>{poolListCss}</style>
@@ -59,7 +61,7 @@ function Reserved({ user }) {
     </React.Fragment>
   );
 
-  if (isLoading) return Loading;
+  if (showLoading) return Loading;
 
   return (
     <React.Fragment>
@@ -73,14 +75,30 @@ function Reserved({ user }) {
       >
         <div className="new-trip-form">
           <h3>{t("reservation.unreserve.title", { city: trip.to_city })}</h3>
-          <h2>{t("reservation.unreserve.subtitle")}</h2>
+          <h2>
+            {suggestions.length
+              ? t("reservation.unreserve.subtitle")
+              : t("reservation.unreserve.subtitle_no_options")}
+          </h2>
         </div>
         <div>
-          {suggestions
-            .filter(suggestion => suggestion.id !== trip.id)
-            .map(suggestion => (
-              <Trip key={suggestion.id} trip={suggestion} />
-            ))}
+          {suggestions.map(suggestion => (
+            <Trip key={suggestion.id} trip={suggestion} />
+          ))}
+          {!suggestions.length && (
+            <Link
+              className="login-button empty-button"
+              to={`/`}
+              style={{
+                display: "inline-block",
+                width: "auto",
+                marginLeft: 0,
+                marginTop: 20,
+              }}
+            >
+              {t("reservation.unreserve.search")}
+            </Link>
+          )}
         </div>
       </div>
     </React.Fragment>
