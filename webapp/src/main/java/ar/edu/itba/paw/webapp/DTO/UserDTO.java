@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.DTO;
 import ar.edu.itba.paw.models.User;
+
+import java.net.URI;
 import java.sql.Timestamp;
 
 public class UserDTO {
@@ -13,6 +15,12 @@ public class UserDTO {
     private long id;
 
     public UserDTO() {}
+    
+    public UserDTO(User user, URI uri) {
+    	this(user);
+    	if (user.getProfileImage() != null) this.image = uri.toString() + "users/" + user.getId() + "/profile/image";
+    	if (user.getCoverImage() != null) this.cover = uri.toString() + "users/" + user.getId() + "/profile/cover";
+    }
 
     public UserDTO(User user) {
         this.setUsername(user.getUsername());

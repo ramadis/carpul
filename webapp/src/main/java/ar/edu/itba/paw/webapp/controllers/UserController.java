@@ -112,7 +112,7 @@ public class UserController extends AuthController {
 		final User loggedUser = user();
 		
 		if (user != null) {
-			return Response.ok(new UserDTO(user)).build();
+			return Response.ok(new UserDTO(user, uriInfo.getBaseUri())).build();
 		} else if (loggedUser != null) {
 			return Response.ok(new UserDTO(loggedUser)).build();
 		} else {

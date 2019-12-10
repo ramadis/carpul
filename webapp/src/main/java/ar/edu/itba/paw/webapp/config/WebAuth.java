@@ -62,6 +62,8 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
 			.and().authorizeRequests()
 				.antMatchers(HttpMethod.POST, "/api/users").anonymous()    // Register
 	            .antMatchers(HttpMethod.POST, "/api/login").anonymous()    // Login
+	            .antMatchers(HttpMethod.GET, "/api/users/{\\d+}/profile/image").permitAll()
+	            .antMatchers(HttpMethod.GET, "/api/users/{\\d+}/profile/cover").permitAll()
 	            .antMatchers("/api/search**").permitAll()
 				.antMatchers("/api/**").authenticated()
 			.and().authorizeRequests()
