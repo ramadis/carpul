@@ -1,7 +1,7 @@
 import { createBrowserHistory } from "history";
 import { takeRight, get } from "lodash";
 
-const ROUTER_HISTORY_MAX_LIMIT = 10;
+const ROUTER_HISTORY_MAX_LIMIT = 2;
 
 class HistoricRoute {
   constructor(path, user) {
