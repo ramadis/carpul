@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { format, parse } from "date-fns";
+import { format, parse, isValid } from "date-fns";
 import MDSpinner from "react-md-spinner";
 import Rating from "react-rating";
 import DatePicker from "react-datepicker";
@@ -92,6 +92,7 @@ const Search = ({ user }) => {
   const rawParams = useQuery();
   const [params, setParams] = useState(rawParams);
   const [loading, setLoading] = useState(true);
+  const history = useHistory();
   const { to, from, when } = params;
 
   const handleSearch = debounce(setParams, 1000);
@@ -107,9 +108,13 @@ const Search = ({ user }) => {
   const whenDate = new Date(Number(when));
 
   const searchDate = format(whenDate, "DD/MM/YYYY HH:mm");
-
   const dateDayMonthYear = format(whenDate, "DD/MM/YYYY");
   const whenTime = format(whenDate, "HH:mm");
+
+  if (!isValid(whenDate)) {
+    history.push("/404");
+    return null;
+  }
 
   return (
     <div>
