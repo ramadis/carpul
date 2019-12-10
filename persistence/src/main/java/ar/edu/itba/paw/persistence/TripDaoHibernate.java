@@ -80,6 +80,32 @@ public class TripDaoHibernate implements TripDao {
 
 		return;
 	}
+	
+	public Boolean areDrivingConflicts(Trip trip, User user) {
+		console.info("Persistence: Checking if there are any conflicts for the user {} creating a new trip", user.getId());
+		String query = "SELECT count(t.id) FROM Trip t WHERE t.driver = :user AND (:tripEtd >= t.etd  AND :tripEtd <= t.eta OR :tripEta >= t.etd AND :tripEta <= t.eta)";
+		
+		Long count = em.createQuery(query, Long.class)
+							.setParameter("user", user)
+							.setParameter("tripEtd", trip.getEtd())
+							.setParameter("tripEta", trip.getEta())
+							.getSingleResult();
+		
+		return count > 0;
+	}
+	
+	public Boolean areReservationConflicts(Trip trip, User user) {
+		console.info("Persistence: Checking if there are any conflicts for the user {} reserving the trip", user.getId());
+		String query = "SELECT count(r.id) FROM Reservation r WHERE r.user = :user AND (:tripEtd >= r.trip.etd  AND :tripEtd <= r.trip.eta OR :tripEta >= r.trip.etd AND :tripEta <= r.trip.eta)";
+		
+		Long count = em.createQuery(query, Long.class)
+							.setParameter("user", user)
+							.setParameter("tripEtd", trip.getEtd())
+							.setParameter("tripEta", trip.getEta())
+							.getSingleResult();
+		
+		return count > 0;
+	}
 
 	public List<Trip> findByRoute(Search search, Pagination pagination, User driver) {
 		// Get available trips by a route

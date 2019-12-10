@@ -152,8 +152,9 @@ public class TripController extends AuthController {
 		boolean isFull = trip.getAvailable_seats() < 1;
 		boolean isDriver = trip.getDriver().equals(loggedUser);
 		boolean hasReserved = us.getPassengers(trip).contains(loggedUser);
+		boolean isOverlapping = ts.areReservationConflicts(trip, loggedUser) || ts.areDrivingConflicts(trip, loggedUser);
 		
-		if (isLate || isFull || isDriver) return Response.status(Status.FORBIDDEN).build();
+		if (isLate || isFull || isDriver || isOverlapping) return Response.status(Status.CONFLICT).build();
 		if (hasReserved) return Response.noContent().build();
 		
 		// Reserve and register trip 

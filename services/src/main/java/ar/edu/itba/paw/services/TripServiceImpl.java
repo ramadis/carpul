@@ -32,6 +32,14 @@ public class TripServiceImpl implements TripService {
 		tripDao.reserveTrip(tripId, user);
 		return;
 	}
+	
+	public Boolean areReservationConflicts(Trip trip, User user) {
+		return tripDao.areReservationConflicts(trip, user);
+	}
+	
+	public Boolean areDrivingConflicts(Trip trip, User user){
+		return tripDao.areDrivingConflicts(trip, user);
+	}
 
 	@Transactional
 	public void unreserve(Integer tripId, User user) {

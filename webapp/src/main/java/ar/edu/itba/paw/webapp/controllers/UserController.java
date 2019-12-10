@@ -143,6 +143,8 @@ public class UserController extends AuthController {
 
 		// If trying to create a trip for someone else, fail by forbidden
 		if (!loggedUser.getId().equals(id)) return Response.status(Status.FORBIDDEN).build();
+		boolean isOverlapping = ts.areReservationConflicts(form.getTrip(), loggedUser) || ts.areDrivingConflicts(form.getTrip(), loggedUser);
+		if (isOverlapping) return Response.status(Status.CONFLICT).build();
 			
 		// Create trip with logged user as a driver
 		Trip trip = ts.register(form.getTrip(), loggedUser);
