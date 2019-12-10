@@ -49,7 +49,7 @@ const Login = ({ dispatch, user }) => {
   const isLogged = !!user;
 
   return isLogged ? (
-    <Redirect to={`/user/${user.id}`} />
+    <Redirect to={getPreviousPath(`/user/${user.id}`)} />
   ) : (
     <div className="flex-center full-height">
       <form className="user-form">

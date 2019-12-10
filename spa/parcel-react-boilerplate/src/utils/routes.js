@@ -39,11 +39,14 @@ const defaultPredicate = route => {
   return !pathsToOmit.includes(route.path);
 };
 
-export const getPreviousPath = (predicate = defaultPredicate) => {
+export const getPreviousPath = (
+  defaultRoute = "/",
+  predicate = defaultPredicate
+) => {
   const filteredRoutes = predicate
     ? routerHistory.filter(predicate)
     : routerHistory;
-  if (filteredRoutes.length < 1) return "/";
+  if (filteredRoutes.length < 1) return defaultRoute;
   return filteredRoutes[filteredRoutes.length - 1].path;
 };
 
