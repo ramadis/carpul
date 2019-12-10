@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import styled from "styled-components";
 import MDSpinner from "react-md-spinner";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { reserveByTrip, unreserveByTrip } from "../services/Reservation";
 import { confirmAlert } from "react-confirm-alert";
 
@@ -82,6 +82,12 @@ const SmallItem = ({ user, trip, hero_message }) => {
             <Header>
               {trip.from_city} {t("home.index.small_to")} {trip.to_city}
             </Header>
+            <p style={{ margin: 0 }}>
+              Driven by{" "}
+              <Link to={`/user/${trip.driver.id}`} style={{ fontWeight: 600 }}>
+                {trip.driver.first_name}
+              </Link>
+            </p>
           </HeaderContainer>
 
           <div>
