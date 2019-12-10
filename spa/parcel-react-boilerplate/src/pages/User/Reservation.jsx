@@ -69,9 +69,13 @@ const Reservation = ({ t, trip }) => {
                     <img
                       width="50"
                       height="50"
-                      src={`https://ui-avatars.com/api/?rounded=true&size=150&background=e36f4a&color=fff&name=${
-                        trip.driver.first_name
-                      } ${trip.driver.last_name}`}
+                      className="profile-image"
+                      src={
+                        trip.driver.image ||
+                        `https://ui-avatars.com/api/?rounded=true&size=150&background=e36f4a&color=fff&name=${
+                          trip.driver.first_name
+                        } ${trip.driver.last_name}`
+                      }
                       alt=""
                     />
                     <div className="driver-info">

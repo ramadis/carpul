@@ -22,6 +22,7 @@ const HistoryItem = ({ history }) => {
           <img
             width="50"
             height="50"
+            className="profile-image"
             src={history.user.image || defaultProfile}
             alt=""
           />

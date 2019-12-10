@@ -108,9 +108,13 @@ const PassengerList = ({ trip }) => {
                 <img
                   width="50"
                   height="50"
-                  src={`https://ui-avatars.com/api/?rounded=true&size=150&background=e36f4a&color=fff&name=${
-                    passenger.first_name
-                  } ${passenger.last_name}`}
+                  className="profile-image"
+                  src={
+                    passenger.image ||
+                    `https://ui-avatars.com/api/?rounded=true&size=150&background=e36f4a&color=fff&name=${
+                      passenger.first_name
+                    } ${passenger.last_name}`
+                  }
                   alt=""
                 />
                 <div className="driver-info">

@@ -30,6 +30,7 @@ import { routes } from "../App";
 
 import "react-datepicker/dist/react-datepicker.css";
 import poolListCss from "../styles/pool_list";
+import profileCss from "../styles/profile";
 import imgSeats from "../../images/seats.png";
 
 function useQuery() {
@@ -368,12 +369,19 @@ export const Trip = ({ trip }) => {
   return (
     <React.Fragment>
       <style jsx>{poolListCss}</style>
+      <style jsx>{profileCss}</style>
 
       <div className="pool-item flex-center">
         <Link to={`/user/${trip.driver.id}`}>
           <div className="user-info flex space-around align-center column h-150">
             <div className="user-image">
-              <img src={trip.driver.image || defaultProfile} alt="" />
+              <img
+                width="85"
+                height="85"
+                className="profile-image"
+                src={trip.driver.image || defaultProfile}
+                alt=""
+              />
             </div>
             <div className="user-name" style={{ color: "black" }}>
               {trip.driver.first_name}
