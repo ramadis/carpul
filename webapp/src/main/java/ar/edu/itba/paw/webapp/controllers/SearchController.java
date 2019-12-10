@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.controllers;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -33,10 +35,10 @@ public class SearchController extends AuthController {
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response search(@QueryParam("from") String from,
-						   @QueryParam("to") String to,
-						   @QueryParam("when") Long when,
-						   @DefaultValue("false") @QueryParam("exclude_driver") Boolean excludeDriver,
+	public Response search(@DefaultValue("") @QueryParam("from") String from,
+						   @DefaultValue("") @QueryParam("to") String to,
+						   @DefaultValue("") @QueryParam("when") Long when,
+						   @DefaultValue("true") @QueryParam("exclude_driver") Boolean excludeDriver,
 						   @DefaultValue("0") @QueryParam("page") int page,
 						   @DefaultValue("5") @QueryParam("per_page") int perPage) {
 		
@@ -44,7 +46,7 @@ public class SearchController extends AuthController {
 		Search search = new Search();
 		search.setFrom(from);
 		search.setTo(to);
-		search.setWhen(when);
+		search.setWhen(when == null ? System.currentTimeMillis() : when);
 		
 		// Get logged user
 		User user = user();
