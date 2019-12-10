@@ -147,7 +147,8 @@ public class UserController extends AuthController {
 		// Create trip with logged user as a driver
 		Trip trip = ts.register(form.getTrip(), loggedUser);
 		
-		return Response.status(Status.CREATED).entity(new TripDTO(trip)).build();
+		final URI uri = uriInfo.getBaseUriBuilder().path("/trips/{id}").build(trip.getId());
+		return Response.created(uri).entity(new TripDTO(trip)).build();
 	}
 	
 	@GET

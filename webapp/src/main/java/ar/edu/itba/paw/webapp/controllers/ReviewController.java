@@ -5,6 +5,7 @@ import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -46,7 +47,7 @@ public class ReviewController extends AuthController {
 		return Response.ok(new ReviewDTO(review)).build();
 	}
 	
-	@POST
+	@PUT
     @Path("/{id}/image")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadImage(@PathParam("id") Integer id, @BeanParam final ImageForm form){

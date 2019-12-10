@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controllers;
 
+import java.net.URI;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -107,7 +108,8 @@ public class TripController extends AuthController {
 		console.info("Review created successfully.");
 
 		// Return new review with its id
-		return Response.status(Status.CREATED).entity(new ReviewDTO(savedReview)).build();
+		final URI uri = uriInfo.getBaseUriBuilder().path("/reviews/{id}").build(savedReview.getId());
+		return Response.created(uri).entity(new ReviewDTO(savedReview)).build();
 		
 	}
 
