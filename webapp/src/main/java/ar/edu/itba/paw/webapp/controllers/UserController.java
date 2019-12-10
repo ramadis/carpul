@@ -158,7 +158,7 @@ public class UserController extends AuthController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getTrips(@PathParam("id") final int id,
 								@DefaultValue("0") @QueryParam("page") int page,
-								@DefaultValue("5") @QueryParam("per_page") int perPage) {
+								@DefaultValue("3") @QueryParam("per_page") int perPage) {
 		final User user = us.getById(id);
 		final User loggedUser = user();
 		if (user == null) return Response.status(Status.NOT_FOUND).build();
@@ -182,7 +182,7 @@ public class UserController extends AuthController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getReviews(@PathParam("id") final int id,
 			@DefaultValue("0") @QueryParam("page") int page,
-			@DefaultValue("5") @QueryParam("per_page") int perPage) {
+			@DefaultValue("10") @QueryParam("per_page") int perPage) {
 		final User user = us.getById(id);
 		if (user == null) return Response.status(Status.NOT_FOUND).build();
 		
@@ -201,7 +201,7 @@ public class UserController extends AuthController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getHistory(@PathParam("id") final int id,
 			@DefaultValue("0") @QueryParam("page") int page,
-			@DefaultValue("5") @QueryParam("per_page") int perPage) {
+			@DefaultValue("10") @QueryParam("per_page") int perPage) {
 		final User user = us.getById(id);
 		if (user == null) Response.status(Status.NOT_FOUND).build();
 		
@@ -218,7 +218,7 @@ public class UserController extends AuthController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getReservations(@PathParam("id") final int id,
 			@DefaultValue("0") @QueryParam("page") int page,
-			@DefaultValue("5") @QueryParam("per_page") int perPage) {
+			@DefaultValue("3") @QueryParam("per_page") int perPage) {
 		// TODO: Check permissions and what to do with default values for pagination
 		final User user = us.getById(id);
 		if (user == null) return Response.status(Status.NOT_FOUND).build();
