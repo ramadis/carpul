@@ -18,8 +18,8 @@ public class UserDTO {
     
     public UserDTO(User user, URI uri) {
     	this(user);
-    	if (user.getProfileImage() != null) this.image = uri.toString() + "users/" + user.getId() + "/profile/image";
-    	if (user.getCoverImage() != null) this.cover = uri.toString() + "users/" + user.getId() + "/profile/cover";
+    	if (user.getProfileImage() != null) this.image = uri.toString() + "/image";
+    	if (user.getCoverImage() != null) this.cover = uri.toString() + "/cover";
     }
 
     public UserDTO(User user) {

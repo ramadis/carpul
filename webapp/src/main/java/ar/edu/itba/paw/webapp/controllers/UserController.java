@@ -38,7 +38,6 @@ import ar.edu.itba.paw.webapp.DTO.ReservationDTO;
 import ar.edu.itba.paw.webapp.DTO.TripDTO;
 import ar.edu.itba.paw.webapp.DTO.UserDTO;
 import ar.edu.itba.paw.webapp.forms.ImageForm;
-import ar.edu.itba.paw.webapp.forms.TripCreateForm;
 import ar.edu.itba.paw.webapp.forms.UserCreateForm;
 import ar.edu.itba.paw.webapp.forms.UserUpdateForm;
 import ar.edu.itba.paw.models.User;
@@ -107,7 +106,7 @@ public class UserController extends AuthController {
 		es.sendRegistrationEmail(user);
 		
 		final URI uri = uriInfo.getBaseUriBuilder().path("/users/{id}").build(user.getId());
-		return Response.created(uri).entity(new UserDTO(user)).build();
+		return Response.created(uri).entity(new UserDTO(user, uri)).build();
 	}
 	
 	@GET
@@ -115,16 +114,14 @@ public class UserController extends AuthController {
 	@Produces(MediaType.APPLICATION_JSON)
 	// TODO: This endpoint is working
 	public Response getById(@PathParam("id") final int id) {
+		console.info("Controller: Getting user with id: {}", id);
 		final User user = us.getById(id);
-		final User loggedUser = user();
 		
 		if (user != null) {
-			return Response.ok(new UserDTO(user, uriInfo.getBaseUri())).build();
-		} else if (loggedUser != null) {
-			return Response.ok(new UserDTO(loggedUser)).build();
-		} else {
-			return Response.status(Status.NOT_FOUND).build();
+			return Response.ok(new UserDTO(user, uriInfo.getBaseUriBuilder().path("/users/{id}").build(user.getId()))).build();
 		}
+		
+		return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "User not found")).build();
 	}
 	
 	@GET
@@ -132,39 +129,7 @@ public class UserController extends AuthController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getCurrentUser() {
 		final User user = user();
-		return Response.ok(new UserDTO(user)).build();
-	}
-	
-	@POST
-	@Path("/{id}/trips")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	// TODO: This endpoint is working
-	public Response createTrip(final TripCreateForm form, @PathParam("id") final int id) {
-		// Check if the trip form is valid
-		if (form == null) {
-			return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), "form", "form is null")).build();
-		}
-		
-		if (!validator.validate(form).isEmpty()) {
-			List<ErrorDTO> errors = validator.validate(form).stream().map(validation -> new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), validation.getPropertyPath() + "", validation.getMessage())).collect(Collectors.toList());
-			return Response.status(Status.BAD_REQUEST).entity(errors).build();
-		}
-
-		console.info("Controller: Start creating trip from {} to {}", form.getFrom_city(), form.getTo_city());
-		
-		User loggedUser = user();
-
-		// If trying to create a trip for someone else, fail by forbidden
-		if (!loggedUser.getId().equals(id)) return Response.status(Status.FORBIDDEN).build();
-		boolean isOverlapping = ts.areTimeConflicts(form.getTrip(), loggedUser);
-		if (isOverlapping) return Response.status(Status.CONFLICT).build();
-			
-		// Create trip with logged user as a driver
-		Trip trip = ts.register(form.getTrip(), loggedUser);
-		
-		final URI uri = uriInfo.getBaseUriBuilder().path("/trips/{id}").build(trip.getId());
-		return Response.created(uri).entity(new TripDTO(trip)).build();
+		return Response.ok(new UserDTO(user, uriInfo.getBaseUriBuilder().path("/users/{id}").build(user.getId()))).build();
 	}
 	
 	@GET
@@ -173,16 +138,18 @@ public class UserController extends AuthController {
 	public Response getTrips(@PathParam("id") final int id,
 								@DefaultValue("0") @QueryParam("page") int page,
 								@DefaultValue("3") @QueryParam("per_page") int perPage) {
+		console.info("Controller: Getting trips for user with id: {}", id);
+		
 		final User user = us.getById(id);
 		final User loggedUser = user();
-		if (user == null) return Response.status(Status.NOT_FOUND).build();
+		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "the user does not exist")).build();
 		
 		// Search trips belonging to a given user
 		List<Trip> trips = ts.getUserTrips(user, new Pagination(page, perPage));
 		if (trips == null || trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 	
 		// Return trip DTOs
-		if (loggedUser.getId().equals(id)) {			
+		if (loggedUser != null && loggedUser.getId().equals(id)) {			
 			List<TripDTO> tripDTOs = trips.stream().map(trip -> new TripDTO(trip)).collect(Collectors.toList());
 			return Response.ok(tripDTOs).build();
 		} else {
@@ -197,8 +164,10 @@ public class UserController extends AuthController {
 	public Response getReviews(@PathParam("id") final int id,
 			@DefaultValue("0") @QueryParam("page") int page,
 			@DefaultValue("10") @QueryParam("per_page") int perPage) {
+		console.info("Controller: Getting reviews for user with id: {}", id);
+		
 		final User user = us.getById(id);
-		if (user == null) return Response.status(Status.NOT_FOUND).build();
+		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "the user does not exist")).build();
 		
 		// Transform reviews to DTOs
 		List<ReviewDTO> reviewDTOs = new ArrayList<>();
@@ -216,8 +185,10 @@ public class UserController extends AuthController {
 	public Response getHistory(@PathParam("id") final int id,
 			@DefaultValue("0") @QueryParam("page") int page,
 			@DefaultValue("10") @QueryParam("per_page") int perPage) {
+		console.info("Controller: Getting history for user with id: {}", id);
+		
 		final User user = us.getById(id);
-		if (user == null) Response.status(Status.NOT_FOUND).build();
+		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "the user does not exist")).build();
 		
 		List<History> histories = hs.getHistories(user, new Pagination(page, perPage));
 		if (histories == null || histories.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
@@ -233,9 +204,10 @@ public class UserController extends AuthController {
 	public Response getReservations(@PathParam("id") final int id,
 			@DefaultValue("0") @QueryParam("page") int page,
 			@DefaultValue("3") @QueryParam("per_page") int perPage) {
-		// TODO: Check permissions and what to do with default values for pagination
+		console.info("Controller: Getting reservations for user with id: {}", id);
+		
 		final User user = us.getById(id);
-		if (user == null) return Response.status(Status.NOT_FOUND).build();
+		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "the user does not exist")).build();
 		
 		// Search trips belonging to a given user
 		List<Trip> trips = ts.getReservedTrips(user, new Pagination(page, perPage));
@@ -248,9 +220,11 @@ public class UserController extends AuthController {
 	}
 	
 	@PUT
-    @Path("/{id}/profile/image")
+    @Path("/{id}/image")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadProfileImage(@PathParam("id") Integer id, @BeanParam final ImageForm form){
+		console.info("Controller: Updating profile image for user with id: {}", id);
+		
 		if (form == null) {
 			return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), "form", "form is null")).build();
 		}
@@ -263,17 +237,20 @@ public class UserController extends AuthController {
 		User user = us.getById(id);
 		User loggedUser = user(); 
 		
-		console.info("Controller: Add profile image for user {}", loggedUser.getUsername());
-		if (user == null) return Response.status(Status.NOT_FOUND).build();
-		if (!user.getId().equals(loggedUser.getId())) return Response.status(Status.FORBIDDEN).build();
+		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "the user does not exist")).build();
+		if (!user.getId().equals(loggedUser.getId())) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "id", "logged with wrong user")).build();
+		byte[] prevImage = user.getProfileImage();
 		
 		us.uploadProfileImage(user, form.getContent());
-		return Response.status(Status.CREATED).build();
+		
+		final URI uri = uriInfo.getBaseUriBuilder().path("/users/{id}/image").build(user.getId());
+		if ( prevImage == null) return Response.created(uri).build();
+		return Response.status(Status.NO_CONTENT).build();
 
     }
 	
 	@GET
-	@Path("/{id}/profile/image")
+	@Path("/{id}/image")
 	@Produces({"image/jpg", "image/png", "image/gif", "image/jpeg"})
 	public Response getProfileImage(@PathParam("id") final int id) {
 		User user = us.getById(id);
@@ -284,9 +261,10 @@ public class UserController extends AuthController {
 	}
 	
 	@PUT
-    @Path("/{id}/profile/cover")
+    @Path("/{id}/cover")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadCoverImage(@PathParam("id") Integer id, @BeanParam final ImageForm form){
+		console.info("Controller: Updating cover image to user {}", id);
 		if (form == null) {
 			return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), "form", "form is null")).build();
 		}
@@ -299,12 +277,15 @@ public class UserController extends AuthController {
 		User user = us.getById(id);
 		User loggedUser = user(); 
 		
-		console.info("Uploading cover image to user {}", id);
-		if (user == null) return Response.status(Status.NOT_FOUND).build();
-		if (!user.getId().equals(loggedUser.getId())) return Response.status(Status.FORBIDDEN).build();
+		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "the user does not exist")).build();
+		if (!user.getId().equals(loggedUser.getId())) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "id", "logged with wrong user")).build();
+		byte[] prevImage = user.getCoverImage();
 		
 		us.uploadCoverImage(user, form.getContent());
-		return Response.status(Status.CREATED).build();
+		
+		final URI uri = uriInfo.getBaseUriBuilder().path("/users/{id}/cover").build(user.getId());
+		if ( prevImage == null) return Response.created(uri).build();
+		return Response.status(Status.NO_CONTENT).build();
     }
 	
 	@PUT
@@ -312,17 +293,23 @@ public class UserController extends AuthController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response updateUser(@PathParam("id") Integer id, final UserUpdateForm form) {
-		console.info("Start updating user");
+		console.info("Controller: Start updating user {}", id);
+		
+		if (form == null) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), "form", "form is null")).build();
+		}
+		
+		if (!validator.validate(form).isEmpty()) {
+			List<ErrorDTO> errors = validator.validate(form).stream().map(validation -> new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), validation.getPropertyPath() + "", validation.getMessage())).collect(Collectors.toList());
+			return Response.status(Status.BAD_REQUEST).entity(errors).build();
+		}
 		
 		User toUpdate = us.getById(id);
 		User loggedUser = user();
 		
 		// Check if profile can be updated
-		if (toUpdate == null) return Response.status(Status.NOT_FOUND).build();
-		if (!loggedUser.getId().equals(toUpdate.getId())) return Response.status(Status.FORBIDDEN).build();
-		if (form == null || !validator.validate(form).isEmpty()) {
-			return Response.status(Status.BAD_REQUEST).build();
-		}
+		if (toUpdate == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "the user does not exist")).build();
+		if (!toUpdate.getId().equals(loggedUser.getId())) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "id", "logged with wrong user")).build();
 		
 		// Get user from form
 		User user = form.getUser();
@@ -330,11 +317,11 @@ public class UserController extends AuthController {
 		// Update user fields
 		user = us.update(toUpdate, user);
 
-		return Response.ok().entity(new UserDTO(user)).build();
+		return Response.ok().entity(new UserDTO(user, uriInfo.getBaseUriBuilder().path("/users/{id}").build(user.getId()))).build();
 	}
 	
 	@GET
-	@Path("/{id}/profile/cover")
+	@Path("/{id}/cover")
 	@Produces({"images/jpg", "images/png", "images/gif"})
 	public Response getCoverImage(@PathParam("id") final int id) {
 		User user = us.getById(id);

@@ -37,8 +37,8 @@ import ar.edu.itba.paw.webapp.DTO.ErrorDTO;
 import ar.edu.itba.paw.webapp.DTO.ReservationDTO;
 import ar.edu.itba.paw.webapp.DTO.ReviewDTO;
 import ar.edu.itba.paw.webapp.DTO.TripDTO;
-import ar.edu.itba.paw.webapp.DTO.UserDTO;
 import ar.edu.itba.paw.webapp.forms.ReviewForm;
+import ar.edu.itba.paw.webapp.forms.TripCreateForm;
 
 @Path("trips")
 @Component
@@ -78,6 +78,36 @@ public class TripController extends AuthController {
 		} else {
 			return Response.status(Status.NOT_FOUND).build();
 		}
+	}
+	
+	@POST
+	@Path("/")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	// TODO: This endpoint is working
+	public Response createTrip(final TripCreateForm form) {
+		// Check if the trip form is valid
+		if (form == null) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), "form", "form is null")).build();
+		}
+		
+		if (!validator.validate(form).isEmpty()) {
+			List<ErrorDTO> errors = validator.validate(form).stream().map(validation -> new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), validation.getPropertyPath() + "", validation.getMessage())).collect(Collectors.toList());
+			return Response.status(Status.BAD_REQUEST).entity(errors).build();
+		}
+
+		console.info("Controller: Start creating trip from {} to {}", form.getFrom_city(), form.getTo_city());
+		
+		User loggedUser = user();
+		
+		boolean isOverlapping = ts.areTimeConflicts(form.getTrip(), loggedUser);
+		if (isOverlapping) return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "times", "user has not available this time range")).build();
+			
+		// Create trip with logged user as a driver
+		Trip trip = ts.register(form.getTrip(), loggedUser);
+		
+		final URI uri = uriInfo.getBaseUriBuilder().path("/trips/{id}").build(trip.getId());
+		return Response.created(uri).entity(new TripDTO(trip)).build();
 	}
 	
 	@POST
