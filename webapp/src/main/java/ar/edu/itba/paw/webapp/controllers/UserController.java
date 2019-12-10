@@ -42,6 +42,7 @@ import ar.edu.itba.paw.webapp.forms.UserCreateForm;
 import ar.edu.itba.paw.webapp.forms.UserUpdateForm;
 import ar.edu.itba.paw.models.User;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -98,7 +99,8 @@ public class UserController extends AuthController {
 		// Send welcome email to user
 		es.sendRegistrationEmail(user);
 		
-		return Response.status(Status.CREATED).entity(new UserDTO(user)).build();
+		final URI uri = uriInfo.getBaseUriBuilder().path("/users/{id}").build(user.getId());
+		return Response.created(uri).entity(new UserDTO(user)).build();
 	}
 	
 	@GET

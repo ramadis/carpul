@@ -160,6 +160,8 @@ public class User implements Serializable {
 		Integer sum = 0;
 		Integer count = 0;
 		
+		if (this.getDrived_trips() == null) return 0;
+		
 		for (Trip trip: this.getDrived_trips()) {
 			for (Review review: trip.getReviews()) {
 				sum += review.getStars();
