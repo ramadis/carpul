@@ -28,9 +28,8 @@ public class TripServiceImpl implements TripService {
 	}
 
 	@Transactional
-	public void reserve(Integer tripId, User user) {
-		tripDao.reserveTrip(tripId, user);
-		return;
+	public Reservation reserve(Integer tripId, User user) {
+		return tripDao.reserveTrip(tripId, user);
 	}
 	
 	public Boolean areTimeConflicts(Trip trip, User user) {

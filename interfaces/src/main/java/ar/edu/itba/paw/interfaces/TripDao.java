@@ -13,7 +13,7 @@ public interface TripDao {
 	Trip findById (Integer tripId);
 	List<Trip> getUserTrips(User user, Pagination pagination);
 	List<Trip> getSuggestions(String origin, Pagination pagination, User driver);
-	void reserveTrip(Integer tripId, User user);
+	Reservation reserveTrip(Integer tripId, User user);
 	void delete(Integer tripId, User user);
 	void unreserveTrip(Integer tripId, User user);
 	List<Reservation> getReservationsByUser(User user, Pagination pagination);

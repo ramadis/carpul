@@ -96,7 +96,7 @@ public class UserController extends AuthController {
 		
 		// Check if user exists
 		if (us.exists(user)) {
-			return Response.status(Status.CONFLICT).build();
+			return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "username", "user already exists")).build();
 		}
 
 		// Register new user

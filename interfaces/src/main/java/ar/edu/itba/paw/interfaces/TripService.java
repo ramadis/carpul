@@ -16,7 +16,7 @@ public interface TripService {
 	List<Trip> getReservedTrips(User user, Pagination pagination);
 	List<Trip> getSuggestions(String origin, Pagination pagination, User driver);
 	Boolean areTimeConflicts(Trip trip, User user);
-	void reserve(Integer tripId, User user);
+	Reservation reserve(Integer tripId, User user);
 	void delete(Integer tripId, User user);
 	void unreserve(Integer tripId, User user);
 }

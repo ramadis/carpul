@@ -30,6 +30,7 @@ import ar.edu.itba.paw.interfaces.EventService;
 import ar.edu.itba.paw.interfaces.ReviewService;
 import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.models.Reservation;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
@@ -70,13 +71,14 @@ public class TripController extends AuthController {
 		final Trip trip = ts.findById(id);
 		final User user = user();
 		if (trip != null) {
+			console.info("Controller: Gettingtrip from {} to {}", trip.getFrom_city(), trip.getTo_city());
 			if (trip.getDriver().equals(user)) {
 				return Response.ok(new TripDTO(trip)).build();
 			} else {
 				return Response.ok(new ReservationDTO(trip)).build();
 			}
 		} else {
-			return Response.status(Status.NOT_FOUND).build();
+			return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "Trip not found")).build();
 		}
 	}
 	
@@ -96,7 +98,7 @@ public class TripController extends AuthController {
 			return Response.status(Status.BAD_REQUEST).entity(errors).build();
 		}
 
-		console.info("Controller: Start creating trip from {} to {}", form.getFrom_city(), form.getTo_city());
+		console.info("Controller: Creating trip from {} to {}", form.getFrom_city(), form.getTo_city());
 		
 		User loggedUser = user();
 		
@@ -127,12 +129,15 @@ public class TripController extends AuthController {
 			return Response.status(Status.BAD_REQUEST).entity(errors).build();
 		}
 		
+		console.info("Controller: Adding review for trip with id {}", tripId);
+		
 		// Check requirements for reviewing are passed
 		Trip trip = ts.findById(tripId);
-		if (trip == null) return Response.status(Status.NOT_FOUND).build();
+		
+		if (trip == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "Trip not found")).build();
 		boolean wasPassenger = trip.getPassengers().contains(loggedUser);
-		if(!wasPassenger) return Response.status(Status.FORBIDDEN).build();
-		if (!rs.canLeaveReview(trip, loggedUser)) return Response.status(Status.CONFLICT).build();
+		if(!wasPassenger) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "id", "logged with wrong user")).build();
+		if (!rs.canLeaveReview(trip, loggedUser)) return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "reviewed", "the user can't review this trip")).build();
 		
 		// Compose review
 		Review review = form.getReview();
@@ -143,8 +148,6 @@ public class TripController extends AuthController {
 		// Persist review
 		Review savedReview = rs.add(review);
 		
-		console.info("Review created successfully.");
-
 		// Return new review with its id
 		final URI uri = uriInfo.getBaseUriBuilder().path("/reviews/{id}").build(savedReview.getId());
 		return Response.created(uri).entity(new ReviewDTO(savedReview)).build();
@@ -156,13 +159,16 @@ public class TripController extends AuthController {
 	@Produces(MediaType.APPLICATION_JSON)
 	// TODO: This endpoint is working
 	public Response deleteTrip(@PathParam("id") final Integer tripId) {
+		console.info("Controller: Deleting trip with id {}", tripId);
 		User loggedUser = user();
 		
 		// Check you have control over the trip
 		Trip trip = ts.findById(tripId);
-		if (trip == null) return Response.status(Status.NOT_FOUND).build();
-		if (!trip.getDriver().equals(loggedUser)) return Response.status(Status.FORBIDDEN).build();
+		if (trip == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "Trip not found")).build();
+		if (!trip.getDriver().equals(loggedUser)) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "id", "logged with wrong user")).build();
 		if (trip.getDeleted())return Response.noContent().build();
+		
+		
 		
 		// Delete trip
 		ts.delete(tripId, loggedUser);
@@ -176,11 +182,12 @@ public class TripController extends AuthController {
 	@Path("/{id}/reservation")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response reserveTrip(@PathParam("id") final Integer tripId) {
+		console.info("Controller: Reserving trip with id {}", tripId);
 		User loggedUser = user();
 		
 		// Check that trip exists
 		Trip trip = ts.findById(tripId);
-		if (trip == null) return Response.status(Status.NOT_FOUND).build();
+		if (trip == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "Trip not found")).build();
 		
 		// Make several checks to ensure the user can reserve the trip
 		Date date = new Date();
@@ -192,26 +199,28 @@ public class TripController extends AuthController {
 		boolean hasReserved = us.getPassengers(trip).contains(loggedUser);
 		boolean isOverlapping = ts.areTimeConflicts(trip, loggedUser);
 		
-		if (isLate || isFull || isDriver || isOverlapping) return Response.status(Status.CONFLICT).build();
+		if (isLate || isFull || isDriver || isOverlapping) return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "reservation", "the user can't reserve this trip")).build();
 		if (hasReserved) return Response.noContent().build();
 		
 		// Reserve and register trip 
-		ts.reserve(tripId, loggedUser);
+		Reservation reservation = ts.reserve(tripId, loggedUser);
 		es.registerReserve(loggedUser, tripId);
 
 		// Return success
-		return Response.status(Status.CREATED).build();
+		final URI uri = uriInfo.getBaseUriBuilder().path("/reservation/{}").build(reservation.getId());
+		return Response.created(uri).build();
 	}
 	
 	@DELETE
 	@Path("/{id}/reservation")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response unreserveTrip(@PathParam("id") final Integer tripId) {
+		console.info("Controller: Unreserving trip with id {}", tripId);
 		User loggedUser = user();
 		
 		// Check that trip exists
 		Trip trip = ts.findById(tripId);
-		if (trip == null) return Response.status(Status.NOT_FOUND).build();
+		if (trip == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "Trip not found")).build();
 		
 		// Check that has permissions required
 		if (!trip.getPassengers().contains(loggedUser)) Response.noContent().build();
@@ -220,7 +229,7 @@ public class TripController extends AuthController {
 		Date date = new Date();
 		Timestamp now = new Timestamp(date.getTime());
 		boolean isLate = now.after(trip.getEtd());
-		if (isLate) return Response.status(Status.FORBIDDEN).build();
+		if (isLate) return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "time", "too late to reserve")).build();
 		
 		// Unreserve trip and notify
 		ts.unreserve(tripId, loggedUser);
@@ -235,21 +244,23 @@ public class TripController extends AuthController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response kickFromTrip(@PathParam("id") final Integer tripId, 
 								 @PathParam("userid") final Integer userId) {
+		console.info("Controller: Kicking passenger with id {} from trip with id {}", userId, tripId);
+		
 		// Check logged user is authorized to edit the trip
 		Trip trip = ts.findById(tripId);
 		User loggedUser = user();
-		if (trip == null) return Response.status(Status.NOT_FOUND).build();
-		if (!trip.getDriver().equals(loggedUser)) return Response.status(Status.FORBIDDEN).build();
+		if (trip == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "Trip not found")).build();
+		if (!trip.getDriver().equals(loggedUser)) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "id", "logged with wrong user")).build();
 		
 		// Find kicked user
 		User user = us.findById(userId);
-		if (user == null) return Response.status(Status.NOT_FOUND).build();
+		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "user not found")).build();
 		
 		// Check if it's too late
 		Date date = new Date();
 		Timestamp now = new Timestamp(date.getTime());
 		boolean isLate = now.after(trip.getEtd());
-		if (isLate) return Response.status(Status.FORBIDDEN).build();
+		if (isLate) return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "time", "too late to delete")).build();
 		
 		// Unreserve trip for the kicked user
 		ts.unreserve(tripId, user);

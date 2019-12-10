@@ -41,7 +41,7 @@ public class TripDaoHibernate implements TripDao {
 		return trip;
 	}
 
-	public void reserveTrip(Integer tripId, User user) {
+	public Reservation reserveTrip(Integer tripId, User user) {
 		console.info("Persistence: Reserving trip");
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		Trip trip = findById(tripId);
@@ -53,7 +53,8 @@ public class TripDaoHibernate implements TripDao {
 		reserve.setCreated(now);
 
 		em.persist(reserve);
-		return;
+		
+		return reserve;
 	}
 
 	public void unreserveTrip(Integer tripId, User user) {

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controllers;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,13 +8,14 @@ import javax.validation.Validator;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
@@ -38,14 +40,17 @@ public class ReviewController extends AuthController {
 	
 	@Autowired
     private Validator validator;
+	
+	@Context
+	private UriInfo uriInfo;
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("id") final int id) {
-		console.info("Getting review {}", id);
+		console.info("Controller: Getting review with id {}", id);
 		Review review = rs.getReviewById(id);
-		if (review == null) return Response.status(Status.NOT_FOUND).build();
+		if (review == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "review not found")).build();
 
 		// TODO: Return review
 		return Response.ok(new ReviewDTO(review)).build();
@@ -67,13 +72,15 @@ public class ReviewController extends AuthController {
 		Review review = rs.getReviewById(id);
 		User loggedUser = user(); 
 		
-		console.info("Uploading image to review {}", id);
-		if (review == null) return Response.status(Status.NOT_FOUND).build();
-		if (!review.getOwner().getId().equals(loggedUser.getId())) return Response.status(Status.FORBIDDEN).build();
-		if (review.getImage() != null) return Response.status(Status.CONFLICT).build();
+		console.info("Controller: Uploading image to review {}", id);
+		if (review == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "review not found")).build();
+		if (!review.getOwner().getId().equals(loggedUser.getId())) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "id", "logged with wrong user")).build();
+		if (review.getImage() != null) return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "uploaded", "the image was already uploaded")).build();
 		
 		rs.uploadImage(review, form.getContent());
-		return Response.status(Status.CREATED).build();
+
+		final URI uri = uriInfo.getBaseUriBuilder().path("/reviews/{id}/image").build(id);
+		return Response.created(uri).build();
 
     }
 	
@@ -82,7 +89,7 @@ public class ReviewController extends AuthController {
 	@Produces({"image/jpg", "image/png", "image/gif", "image/jpeg"})
 	public Response getImageById(@PathParam("id") final int id) {
 		Review review = rs.getReviewById(id);
-		console.info("Getting image for id {}", id);
+		console.info("Controller: Getting image for id {}", id);
 		if (review == null || review.getImage() == null) return Response.status(Status.NOT_FOUND).build();
 		
 		// TODO: Return review
