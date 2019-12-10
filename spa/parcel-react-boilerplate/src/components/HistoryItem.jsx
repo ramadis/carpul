@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
+import { Link } from "react-router-dom";
 
 import profileCss from "../styles/profile.js";
 import reviewItemCss from "../styles/review_item";
@@ -17,12 +18,14 @@ const HistoryItem = ({ history }) => {
       <style jsx>{profileCss}</style>
       <style jsx>{reviewItemCss}</style>
       <li className="review-item-container">
-        <img
-          width="50"
-          height="50"
-          src={history.user.image || defaultProfile}
-          alt=""
-        />
+        <Link to={`/user/${history.user.id}`}>
+          <img
+            width="50"
+            height="50"
+            src={history.user.image || defaultProfile}
+            alt=""
+          />
+        </Link>
         <div className="review-item-content history-content">
           {history.type === "RESERVE" && (
             <div className="review-message">

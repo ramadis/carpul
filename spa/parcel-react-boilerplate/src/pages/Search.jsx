@@ -366,29 +366,33 @@ export const Trip = ({ trip }) => {
       <style jsx>{poolListCss}</style>
 
       <div className="pool-item flex-center">
-        <div className="user-info flex space-around align-center column h-150">
-          <div className="user-image">
-            <img
-              src={`https://ui-avatars.com/api/?rounded=true&size=85&background=e36f4a&color=fff&name=${
-                trip.driver.first_name
-              } ${trip.driver.last_name}`}
-              alt=""
-            />
+        <Link to={`/user/${trip.driver.id}`}>
+          <div className="user-info flex space-around align-center column h-150">
+            <div className="user-image">
+              <img
+                src={`https://ui-avatars.com/api/?rounded=true&size=85&background=e36f4a&color=fff&name=${
+                  trip.driver.first_name
+                } ${trip.driver.last_name}`}
+                alt=""
+              />
+            </div>
+            <div className="user-name" style={{ color: "black" }}>
+              {trip.driver.first_name}
+            </div>
+            <span className="user-rating">
+              <Rating
+                initialRating={trip.driver.rating}
+                readonly
+                emptySymbol={
+                  <FontAwesomeIcon icon={faStar} size="xs" color="#e2e2e2" />
+                }
+                fullSymbol={
+                  <FontAwesomeIcon icon={faStar} size="xs" color="#f39c12" />
+                }
+              />
+            </span>
           </div>
-          <div className="user-name">{trip.driver.first_name}</div>
-          <span className="user-rating">
-            <Rating
-              initialRating={trip.driver.rating}
-              readonly
-              emptySymbol={
-                <FontAwesomeIcon icon={faStar} size="xs" color="#e2e2e2" />
-              }
-              fullSymbol={
-                <FontAwesomeIcon icon={faStar} size="xs" color="#f39c12" />
-              }
-            />
-          </span>
-        </div>
+        </Link>
 
         <TripInfoContainer>
           <div className="map-container">
