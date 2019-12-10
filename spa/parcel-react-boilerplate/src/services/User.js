@@ -1,78 +1,100 @@
-import { GETwithAuth, POSTwithAuth, PUTwithAuth } from './Utils'
-import store from '../state/store'
+import { GETwithAuth, POSTwithAuth, PUTwithAuth } from "./Utils";
+import store from "../state/store";
 
 export const userid = () => {
-  const state = store.getState()
-  return state.user && state.user.id
-}
+  const state = store.getState();
+  return state.user && state.user.id;
+};
 
 export const getProfileById = async id => {
   const user = await GETwithAuth(`/users/${id}`).then(res => {
     if (res.isRawResponse) {
       // TODO: Handle specific error messages
-      return
+      return;
     }
-    return res
-  })
-  return user
-}
+    return res;
+  });
+  return user;
+};
 
 export const getProfile = async () => {
-  const user = await GETwithAuth('/users').then(res => {
+  const user = await GETwithAuth("/users").then(res => {
     if (res.isRawResponse) {
       // TODO: Handle specific error messages
-      return
+      return;
     }
-    return res
-  })
+    return res;
+  });
 
-  localStorage.setItem('user', JSON.stringify(user))
-  return user
-}
+  localStorage.setItem("user", JSON.stringify(user));
+  return user;
+};
 
 export const updateProfileById = async (id, profile) => {
   const user = await PUTwithAuth(`/users/${id}/profile`, profile).then(res => {
     if (res.isRawResponse) {
       // TODO: Handle specific error messages
-      return
+      return;
     }
-    return res
-  })
-  return user
-}
+    return res;
+  });
+  return user;
+};
 
 export const updateCoverImageById = async (id, image) => {
-  const user = await PUTwithAuth(`/users/${id}/cover`, image).then(res => {
+  // prepare data
+  const data = new FormData();
+  data.append("file", image.file);
+
+  const user = await PUTwithAuth(
+    `/users/${id}/profile/cover`,
+    {
+      isRaw: true,
+      content: data,
+    },
+    { "Content-Type": null }
+  ).then(res => {
     if (res.isRawResponse) {
       // TODO: Handle specific error messages
-      return
+      return;
     }
-    return res
-  })
-  return user
-}
+    return res;
+  });
+  return user;
+};
 
 export const updateProfileImageById = async (id, image) => {
-  const user = await PUTwithAuth(`/users/${id}/profile`, image).then(res => {
+  // prepare data
+  const data = new FormData();
+  data.append("file", image.file);
+
+  const user = await PUTwithAuth(
+    `/users/${id}/profile/image`,
+    {
+      isRaw: true,
+      content: data,
+    },
+    { "Content-Type": null }
+  ).then(res => {
     if (res.isRawResponse) {
       // TODO: Handle specific error messages
-      return
+      return;
     }
-    return res
-  })
-  return user
-}
+    return res;
+  });
+  return user;
+};
 
 export const signupUser = async profile => {
-  const user = await POSTwithAuth('/users', profile).then(res => {
+  const user = await POSTwithAuth("/users", profile).then(res => {
     if (res.isRawResponse) {
       // TODO: Handle specific error messages
-      return
+      return;
     }
-    return res
-  })
-  return user
-}
+    return res;
+  });
+  return user;
+};
 
 export const updateProfile = async profile => {
   const updatedUser = await POSTwithAuth(
@@ -81,10 +103,10 @@ export const updateProfile = async profile => {
   ).then(res => {
     if (res.isRawResponse) {
       // TODO: Handle specific error messages
-      return
+      return;
     }
-    return res
-  })
+    return res;
+  });
 
-  return updatedUser
-}
+  return updatedUser;
+};
