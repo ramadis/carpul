@@ -7,10 +7,11 @@ import { useParams, Link } from "react-router-dom";
 import Confetti from "react-confetti";
 import AddToCalendar from "react-add-to-calendar";
 
-import { useWindowSize } from "../../utils/hooks.js";
+import { useWindowSize } from "../../utils/hooks";
+import { requestCatch } from "../../utils/fetch";
 
-import { getTripById } from "../../services/Trip.js";
-import { search } from "../../services/Search.js";
+import { getTripById } from "../../services/Trip";
+import { search } from "../../services/Search";
 
 import Reservation from "../User/Reservation";
 import { Trip } from "../Search";
@@ -35,15 +36,20 @@ function Reserved({ user }) {
 
   useEffect(() => {
     const fetches = async () => {
-      const trip = await getTripById(tripId);
-      setTrip(trip);
-      await search({
-        to: trip.to_city,
-        from: trip.from_city,
-        when: trip.etd,
-        per_page: 6,
-      }).then(trips => setSuggestions(trips.filter(t => t.id !== trip.id)));
-      setLoading(false);
+      try {
+        const trip = await getTripById(tripId);
+        setTrip(trip);
+        await search({
+          to: trip.to_city,
+          from: trip.from_city,
+          when: trip.etd,
+          per_page: 6,
+        }).then(trips => setSuggestions(trips.filter(t => t.id !== trip.id)));
+        setLoading(false);
+      } catch (error) {
+        requestCatch(error);
+        setLoading(false);
+      }
     };
     fetches();
   }, []);

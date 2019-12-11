@@ -10,8 +10,10 @@ import styled from "styled-components";
 import { isEmpty } from "lodash";
 import { NotificationManager } from "react-notifications";
 
-import { getTripById } from "../services/Trip.js";
-import { reviewTrip, addReviewImage } from "../services/Review.js";
+import { getTripById } from "../services/Trip";
+import { reviewTrip, addReviewImage } from "../services/Review";
+
+import { requestCatch } from "../utils/fetch";
 
 import { routes } from "../App";
 import Hero from "../components/Hero";
@@ -112,7 +114,9 @@ const Review = ({ user }) => {
   };
 
   useEffect(() => {
-    getTripById(tripId).then(setTrip);
+    getTripById(tripId)
+      .then(setTrip)
+      .catch(requestCatch);
   }, []);
 
   window.document.title = t("review.add.page_title");

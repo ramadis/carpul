@@ -7,9 +7,10 @@ import { useParams, Link } from "react-router-dom";
 import Confetti from "react-confetti";
 import AddToCalendar from "react-add-to-calendar";
 
-import { useWindowSize } from "../../utils/hooks.js";
+import { useWindowSize } from "../../utils/hooks";
+import { requestCatch } from "../../utils/fetch";
 
-import { getTripById } from "../../services/Trip.js";
+import { getTripById } from "../../services/Trip";
 
 import Reservation from "../User/Reservation";
 
@@ -35,7 +36,9 @@ function Reserved({ user }) {
   const [trip, setTrip] = useState();
 
   useEffect(() => {
-    getTripById(tripId).then(setTrip);
+    getTripById(tripId)
+      .then(setTrip)
+      .catch(requestCatch);
   }, []);
 
   const isLoading = !user || !trip;

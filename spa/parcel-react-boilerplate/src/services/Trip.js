@@ -32,7 +32,22 @@ export const createTrip = async trip => {
 export const getTripById = async id => {
   const trips = await GETwithAuth(`/trips/${id}`).then(res => {
     if (res.isRawResponse) {
-      // TODO: Handle specific error messages
+      const errors = {
+        404: {
+          title: "We can't find the trip",
+          subtitle: "You sure you are trying to access an existing trip?",
+        },
+        default: {
+          title: "Something went wrong",
+          subtitle: "And we don't know what it is, sorry :(.",
+        },
+      };
+
+      throw {
+        origin: "getTripById",
+        message: errors[res.status] || errors.default,
+        code: res.status,
+      };
       return;
     }
     return res;
