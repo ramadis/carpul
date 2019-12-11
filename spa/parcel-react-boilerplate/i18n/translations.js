@@ -206,6 +206,7 @@ const translations = {
         date: {
           invalid:
             "The arrival date should be after the departure... or are you traveling through time?",
+          long: "Your trip can't last more than 24 hours, you crazy",
         },
         etd: {
           invalid:

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { connect } from "react-redux";
-import { addHours } from "date-fns";
+import { addHours, addDays } from "date-fns";
 import MDSpinner from "react-md-spinner";
 import DatePicker from "react-datepicker";
 import useForm from "react-hook-form";
@@ -74,6 +74,7 @@ function Add({ user }) {
 
     if (ETDdirty && !ETD) errors.etd = { type: "required" };
     if (ETAdirty && !ETA) errors.eta = { type: "required" };
+    if (addDays(ETD, 1) < ETA) errors.eta = { type: "long" };
     if (ETD >= ETA) errors.eta = { type: "invalid" };
     if (ETD < new Date()) errors.etd = { type: "invalid" };
 
@@ -257,7 +258,8 @@ function Add({ user }) {
               timeFormat={t("trip.add.time")}
               todayButton={t("trip.add.today")}
               timeCaption="time"
-              minDate={new Date()}
+              minDate={ETD || new Date()}
+              maxDate={addDays(ETD || new Date(), 1)}
               timeIntervals={15}
               customInput={
                 <input
@@ -271,6 +273,11 @@ function Add({ user }) {
             {formErrors.eta && formErrors.eta.type === "invalid" ? (
               <label className="label-error">
                 {t("trip.add.errors.date.invalid")}
+              </label>
+            ) : null}
+            {formErrors.eta && formErrors.eta.type === "long" ? (
+              <label className="label-error">
+                {t("trip.add.errors.date.long")}
               </label>
             ) : null}
           </div>
