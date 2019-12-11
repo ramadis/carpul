@@ -214,7 +214,7 @@ public class TripController extends AuthController {
 		es.registerReserve(loggedUser, tripId);
 
 		// Return success
-		final URI uri = uriInfo.getBaseUriBuilder().path("/reservation/{}").build(reservation.getId());
+		final URI uri = uriInfo.getBaseUriBuilder().path("/reservation/{id}").build(reservation.getId());
 		return Response.created(uri).build();
 	}
 	
