@@ -166,6 +166,11 @@ const translations = {
       },
     },
   },
+  single: {
+    title: "This trip to {{city}} awaits you",
+    subtitle:
+      "Share this link with any of your friends to bring more people into this adventure",
+  },
   trip: {
     add: {
       page_title: "Carpul | Add a trip",

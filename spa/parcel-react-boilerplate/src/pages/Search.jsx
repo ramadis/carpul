@@ -343,7 +343,7 @@ const MapView = styled.iframe`
   width: 100%;
 `;
 
-export const Trip = ({ trip }) => {
+export const Trip = ({ trip, hideShare }) => {
   const { t } = useTranslation();
   const [reserved, setReserved] = useState(false);
   const [requestLoading, setRequestLoading] = useState(false);
@@ -511,7 +511,16 @@ export const Trip = ({ trip }) => {
             </div>
 
             <div className="pool-features flex space-between align-center">
-              <div className="features-container" />
+              <div className="features-container">
+                {!hideShare && (
+                  <Link
+                    to={`/trips/${trip.id}`}
+                    style={{ color: "grey", fontWeight: 600 }}
+                  >
+                    Share
+                  </Link>
+                )}
+              </div>
               <div className="seats-container">
                 <span className="seats bold gray">
                   <img className="seats-icon" src={imgSeats} />

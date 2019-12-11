@@ -27,7 +27,7 @@ const LinksContainer = styled.div`
   align-items: center;
 `;
 
-function Reserved({ user }) {
+function Unreserved({ user }) {
   const { t, i18n } = useTranslation();
   const { tripId } = useParams();
   const [trip, setTrip] = useState();
@@ -111,4 +111,4 @@ function Reserved({ user }) {
   );
 }
 
-export default connect(state => ({ user: state.user }))(Reserved);
+export default connect(state => ({ user: state.user }))(Unreserved);

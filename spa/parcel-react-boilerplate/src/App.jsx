@@ -71,7 +71,7 @@ function App({ token, user, dispatch }) {
           <Route path="/user/:userId/trip" exact component={Trip} />
           <Route path="/user/:userId" exact component={Profile} />
           <SecureRoute path="/trips/add" exact component={Add} />
-          <Route path="/trips/:id" exact component={Single} />
+          <Route path="/trips/:tripId" exact component={Single} />
           <SecureRoute
             path="/trips/:tripId/reserved"
             exact
