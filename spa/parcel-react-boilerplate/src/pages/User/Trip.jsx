@@ -101,7 +101,7 @@ const PassengerList = ({ trip }) => {
       message: t("reservation.cancel.confirmation.subtitle"),
     });
 
-  return trip.passengers.length === 0 ? null : (
+  return !trip.passengers || trip.passengers.length === 0 ? null : (
     <React.Fragment>
       <style jsx>{profileCss}</style>
       <hr />
