@@ -32,6 +32,14 @@ export const reviewTrip = async (id, reviewContent) => {
         title: "The review content has some problems",
         subtitle: "Try fixing the errors and submitting it again.",
       },
+      403: {
+        title: "You can't review this trip",
+        subtitle: "Only passengers can, sorry.",
+      },
+      404: {
+        title: "We can't find this trip",
+        subtitle: "You sure you are trying to review the correct trip?",
+      },
       409: {
         title: "You've already reviewed this trip",
         subtitle: "We'll take you back to your profile.",
@@ -43,6 +51,7 @@ export const reviewTrip = async (id, reviewContent) => {
     };
 
     throw {
+      origin: "review",
       message: errors[response.status] || errors.default,
       code: response.status,
     };
@@ -66,7 +75,35 @@ export const addReviewImage = async (id, image) => {
     { "Content-Type": null }
   ).then(res => {
     if (res.isRawResponse) {
-      // TODO: Handle specific error messages
+      const errors = {
+        400: {
+          title: "The image content has some problems",
+          subtitle: "Try uploading a valid image and submitting it again.",
+        },
+        403: {
+          title: "You can't add an image to this review",
+          subtitle: "Only the owner can, sorry.",
+        },
+        404: {
+          title: "We can't find the review",
+          subtitle:
+            "You sure you are trying to add an image to an existing review?",
+        },
+        409: {
+          title: "You've already uploaded an image for this trip",
+          subtitle: "Try reviewing some other trip!",
+        },
+        default: {
+          title: "Something went wrong",
+          subtitle: "And we don't know what it is, sorry :(.",
+        },
+      };
+
+      throw {
+        origin: "review-image",
+        message: errors[response.status] || errors.default,
+        code: response.status,
+      };
       return;
     }
     return res;

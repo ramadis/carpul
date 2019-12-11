@@ -2,18 +2,18 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { connect } from "react-redux";
 import MDSpinner from "react-md-spinner";
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useHistory } from "react-router-dom";
 import Rating from "react-rating";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import { isEmpty } from "lodash";
-import { NotificationManager } from 'react-notifications'
-
+import { NotificationManager } from "react-notifications";
 
 import { getTripById } from "../services/Trip.js";
 import { reviewTrip, addReviewImage } from "../services/Review.js";
 
+import { routes } from "../App";
 import Hero from "../components/Hero";
 import Dropzone from "../components/Dropzone";
 
@@ -24,11 +24,11 @@ import reviewItemCss from "../styles/review_item";
 
 const Field = styled.div`
   margin-top: 10px;
-`
+`;
 
 const UploadedImageContainer = styled.div`
   position: relative;
-`
+`;
 
 const RemoveImageButton = styled.button`
   position: absolute;
@@ -40,7 +40,7 @@ const RemoveImageButton = styled.button`
   width: 25px;
   background: #e36f49;
   color: white;
-`
+`;
 
 const SubmitButton = styled.button`
   width: 150px;
@@ -61,12 +61,12 @@ const SubmitButton = styled.button`
   &:hover {
     background: #e36f4a;
   }
-`
+`;
 
 const Review = ({ user }) => {
-  const { t, i18n } = useTranslation()
-  const { id: tripId } = useParams()
-  const history = useHistory()
+  const { t, i18n } = useTranslation();
+  const { id: tripId } = useParams();
+  const history = useHistory();
 
   const [image, setImage] = useState();
   const [trip, setTrip] = useState();
@@ -76,45 +76,48 @@ const Review = ({ user }) => {
   const [errors, setErrors] = useState({ clean: true });
 
   const onImageLoaded = (imageURL, imageRAW, file) => {
-    const image = new Image()
-    image.src = imageURL
+    const image = new Image();
+    image.src = imageURL;
     image.onload = () =>
       setImage({
         URL: imageURL,
         RAW: imageRAW,
         element: image,
-        file
-      })
-  }
+        file,
+      });
+  };
 
   const review = async () => {
     try {
-      setLoading(true)
-      const review = await reviewTrip(trip.id, { stars, message })
-      if (image) await addReviewImage(review.id, image)
+      setLoading(true);
+      const review = await reviewTrip(trip.id, { stars, message });
+      if (image) await addReviewImage(review.id, image);
 
-      NotificationManager.success('Review updated successfully!')
-      history.push(routes.profile(user.id))
-      setLoading(false)
+      NotificationManager.success(
+        "Review added successfully!",
+        "Thanks for leaving your mark."
+      );
+      history.push(routes.profile(user.id));
+      setLoading(false);
     } catch (error) {
-      console.error(error)
-      NotificationManager.error(error.message.subtitle, error.message.title)
-      
-      if (error.code === 409) {
-        history.push(routes.profile(user.id))
+      console.error(error);
+      NotificationManager.error(error.message.subtitle, error.message.title);
+
+      if (error.origin === "review" && error.code === 409) {
+        history.push(routes.profile(user.id));
       }
 
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    getTripById(tripId).then(setTrip)
-  }, [])
+    getTripById(tripId).then(setTrip);
+  }, []);
 
-  window.document.title = t('review.add.page_title')
+  window.document.title = t("review.add.page_title");
 
-  const isLoading = !user && !trip
+  const isLoading = !user && !trip;
 
   const Loading = (
     <React.Fragment>
@@ -122,13 +125,13 @@ const Review = ({ user }) => {
       <style jsx>{profileCss}</style>
       <style jsx>{reviewItemCss}</style>
       <style jsx>{profileHeroCss}</style>
-      <div className='flex-center spinner-class'>
+      <div className="flex-center spinner-class">
         <MDSpinner size={36} />
       </div>
     </React.Fragment>
-  )
+  );
 
-  if (isLoading) return Loading
+  if (isLoading) return Loading;
 
   return (
     <React.Fragment>
@@ -136,28 +139,28 @@ const Review = ({ user }) => {
       <style jsx>{profileCss}</style>
       <style jsx>{reviewItemCss}</style>
       <style jsx>{profileHeroCss}</style>
-      <Hero hero_message={t('review.add.hero')} user={user} />
+      <Hero hero_message={t("review.add.hero")} user={user} />
 
       {trip ? (
-        <div className='profile-form-container flex-center'>
-          <div className='new-trip-form' action='../review/${trip.id}'>
-            <h3>{t('review.add.title')}</h3>
+        <div className="profile-form-container flex-center">
+          <div className="new-trip-form" action="../review/${trip.id}">
+            <h3>{t("review.add.title")}</h3>
             <h2>
-              {t('review.add.subtitle', {
-                '0': user.first_name,
-                '1': trip.driver.first_name,
-                '2': trip.from_city,
-                '3': trip.to_city
+              {t("review.add.subtitle", {
+                "0": user.first_name,
+                "1": trip.driver.first_name,
+                "2": trip.from_city,
+                "3": trip.to_city,
               })}
             </h2>
 
-            <div className='field-container'>
-              <label path='message' className='field-label' htmlFor='message'>
-                {t('review.add.message')}
+            <div className="field-container">
+              <label path="message" className="field-label" htmlFor="message">
+                {t("review.add.message")}
               </label>
               <Field>
                 {image ? (
-                  <UploadedImageContainer className='uploaded-image-container'>
+                  <UploadedImageContainer className="uploaded-image-container">
                     <img
                       src={image.URL}
                       height={100}
@@ -183,10 +186,10 @@ const Review = ({ user }) => {
                       : setErrors({});
                   }}
                   emptySymbol={
-                    <FontAwesomeIcon icon={faStar} size='1x' color='#808080' />
+                    <FontAwesomeIcon icon={faStar} size="1x" color="#808080" />
                   }
                   fullSymbol={
-                    <FontAwesomeIcon icon={faStar} size='1x' color='#f39c12' />
+                    <FontAwesomeIcon icon={faStar} size="1x" color="#f39c12" />
                   }
                 />
                 {errors.stars ? (
@@ -242,7 +245,7 @@ const Review = ({ user }) => {
         Loading
       )}
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default connect(state => ({ user: state.user }))(Review)
+export default connect(state => ({ user: state.user }))(Review);
