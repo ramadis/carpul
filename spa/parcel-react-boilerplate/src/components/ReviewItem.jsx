@@ -73,6 +73,7 @@ const Review = ({ review }) => {
         <Link to={`/user/${review.owner.id}`}>
           <img
             width="75"
+            className="profile-image"
             height="75"
             src={review.owner.image || defaultProfile}
             alt=""

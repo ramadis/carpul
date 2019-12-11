@@ -14,7 +14,10 @@ export const getLocation = async () => {
   try {
     if ("geolocation" in navigator) {
       const currentPos = await new Promise((res, rej) =>
-        navigator.geolocation.getCurrentPosition(res, rej)
+        navigator.geolocation.getCurrentPosition(res, rej, {
+          timeout: 2 * 1000, // milliseconds
+          maximumAge: 5 * 60 * 1000, // milliseconds
+        })
       );
 
       const res = await fetch(
