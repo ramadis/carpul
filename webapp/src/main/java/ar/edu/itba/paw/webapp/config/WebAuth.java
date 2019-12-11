@@ -68,6 +68,7 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
 	            .antMatchers(HttpMethod.GET, "/api/users/{\\d+}/trips").permitAll()
 	            .antMatchers(HttpMethod.GET, "/api/users/{\\d+}/reviews").permitAll()
 	            .antMatchers(HttpMethod.GET, "/api/reviews/{\\d+}/image").permitAll()
+	            .antMatchers(HttpMethod.GET, "/api/trips/{\\d+}").permitAll()
 	            .antMatchers("/api/search**").permitAll()
 	            .antMatchers("/api/search/suggestions**").permitAll()
 				.antMatchers("/api/**").authenticated()

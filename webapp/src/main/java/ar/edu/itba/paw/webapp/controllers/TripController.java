@@ -72,7 +72,7 @@ public class TripController extends AuthController {
 		final User user = user();
 		if (trip != null) {
 			console.info("Controller: Gettingtrip from {} to {}", trip.getFrom_city(), trip.getTo_city());
-			if (trip.getDriver().equals(user)) {
+			if (user != null && trip.getDriver().equals(user)) {
 				URI uri = uriInfo.getBaseUriBuilder().path("/users/").build();
 				return Response.ok(new TripDTO(trip, uri)).build();
 			} else {
