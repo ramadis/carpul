@@ -1,8 +1,10 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { connect } from "react-redux";
 import { differenceInDays } from "date-fns";
 import styled from "styled-components";
+
+import { getProfileById } from "../services/User";
 
 const NullDropzone = styled.div``;
 
@@ -12,7 +14,23 @@ import AbstractDropzone from "./AbstractDropzone";
 
 import profileCss from "../styles/profile";
 
-const Hero = ({ user, hero_message, editable }) => {
+const ProfileImage = ({ src }) => {
+  return (
+    <Fragment>
+      <style jsx>{profileCss}</style>
+
+      <img
+        width="100"
+        height="100"
+        className="profile-image"
+        src={`${src}?hash=${Math.random()}`}
+        alt=""
+      />
+    </Fragment>
+  );
+};
+
+const Hero = ({ user, hero_message, editable, onUserUpdate }) => {
   const { t } = useTranslation();
   const editableClass = editable ? "editable" : "";
   const defaultProfileImageSrc = `https://ui-avatars.com/api/?rounded=true&size=200&background=e36f4a&color=fff&name=${
@@ -21,7 +39,7 @@ const Hero = ({ user, hero_message, editable }) => {
   const daysRegistered = differenceInDays(new Date(), new Date(user.created));
 
   const coverImage = user.cover && {
-    backgroundImage: `url(${user.cover})`,
+    backgroundImage: `url(${user.cover}?hash=${Math.random()})`,
   };
 
   const Dropzone = editable ? AbstractDropzone : NullDropzone;
@@ -29,19 +47,19 @@ const Hero = ({ user, hero_message, editable }) => {
   const onImageLoaded = callback => (imageURL, imageRAW, file) => {
     const image = new Image();
     image.src = imageURL;
-    image.onload = () =>
-      callback(user.id, {
+    image.onload = async () => {
+      await callback(user.id, {
         URL: imageURL,
         RAW: imageRAW,
         element: image,
         file,
       });
+      await getProfileById(user.id).then(onUserUpdate);
+    };
   };
 
   return (
     <React.Fragment>
-      <style jsx>{profileCss}</style>
-
       <Dropzone onLoad={onImageLoaded(updateCoverImageById)}>
         <div
           className={`profile-hero-container ${editableClass}`}
@@ -53,13 +71,7 @@ const Hero = ({ user, hero_message, editable }) => {
                 onLoad={onImageLoaded(updateProfileImageById)}
                 extra={{ noDragEventsBubbling: true }}
               >
-                <img
-                  width="100"
-                  height="100"
-                  className="profile-image"
-                  src={user.image || defaultProfileImageSrc}
-                  alt=""
-                />
+                <ProfileImage src={user.image || defaultProfileImageSrc} />
               </Dropzone>
             </div>
 

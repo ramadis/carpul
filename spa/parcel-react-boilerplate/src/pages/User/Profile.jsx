@@ -47,7 +47,6 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
   const [trips, setTrips] = useState({ data: [], loading: true });
   const [reservations, setReservations] = useState({ data: [], loading: true });
   const [histories, setHistories] = useState({ data: [], loading: true });
-
   const [user, setUser] = useState(null);
   const { userId } = useParams();
 
@@ -111,6 +110,7 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
         <React.Fragment>
           <Hero
             user={user}
+            onUserUpdate={setUser}
             hero_message={t(`${translationPrefix}.hero`, {
               user: user.first_name,
             })}
