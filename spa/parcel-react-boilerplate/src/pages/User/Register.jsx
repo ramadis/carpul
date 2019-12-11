@@ -10,6 +10,8 @@ import { loginUser } from "../../services/Auth";
 
 import { requestCatch } from "../../utils/fetch";
 
+import { routes } from "../../App";
+
 const Register = ({ user }) => {
   const { t, i18n } = useTranslation();
   const { handleSubmit, register, errors, triggerValidation } = useForm({
@@ -22,7 +24,7 @@ const Register = ({ user }) => {
   };
 
   const isLogged = !!user;
-  if (isLogged) return <Redirect to={`/user/${user.id}`} />;
+  if (isLogged) return <Redirect to={routes.profile(user.id)} />;
   return (
     <div className="flex-center full-height">
       <form onSubmit={handleSubmit(onSubmit)} className="user-form">
@@ -157,7 +159,7 @@ const Register = ({ user }) => {
         </div>
 
         <div className="actions">
-          <Link to="/login" className="create-account">
+          <Link to={routes.login} className="create-account">
             {t("user.register.login")}
           </Link>
           <button

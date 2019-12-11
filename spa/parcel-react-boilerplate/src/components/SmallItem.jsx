@@ -96,7 +96,10 @@ const SmallItem = ({ user, trip, hero_message }) => {
             </Header>
             <p style={{ margin: 0 }}>
               Driven by{" "}
-              <Link to={`/user/${trip.driver.id}`} style={{ fontWeight: 600 }}>
+              <Link
+                to={routes.profile(trip.driver.id)}
+                style={{ fontWeight: 600 }}
+              >
                 {trip.driver.first_name}
               </Link>
             </p>
@@ -156,7 +159,7 @@ const SmallItem = ({ user, trip, hero_message }) => {
               )}
             </button>
           )}
-          <Link style={{ fontWeight: 600 }} to={`/trips/${trip.id}`}>
+          <Link style={{ fontWeight: 600 }} to={routes.trip(trip.id)}>
             Share
           </Link>
         </ItemContainer>

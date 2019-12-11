@@ -12,6 +12,7 @@ import { requestCatch } from "../../utils/fetch";
 
 import { getTripById } from "../../services/Trip";
 
+import { routes } from "../../App";
 import Reservation from "../User/Reservation";
 
 import "react-add-to-calendar/dist/react-add-to-calendar.css";
@@ -87,7 +88,7 @@ function Reserved({ user }) {
           <LinksContainer>
             <Link
               className="login-button empty-button"
-              to={`/user/${user.id}`}
+              to={routes.profile(user.id)}
               style={{
                 display: "inline-block",
                 width: "auto",

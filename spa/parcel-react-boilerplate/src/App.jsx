@@ -5,7 +5,6 @@ import { NotificationContainer } from "react-notifications";
 import { Router, Route, Switch, Link, Redirect } from "react-router-dom";
 import Navbar2 from "./components/Navbar2";
 import Home from "./pages/Home";
-// import { Trips } from "./pages/Trips";
 import Review from "./pages/Review";
 import Error from "./pages/Error";
 import Search from "./pages/Search";
@@ -29,11 +28,12 @@ import history, { initializeHistory } from "./utils/routes";
 export const routes = {
   unreservedTrip: tripId => `/trips/${tripId}/unreserved`,
   reservedTrip: tripId => `/trips/${tripId}/reserved`,
-  trip: userId => `/user/${userId}/trip`,
+  trip: tripId => `/trips/${tripId}`,
   profile: userId => `/user/${userId}`,
   login: `/login`,
   register: `/register`,
   logOut: `/logout`,
+  addTrip: "/trips/add",
 };
 
 // initialize history object and routes storage
@@ -60,7 +60,6 @@ function App({ token, user, dispatch }) {
         <Navbar2 />
         <Switch>
           <Route exact path="/" component={Home} />
-          {/* <Route path="/trips" component={Trips} /> */}
           <SecureRoute path="/review/:id" component={Review} />
           <Route path="/error/:code" component={Error} />
           <Route path="/search" component={Search} />

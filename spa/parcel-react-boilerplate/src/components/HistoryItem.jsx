@@ -3,6 +3,8 @@ import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 
+import { routes } from "../App";
+
 import profileCss from "../styles/profile.js";
 import reviewItemCss from "../styles/review_item";
 
@@ -18,7 +20,7 @@ const HistoryItem = ({ history }) => {
       <style jsx>{profileCss}</style>
       <style jsx>{reviewItemCss}</style>
       <li className="review-item-container">
-        <Link to={`/user/${history.user.id}`}>
+        <Link to={routes.profile(history.user.id)}>
           <img
             width="50"
             height="50"

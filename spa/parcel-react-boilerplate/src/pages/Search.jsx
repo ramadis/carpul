@@ -123,7 +123,7 @@ const Search = ({ user }) => {
 
       <HeaderContainer>
         <SearchBar onSearch={handleSearch} />
-        <Link to="/trips/add" className="login-button inverted hard-edges">
+        <Link to={routes.addTrip} className="login-button inverted hard-edges">
           {t("search.search.create")}
         </Link>
       </HeaderContainer>
@@ -388,7 +388,7 @@ export const Trip = ({ trip, hideShare }) => {
       <style jsx>{profileCss}</style>
 
       <div className="pool-item flex-center">
-        <Link to={`/user/${trip.driver.id}`}>
+        <Link to={routes.profile(trip.driver.id)}>
           <div className="user-info flex space-around align-center column h-150">
             <div className="user-image">
               <img
@@ -514,7 +514,7 @@ export const Trip = ({ trip, hideShare }) => {
               <div className="features-container">
                 {!hideShare && (
                   <Link
-                    to={`/trips/${trip.id}`}
+                    to={routes.trip(trip.id)}
                     style={{ color: "grey", fontWeight: 600 }}
                   >
                     Share

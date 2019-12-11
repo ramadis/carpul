@@ -99,11 +99,11 @@ const Reservation = ({ t, trip, editable }) => {
               {t("user.trip.map")}
             </a>
             <div className="flex-center destiny-time map-trigger">
-              <Link to={`/trips/${trip.id}`}>Share</Link>
+              <Link to={routes.trip(trip.id)}>Share</Link>
             </div>
             <hr />
-            <a href={`/user/${trip.driver.id}`}>
-              <div href={`/user/${trip.driver.id}`}>
+            <a href={routes.profile(trip.driver.id)}>
+              <div>
                 <div className="driver">
                   <div className="driver-item-data flex-center">
                     <img

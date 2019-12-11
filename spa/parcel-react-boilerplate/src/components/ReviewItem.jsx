@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 
+import { routes } from "../App";
+
 import profileCss from "../styles/profile";
 import reviewItemCss from "../styles/review_item";
 
@@ -70,7 +72,7 @@ const Review = ({ review }) => {
       <style jsx>{profileCss}</style>
       <style jsx>{reviewItemCss}</style>
       <li className="review-item-container">
-        <Link to={`/user/${review.owner.id}`}>
+        <Link to={routes.profile(review.owner.id)}>
           <img
             width="75"
             className="profile-image"

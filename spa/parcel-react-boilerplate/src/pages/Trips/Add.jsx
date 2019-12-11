@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom";
 import { isEmpty } from "lodash";
 import { NotificationManager } from "react-notifications";
 
+import { routes } from "../../App";
 import Hero from "../../components/Hero";
 import PlacesAutocomplete from "../../components/PlacesAutocomplete";
 
@@ -54,7 +55,7 @@ function Add({ user }) {
 
     try {
       await createTrip(payload);
-      history.push(`/user/${user.id}`);
+      history.push(routes.profile(user.id));
       setTimeout(
         () =>
           NotificationManager.success(

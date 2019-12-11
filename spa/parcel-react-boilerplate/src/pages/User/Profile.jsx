@@ -22,6 +22,7 @@ import ReviewItem from "../../components/ReviewItem";
 import HistoryItem from "../../components/HistoryItem";
 import Loading from "../../components/Loading";
 
+import { routes } from "../../App";
 import TripPast from "./TripPast";
 import Trip from "./Trip";
 import Destiny from "./Reservation";
@@ -296,7 +297,7 @@ const TripsSection = ({ trips, isOwnProfile }) => {
       <SectionHeader>{t(`${translationPrefix}.trips`)}</SectionHeader>
 
       {isOwnProfile && (
-        <Link className="no-margin login-button" to="/trips/add">
+        <Link className="no-margin login-button" to={routes.addTrip}>
           {t("user.profile.new")}
         </Link>
       )}
@@ -339,7 +340,7 @@ const EmptyProfile = ({ isOwnProfile }) => {
           {t(`${translationPrefix}.empty_subtitle`)}
         </h4>
         {isOwnProfile && (
-          <Link className="login-button empty-button" to="/trips/add">
+          <Link className="login-button empty-button" to={routes.addTrip}>
             {t(`${translationPrefix}.empty_new`)}
           </Link>
         )}

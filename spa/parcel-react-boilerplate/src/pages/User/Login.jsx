@@ -8,6 +8,8 @@ import styled from "styled-components";
 
 import { loginUser } from "../../services/Auth";
 
+import { routes } from "../../App";
+
 import { getPreviousPath } from "../../utils/routes";
 
 const LoginButton = styled.button`
@@ -50,7 +52,7 @@ const Login = ({ dispatch, user }) => {
   const isLogged = !!user;
 
   return isLogged ? (
-    <Redirect to={getPreviousPath(`/user/${user.id}`)} />
+    <Redirect to={getPreviousPath(routes.profile(user.id))} />
   ) : (
     <div className="flex-center full-height">
       <form className="user-form">
@@ -94,7 +96,7 @@ const Login = ({ dispatch, user }) => {
           />
         </div>
         <div className="actions">
-          <Link to="/register" className="create-account">
+          <Link to={routes.register} className="create-account">
             {t("user.login.create")}
           </Link>
           <LoginButton type="submit" onClick={login} disabled={loading}>

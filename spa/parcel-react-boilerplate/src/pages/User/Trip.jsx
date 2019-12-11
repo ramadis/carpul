@@ -106,10 +106,10 @@ const PassengerList = ({ trip }) => {
       <style jsx>{profileCss}</style>
       <hr />
       {trip.passengers.map(passenger => (
-        <div key={passenger.id} href={`/user/${passenger.id}`}>
+        <div key={passenger.id}>
           <div className="driver">
             <div className="driver-item-data">
-              <a href={`/user/${passenger.id}`}>
+              <a href={routes.profile(passenger.id)}>
                 <img
                   width="50"
                   height="50"
@@ -291,7 +291,7 @@ const Trip = ({ trip, isOwner }) => {
                 {t("user.trip.map")}
               </a>
               <div className="flex-center destiny-time map-trigger">
-                <Link to={`/trips/${trip.id}`}>Share</Link>
+                <Link to={routes.trip(trip.id)}>Share</Link>
               </div>
             </div>
             {isOwner && <DeleteTripButton tripId={trip.id} />}
