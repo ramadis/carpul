@@ -10,6 +10,7 @@ import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { connect } from "react-redux";
 import MDSpinner from "react-md-spinner";
+import { NotificationManager } from "react-notifications";
 
 import profileHeroCss from "../../styles/profile_hero";
 import poolListCss from "../../styles/pool_list";
@@ -70,12 +71,14 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      getProfileById(userId).then(setUser);
-      isOwnProfile &&
-        getReservationsByUser(userId).then(setData(setReservations));
-      isOwnProfile && getHistoryByUser(userId).then(setData(setHistories));
-      getReviewsByUser(userId).then(setData(setReviews));
-      getTripsByUser(userId).then(setData(setTrips));
+      return Promise.all([
+        getProfileById(userId).then(setUser),
+        isOwnProfile &&
+          getReservationsByUser(userId).then(setData(setReservations)),
+        isOwnProfile && getHistoryByUser(userId).then(setData(setHistories)),
+        getReviewsByUser(userId).then(setData(setReviews)),
+        getTripsByUser(userId).then(setData(setTrips)),
+      ]);
     };
 
     setUser(null);
@@ -83,7 +86,10 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
     setHistories(webDataInitial);
     setReviews(webDataInitial);
     setTrips(webDataInitial);
-    fetchUsers();
+    fetchUsers().catch(error => {
+      console.error(error);
+      NotificationManager.error(error.message.subtitle, error.message.title);
+    });
   }, [userId]);
 
   useEffect(() => {

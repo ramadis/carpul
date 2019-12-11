@@ -2,12 +2,26 @@ import { GETwithAuth, POSTwithAuth } from "./Utils";
 import { NotificationManager } from "react-notifications";
 
 export const getReviewsByUser = async id => {
-  const reviews = await GETwithAuth(`/users/${id}/reviews`).then(res => {
-    if (res.isRawResponse) {
-      // TODO: Handle specific error messages
-      return;
+  const reviews = await GETwithAuth(`/users/${id}/reviews`).then(response => {
+    if (response.isRawResponse) {
+      const errors = {
+        404: {
+          title: "We can't find the user",
+          subtitle: "You sure you are trying to access the correct one?",
+        },
+        default: {
+          title: "Something went wrong",
+          subtitle: "And we don't know what it is, sorry :(.",
+        },
+      };
+
+      throw {
+        origin: "get-review",
+        message: errors[response.status] || errors.default,
+        code: response.status,
+      };
     }
-    return res;
+    return response;
   });
   return reviews;
 };
@@ -101,8 +115,8 @@ export const addReviewImage = async (id, image) => {
 
       throw {
         origin: "review-image",
-        message: errors[response.status] || errors.default,
-        code: response.status,
+        message: errors[res.status] || errors.default,
+        code: res.status,
       };
       return;
     }
