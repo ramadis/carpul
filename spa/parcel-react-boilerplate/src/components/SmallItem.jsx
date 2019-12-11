@@ -116,6 +116,7 @@ const SmallItem = ({ user, trip, hero_message }) => {
           {trip.reserved ? (
             <button
               className="inline-block CTA login-button main-color"
+              style={{ marginLeft: 0, marginTop: 10, marginBottom: 5 }}
               disabled={requestLoading}
               onClick={() => {
                 confirmAlert({
@@ -145,6 +146,7 @@ const SmallItem = ({ user, trip, hero_message }) => {
             <button
               className="inline-block CTA login-button"
               onClick={reserve}
+              style={{ marginLeft: 0, marginTop: 10, marginBottom: 5 }}
               disabled={requestLoading}
             >
               {requestLoading ? (
@@ -154,6 +156,9 @@ const SmallItem = ({ user, trip, hero_message }) => {
               )}
             </button>
           )}
+          <Link style={{ fontWeight: 600 }} to={`/trips/${trip.id}`}>
+            Share
+          </Link>
         </ItemContainer>
       </div>
     </Fragment>

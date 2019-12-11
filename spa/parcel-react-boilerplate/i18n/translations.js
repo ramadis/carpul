@@ -44,7 +44,7 @@ const translations = {
       },
       title: `You've unreserved your trip to {{city}}`,
       subtitle: `Not everything is lost though! May we suggest you a few other alternatives? These are trips you might enjoy.`,
-      subtitle_no_options: `Not everything is lost though! Try searching for different trips, to new places:`,
+      subtitle_no_options: `Not everything is lost though! Try searching for different trips, to new places.`,
       search: "Search for different options",
     },
   },

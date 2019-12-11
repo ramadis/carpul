@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { connect } from "react-redux";
 import MDSpinner from "react-md-spinner";
 import styled from "styled-components";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useHistory } from "react-router-dom";
 import Confetti from "react-confetti";
 import AddToCalendar from "react-add-to-calendar";
 
@@ -34,11 +34,15 @@ function Reserved({ user }) {
   const { t, i18n } = useTranslation();
   const { tripId } = useParams();
   const [trip, setTrip] = useState();
+  const history = useHistory();
 
   useEffect(() => {
     getTripById(tripId)
       .then(setTrip)
-      .catch(requestCatch);
+      .catch(e => {
+        requestCatch(e);
+        history.push("/404");
+      });
   }, []);
 
   const isLoading = !user || !trip;

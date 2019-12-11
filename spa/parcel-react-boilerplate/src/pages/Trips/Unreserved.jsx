@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { connect } from "react-redux";
 import MDSpinner from "react-md-spinner";
 import styled from "styled-components";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useHistory } from "react-router-dom";
 import Confetti from "react-confetti";
 import AddToCalendar from "react-add-to-calendar";
 
@@ -31,6 +31,7 @@ function Unreserved({ user }) {
   const { t, i18n } = useTranslation();
   const { tripId } = useParams();
   const [trip, setTrip] = useState();
+  const history = useHistory();
   const [suggestions, setSuggestions] = useState([]);
   const [isLoading, setLoading] = useState(true);
 
@@ -48,6 +49,7 @@ function Unreserved({ user }) {
         setLoading(false);
       } catch (error) {
         requestCatch(error);
+        history.push("/404");
         setLoading(false);
       }
     };
