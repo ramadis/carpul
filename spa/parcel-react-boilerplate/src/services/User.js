@@ -34,10 +34,7 @@ export const getProfileById = async id => {
 
 export const getProfile = async () => {
   const user = await GETwithAuth("/users").then(res => {
-    if (res.isRawResponse) {
-      // TODO: Handle specific error messages
-      return;
-    }
+    if (res.isRawResponse) return;
     return res;
   });
 
@@ -149,10 +146,27 @@ export const updateProfileImageById = async (id, image) => {
 export const signupUser = async profile => {
   const user = await POSTwithAuth("/users", profile).then(res => {
     if (res.isRawResponse) {
-      // TODO: Handle specific error messages
-      return;
+      const errors = {
+        400: {
+          title: "The signup form has some problems",
+          subtitle: "Try fixing the issues and submitting it again.",
+        },
+        409: {
+          title: "An user with that email already exists",
+          subtitle: "Try using a different email to access Carpul",
+        },
+        default: {
+          title: "Something went wrong",
+          subtitle: "And we don't know what it is, sorry :(.",
+        },
+      };
+
+      throw {
+        origin: "signup",
+        message: errors[res.status] || errors.default,
+        code: res.status,
+      };
     }
-    return res;
   });
   return user;
 };
@@ -162,10 +176,7 @@ export const updateProfile = async profile => {
     `/users/${userid()}/profile`,
     profile
   ).then(res => {
-    if (res.isRawResponse) {
-      // TODO: Handle specific error messages
-      return;
-    }
+    if (res.isRawResponse) return;
     return res;
   });
 

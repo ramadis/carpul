@@ -8,6 +8,8 @@ import useForm from "react-hook-form";
 import { signupUser } from "../../services/User";
 import { loginUser } from "../../services/Auth";
 
+import { requestCatch } from "../../utils/fetch";
+
 const Register = ({ user }) => {
   const { t, i18n } = useTranslation();
   const { handleSubmit, register, errors, triggerValidation } = useForm({
@@ -15,7 +17,7 @@ const Register = ({ user }) => {
   });
 
   const onSubmit = async values => {
-    await signupUser(values);
+    await signupUser(values).catch(requestCatch);
     await loginUser(values.username, values.password);
   };
 
