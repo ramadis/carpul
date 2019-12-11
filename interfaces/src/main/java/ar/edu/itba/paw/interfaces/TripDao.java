@@ -16,7 +16,7 @@ public interface TripDao {
 	Reservation reserveTrip(Integer tripId, User user);
 	void delete(Integer tripId, User user);
 	void unreserveTrip(Integer tripId, User user);
-	List<Reservation> getReservationsByUser(User user, Pagination pagination);
+	List<Reservation> getReservationsByUser(User user, Pagination pagination, Boolean exlcudeReviewed);
 	Boolean areReservationConflicts(Trip trip, User user);
 	Boolean areDrivingConflicts(Trip trip, User user);
 	List<Trip> findByRoute(Search search, Pagination pagination, User driver);

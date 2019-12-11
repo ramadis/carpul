@@ -206,6 +206,7 @@ public class UserController extends AuthController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getReservations(@PathParam("id") final int id,
 			@DefaultValue("0") @QueryParam("page") int page,
+			@DefaultValue("true") @QueryParam("exclude_reviewed") Boolean excludeReviewed,
 			@DefaultValue("3") @QueryParam("per_page") int perPage) {
 		console.info("Controller: Getting reservations for user with id: {}", id);
 		
@@ -213,7 +214,7 @@ public class UserController extends AuthController {
 		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "the user does not exist")).build();
 		
 		// Search trips belonging to a given user
-		List<Trip> trips = ts.getReservedTrips(user, new Pagination(page, perPage));
+		List<Trip> trips = ts.getReservedTrips(user, new Pagination(page, perPage), excludeReviewed);
 
 		if (trips == null || trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 		

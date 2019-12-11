@@ -13,7 +13,7 @@ public interface TripService {
 	Trip findById(Integer tripId);
 	List<Trip> findByRoute(Search search, Pagination pagination, User driver);
 	List<Trip> getUserTrips(User user, Pagination pagination);
-	List<Trip> getReservedTrips(User user, Pagination pagination);
+	List<Trip> getReservedTrips(User user, Pagination pagination, Boolean exlcudeReviewed);
 	List<Trip> getSuggestions(String origin, Pagination pagination, User driver);
 	Boolean areTimeConflicts(Trip trip, User user);
 	Reservation reserve(Integer tripId, User user);

@@ -46,8 +46,8 @@ public class TripServiceImpl implements TripService {
 		return trip;
 	}
 
-	public List<Trip> getReservedTrips(User user, Pagination pagination) {
-		List<Reservation> reserves = tripDao.getReservationsByUser(user, pagination);
+	public List<Trip> getReservedTrips(User user, Pagination pagination, Boolean exlcudeReviewed) {
+		List<Reservation> reserves = tripDao.getReservationsByUser(user, pagination, exlcudeReviewed);
 		// TODO: ver si va este filter
 		return reserves.stream().map(reservation -> reservation.getTrip()).collect(Collectors.toList());
 	}
