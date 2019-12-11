@@ -1,3 +1,5 @@
+import { NotificationManager } from "react-notifications";
+
 export const query = params =>
   "?" +
     Object.keys(params)
