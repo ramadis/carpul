@@ -40,7 +40,7 @@ const EarningSection = ({ trip }) => {
   );
 };
 
-const Button = styled.button`
+export const Button = styled.button`
   position: absolute;
   top: 10;
   right: 10;
@@ -101,7 +101,7 @@ const PassengerList = ({ trip }) => {
       <style jsx>{profileCss}</style>
       <hr />
       {trip.passengers.map(passenger => (
-        <div href={`/user/${passenger.id}`}>
+        <div key={passenger.id} href={`/user/${passenger.id}`}>
           <div className="driver">
             <div className="driver-item-data">
               <a href={`/user/${passenger.id}`}>

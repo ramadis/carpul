@@ -1,21 +1,51 @@
 import React, { useState, useEffect } from "react";
 import { withTranslation } from "react-i18next";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import { format } from "date-fns";
+import MDSpinner from "react-md-spinner";
+import { confirmAlert } from "react-confirm-alert";
 
-import { cancelTrip } from "../../services/Trip";
-import { cancelReservation } from "../../services/Reservation";
+import { unreserveByTrip } from "../../services/Reservation";
+
+import ConfirmationModal from "../../components/ConfirmationModal";
+import { Button } from "./Trip";
+import { routes } from "../../App";
 
 import profileHeroCss from "../../styles/profile_hero";
 import poolListCss from "../../styles/pool_list";
 import profileCss from "../../styles/profile";
 import reviewItemCss from "../../styles/review_item";
 
-const Reservation = ({ t, trip }) => {
+const Reservation = ({ t, trip, editable }) => {
   const fmtetddate = format(trip.etd, "DD/MM/YYYY");
   const fmtetdtime = format(trip.etd, "HH:mm");
   const fmtetadate = format(trip.eta, "DD/MM/YYYY");
   const fmtetatime = format(trip.eta, "HH:mm");
+  const [requestLoading, setRequestLoading] = useState(false);
+  const history = useHistory();
+
+  const unreserve = async () => {
+    setRequestLoading(true);
+    await unreserveByTrip(trip.id);
+    history.push(routes.unreservedTrip(trip.id));
+  };
+
+  const askUnreserve = () =>
+    confirmAlert({
+      customUI: ConfirmationModal([
+        {
+          danger: true,
+          label: t("reservation.unreserve.confirmation.unreserve"),
+          onClick: unreserve,
+        },
+        {
+          label: t("reservation.unreserve.confirmation.cancel"),
+          onClick: () => null,
+        },
+      ]),
+      title: t("reservation.unreserve.confirmation.title"),
+      message: t("reservation.unreserve.confirmation.subtitle"),
+    });
 
   return (
     <React.Fragment>
@@ -29,7 +59,7 @@ const Reservation = ({ t, trip }) => {
             <span className="destiny-cost">
               {t("reservation.cost")}
               <span className="bold" style={{ display: "inline" }}>
-                ${trip.cost * trip.occupied_seats}
+                ${trip.cost}
               </span>
             </span>
             <div className="destiny-name">{trip.to_city}</div>
@@ -88,6 +118,11 @@ const Reservation = ({ t, trip }) => {
                 </div>
               </div>
             </a>
+            {editable ? (
+              <Button onClick={askUnreserve}>
+                {requestLoading ? <MDSpinner size={16} /> : "Unreserve"}
+              </Button>
+            ) : null}
           </div>
         </li>
       </React.Fragment>

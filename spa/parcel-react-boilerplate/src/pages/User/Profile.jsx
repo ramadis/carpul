@@ -257,7 +257,11 @@ const ReservationsSection = ({ reservations }) => {
             reservation.expired ? (
               <TripPast reservation={reservation} key={reservation.id} />
             ) : (
-              <Destiny trip={reservation} key={reservation.id} />
+              <Destiny
+                trip={reservation}
+                editable={true}
+                key={reservation.id}
+              />
             )
           )}
         </List>
