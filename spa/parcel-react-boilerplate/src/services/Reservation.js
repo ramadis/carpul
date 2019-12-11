@@ -38,7 +38,7 @@ export const reserveByTrip = async id => {
           409: {
             title: "You can't reserve this trip",
             subtitle:
-              "It may be too old, full, or you may have another time conflicting trip.",
+              "It might be too old, full, you might have another time conflicting trip, or you might be the driver.",
           },
           default: {
             title: "Something went wrong",

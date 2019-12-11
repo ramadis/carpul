@@ -27,6 +27,14 @@ const LinksContainer = styled.div`
   align-items: center;
 `;
 
+const Letter = styled.span`
+  font-size: 12px;
+  color: grey;
+  letter-spacing: 2;
+  margin-bottom: 20px;
+  display: inline-block;
+`;
+
 function Single({ user }) {
   const { t, i18n } = useTranslation();
   const { tripId } = useParams();
@@ -69,6 +77,9 @@ function Single({ user }) {
         style={{ marginTop: 20, flexDirection: "column", marginBottom: 20 }}
       >
         <div className="new-trip-form">
+          {trip.driver.id === user.id ? (
+            <Letter>{t("single.letter")}</Letter>
+          ) : null}
           <h3>{t("single.title", { city: trip.to_city })}</h3>
           <h2>{t("single.subtitle")}</h2>
         </div>

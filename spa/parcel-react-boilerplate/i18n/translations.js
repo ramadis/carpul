@@ -167,6 +167,7 @@ const translations = {
     },
   },
   single: {
+    letter: "THIS IS WHAT EVERYONE WILL SEE",
     title: "This trip to {{city}} awaits you",
     subtitle:
       "Share this link with any of your friends to bring more people into this adventure",

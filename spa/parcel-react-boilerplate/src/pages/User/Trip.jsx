@@ -278,17 +278,22 @@ const Trip = ({ trip, isOwner }) => {
                 <div className="destiny-time-span">{fmtetatime}</div>
               </div>
             </div>
-            <a
-              className="destiny-time map-trigger"
-              target="iframe"
-              href={`https://www.google.com/maps/embed/v1/directions?key=AIzaSyCNS1Xx_AGiNgyperC3ovLBiTdsMlwnuZU&origin=${
-                trip.departure.latitude
-              }, ${trip.departure.longitude}&destination=${
-                trip.arrival.latitude
-              }, ${trip.arrival.longitude}`}
-            >
-              {t("user.trip.map")}
-            </a>
+            <div>
+              <a
+                className="destiny-time map-trigger"
+                target="iframe"
+                href={`https://www.google.com/maps/embed/v1/directions?key=AIzaSyCNS1Xx_AGiNgyperC3ovLBiTdsMlwnuZU&origin=${
+                  trip.departure.latitude
+                }, ${trip.departure.longitude}&destination=${
+                  trip.arrival.latitude
+                }, ${trip.arrival.longitude}`}
+              >
+                {t("user.trip.map")}
+              </a>
+              <div className="flex-center destiny-time map-trigger">
+                <Link to={`/trips/${trip.id}`}>Share</Link>
+              </div>
+            </div>
             {isOwner && <DeleteTripButton tripId={trip.id} />}
             {isOwner && <PassengerList trip={trip} />}
             {!isOwner && <ReserveButton trip={trip} />}
