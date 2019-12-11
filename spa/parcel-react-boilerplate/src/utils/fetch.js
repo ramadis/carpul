@@ -4,3 +4,8 @@ export const query = params =>
       .filter(key => params[key])
       .map(key => key + "=" + params[key])
       .join("&") || "";
+
+export const requestCatch = error => {
+  console.error(error);
+  NotificationManager.error(error.message.subtitle, error.message.title);
+};

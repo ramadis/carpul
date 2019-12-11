@@ -32,6 +32,8 @@ import { getHistoryByUser } from "../../services/History";
 import { getReviewsByUser } from "../../services/Review";
 import { getTripsByUser } from "../../services/Trip";
 
+import { requestCatch } from "../../utils/fetch";
+
 const ProfileContainer = styled.div`
   width: 100%;
   display: flex;
@@ -41,11 +43,6 @@ const ProfileContainer = styled.div`
 const setData = setter => data => setter({ data, loading: false });
 
 const webDataInitial = { data: [], loading: true };
-
-const requestCatch = error => {
-  console.error(error);
-  NotificationManager.error(error.message.subtitle, error.message.title);
-};
 
 const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
   const { t } = useTranslation();

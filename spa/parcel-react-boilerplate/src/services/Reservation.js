@@ -57,8 +57,31 @@ export const cancelReservation = async (passenger, trip) => {
     `/trips/${trip}/passengers/${passenger}`
   ).then(res => {
     if (res.isRawResponse) {
-      // TODO: Handle specific error messages
-      return;
+      const errors = {
+        403: {
+          title: "You are not allowed to cancel passengers",
+          subtitle: "Try logging in as the driver of the trip",
+        },
+        404: {
+          title: "We can't find the user or the trip",
+          subtitle:
+            "Check you are trying to kick out a valid user from a valid trip.",
+        },
+        409: {
+          title: "It's too late",
+          subtitle:
+            "You can't cancel a passenger after if the trip already ended.",
+        },
+        default: {
+          title: "Something went wrong",
+          subtitle: "And we don't know what it is, sorry :(.",
+        },
+      };
+
+      throw {
+        message: errors[res.status] || errors.default,
+        code: res.status,
+      };
     }
     return res;
   });

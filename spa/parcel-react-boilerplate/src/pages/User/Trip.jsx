@@ -14,6 +14,8 @@ import { cancelTrip } from "../../services/Trip";
 import { cancelReservation } from "../../services/Reservation";
 import { reserveByTrip, unreserveByTrip } from "../../services/Reservation";
 
+import { requestCatch } from "../../utils/fetch";
+
 import imgDelete from "../../../images/delete.png";
 import profileHeroCss from "../../styles/profile_hero";
 import poolListCss from "../../styles/pool_list";
@@ -83,7 +85,8 @@ const PassengerList = ({ trip }) => {
         {
           danger: true,
           label: t("reservation.cancel.confirmation.unreserve"),
-          onClick: () => cancelReservation(passenger.id, trip.id),
+          onClick: () =>
+            cancelReservation(passenger.id, trip.id).catch(requestCatch),
         },
         {
           label: t("reservation.cancel.confirmation.cancel"),
