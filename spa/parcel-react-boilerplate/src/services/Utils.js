@@ -41,7 +41,7 @@ module.exports = methods.reduce((pv, cv) => {
 
     if (res.ok && res.headers.get("Content-Type") === "application/json") {
       return await res.json();
-    } else if (res.status === 204) {
+    } else if (res.status === 204 || res.status === 201) {
       return "";
     }
 
