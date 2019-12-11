@@ -6,6 +6,7 @@ import MDSpinner from "react-md-spinner";
 import { useHistory, Link } from "react-router-dom";
 import { reserveByTrip, unreserveByTrip } from "../services/Reservation";
 import { confirmAlert } from "react-confirm-alert";
+import { NotificationManager } from "react-notifications";
 
 import ConfirmationModal from "../components/ConfirmationModal";
 
@@ -67,6 +68,10 @@ const SmallItem = ({ user, trip, hero_message }) => {
     setRequestLoading(true);
     try {
       await unreserveByTrip(trip.id);
+      NotificationManager.success(
+        "Continúa buscando las mejores aventuras en Carpul",
+        "Viaje desreservado con éxito"
+      );
       history.push(routes.unreservedTrip(trip.id));
     } catch (error) {
       requestCatch(error);

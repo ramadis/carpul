@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { debounce } from "lodash";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { confirmAlert } from "react-confirm-alert";
+import { NotificationManager } from "react-notifications";
 import {
   BrowserRouter as Router,
   Route,
@@ -368,6 +369,10 @@ export const Trip = ({ trip, hideShare }) => {
     setRequestLoading(true);
     try {
       await unreserveByTrip(trip.id);
+      NotificationManager.success(
+        "Continúa buscando las mejores aventuras en Carpul",
+        "Viaje desreservado con éxito"
+      );
       history.push(routes.unreservedTrip(trip.id));
     } catch (error) {
       requestCatch(error);
