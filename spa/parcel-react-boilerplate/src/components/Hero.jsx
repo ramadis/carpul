@@ -55,7 +55,9 @@ const Hero = ({ user, hero_message, editable, onUserUpdate }) => {
         element: image,
         file,
       }).catch(requestCatch);
-      await getProfileById(user.id).then(onUserUpdate);
+      await getProfileById(user.id)
+        .then(onUserUpdate)
+        .catch(requestCatch);
     };
   };
 

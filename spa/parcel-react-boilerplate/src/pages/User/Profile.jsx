@@ -73,7 +73,9 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      getProfileById(userId).then(setUser);
+      getProfileById(userId)
+        .then(setUser)
+        .catch(requestCatch);
       isOwnProfile &&
         getReservationsByUser(userId)
           .then(setData(setReservations))
