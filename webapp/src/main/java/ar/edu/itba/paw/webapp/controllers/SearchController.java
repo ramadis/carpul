@@ -52,7 +52,7 @@ public class SearchController extends AuthController {
 		Search search = new Search();
 		search.setFrom(from);
 		search.setTo(to);
-		search.setWhen(when == null ? System.currentTimeMillis() : when);
+		search.setWhen(when == null ? System.currentTimeMillis() : Math.max(System.currentTimeMillis(), when));
 		
 		// Get logged user
 		User user = user();

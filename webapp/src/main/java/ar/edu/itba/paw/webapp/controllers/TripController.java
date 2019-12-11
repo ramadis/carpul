@@ -203,7 +203,10 @@ public class TripController extends AuthController {
 		boolean hasReserved = us.getPassengers(trip).contains(loggedUser);
 		boolean isOverlapping = ts.areTimeConflicts(trip, loggedUser);
 		
-		if (isLate || isFull || isDriver || isOverlapping) return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "reservation", "the user can't reserve this trip")).build();
+		if (isLate) return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "late", "the user can't reserve this trip")).build();
+		if (isFull) return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "full", "the user can't reserve this trip")).build();
+		if (isDriver) return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "driver", "the user can't reserve this trip")).build();
+		if (isOverlapping) return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "overlapping", "the user can't reserve this trip")).build();
 		if (hasReserved) return Response.noContent().build();
 		
 		// Reserve and register trip 
@@ -253,12 +256,12 @@ public class TripController extends AuthController {
 		// Check logged user is authorized to edit the trip
 		Trip trip = ts.findById(tripId);
 		User loggedUser = user();
-		if (trip == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "Trip not found")).build();
+		if (trip == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "trip_id", "Trip not found")).build();
 		if (!trip.getDriver().equals(loggedUser)) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "id", "logged with wrong user")).build();
 		
 		// Find kicked user
 		User user = us.findById(userId);
-		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "user not found")).build();
+		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "user_id", "user not found")).build();
 		
 		// Check if it's too late
 		Date date = new Date();
