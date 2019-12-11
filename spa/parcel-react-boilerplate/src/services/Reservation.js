@@ -61,8 +61,25 @@ export const unreserveByTrip = async id => {
   const reservation = await DELETEwithAuth(`/trips/${id}/reservation`).then(
     res => {
       if (res.isRawResponse) {
-        // TODO: Handle specific error messages
-        return;
+        const errors = {
+          404: {
+            title: "We can't find the trip to reserve",
+            subtitle: "Are you sure this is a valid trip?",
+          },
+          409: {
+            title: "You can't unreserve this trip",
+            subtitle: "IT ALREADY HAPPENED MY FRIEND.",
+          },
+          default: {
+            title: "Something went wrong",
+            subtitle: "And we don't know what it is, sorry :(.",
+          },
+        };
+
+        throw {
+          message: errors[res.status] || errors.default,
+          code: res.status,
+        };
       }
       return res;
     }

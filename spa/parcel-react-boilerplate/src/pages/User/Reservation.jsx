@@ -11,6 +11,8 @@ import ConfirmationModal from "../../components/ConfirmationModal";
 import { Button } from "./Trip";
 import { routes } from "../../App";
 
+import { requestCatch } from "../../utils/fetch";
+
 import profileHeroCss from "../../styles/profile_hero";
 import poolListCss from "../../styles/pool_list";
 import profileCss from "../../styles/profile";
@@ -26,8 +28,13 @@ const Reservation = ({ t, trip, editable }) => {
 
   const unreserve = async () => {
     setRequestLoading(true);
-    await unreserveByTrip(trip.id);
-    history.push(routes.unreservedTrip(trip.id));
+    try {
+      await unreserveByTrip(trip.id);
+      history.push(routes.unreservedTrip(trip.id));
+    } catch (error) {
+      requestCatch(error);
+      setRequestLoading(false);
+    }
   };
 
   const askUnreserve = () =>
