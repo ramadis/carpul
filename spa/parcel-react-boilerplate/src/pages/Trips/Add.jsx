@@ -5,7 +5,9 @@ import { addHours } from "date-fns";
 import MDSpinner from "react-md-spinner";
 import DatePicker from "react-datepicker";
 import useForm from "react-hook-form";
+import { useHistory } from "react-router-dom";
 import { isEmpty } from "lodash";
+import { NotificationManager } from "react-notifications";
 
 import Hero from "../../components/Hero";
 import PlacesAutocomplete from "../../components/PlacesAutocomplete";
@@ -27,6 +29,7 @@ function Add({ user }) {
   const [ETDdirty, setETDdirty] = useState(false);
   const [from, setFrom] = useState({});
   const [to, setTo] = useState({});
+  const history = useHistory();
   const { handleSubmit, register, errors, triggerValidation } = useForm({
     mode: "onChange",
   });
@@ -49,8 +52,21 @@ function Add({ user }) {
       eta_longitude: Number(to.position.longitude),
     };
 
-    await createTrip(payload);
-    alert("Trip created");
+    try {
+      await createTrip(payload);
+      history.push(`/user/${user.id}`);
+      setTimeout(
+        () =>
+          NotificationManager.success(
+            "Pack your bags and get ready to meet some cool people.",
+            "Your trip is ready!"
+          ),
+        500
+      );
+    } catch (error) {
+      console.error(error);
+      NotificationManager.error(error.message.subtitle, error.message.title);
+    }
   };
 
   const checkErrors = err => {

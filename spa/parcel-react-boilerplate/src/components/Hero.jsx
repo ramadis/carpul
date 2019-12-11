@@ -23,7 +23,7 @@ const ProfileImage = ({ src }) => {
         width="100"
         height="100"
         className="profile-image"
-        src={`${src}?hash=${Math.random()}`}
+        src={`${src}`}
         alt=""
       />
     </Fragment>
@@ -39,7 +39,7 @@ const Hero = ({ user, hero_message, editable, onUserUpdate }) => {
   const daysRegistered = differenceInDays(new Date(), new Date(user.created));
 
   const coverImage = user.cover && {
-    backgroundImage: `url(${user.cover}?hash=${Math.random()})`,
+    backgroundImage: `url(${user.cover})`,
   };
 
   const Dropzone = editable ? AbstractDropzone : NullDropzone;

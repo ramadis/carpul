@@ -39,6 +39,10 @@ export const routes = {
 // initialize history object and routes storage
 initializeHistory(window.location);
 
+const RedirectingRoute = ({ to = "/login" }) => {
+  return <Redirect to={to} />;
+};
+
 function App({ token, user, dispatch }) {
   const loadSession = async () => {
     if (token && !user) {
@@ -46,6 +50,8 @@ function App({ token, user, dispatch }) {
       dispatch({ type: "USER_LOADED", user });
     }
   };
+
+  const SecureRoute = user ? Route : RedirectingRoute;
 
   loadSession();
   return (
@@ -55,7 +61,7 @@ function App({ token, user, dispatch }) {
         <Switch>
           <Route exact path="/" component={Home} />
           {/* <Route path="/trips" component={Trips} /> */}
-          <Route path="/review/:id" component={Review} />
+          <SecureRoute path="/review/:id" component={Review} />
           <Route path="/error/:code" component={Error} />
           <Route path="/search" component={Search} />
           <Route path="/login" exact component={Login} />
@@ -64,17 +70,21 @@ function App({ token, user, dispatch }) {
           <Route path="/user/trip_past" component={TripPast} />
           <Route path="/user/:userId/trip" exact component={Trip} />
           <Route path="/user/:userId" exact component={Profile} />
-          <Route path="/trips/add" exact component={Add} />
+          <SecureRoute path="/trips/add" exact component={Add} />
           <Route path="/trips/:id" exact component={Single} />
-          <Route path="/trips/:tripId/reserved" exact component={Reserved} />
-          <Route
+          <SecureRoute
+            path="/trips/:tripId/reserved"
+            exact
+            component={Reserved}
+          />
+          <SecureRoute
             path="/trips/:tripId/unreserved"
             exact
             component={Unreserved}
           />
           <Route component={() => <Redirect to="/error/404" />} />
         </Switch>
-        <NotificationContainer />
+        <NotificationContainer leaveTimeout={1000} />
       </React.Fragment>
     </Router>
   );
