@@ -10,6 +10,7 @@ import AddToCalendar from "react-add-to-calendar";
 import { useWindowSize } from "../../utils/hooks";
 import { requestCatch } from "../../utils/fetch";
 
+import { routes } from "../../services/Routes";
 import { getTripById } from "../../services/Trip";
 import { search } from "../../services/Search";
 
@@ -89,7 +90,10 @@ function Single({ user }) {
           </div>
           <Link
             className="login-button empty-button"
-            to={`/`}
+            to={routes.search({
+              to: { city: trip.to_city },
+              from: { city: "" },
+            })}
             style={{
               display: "inline-block",
               width: "auto",
