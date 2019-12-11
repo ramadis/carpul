@@ -42,6 +42,11 @@ const setData = setter => data => setter({ data, loading: false });
 
 const webDataInitial = { data: [], loading: true };
 
+const requestCatch = error => {
+  console.error(error);
+  NotificationManager.error(error.message.subtitle, error.message.title);
+};
+
 const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
   const { t } = useTranslation();
   const [reviews, setReviews] = useState({ data: [], loading: true });
@@ -71,14 +76,19 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      return Promise.all([
-        getProfileById(userId).then(setUser),
-        isOwnProfile &&
-          getReservationsByUser(userId).then(setData(setReservations)),
-        isOwnProfile && getHistoryByUser(userId).then(setData(setHistories)),
-        getReviewsByUser(userId).then(setData(setReviews)),
-        getTripsByUser(userId).then(setData(setTrips)),
-      ]);
+      getProfileById(userId).then(setUser);
+      isOwnProfile &&
+        getReservationsByUser(userId)
+          .then(setData(setReservations))
+          .catch(requestCatch);
+      isOwnProfile &&
+        getHistoryByUser(userId)
+          .then(setData(setHistories))
+          .catch(requestCatch);
+      getReviewsByUser(userId)
+        .then(setData(setReviews))
+        .catch(requestCatch);
+      getTripsByUser(userId).then(setData(setTrips));
     };
 
     setUser(null);
@@ -86,10 +96,7 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
     setHistories(webDataInitial);
     setReviews(webDataInitial);
     setTrips(webDataInitial);
-    fetchUsers().catch(error => {
-      console.error(error);
-      NotificationManager.error(error.message.subtitle, error.message.title);
-    });
+    fetchUsers();
   }, [userId]);
 
   useEffect(() => {
