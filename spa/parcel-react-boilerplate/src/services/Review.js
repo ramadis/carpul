@@ -28,10 +28,7 @@ export const getReviewsByUser = async id => {
 
 export const getReviewById = async id => {
   const review = await GETwithAuth(`/reviews/${id}`).then(res => {
-    if (res.isRawResponse) {
-      // TODO: Handle specific error messages
-      return;
-    }
+    if (res.isRawResponse) return;
     return res;
   });
   return review;

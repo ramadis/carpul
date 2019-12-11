@@ -5,10 +5,7 @@ export const search = async ({ to, from, when, page, per_page }) => {
   const results = await GETwithAuth(
     `/search${query({ to, from, when, page, per_page })}`
   ).then(res => {
-    if (res.isRawResponse) {
-      // TODO: Handle specific error messages
-      return [];
-    }
+    if (res.isRawResponse) return [];
     return res;
   });
   return results;
@@ -22,10 +19,7 @@ export const getSuggestions = async origin => {
       exclude_driver: true,
     })}`
   ).then(res => {
-    if (res.isRawResponse) {
-      // TODO: Handle specific error messages
-      return;
-    }
+    if (res.isRawResponse) return [];
     return res;
   });
   return results;

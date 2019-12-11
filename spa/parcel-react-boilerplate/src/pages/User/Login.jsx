@@ -39,8 +39,10 @@ const Login = ({ dispatch, user }) => {
     try {
       await loginUser(username, password);
     } catch (e) {
-      // TODO: Arreglar
-      NotificationManager.error("paso algo malo");
+      NotificationManager.error(
+        "The email or the password are incorrect",
+        "Try again, you may have a typo."
+      );
       setLoading(false);
     }
   };

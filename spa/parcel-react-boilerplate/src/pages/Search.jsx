@@ -98,7 +98,6 @@ const Search = ({ user }) => {
   const handleSearch = debounce(setParams, 1000);
 
   useEffect(() => {
-    // TODO: Handle errors
     setLoading(true);
     search({ to, from, when })
       .then(setTrips)
