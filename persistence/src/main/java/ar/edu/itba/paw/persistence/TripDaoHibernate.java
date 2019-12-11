@@ -146,7 +146,7 @@ public class TripDaoHibernate implements TripDao {
 
 	public List<Reservation> getReservationsByUser(User user, Pagination pagination) {
 		console.info("Persistence: Get reservations");
-		String query = "FROM Reservation r WHERE user = :user ORDER BY r.trip.etd DESC";
+		String query = "FROM Reservation r WHERE user = :user AND NOT EXISTS (FROM Review rw WHERE rw.owner = :user AND rw.trip = r.trip) ORDER BY r.trip.etd DESC";
 				
 		List<Reservation> reserves  = em.createQuery(query, Reservation.class)
 										.setParameter("user", user)
