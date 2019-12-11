@@ -188,8 +188,13 @@ const ReserveButton = ({ trip }) => {
 
   const reserve = async () => {
     setRequestLoading(true);
-    await reserveByTrip(trip.id);
-    history.push(routes.reservedTrip(trip.id));
+    try {
+      await reserveByTrip(trip.id);
+      history.push(routes.reservedTrip(trip.id));
+    } catch (error) {
+      requestCatch(error);
+      setRequestLoading(false);
+    }
   };
 
   const unreserve = async () => {

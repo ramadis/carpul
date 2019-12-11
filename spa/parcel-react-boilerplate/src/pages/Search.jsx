@@ -22,7 +22,9 @@ import { useLocation } from "react-router-dom";
 
 import { search } from "../services/search";
 import { reserveByTrip, unreserveByTrip } from "../services/Reservation";
-import { getCity } from "../services/Places.js";
+import { getCity } from "../services/Places";
+
+import { requestCatch } from "../utils/fetch";
 
 import ConfirmationModal from "../components/ConfirmationModal";
 import PlacesAutocomplete from "../components/PlacesAutocomplete";
@@ -353,8 +355,13 @@ export const Trip = ({ trip }) => {
 
   const reserve = async () => {
     setRequestLoading(true);
-    await reserveByTrip(trip.id);
-    history.push(routes.reservedTrip(trip.id));
+    try {
+      await reserveByTrip(trip.id);
+      history.push(routes.reservedTrip(trip.id));
+    } catch (error) {
+      requestCatch(error);
+      setRequestLoading(false);
+    }
   };
 
   const unreserve = async () => {

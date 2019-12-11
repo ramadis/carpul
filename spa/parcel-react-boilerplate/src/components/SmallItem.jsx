@@ -11,6 +11,8 @@ import ConfirmationModal from "../components/ConfirmationModal";
 
 import { routes } from "../App";
 
+import { requestCatch } from "../utils/fetch";
+
 import "react-confirm-alert/src/react-confirm-alert.css";
 import profileHeroCss from "../styles/profile_hero";
 import poolListCss from "../styles/pool_list";
@@ -52,8 +54,13 @@ const SmallItem = ({ user, trip, hero_message }) => {
 
   const reserve = async () => {
     setRequestLoading(true);
-    await reserveByTrip(trip.id);
-    history.push(routes.reservedTrip(trip.id));
+    try {
+      await reserveByTrip(trip.id);
+      history.push(routes.reservedTrip(trip.id));
+    } catch (error) {
+      requestCatch(error);
+      setRequestLoading(false);
+    }
   };
 
   const unreserve = async () => {
