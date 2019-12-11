@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { useParams, Link, useHistory } from "react-router-dom";
 import Confetti from "react-confetti";
 import AddToCalendar from "react-add-to-calendar";
+import { NotificationManager } from "react-notifications";
 
 import { useWindowSize } from "../../utils/hooks";
 import { requestCatch } from "../../utils/fetch";
@@ -60,6 +61,24 @@ function Reserved({ user }) {
   );
 
   if (isLoading) return Loading;
+
+  if (trip.driver.id === user.id) {
+    NotificationManager.error(
+      "We brought you back home anyway",
+      "You can't reserve your own trips"
+    );
+    history.push(routes.profile(user.id));
+    return null;
+  }
+
+  if (!trip.reserved) {
+    NotificationManager.error(
+      "Try reserving it first!",
+      "You haven't reserved that trip yet"
+    );
+    history.push(routes.trip(trip.id));
+    return null;
+  }
 
   return (
     <React.Fragment>

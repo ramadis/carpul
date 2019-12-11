@@ -4,8 +4,7 @@ import { connect } from "react-redux";
 import MDSpinner from "react-md-spinner";
 import styled from "styled-components";
 import { useParams, Link, useHistory } from "react-router-dom";
-import Confetti from "react-confetti";
-import AddToCalendar from "react-add-to-calendar";
+import { NotificationManager } from "react-notifications";
 
 import { useWindowSize } from "../../utils/hooks";
 import { requestCatch } from "../../utils/fetch";
@@ -13,6 +12,7 @@ import { requestCatch } from "../../utils/fetch";
 import { getTripById } from "../../services/Trip";
 import { search } from "../../services/Search";
 
+import { routes } from "../../App";
 import Reservation from "../User/Reservation";
 import { Trip } from "../Search";
 
@@ -70,6 +70,24 @@ function Unreserved({ user }) {
   );
 
   if (showLoading) return Loading;
+
+  if (trip.driver.id === user.id) {
+    NotificationManager.error(
+      "We brought you back home anyway",
+      "You can't unreserve your own trips"
+    );
+    history.push(routes.profile(user.id));
+    return null;
+  }
+
+  if (trip.reserved) {
+    NotificationManager.error(
+      "Here, check your reservation details",
+      "You didn't unreserve this tripy yet!"
+    );
+    history.push(routes.reservedTrip(trip.id));
+    return null;
+  }
 
   return (
     <React.Fragment>
