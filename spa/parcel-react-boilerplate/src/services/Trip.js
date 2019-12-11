@@ -43,8 +43,22 @@ export const getTripById = async id => {
 export const getTripsByUser = async id => {
   const trips = await GETwithAuth(`/users/${id}/trips`).then(res => {
     if (res.isRawResponse) {
-      // TODO: Handle specific error messages
-      return;
+      const errors = {
+        404: {
+          title: "We can't find the user",
+          subtitle: "You sure you are trying to access an existing user?",
+        },
+        default: {
+          title: "Something went wrong",
+          subtitle: "And we don't know what it is, sorry :(.",
+        },
+      };
+
+      throw {
+        origin: "getTripsByUser",
+        message: errors[res.status] || errors.default,
+        code: res.status,
+      };
     }
     return res;
   });

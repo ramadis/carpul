@@ -87,7 +87,9 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
       getReviewsByUser(userId)
         .then(setData(setReviews))
         .catch(requestCatch);
-      getTripsByUser(userId).then(setData(setTrips));
+      getTripsByUser(userId)
+        .then(setData(setTrips))
+        .catch(requestCatch);
     };
 
     setUser(null);
