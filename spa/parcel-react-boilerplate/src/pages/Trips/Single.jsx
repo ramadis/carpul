@@ -51,7 +51,7 @@ function Single({ user }) {
     fetches();
   }, []);
 
-  const isLoading = !user || !trip;
+  const isLoading = !trip;
   const Loading = (
     <React.Fragment>
       <style jsx>{poolListCss}</style>
@@ -77,7 +77,7 @@ function Single({ user }) {
         style={{ marginTop: 20, flexDirection: "column", marginBottom: 20 }}
       >
         <div className="new-trip-form">
-          {trip.driver.id === user.id ? (
+          {user && trip.driver.id === user.id ? (
             <Letter>{t("single.letter")}</Letter>
           ) : null}
           <h3>{t("single.title", { city: trip.to_city })}</h3>
