@@ -77,7 +77,7 @@ public class TripController extends AuthController {
 				return Response.ok(new TripDTO(trip, uri)).build();
 			} else {
 				final URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
-				return Response.ok(new UnauthTripDTO(trip, userUri)).build();
+				return Response.ok(new UnauthTripDTO(trip, user, userUri)).build();
 			}
 		} else {
 			return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "Trip not found")).build();
