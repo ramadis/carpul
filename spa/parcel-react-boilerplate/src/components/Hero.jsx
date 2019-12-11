@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { connect } from "react-redux";
 import { differenceInDays } from "date-fns";
 import styled from "styled-components";
+import { NotificationManager } from "react-notifications";
 
 import { getProfileById } from "../services/User";
 import { updateCoverImageById, updateProfileImageById } from "../services/User";
@@ -58,6 +59,10 @@ const Hero = ({ user, hero_message, editable, onUserUpdate }) => {
       await getProfileById(user.id)
         .then(onUserUpdate)
         .catch(requestCatch);
+      NotificationManager.success(
+        "Perfect to let other adventurers to get to know you",
+        "Image updated successfully"
+      );
     };
   };
 
