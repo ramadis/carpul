@@ -10,7 +10,7 @@ import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 
-public class ReservationDTO {
+public class UnauthTripDTO {
 	private Integer id;
 	private Timestamp etd;
 	private Timestamp eta;
@@ -27,15 +27,15 @@ public class ReservationDTO {
 	private Boolean reviewed;
 	private Integer available_seats;
 	
-	public ReservationDTO() {}
+	public UnauthTripDTO() {}
 	
-	public ReservationDTO(Trip trip, User loggedUser, URI uri) {
+	public UnauthTripDTO(Trip trip, User loggedUser, URI uri) {
 		this(trip, uri);
 		this.reserved = trip.getPassengers().contains(loggedUser);
 		this.reviewed = expired && trip.getReviews().stream().map(review -> review.getOwner()).collect(Collectors.toList()).contains(loggedUser);
 	}
 	
-	public ReservationDTO(Trip trip, URI uri) {
+	public UnauthTripDTO(Trip trip, URI uri) {
 		this.id = trip.getId();
 		this.etd = trip.getEtd();
 		this.eta = trip.getEta();

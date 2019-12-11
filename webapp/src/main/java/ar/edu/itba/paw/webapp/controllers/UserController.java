@@ -34,7 +34,7 @@ import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.webapp.DTO.ReviewDTO;
 import ar.edu.itba.paw.webapp.DTO.ErrorDTO;
 import ar.edu.itba.paw.webapp.DTO.HistoryDTO;
-import ar.edu.itba.paw.webapp.DTO.ReservationDTO;
+import ar.edu.itba.paw.webapp.DTO.UnauthTripDTO;
 import ar.edu.itba.paw.webapp.DTO.TripDTO;
 import ar.edu.itba.paw.webapp.DTO.UserDTO;
 import ar.edu.itba.paw.webapp.forms.ImageForm;
@@ -155,7 +155,7 @@ public class UserController extends AuthController {
 			return Response.ok(tripDTOs).build();
 		} else {
 			final URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
-			List<ReservationDTO> tripDTOs = trips.stream().map(trip -> new ReservationDTO(trip, loggedUser, userUri)).collect(Collectors.toList());
+			List<UnauthTripDTO> tripDTOs = trips.stream().map(trip -> new UnauthTripDTO(trip, loggedUser, userUri)).collect(Collectors.toList());
 			return Response.ok(tripDTOs).build();
 		}
 	}
@@ -220,7 +220,7 @@ public class UserController extends AuthController {
 		
 		// Return trips owned by the user with the param id
 		final URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
-		List<ReservationDTO> tripDTOs = trips.stream().map(trip -> new ReservationDTO(trip, user, userUri)).collect(Collectors.toList());
+		List<UnauthTripDTO> tripDTOs = trips.stream().map(trip -> new UnauthTripDTO(trip, user, userUri)).collect(Collectors.toList());
 		return Response.ok(tripDTOs).build();
 	}
 	

@@ -24,7 +24,7 @@ import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.models.Pagination;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
-import ar.edu.itba.paw.webapp.DTO.ReservationDTO;
+import ar.edu.itba.paw.webapp.DTO.UnauthTripDTO;
 import ar.edu.itba.paw.webapp.DTO.TripDTO;
 import ar.edu.itba.paw.models.User;
 
@@ -58,7 +58,7 @@ public class SearchController extends AuthController {
 		User user = user();
 		
 		// Get trips to this search
-		List<ReservationDTO> tripDTOs = new ArrayList<>();
+		List<UnauthTripDTO> tripDTOs = new ArrayList<>();
 		List<Trip> trips = ts.findByRoute(search, new Pagination(page, perPage), excludeDriver ? user : null);
 		
 		// If no trips at all. It's empty.
@@ -66,7 +66,7 @@ public class SearchController extends AuthController {
 
 		// Generate DTOs
 		final URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
-		for(Trip t: trips) tripDTOs.add(new ReservationDTO(t, user, userUri));
+		for(Trip t: trips) tripDTOs.add(new UnauthTripDTO(t, user, userUri));
 		return Response.ok(tripDTOs).build();
 	}
 	
@@ -81,7 +81,7 @@ public class SearchController extends AuthController {
 		User user = user();
 
 		// Get trips to this search
-		List<ReservationDTO> tripDTOs = new ArrayList<>();
+		List<UnauthTripDTO> tripDTOs = new ArrayList<>();
 		List<Trip> trips = ts.getSuggestions(origin, new Pagination(page, perPage), excludeDriver ? null : user);
 		
 		// If no trips at all. It's empty.
@@ -89,7 +89,7 @@ public class SearchController extends AuthController {
 		
 		// Generate DTOs
 		final URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
-		for(Trip t: trips) tripDTOs.add(new ReservationDTO(t, user, userUri));
+		for(Trip t: trips) tripDTOs.add(new UnauthTripDTO(t, user, userUri));
 		return Response.ok(tripDTOs).build();
 	}
 }

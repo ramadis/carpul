@@ -35,7 +35,7 @@ import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.DTO.ErrorDTO;
-import ar.edu.itba.paw.webapp.DTO.ReservationDTO;
+import ar.edu.itba.paw.webapp.DTO.UnauthTripDTO;
 import ar.edu.itba.paw.webapp.DTO.ReviewDTO;
 import ar.edu.itba.paw.webapp.DTO.TripDTO;
 import ar.edu.itba.paw.webapp.forms.ReviewForm;
@@ -77,7 +77,7 @@ public class TripController extends AuthController {
 				return Response.ok(new TripDTO(trip, uri)).build();
 			} else {
 				final URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
-				return Response.ok(new ReservationDTO(trip, userUri)).build();
+				return Response.ok(new UnauthTripDTO(trip, userUri)).build();
 			}
 		} else {
 			return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "Trip not found")).build();
