@@ -118,7 +118,6 @@ export const addReviewImage = async (id, image) => {
         message: errors[res.status] || errors.default,
         code: res.status,
       };
-      return;
     }
     return res;
   });

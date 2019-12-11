@@ -5,14 +5,15 @@ import { differenceInDays } from "date-fns";
 import styled from "styled-components";
 
 import { getProfileById } from "../services/User";
-
-const NullDropzone = styled.div``;
-
 import { updateCoverImageById, updateProfileImageById } from "../services/User";
+
+import { requestCatch } from "../utils/fetch";
 
 import AbstractDropzone from "./AbstractDropzone";
 
 import profileCss from "../styles/profile";
+
+const NullDropzone = styled.div``;
 
 const ProfileImage = ({ src }) => {
   return (
@@ -53,7 +54,7 @@ const Hero = ({ user, hero_message, editable, onUserUpdate }) => {
         RAW: imageRAW,
         element: image,
         file,
-      });
+      }).catch(requestCatch);
       await getProfileById(user.id).then(onUserUpdate);
     };
   };

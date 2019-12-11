@@ -55,8 +55,31 @@ export const updateCoverImageById = async (id, image) => {
     { "Content-Type": null }
   ).then(res => {
     if (res.isRawResponse) {
-      // TODO: Handle specific error messages
-      return;
+      const errors = {
+        400: {
+          title: "The image content has some problems",
+          subtitle: "Try uploading a valid image and submitting it again.",
+        },
+        403: {
+          title: "You can't add a cover image to this user",
+          subtitle: "Only the owner can, sorry.",
+        },
+        404: {
+          title: "We can't find the user",
+          subtitle:
+            "You sure you are trying to add an image to an existing user?",
+        },
+        default: {
+          title: "Something went wrong",
+          subtitle: "And we don't know what it is, sorry :(.",
+        },
+      };
+
+      throw {
+        origin: "cover-image",
+        message: errors[res.status] || errors.default,
+        code: res.status,
+      };
     }
     return res;
   });
@@ -77,8 +100,31 @@ export const updateProfileImageById = async (id, image) => {
     { "Content-Type": null }
   ).then(res => {
     if (res.isRawResponse) {
-      // TODO: Handle specific error messages
-      return;
+      const errors = {
+        400: {
+          title: "The image content has some problems",
+          subtitle: "Try uploading a valid image and submitting it again.",
+        },
+        403: {
+          title: "You can't add an image to this user",
+          subtitle: "Only the owner can, sorry.",
+        },
+        404: {
+          title: "We can't find the user",
+          subtitle:
+            "You sure you are trying to add an image to an existing user?",
+        },
+        default: {
+          title: "Something went wrong",
+          subtitle: "And we don't know what it is, sorry :(.",
+        },
+      };
+
+      throw {
+        origin: "profile-image",
+        message: errors[res.status] || errors.default,
+        code: res.status,
+      };
     }
     return res;
   });
