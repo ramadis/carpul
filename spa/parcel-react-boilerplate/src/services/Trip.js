@@ -54,8 +54,26 @@ export const getTripsByUser = async id => {
 export const cancelTrip = async id => {
   const trip = await DELETEwithAuth(`/trips/${id}`).then(res => {
     if (res.isRawResponse) {
-      // TODO: Handle specific error messages
-      return;
+      const errors = {
+        403: {
+          title: "You can't cancel the trip",
+          subtitle: "Only the driver of this trip can, sorry",
+        },
+        404: {
+          title: "We can't find the trip",
+          subtitle: "You sure you are trying to delete an existing trip?",
+        },
+        default: {
+          title: "Something went wrong",
+          subtitle: "And we don't know what it is, sorry :(.",
+        },
+      };
+
+      throw {
+        origin: "cancel-trip",
+        message: errors[res.status] || errors.default,
+        code: res.status,
+      };
     }
     return res;
   });

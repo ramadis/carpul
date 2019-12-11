@@ -72,7 +72,9 @@ const DeleteTripButton = ({ tripId }) => {
   const { t } = useTranslation();
 
   return (
-    <Button onClick={() => cancelTrip(tripId)}>{t("user.trip.delete")}</Button>
+    <Button onClick={() => cancelTrip(tripId).catch(requestCatch)}>
+      {t("user.trip.delete")}
+    </Button>
   );
 };
 

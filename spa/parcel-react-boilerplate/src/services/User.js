@@ -44,10 +44,7 @@ export const getProfile = async () => {
 
 export const updateProfileById = async (id, profile) => {
   const user = await PUTwithAuth(`/users/${id}/profile`, profile).then(res => {
-    if (res.isRawResponse) {
-      // TODO: Handle specific error messages
-      return;
-    }
+    if (res.isRawResponse) return;
     return res;
   });
   return user;
@@ -167,6 +164,7 @@ export const signupUser = async profile => {
         code: res.status,
       };
     }
+    return res;
   });
   return user;
 };
