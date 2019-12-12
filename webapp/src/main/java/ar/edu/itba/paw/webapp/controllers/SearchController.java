@@ -40,7 +40,7 @@ public class SearchController extends AuthController {
 	private UriInfo uriInfo;
 	
 	@GET
-	@Path("/closest")
+	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response searchClosest(@DefaultValue("") @QueryParam("from") String from,
 						   @DefaultValue("") @QueryParam("to") String to,
@@ -66,117 +66,7 @@ public class SearchController extends AuthController {
 		
 		// Get trips to this search
 		List<UnauthTripDTO> tripDTOs = new ArrayList<>();
-		List<Trip> trips = ts.searchByClosest(search, new Pagination(page, perPage), excludeDriver ? user : null);
-		
-		// If no trips at all. It's empty.
-		if (trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
-
-		// Generate DTOs
-		final URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
-		for(Trip t: trips) tripDTOs.add(new UnauthTripDTO(t, user, userUri));
-		return Response.ok(tripDTOs).build();
-	}
-	
-	@GET
-	@Path("/origin")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response searchOrigin(@DefaultValue("") @QueryParam("from") String from,
-						   @DefaultValue("") @QueryParam("to") String to,
-						   @QueryParam("arrLat") Double arrLat,
-						   @QueryParam("arrLon") Double arrLon,
-						   @QueryParam("depLat") Double depLat,
-						   @QueryParam("depLon") Double depLon,
-						   @DefaultValue("") @QueryParam("when") Long when,
-						   @DefaultValue("true") @QueryParam("exclude_driver") Boolean excludeDriver,
-						   @DefaultValue("0") @QueryParam("page") int page,
-						   @DefaultValue("5") @QueryParam("per_page") int perPage) {
-		
-		// Create a valid search model.
-		Search search = new Search();
-		search.setFrom(from);
-		search.setTo(to);
-		search.setWhen(when == null ? System.currentTimeMillis() : Math.max(System.currentTimeMillis(), when));
-		search.setArrival(new Position(arrLat, arrLon));
-		search.setDeparture(new Position(depLat, depLon));
-		
-		// Get logged user
-		User user = user();
-		
-		// Get trips to this search
-		List<UnauthTripDTO> tripDTOs = new ArrayList<>();
-		List<Trip> trips = ts.searchByOrigin(search, new Pagination(page, perPage), excludeDriver ? user : null);
-		
-		// If no trips at all. It's empty.
-		if (trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
-
-		// Generate DTOs
-		final URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
-		for(Trip t: trips) tripDTOs.add(new UnauthTripDTO(t, user, userUri));
-		return Response.ok(tripDTOs).build();
-	}
-	
-	@GET
-	@Path("/rest")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response searchRest(@DefaultValue("") @QueryParam("from") String from,
-						   @DefaultValue("") @QueryParam("to") String to,
-						   @QueryParam("arrLat") Double arrLat,
-						   @QueryParam("arrLon") Double arrLon,
-						   @QueryParam("depLat") Double depLat,
-						   @QueryParam("depLon") Double depLon,
-						   @DefaultValue("") @QueryParam("when") Long when,
-						   @DefaultValue("true") @QueryParam("exclude_driver") Boolean excludeDriver,
-						   @DefaultValue("0") @QueryParam("page") int page,
-						   @DefaultValue("5") @QueryParam("per_page") int perPage) {
-		
-		// Create a valid search model.
-		Search search = new Search();
-		search.setFrom(from);
-		search.setTo(to);
-		search.setWhen(when == null ? System.currentTimeMillis() : Math.max(System.currentTimeMillis(), when));
-		search.setArrival(new Position(arrLat, arrLon));
-		search.setDeparture(new Position(depLat, depLon));
-		
-		// Get logged user
-		User user = user();
-		
-		// Get trips to this search
-		List<UnauthTripDTO> tripDTOs = new ArrayList<>();
-		List<Trip> trips = ts.searchByRest(search, new Pagination(page, perPage), excludeDriver ? user : null);
-		
-		// If no trips at all. It's empty.
-		if (trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
-
-		// Generate DTOs
-		final URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
-		for(Trip t: trips) tripDTOs.add(new UnauthTripDTO(t, user, userUri));
-		return Response.ok(tripDTOs).build();
-	}
-
-	@GET
-	@Path("/")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response search(@DefaultValue("") @QueryParam("from") String from,
-						   @DefaultValue("") @QueryParam("to") String to,
-						   @DefaultValue("") @QueryParam("when") Long when,
-						   @DefaultValue("true") @QueryParam("exclude_driver") Boolean excludeDriver,
-						   @DefaultValue("0") @QueryParam("page") int page,
-						   @DefaultValue("5") @QueryParam("per_page") int perPage) {
-		
-		// Create a valid search model.
-		Search search = new Search();
-		search.setFrom(from);
-		search.setTo(to);
-		search.setWhen(when == null ? System.currentTimeMillis() : Math.max(System.currentTimeMillis(), when));
-		search.setArrival(new Position());
-		search.setDeparture(new Position());
-		
-		// Get logged user
-		User user = user();
-		
-		// Get trips to this search
-		List<UnauthTripDTO> tripDTOs = new ArrayList<>();
-		List<Trip> trips = ts.findByRoute(search, new Pagination(page, perPage), excludeDriver ? user : null);
+		List<Trip> trips = ts.searchTrips(search, new Pagination(page, perPage), excludeDriver ? user : null);
 		
 		// If no trips at all. It's empty.
 		if (trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();

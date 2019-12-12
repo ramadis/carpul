@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.TripDao;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,7 @@ import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.models.Pagination;
 import ar.edu.itba.paw.models.Reservation;
 import ar.edu.itba.paw.models.Search;
+import ar.edu.itba.paw.models.SearchResult;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 
@@ -64,26 +66,24 @@ public class TripServiceImpl implements TripService {
 	}
 
 	public List<Trip> getSuggestions(String origin, Pagination pagination, User driver) {
-		// TODO: improve this
 		List<Trip> trips = tripDao.getSuggestions(origin, pagination, driver);
 		return trips;
 	}
 	
-	public List<Trip> searchByClosest(Search search, Pagination pagination, User driver) {
-		return tripDao.searchByClosest(search, pagination, driver);
+	public List<Trip> searchTrips(Search search, Pagination pagination, User driver) {
+		SearchResult resultClosest = tripDao.searchByClosest(search, pagination, driver);
+		if (resultClosest.hasTrips()) return resultClosest.getResults();
+		
+		Integer pagesWithDataOrigin = (int) Math.ceil(resultClosest.getCount() / (double) pagination.getPer_page());
+		Pagination  originPagination = new Pagination(pagination.getPage() - pagesWithDataOrigin, pagination.getPer_page());
+		SearchResult resultOrigin = tripDao.searchByOrigin(search, originPagination, driver);
+		if (resultOrigin.hasTrips()) return resultOrigin.getResults();
+		
+		Integer pagesWithDataRest = (int) Math.ceil(resultOrigin.getCount() / (double) pagination.getPer_page());
+		Pagination  restPagination = new Pagination(pagination.getPage() - pagesWithDataRest - pagesWithDataOrigin, pagination.getPer_page());
+		SearchResult resultRest = tripDao.searchByRest(search, restPagination, driver);
+		if (resultRest.hasTrips()) return resultRest.getResults();
+		
+		return Collections.EMPTY_LIST;
 	}
-	
-	public List<Trip> searchByOrigin(Search search, Pagination pagination, User driver) {
-		return tripDao.searchByOrigin(search, pagination, driver);
-	}
-	
-	public List<Trip> searchByRest(Search search, Pagination pagination, User driver) {
-		return tripDao.searchByRest(search, pagination, driver);
-	}
-
-	public List<Trip> findByRoute(Search search, Pagination pagination, User driver) {
-		List<Trip> trips = tripDao.findByRoute(search, pagination, driver);
-		return trips;
-	}
-
 }

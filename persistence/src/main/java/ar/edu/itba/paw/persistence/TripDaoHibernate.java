@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.TripDao;
 import ar.edu.itba.paw.models.Pagination;
 import ar.edu.itba.paw.models.Reservation;
 import ar.edu.itba.paw.models.Search;
+import ar.edu.itba.paw.models.SearchResult;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 
@@ -109,6 +110,24 @@ public class TripDaoHibernate implements TripDao {
 		return count > 0;
 	}
 	
+	private Long executeSearchCount(String query, Search search, Pagination pagination, User driver) {
+		
+		String finalQuery = "SELECT count(t.id) " + query.replace("ORDER BY etd ASC", "");
+		TypedQuery<Long> partialQuery =  em.createQuery(finalQuery, Long.class)
+				 						   .setParameter("when", search.getWhen());
+		
+		if (query.contains(":driver")) partialQuery.setParameter("driver", driver);
+		if (query.contains(":arrLat")) partialQuery.setParameter("arrLat", search.getArrival().getLatitude());
+		if (query.contains(":arrLon")) partialQuery.setParameter("arrLon", search.getArrival().getLongitude());
+		if (query.contains(":depLat")) partialQuery.setParameter("depLat", search.getDeparture().getLatitude());
+		if (query.contains(":depLon")) partialQuery.setParameter("depLon", search.getDeparture().getLongitude());
+		if (query.contains(":maxDist")) partialQuery.setParameter("maxDist", (double) 15);
+		if (query.contains(":from")) partialQuery.setParameter("from", "%" + search.getFrom().toLowerCase() + "%");
+		if (query.contains(":to")) partialQuery.setParameter("to", "%" + search.getTo().toLowerCase() + "%");
+
+		return partialQuery.getSingleResult();
+	}
+	
 	private List<Trip> executeSearch(String query, Search search, Pagination pagination, User driver) {
 		TypedQuery<Trip> partialQuery =  em.createQuery(query, Trip.class)
 				 .setParameter("when", search.getWhen())
@@ -120,7 +139,7 @@ public class TripDaoHibernate implements TripDao {
 		if (query.contains(":arrLon")) partialQuery.setParameter("arrLon", search.getArrival().getLongitude());
 		if (query.contains(":depLat")) partialQuery.setParameter("depLat", search.getDeparture().getLatitude());
 		if (query.contains(":depLon")) partialQuery.setParameter("depLon", search.getDeparture().getLongitude());
-		if (query.contains(":maxDist")) partialQuery.setParameter("maxDist", (double) 10);
+		if (query.contains(":maxDist")) partialQuery.setParameter("maxDist", (double) 15);
 		if (query.contains(":from")) partialQuery.setParameter("from", "%" + search.getFrom().toLowerCase() + "%");
 		if (query.contains(":to")) partialQuery.setParameter("to", "%" + search.getTo().toLowerCase() + "%");
 
@@ -128,7 +147,7 @@ public class TripDaoHibernate implements TripDao {
 	}
 	
 
-	public List<Trip> searchByRest(Search search, Pagination pagination, User driver) {
+	public SearchResult searchByRest(Search search, Pagination pagination, User driver) {
 		String operatorDriver = driver == null ? "is not null" : "!= :driver";
 		String initialQuery = "FROM Trip t WHERE t.deleted = FALSE AND etd >= :when AND t.driver " + operatorDriver + " AND (SELECT count(r.id) FROM Reservation r WHERE r.trip = t) < t.seats";
 
@@ -146,10 +165,11 @@ public class TripDaoHibernate implements TripDao {
 		
 		String thirdLevelQuery = initialQuery + " AND (t NOT IN (" + secondLevelQuery + ") AND t NOT IN (" + firstLevelQuery + ")) ORDER BY etd ASC";
 		List<Trip> trips = this.executeSearch(thirdLevelQuery, search, pagination, driver);
-		return trips;
+		Long count = this.executeSearchCount(thirdLevelQuery, search, pagination, driver);
+		return new SearchResult(trips, count);
 	}
 	
-	public List<Trip> searchByOrigin(Search search, Pagination pagination, User driver) {
+	public SearchResult searchByOrigin(Search search, Pagination pagination, User driver) {
 		String operatorDriver = driver == null ? "is not null" : "!= :driver";
 		String initialQuery = "FROM Trip t WHERE t.deleted = FALSE AND etd >= :when AND t.driver " + operatorDriver + " AND (SELECT count(r.id) FROM Reservation r WHERE r.trip = t) < t.seats";
 
@@ -166,10 +186,11 @@ public class TripDaoHibernate implements TripDao {
 		secondLevelQuery += " AND t NOT IN (" + firstLevelQuery + ") ORDER BY etd ASC";
 		
 		List<Trip> trips = this.executeSearch(secondLevelQuery, search, pagination, driver);
-		return trips;
+		Long count = this.executeSearchCount(secondLevelQuery, search, pagination, driver);
+		return new SearchResult(trips, count);
 	}
 	
-	public List<Trip> searchByClosest(Search search, Pagination pagination, User driver) {
+	public SearchResult searchByClosest(Search search, Pagination pagination, User driver) {
 		String operatorDriver = driver == null ? "is not null" : "!= :driver";
 		String initialQuery = "FROM Trip t WHERE t.deleted = FALSE AND etd >= :when AND t.driver " + operatorDriver + " AND (SELECT count(r.id) FROM Reservation r WHERE r.trip = t) < t.seats";
 
@@ -181,7 +202,8 @@ public class TripDaoHibernate implements TripDao {
 		firstLevelQuery += " ORDER BY etd ASC";
 		
 		List<Trip> trips = this.executeSearch(firstLevelQuery, search, pagination, driver);
-		return trips;
+		Long count = this.executeSearchCount(firstLevelQuery, search, pagination, driver);
+		return new SearchResult(trips, count);
 	}
 
 	public List<Trip> findByRoute(Search search, Pagination pagination, User driver) {

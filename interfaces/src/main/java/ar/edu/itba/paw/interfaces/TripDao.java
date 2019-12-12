@@ -5,6 +5,7 @@ import java.util.List;
 import ar.edu.itba.paw.models.Pagination;
 import ar.edu.itba.paw.models.Reservation;
 import ar.edu.itba.paw.models.Search;
+import ar.edu.itba.paw.models.SearchResult;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 
@@ -15,9 +16,9 @@ public interface TripDao {
 	List<Trip> getSuggestions(String origin, Pagination pagination, User driver);
 	Reservation reserveTrip(Integer tripId, User user);
 	void delete(Integer tripId, User user);
-	List<Trip> searchByClosest(Search search, Pagination pagination, User driver);
-	List<Trip> searchByOrigin(Search search, Pagination pagination, User driver);
-	List<Trip> searchByRest(Search search, Pagination pagination, User driver);
+	SearchResult searchByClosest(Search search, Pagination pagination, User driver);
+	SearchResult searchByOrigin(Search search, Pagination pagination, User driver);
+	SearchResult searchByRest(Search search, Pagination pagination, User driver);
 	void unreserveTrip(Integer tripId, User user);
 	List<Reservation> getReservationsByUser(User user, Pagination pagination, Boolean exlcudeReviewed);
 	Boolean areReservationConflicts(Trip trip, User user);

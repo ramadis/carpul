@@ -28,4 +28,8 @@ public class Pagination {
 	public Integer getFirstResult() {
 		return page * per_page;
 	}
+	
+	public String toString() {
+		return "Page: " + page +"; Per page: " + per_page + " First result: " + this.getFirstResult();
+	}
 }
