@@ -98,10 +98,7 @@ const Search = ({ user }) => {
   const history = useHistory();
   const { to, from, when, page = 0 } = params;
 
-  const handleSearch = debounce(params => {
-    setParams(params);
-    console.log(params);
-  }, 1000);
+  const handleSearch = debounce(setParams, 1000);
 
   useEffect(() => {
     setLoading(true);
@@ -213,7 +210,16 @@ const encodeQueryParams = function(obj) {
 
 const SearchBar = ({ onSearch = () => null }) => {
   const { t, i18n } = useTranslation();
-  const { to, from, when, arrLat, arrLon, depLat, depLon } = useQuery();
+  const {
+    to,
+    from,
+    when,
+    arrLat,
+    arrLon,
+    depLat,
+    depLon,
+    page = 0,
+  } = useQuery();
 
   const [origin, setOrigin] = useState({
     city: from,
@@ -231,6 +237,7 @@ const SearchBar = ({ onSearch = () => null }) => {
     onSearch({
       from: origin.city,
       to: destination.city,
+      page: 0,
       when: datetime.getTime(),
       ...value,
     });
@@ -241,6 +248,7 @@ const SearchBar = ({ onSearch = () => null }) => {
     const params = {
       from: origin.city,
       to: destination.city,
+      page,
       when: datetime.getTime(),
     };
     if (origin.position) {
