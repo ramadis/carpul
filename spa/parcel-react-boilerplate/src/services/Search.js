@@ -33,17 +33,24 @@ export const search = async ({
 };
 
 export const getSuggestions = async ({ from, depLat, depLon }) => {
-  const results = await GETwithAuth(
-    `/search${query({
-      from,
-      when: new Date().getTime(),
-      depLat,
-      depLon,
-      per_page: 20,
-    })}`
-  ).then(res => {
-    if (res.isRawResponse) return [];
-    return res;
-  });
-  return results;
+  const results = [];
+  const MAX_RESULTS = 30;
+  for (let page = 0; page < 3; page++) {
+    if (results.length >= MAX_RESULTS) break;
+    const partialResults = await GETwithAuth(
+      `/search${query({
+        from,
+        when: new Date().getTime(),
+        depLat,
+        depLon,
+        page,
+        per_page: 20,
+      })}`
+    ).then(res => {
+      if (res.isRawResponse) return [];
+      return res;
+    });
+    results.push(...partialResults);
+  }
+  return results.slice(0, MAX_RESULTS);
 };
