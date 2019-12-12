@@ -96,13 +96,13 @@ const Search = ({ user }) => {
   const [params, setParams] = useState(rawParams);
   const [loading, setLoading] = useState(true);
   const history = useHistory();
-  const { to, from, when } = params;
+  const { to, from, when, page = 0 } = params;
 
   const handleSearch = debounce(setParams, 1000);
 
   useEffect(() => {
     setLoading(true);
-    search({ to, from, when })
+    search({ to, from, when, page })
       .then(setTrips)
       .finally(() => setLoading(false));
   }, [params]);
