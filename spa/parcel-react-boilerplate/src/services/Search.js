@@ -1,10 +1,30 @@
 import { GETwithAuth } from "./Utils";
 import { query } from "../utils/fetch";
 
-export const search = async ({ to, from, when, page, per_page }) => {
+export const search = async ({
+  to,
+  from,
+  when,
+  page,
+  per_page,
+  arrLat,
+  arrLon,
+  depLat,
+  depLon,
+}) => {
   const makeRequest = async (req, page = page) =>
     await GETwithAuth(
-      `${req}${query({ to, from, when, page, per_page })}`
+      `${req}${query({
+        to,
+        from,
+        when,
+        page,
+        per_page,
+        arrLat,
+        arrLon,
+        depLat,
+        depLon,
+      })}`
     ).then(res => {
       if (res.isRawResponse) return [];
       return res;

@@ -98,11 +98,14 @@ const Search = ({ user }) => {
   const history = useHistory();
   const { to, from, when, page = 0 } = params;
 
-  const handleSearch = debounce(setParams, 1000);
+  const handleSearch = debounce(params => {
+    setParams(params);
+    console.log(params);
+  }, 1000);
 
   useEffect(() => {
     setLoading(true);
-    search({ to, from, when, page })
+    search(params)
       .then(setTrips)
       .finally(() => setLoading(false));
   }, [params]);
@@ -206,10 +209,16 @@ const encodeQueryParams = function(obj) {
 
 const SearchBar = ({ onSearch = () => null }) => {
   const { t, i18n } = useTranslation();
-  const { to, from, when } = useQuery();
+  const { to, from, when, arrLat, arrLon, depLat, depLon } = useQuery();
 
-  const [origin, setOrigin] = useState({ city: from });
-  const [destination, setDestination] = useState({ city: to });
+  const [origin, setOrigin] = useState({
+    city: from,
+    position: { latitude: depLat, longitude: depLon },
+  });
+  const [destination, setDestination] = useState({
+    city: to,
+    position: { latitude: arrLat, longitude: arrLon },
+  });
   const [datetime, setDatetime] = useState(new Date(Number(when)));
 
   const searchDate = format(new Date(Number(when)), "DD/MM/YYYY HH:mm");
@@ -225,11 +234,20 @@ const SearchBar = ({ onSearch = () => null }) => {
 
   const { protocol, host, pathname } = window.location;
   if (history.pushState) {
-    const query = `?${encodeQueryParams({
+    const params = {
       from: origin.city,
       to: destination.city,
       when: datetime.getTime(),
-    })}`;
+    };
+    if (origin.position) {
+      params.depLat = origin.position.latitude;
+      params.depLon = origin.position.longitude;
+    }
+    if (destination.position) {
+      params.arrLat = destination.position.latitude;
+      params.arrLon = destination.position.longitude;
+    }
+    const query = `?${encodeQueryParams(params)}`;
     var newurl = `${protocol}//${host + pathname + query}`;
     window.history.pushState({ path: newurl }, "", newurl);
   }
@@ -248,7 +266,11 @@ const SearchBar = ({ onSearch = () => null }) => {
               selected: getCity(place),
               raw: place,
             });
-            pushSearch({ from: getCity(place) });
+            pushSearch({
+              from: getCity(place),
+              depLat: place.lat,
+              depLon: place.lon,
+            });
           }}
         >
           <SearchInput
@@ -275,7 +297,11 @@ const SearchBar = ({ onSearch = () => null }) => {
               selected: getCity(place),
               raw: place,
             });
-            pushSearch({ to: getCity(place) });
+            pushSearch({
+              to: getCity(place),
+              arrLat: place.lat,
+              arrLon: place.lon,
+            });
           }}
         >
           <SearchInput
