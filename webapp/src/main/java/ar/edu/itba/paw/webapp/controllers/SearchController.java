@@ -44,6 +44,10 @@ public class SearchController extends AuthController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response searchClosest(@DefaultValue("") @QueryParam("from") String from,
 						   @DefaultValue("") @QueryParam("to") String to,
+						   @QueryParam("arrLat") Double arrLat,
+						   @QueryParam("arrLon") Double arrLon,
+						   @QueryParam("depLat") Double depLat,
+						   @QueryParam("depLon") Double depLon,
 						   @DefaultValue("") @QueryParam("when") Long when,
 						   @DefaultValue("true") @QueryParam("exclude_driver") Boolean excludeDriver,
 						   @DefaultValue("0") @QueryParam("page") int page,
@@ -54,8 +58,8 @@ public class SearchController extends AuthController {
 		search.setFrom(from);
 		search.setTo(to);
 		search.setWhen(when == null ? System.currentTimeMillis() : Math.max(System.currentTimeMillis(), when));
-		search.setArrival(new Position());
-		search.setDeparture(new Position());
+		search.setArrival(new Position(arrLat, arrLon));
+		search.setDeparture(new Position(depLat, depLon));
 		
 		// Get logged user
 		User user = user();
@@ -78,6 +82,10 @@ public class SearchController extends AuthController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response searchOrigin(@DefaultValue("") @QueryParam("from") String from,
 						   @DefaultValue("") @QueryParam("to") String to,
+						   @QueryParam("arrLat") Double arrLat,
+						   @QueryParam("arrLon") Double arrLon,
+						   @QueryParam("depLat") Double depLat,
+						   @QueryParam("depLon") Double depLon,
 						   @DefaultValue("") @QueryParam("when") Long when,
 						   @DefaultValue("true") @QueryParam("exclude_driver") Boolean excludeDriver,
 						   @DefaultValue("0") @QueryParam("page") int page,
@@ -88,8 +96,8 @@ public class SearchController extends AuthController {
 		search.setFrom(from);
 		search.setTo(to);
 		search.setWhen(when == null ? System.currentTimeMillis() : Math.max(System.currentTimeMillis(), when));
-		search.setArrival(new Position());
-		search.setDeparture(new Position());
+		search.setArrival(new Position(arrLat, arrLon));
+		search.setDeparture(new Position(depLat, depLon));
 		
 		// Get logged user
 		User user = user();
@@ -112,6 +120,10 @@ public class SearchController extends AuthController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response searchRest(@DefaultValue("") @QueryParam("from") String from,
 						   @DefaultValue("") @QueryParam("to") String to,
+						   @QueryParam("arrLat") Double arrLat,
+						   @QueryParam("arrLon") Double arrLon,
+						   @QueryParam("depLat") Double depLat,
+						   @QueryParam("depLon") Double depLon,
 						   @DefaultValue("") @QueryParam("when") Long when,
 						   @DefaultValue("true") @QueryParam("exclude_driver") Boolean excludeDriver,
 						   @DefaultValue("0") @QueryParam("page") int page,
@@ -122,8 +134,8 @@ public class SearchController extends AuthController {
 		search.setFrom(from);
 		search.setTo(to);
 		search.setWhen(when == null ? System.currentTimeMillis() : Math.max(System.currentTimeMillis(), when));
-		search.setArrival(new Position());
-		search.setDeparture(new Position());
+		search.setArrival(new Position(arrLat, arrLon));
+		search.setDeparture(new Position(depLat, depLon));
 		
 		// Get logged user
 		User user = user();

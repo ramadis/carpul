@@ -120,9 +120,10 @@ public class TripDaoHibernate implements TripDao {
 		if (query.contains(":arrLon")) partialQuery.setParameter("arrLon", search.getArrival().getLongitude());
 		if (query.contains(":depLat")) partialQuery.setParameter("depLat", search.getDeparture().getLatitude());
 		if (query.contains(":depLon")) partialQuery.setParameter("depLon", search.getDeparture().getLongitude());
+		if (query.contains(":maxDist")) partialQuery.setParameter("maxDist", (double) 10);
 		if (query.contains(":from")) partialQuery.setParameter("from", "%" + search.getFrom().toLowerCase() + "%");
 		if (query.contains(":to")) partialQuery.setParameter("to", "%" + search.getTo().toLowerCase() + "%");
-		
+
 		return partialQuery.getResultList();
 	}
 	
@@ -132,14 +133,14 @@ public class TripDaoHibernate implements TripDao {
 		String initialQuery = "FROM Trip t WHERE t.deleted = FALSE AND etd >= :when AND t.driver " + operatorDriver + " AND (SELECT count(r.id) FROM Reservation r WHERE r.trip = t) < t.seats";
 
 		String firstLevelQuery = initialQuery;
-		if (search.getArrival().isValid()) firstLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.arrival_lat - :arrLat) / 2))) ^ 2 + cos(radians(:arrLat)) * cos(radians(t.arrival_lat)) * (sin(radians((t.arrival_lon - :arrLon) / 2))) ^ 2)) < :maxDist";
-		if (search.getDeparture().isValid()) firstLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.departure_lat - :depLat) / 2))) ^ 2 + cos(radians(:depLat)) * cos(radians(t.departure_lat)) * (sin(radians((t.departure_lon - :depLon) / 2))) ^ 2)) < :maxDist";
+		if (search.getArrival().isValid()) firstLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.arrival_lat - :arrLat) / 2))) * (sin(radians((t.arrival_lat - :arrLat) / 2))) + cos(radians(:arrLat)) * cos(radians(t.arrival_lat)) * (sin(radians((t.arrival_lon - :arrLon) / 2))) * (sin(radians((t.arrival_lon - :arrLon) / 2))) )) < :maxDist";
+		if (search.getDeparture().isValid()) firstLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.departure_lat - :depLat) / 2))) * (sin(radians((t.departure_lat - :depLat) / 2))) + cos(radians(:depLat)) * cos(radians(t.departure_lat)) * (sin(radians((t.departure_lon - :depLon) / 2))) * (sin(radians((t.departure_lon - :depLon) / 2))) )) < :maxDist";
 		if (!(search.getDeparture().isValid())) firstLevelQuery += " AND lower(t.from_city) LIKE :from";
 		if (!(search.getArrival().isValid())) firstLevelQuery += " AND lower(t.to_city) LIKE :to";
 		firstLevelQuery += " ORDER BY etd ASC";
 		
 		String secondLevelQuery = initialQuery;
-		if (search.getDeparture().isValid()) secondLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.departure_lat - :depLat) / 2))) ^ 2 + cos(radians(:depLat)) * cos(radians(t.departure_lat)) * (sin(radians((t.departure_lon - :depLon) / 2))) ^ 2)) < :maxDist";
+		if (search.getDeparture().isValid()) secondLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.departure_lat - :depLat) / 2))) * (sin(radians((t.departure_lat - :depLat) / 2))) + cos(radians(:depLat)) * cos(radians(t.departure_lat)) * (sin(radians((t.departure_lon - :depLon) / 2))) * (sin(radians((t.departure_lon - :depLon) / 2))) )) < :maxDist";
 		if (!(search.getDeparture().isValid())) secondLevelQuery += " AND lower(t.from_city) LIKE :from";
 		secondLevelQuery += " AND t NOT IN (" + firstLevelQuery + ") ORDER BY etd ASC";
 		
@@ -153,14 +154,14 @@ public class TripDaoHibernate implements TripDao {
 		String initialQuery = "FROM Trip t WHERE t.deleted = FALSE AND etd >= :when AND t.driver " + operatorDriver + " AND (SELECT count(r.id) FROM Reservation r WHERE r.trip = t) < t.seats";
 
 		String firstLevelQuery = initialQuery;
-		if (search.getArrival().isValid()) firstLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.arrival_lat - :arrLat) / 2))) ^ 2 + cos(radians(:arrLat)) * cos(radians(t.arrival_lat)) * (sin(radians((t.arrival_lon - :arrLon) / 2))) ^ 2)) < :maxDist";
-		if (search.getDeparture().isValid()) firstLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.departure_lat - :depLat) / 2))) ^ 2 + cos(radians(:depLat)) * cos(radians(t.departure_lat)) * (sin(radians((t.departure_lon - :depLon) / 2))) ^ 2)) < :maxDist";
+		if (search.getArrival().isValid()) firstLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.arrival_lat - :arrLat) / 2))) * (sin(radians((t.arrival_lat - :arrLat) / 2))) + cos(radians(:arrLat)) * cos(radians(t.arrival_lat)) * (sin(radians((t.arrival_lon - :arrLon) / 2))) * (sin(radians((t.arrival_lon - :arrLon) / 2))) )) < :maxDist";
+		if (search.getDeparture().isValid()) firstLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.departure_lat - :depLat) / 2))) * (sin(radians((t.departure_lat - :depLat) / 2))) + cos(radians(:depLat)) * cos(radians(t.departure_lat)) * (sin(radians((t.departure_lon - :depLon) / 2))) * (sin(radians((t.departure_lon - :depLon) / 2))) )) < :maxDist";
 		if (!(search.getDeparture().isValid())) firstLevelQuery += " AND lower(t.from_city) LIKE :from";
 		if (!(search.getArrival().isValid())) firstLevelQuery += " AND lower(t.to_city) LIKE :to";
 		firstLevelQuery += " ORDER BY etd ASC";
 		
 		String secondLevelQuery = initialQuery;
-		if (search.getDeparture().isValid()) secondLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.departure_lat - :depLat) / 2))) ^ 2 + cos(radians(:depLat)) * cos(radians(t.departure_lat)) * (sin(radians((t.departure_lon - :depLon) / 2))) ^ 2)) < :maxDist";
+		if (search.getDeparture().isValid()) secondLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.departure_lat - :depLat) / 2))) * (sin(radians((t.departure_lat - :depLat) / 2))) + cos(radians(:depLat)) * cos(radians(t.departure_lat)) * (sin(radians((t.departure_lon - :depLon) / 2))) * (sin(radians((t.departure_lon - :depLon) / 2))) )) < :maxDist";
 		if (!(search.getDeparture().isValid())) secondLevelQuery += " AND lower(t.from_city) LIKE :from";
 		secondLevelQuery += " AND t NOT IN (" + firstLevelQuery + ") ORDER BY etd ASC";
 		
@@ -173,8 +174,8 @@ public class TripDaoHibernate implements TripDao {
 		String initialQuery = "FROM Trip t WHERE t.deleted = FALSE AND etd >= :when AND t.driver " + operatorDriver + " AND (SELECT count(r.id) FROM Reservation r WHERE r.trip = t) < t.seats";
 
 		String firstLevelQuery = initialQuery;
-		if (search.getArrival().isValid()) firstLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.arrival_lat - :arrLat) / 2))) ^ 2 + cos(radians(:arrLat)) * cos(radians(t.arrival_lat)) * (sin(radians((t.arrival_lon - :arrLon) / 2))) ^ 2)) < :maxDist";
-		if (search.getDeparture().isValid()) firstLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.departure_lat - :depLat) / 2))) ^ 2 + cos(radians(:depLat)) * cos(radians(t.departure_lat)) * (sin(radians((t.departure_lon - :depLon) / 2))) ^ 2)) < :maxDist";
+		if (search.getArrival().isValid()) firstLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.arrival_lat - :arrLat) / 2))) * (sin(radians((t.arrival_lat - :arrLat) / 2))) + cos(radians(:arrLat)) * cos(radians(t.arrival_lat)) * (sin(radians((t.arrival_lon - :arrLon) / 2))) * (sin(radians((t.arrival_lon - :arrLon) / 2))) )) < :maxDist";
+		if (search.getDeparture().isValid()) firstLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.departure_lat - :depLat) / 2))) * (sin(radians((t.departure_lat - :depLat) / 2))) + cos(radians(:depLat)) * cos(radians(t.departure_lat)) * (sin(radians((t.departure_lon - :depLon) / 2))) * (sin(radians((t.departure_lon - :depLon) / 2))) )) < :maxDist";
 		if (!(search.getDeparture().isValid())) firstLevelQuery += " AND lower(t.from_city) LIKE :from";
 		if (!(search.getArrival().isValid())) firstLevelQuery += " AND lower(t.to_city) LIKE :to";
 		firstLevelQuery += " ORDER BY etd ASC";

@@ -24,6 +24,10 @@ public class Position {
 		this.longitude = longitude;
 	}
 	
+	public String toString() {
+		return "Lat: " + latitude + ", Lon: " + longitude;
+	}
+	
 	public Position() {};
 
 	public Position(Double latitude, Double longitude) {
