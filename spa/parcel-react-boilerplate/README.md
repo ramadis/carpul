@@ -17,6 +17,14 @@ yarn start
 yarn build
 ```
 
+# Testing
+
+Uses Jest as test runner and react-testing-library to do the assertions.
+
+```
+yarn test
+```
+
 # TODO
 
 - [x] Vista de suscribirse al viaje
