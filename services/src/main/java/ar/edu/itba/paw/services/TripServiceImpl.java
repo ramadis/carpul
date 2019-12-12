@@ -68,6 +68,18 @@ public class TripServiceImpl implements TripService {
 		List<Trip> trips = tripDao.getSuggestions(origin, pagination, driver);
 		return trips;
 	}
+	
+	public List<Trip> searchByClosest(Search search, Pagination pagination, User driver) {
+		return tripDao.searchByClosest(search, pagination, driver);
+	}
+	
+	public List<Trip> searchByOrigin(Search search, Pagination pagination, User driver) {
+		return tripDao.searchByOrigin(search, pagination, driver);
+	}
+	
+	public List<Trip> searchByRest(Search search, Pagination pagination, User driver) {
+		return tripDao.searchByRest(search, pagination, driver);
+	}
 
 	public List<Trip> findByRoute(Search search, Pagination pagination, User driver) {
 		List<Trip> trips = tripDao.findByRoute(search, pagination, driver);

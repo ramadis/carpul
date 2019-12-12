@@ -19,5 +19,8 @@ public interface TripService {
 	Reservation reserve(Integer tripId, User user);
 	void delete(Integer tripId, User user);
 	void unreserve(Integer tripId, User user);
+	List<Trip> searchByClosest(Search search, Pagination pagination, User driver);
+	List<Trip> searchByOrigin(Search search, Pagination pagination, User driver);
+	List<Trip> searchByRest(Search search, Pagination pagination, User driver);
 }
 

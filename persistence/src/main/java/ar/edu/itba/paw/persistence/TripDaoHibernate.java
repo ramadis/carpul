@@ -18,6 +18,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -106,6 +107,80 @@ public class TripDaoHibernate implements TripDao {
 							.getSingleResult();
 		
 		return count > 0;
+	}
+	
+	private List<Trip> executeSearch(String query, Search search, Pagination pagination, User driver) {
+		TypedQuery<Trip> partialQuery =  em.createQuery(query, Trip.class)
+				 .setParameter("when", search.getWhen())
+				 .setFirstResult(pagination.getFirstResult())
+				 .setMaxResults(pagination.getPer_page());
+		
+		if (query.contains(":driver")) partialQuery.setParameter("driver", driver);
+		if (query.contains(":arrLat")) partialQuery.setParameter("arrLat", search.getArrival().getLatitude());
+		if (query.contains(":arrLon")) partialQuery.setParameter("arrLon", search.getArrival().getLongitude());
+		if (query.contains(":depLat")) partialQuery.setParameter("depLat", search.getDeparture().getLatitude());
+		if (query.contains(":depLon")) partialQuery.setParameter("depLon", search.getDeparture().getLongitude());
+		if (query.contains(":from")) partialQuery.setParameter("from", "%" + search.getFrom().toLowerCase() + "%");
+		if (query.contains(":to")) partialQuery.setParameter("to", "%" + search.getTo().toLowerCase() + "%");
+		
+		return partialQuery.getResultList();
+	}
+	
+
+	public List<Trip> searchByRest(Search search, Pagination pagination, User driver) {
+		String operatorDriver = driver == null ? "is not null" : "!= :driver";
+		String initialQuery = "FROM Trip t WHERE t.deleted = FALSE AND etd >= :when AND t.driver " + operatorDriver + " AND (SELECT count(r.id) FROM Reservation r WHERE r.trip = t) < t.seats";
+
+		String firstLevelQuery = initialQuery;
+		if (search.getArrival().isValid()) firstLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.arrival_lat - :arrLat) / 2))) ^ 2 + cos(radians(:arrLat)) * cos(radians(t.arrival_lat)) * (sin(radians((t.arrival_lon - :arrLon) / 2))) ^ 2)) < :maxDist";
+		if (search.getDeparture().isValid()) firstLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.departure_lat - :depLat) / 2))) ^ 2 + cos(radians(:depLat)) * cos(radians(t.departure_lat)) * (sin(radians((t.departure_lon - :depLon) / 2))) ^ 2)) < :maxDist";
+		if (!(search.getDeparture().isValid())) firstLevelQuery += " AND lower(t.from_city) LIKE :from";
+		if (!(search.getArrival().isValid())) firstLevelQuery += " AND lower(t.to_city) LIKE :to";
+		firstLevelQuery += " ORDER BY etd ASC";
+		
+		String secondLevelQuery = initialQuery;
+		if (search.getDeparture().isValid()) secondLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.departure_lat - :depLat) / 2))) ^ 2 + cos(radians(:depLat)) * cos(radians(t.departure_lat)) * (sin(radians((t.departure_lon - :depLon) / 2))) ^ 2)) < :maxDist";
+		if (!(search.getDeparture().isValid())) secondLevelQuery += " AND lower(t.from_city) LIKE :from";
+		secondLevelQuery += " AND t NOT IN (" + firstLevelQuery + ") ORDER BY etd ASC";
+		
+		String thirdLevelQuery = initialQuery + " AND (t NOT IN (" + secondLevelQuery + ") AND t NOT IN (" + firstLevelQuery + ")) ORDER BY etd ASC";
+		List<Trip> trips = this.executeSearch(thirdLevelQuery, search, pagination, driver);
+		return trips;
+	}
+	
+	public List<Trip> searchByOrigin(Search search, Pagination pagination, User driver) {
+		String operatorDriver = driver == null ? "is not null" : "!= :driver";
+		String initialQuery = "FROM Trip t WHERE t.deleted = FALSE AND etd >= :when AND t.driver " + operatorDriver + " AND (SELECT count(r.id) FROM Reservation r WHERE r.trip = t) < t.seats";
+
+		String firstLevelQuery = initialQuery;
+		if (search.getArrival().isValid()) firstLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.arrival_lat - :arrLat) / 2))) ^ 2 + cos(radians(:arrLat)) * cos(radians(t.arrival_lat)) * (sin(radians((t.arrival_lon - :arrLon) / 2))) ^ 2)) < :maxDist";
+		if (search.getDeparture().isValid()) firstLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.departure_lat - :depLat) / 2))) ^ 2 + cos(radians(:depLat)) * cos(radians(t.departure_lat)) * (sin(radians((t.departure_lon - :depLon) / 2))) ^ 2)) < :maxDist";
+		if (!(search.getDeparture().isValid())) firstLevelQuery += " AND lower(t.from_city) LIKE :from";
+		if (!(search.getArrival().isValid())) firstLevelQuery += " AND lower(t.to_city) LIKE :to";
+		firstLevelQuery += " ORDER BY etd ASC";
+		
+		String secondLevelQuery = initialQuery;
+		if (search.getDeparture().isValid()) secondLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.departure_lat - :depLat) / 2))) ^ 2 + cos(radians(:depLat)) * cos(radians(t.departure_lat)) * (sin(radians((t.departure_lon - :depLon) / 2))) ^ 2)) < :maxDist";
+		if (!(search.getDeparture().isValid())) secondLevelQuery += " AND lower(t.from_city) LIKE :from";
+		secondLevelQuery += " AND t NOT IN (" + firstLevelQuery + ") ORDER BY etd ASC";
+		
+		List<Trip> trips = this.executeSearch(secondLevelQuery, search, pagination, driver);
+		return trips;
+	}
+	
+	public List<Trip> searchByClosest(Search search, Pagination pagination, User driver) {
+		String operatorDriver = driver == null ? "is not null" : "!= :driver";
+		String initialQuery = "FROM Trip t WHERE t.deleted = FALSE AND etd >= :when AND t.driver " + operatorDriver + " AND (SELECT count(r.id) FROM Reservation r WHERE r.trip = t) < t.seats";
+
+		String firstLevelQuery = initialQuery;
+		if (search.getArrival().isValid()) firstLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.arrival_lat - :arrLat) / 2))) ^ 2 + cos(radians(:arrLat)) * cos(radians(t.arrival_lat)) * (sin(radians((t.arrival_lon - :arrLon) / 2))) ^ 2)) < :maxDist";
+		if (search.getDeparture().isValid()) firstLevelQuery += " AND 1.60934 * 2 * 3961 * asin(sqrt((sin(radians((t.departure_lat - :depLat) / 2))) ^ 2 + cos(radians(:depLat)) * cos(radians(t.departure_lat)) * (sin(radians((t.departure_lon - :depLon) / 2))) ^ 2)) < :maxDist";
+		if (!(search.getDeparture().isValid())) firstLevelQuery += " AND lower(t.from_city) LIKE :from";
+		if (!(search.getArrival().isValid())) firstLevelQuery += " AND lower(t.to_city) LIKE :to";
+		firstLevelQuery += " ORDER BY etd ASC";
+		
+		List<Trip> trips = this.executeSearch(firstLevelQuery, search, pagination, driver);
+		return trips;
 	}
 
 	public List<Trip> findByRoute(Search search, Pagination pagination, User driver) {
