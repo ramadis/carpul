@@ -17,7 +17,7 @@ public class CacheFilter extends OncePerRequestFilter {
         if (request.getRequestURI().matches(".*/static/.*") || request.getRequestURI().matches(".*/image") || request.getRequestURI().matches(".*/cover")) {
            response.setHeader("Cache-Control", "max-age=31536000, public");
         } else {
-            response.setHeader("Cache-Control", "no-cache");
+           response.setHeader("Cache-Control", "no-cache");
         }
         filterChain.doFilter(request,response);
     }

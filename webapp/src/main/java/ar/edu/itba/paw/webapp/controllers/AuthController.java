@@ -33,11 +33,7 @@ public abstract class AuthController {
 
 		if (principal instanceof Model) return ((Model) principal).getUser();
 
-		if (principal instanceof UserDetails) {
-			username = ((UserDetails)principal).getUsername();
-		} else {
-			username = principal.toString();
-		}
+		username = principal instanceof UserDetails ? ((UserDetails) principal).getUsername() : principal.toString();
 
 		try {
 			return us.getByUsername(username);

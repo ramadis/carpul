@@ -88,7 +88,6 @@ public class TripController extends AuthController {
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	// TODO: This endpoint is working
 	public Response createTrip(final TripCreateForm form) {
 		// Check if the trip form is valid
 		if (form == null) {
@@ -161,7 +160,6 @@ public class TripController extends AuthController {
 	@DELETE
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	// TODO: This endpoint is working
 	public Response deleteTrip(@PathParam("id") final Integer tripId) {
 		console.info("Controller: Deleting trip with id {}", tripId);
 		User loggedUser = user();

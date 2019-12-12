@@ -73,9 +73,7 @@ public class ReviewDaoHibernate implements ReviewDao {
 	public Review add(Review review) {
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		review.setCreated(now);
-		
 		em.persist(review);
-		
 		return review;
 	}
 }

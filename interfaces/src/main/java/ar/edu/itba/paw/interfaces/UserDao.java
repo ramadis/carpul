@@ -11,8 +11,8 @@ public interface UserDao {
 	User getById(Integer id);
 	User findById(Integer id);
 	User getByUsername(String username);
-	Boolean exists(User user);
-	List<User> getPassengers(Trip trip);
 	User uploadProfileImage(User user, byte[] image);
 	User uploadCoverImage(User user, byte[] image);
+	Boolean exists(User user);
+	List<User> getPassengers(Trip trip);
 }

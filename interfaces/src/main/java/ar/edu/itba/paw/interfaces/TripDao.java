@@ -13,15 +13,13 @@ public interface TripDao {
 	Trip create(Trip trip, User driver);
 	Trip findById (Integer tripId);
 	List<Trip> getUserTrips(User user, Pagination pagination);
-	List<Trip> getSuggestions(String origin, Pagination pagination, User driver);
+	List<Reservation> getReservationsByUser(User user, Pagination pagination, Boolean exlcudeReviewed);
 	Reservation reserveTrip(Integer tripId, User user);
+	Boolean areReservationConflicts(Trip trip, User user);
+	Boolean areDrivingConflicts(Trip trip, User user);
 	void delete(Integer tripId, User user);
+	void unreserveTrip(Integer tripId, User user);
 	SearchResult searchByClosest(Search search, Pagination pagination, User driver);
 	SearchResult searchByOrigin(Search search, Pagination pagination, User driver);
 	SearchResult searchByRest(Search search, Pagination pagination, User driver);
-	void unreserveTrip(Integer tripId, User user);
-	List<Reservation> getReservationsByUser(User user, Pagination pagination, Boolean exlcudeReviewed);
-	Boolean areReservationConflicts(Trip trip, User user);
-	Boolean areDrivingConflicts(Trip trip, User user);
-	List<Trip> findByRoute(Search search, Pagination pagination, User driver);
 }

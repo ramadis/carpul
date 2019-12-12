@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.webapp.controllers;
 
 import java.net.URI;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +24,6 @@ import ar.edu.itba.paw.models.Position;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.webapp.DTO.UnauthTripDTO;
-import ar.edu.itba.paw.webapp.DTO.TripDTO;
 import ar.edu.itba.paw.models.User;
 
 @Path("search")
@@ -71,29 +68,6 @@ public class SearchController extends AuthController {
 		// If no trips at all. It's empty.
 		if (trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 
-		// Generate DTOs
-		final URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
-		for(Trip t: trips) tripDTOs.add(new UnauthTripDTO(t, user, userUri));
-		return Response.ok(tripDTOs).build();
-	}
-	
-	@GET
-	@Path("/suggestions")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response suggest(@DefaultValue("'") @QueryParam("origin") String origin,
-							@DefaultValue("true") @QueryParam("exclude_driver") Boolean excludeDriver,
-						 	@DefaultValue("0") @QueryParam("page") int page,
-						 	@DefaultValue("10") @QueryParam("per_page") int perPage) {
-		// Get logged user
-		User user = user();
-
-		// Get trips to this search
-		List<UnauthTripDTO> tripDTOs = new ArrayList<>();
-		List<Trip> trips = ts.getSuggestions(origin, new Pagination(page, perPage), excludeDriver ? null : user);
-		
-		// If no trips at all. It's empty.
-		if (trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
-		
 		// Generate DTOs
 		final URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
 		for(Trip t: trips) tripDTOs.add(new UnauthTripDTO(t, user, userUri));

@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.UserDao;
-import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 import org.springframework.stereotype.Repository;
@@ -72,18 +71,15 @@ public class UserDaoHibernate implements UserDao {
 	}
 
 	public User create(User user) {
-		// Add created timestamp
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		user.setCreated(now);
-		
 		em.persist(user);
-
 		return user;
 	}
 
 	@Override
 	public User getByUsername(final String username) {
-		String query = "from User as u WHERE u.username = :username";
+		String query = "FROM User u WHERE u.username = :username";
 		
 		List<User> users = em.createQuery(query, User.class)
 							 .setParameter("username", username)
@@ -103,10 +99,6 @@ public class UserDaoHibernate implements UserDao {
 
 	public List<User> getPassengers(Trip trip) {
 		List<User> passengers = trip.getReservations().stream().map((reservation) -> reservation.getUser()).collect(Collectors.toList());
-		
-		
 		return passengers == null ? new ArrayList<User>() : passengers;
 	}
-
-
 }

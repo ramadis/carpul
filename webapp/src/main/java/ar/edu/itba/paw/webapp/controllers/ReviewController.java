@@ -92,7 +92,6 @@ public class ReviewController extends AuthController {
 		console.info("Controller: Getting image for id {}", id);
 		if (review == null || review.getImage() == null) return Response.status(Status.NOT_FOUND).build();
 		
-		// TODO: Return review
 		return Response.ok(review.getImage()).build();
 	}
 }

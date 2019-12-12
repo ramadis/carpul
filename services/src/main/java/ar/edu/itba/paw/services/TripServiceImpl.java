@@ -50,7 +50,6 @@ public class TripServiceImpl implements TripService {
 
 	public List<Trip> getReservedTrips(User user, Pagination pagination, Boolean exlcudeReviewed) {
 		List<Reservation> reserves = tripDao.getReservationsByUser(user, pagination, exlcudeReviewed);
-		// TODO: ver si va este filter
 		return reserves.stream().map(reservation -> reservation.getTrip()).collect(Collectors.toList());
 	}
 
@@ -65,11 +64,6 @@ public class TripServiceImpl implements TripService {
 		tripDao.delete(tripId, user);
 	}
 
-	public List<Trip> getSuggestions(String origin, Pagination pagination, User driver) {
-		List<Trip> trips = tripDao.getSuggestions(origin, pagination, driver);
-		return trips;
-	}
-	
 	public List<Trip> searchTrips(Search search, Pagination pagination, User driver) {
 		SearchResult resultClosest = tripDao.searchByClosest(search, pagination, driver);
 		if (resultClosest.hasTrips()) return resultClosest.getResults();

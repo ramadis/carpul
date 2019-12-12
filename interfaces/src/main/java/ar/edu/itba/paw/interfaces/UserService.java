@@ -11,9 +11,9 @@ public interface UserService {
 	User getById(Integer id);
 	User getByUsername(String username);
 	User findById(Integer userId);
-	Boolean exists(User user);
-	List<User> getPassengers(Trip trip);
 	User uploadProfileImage(User user, byte[] image);
 	User uploadCoverImage(User user, byte[] image);
+	Boolean exists(User user);
+	List<User> getPassengers(Trip trip);
 }
 

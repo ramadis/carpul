@@ -112,7 +112,6 @@ public class UserController extends AuthController {
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	// TODO: This endpoint is working
 	public Response getById(@PathParam("id") final int id) {
 		console.info("Controller: Getting user with id: {}", id);
 		final User user = us.getById(id);

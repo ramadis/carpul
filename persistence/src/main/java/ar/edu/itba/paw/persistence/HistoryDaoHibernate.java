@@ -51,8 +51,4 @@ public class HistoryDaoHibernate implements HistoryDao {
 		em.persist(history);
 		return history;
 	}
-
-//	public History addDeletedHistory(Integer tripId) {
-//		// INSERT INTO histories (SELECT user_id, "DELETED" FROM trips_users WHETE trip_id = 2)
-//	}
 }
