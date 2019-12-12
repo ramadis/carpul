@@ -32,12 +32,14 @@ export const search = async ({
   return results;
 };
 
-export const getSuggestions = async origin => {
+export const getSuggestions = async ({ from, depLat, depLon }) => {
   const results = await GETwithAuth(
-    `/search/suggestions${query({
-      origin,
+    `/search${query({
+      from,
+      when: new Date().getTime(),
+      depLat,
+      depLon,
       per_page: 20,
-      exclude_driver: true,
     })}`
   ).then(res => {
     if (res.isRawResponse) return [];

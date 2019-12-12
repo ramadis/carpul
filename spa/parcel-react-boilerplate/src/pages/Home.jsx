@@ -41,9 +41,14 @@ const Home = ({ user }) => {
   useEffect(() => {
     setLoading(true);
     const fetches = async () => {
-      const city = await getLocation().catch(e => console.error(e));
+      const place = await getLocation().catch(e => console.error(e));
+      const city = getCity(place);
       if (!origin.city && city) setOrigin({ city });
-      await getSuggestions(city).then(setTrips);
+      await getSuggestions({
+        from: city,
+        depLat: place.lat,
+        depLon: place.lon,
+      }).then(setTrips);
       setLoading(false);
     };
     fetches();

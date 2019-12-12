@@ -15,7 +15,7 @@ export const getLocation = async () => {
     if ("geolocation" in navigator) {
       const currentPos = await new Promise((res, rej) =>
         navigator.geolocation.getCurrentPosition(res, rej, {
-          timeout: 2 * 1000, // milliseconds
+          timeout: Infinity, // milliseconds
           maximumAge: 5 * 60 * 1000, // milliseconds
         })
       );
@@ -27,7 +27,7 @@ export const getLocation = async () => {
       if (!res.ok) throw "Bad request";
 
       const place = await res.json();
-      return getCity(place);
+      return place;
     } else throw "No geolocation services";
   } catch (e) {
     console.error(e);

@@ -4,7 +4,7 @@ export default css`
   .my-masonry-grid {
     display: flex;
     margin-left: -30px; /* gutter size offset */
-    width: auto;
+    width: 100%;
   }
 
   .my-masonry-grid_column {
