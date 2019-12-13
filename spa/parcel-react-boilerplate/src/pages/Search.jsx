@@ -101,20 +101,26 @@ const Search = ({ user }) => {
   const history = useHistory();
   const { to, from, when } = params;
 
-  const handleSearch = debounce(setParams, 1000);
+  const handleSearch = debounce(params => {
+    setPage(0);
+    setHasNextPage(true);
+    setParams(params);
+  }, 1000);
 
   const loadResults = async () => {
     setLoading(true);
     search({ ...params, page })
       .then(results => {
         !results.length && setHasNextPage(false);
-        setTrips(trips.concat(results));
+        setTrips(page === 0 ? results : trips.concat(results));
         setPage(page + 1);
       })
       .finally(() => setLoading(false));
   };
 
-  useEffect(loadResults, [params]);
+  useEffect(() => {
+    loadResults();
+  }, [params]);
 
   const whenDate = new Date(Number(when));
 
