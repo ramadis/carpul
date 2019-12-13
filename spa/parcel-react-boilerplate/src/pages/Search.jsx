@@ -97,17 +97,19 @@ const Search = ({ user }) => {
   const [params, setParams] = useState(rawParams);
   const [loading, setLoading] = useState(true);
   const [hasNextPage, setHasNextPage] = useState(true);
+  const [page, setPage] = useState(0);
   const history = useHistory();
-  const { to, from, when, page = 0 } = params;
+  const { to, from, when } = params;
 
   const handleSearch = debounce(setParams, 1000);
 
   const loadResults = async () => {
     setLoading(true);
-    search(params)
+    search({ ...params, page })
       .then(results => {
         !results.length && setHasNextPage(false);
         setTrips(trips.concat(results));
+        setPage(page + 1);
       })
       .finally(() => setLoading(false));
   };
@@ -227,16 +229,7 @@ const encodeQueryParams = function(obj) {
 
 const SearchBar = ({ onSearch = () => null }) => {
   const { t, i18n } = useTranslation();
-  const {
-    to,
-    from,
-    when,
-    arrLat,
-    arrLon,
-    depLat,
-    depLon,
-    page = 0,
-  } = useQuery();
+  const { to, from, when, arrLat, arrLon, depLat, depLon } = useQuery();
 
   const [origin, setOrigin] = useState({
     city: from,
@@ -254,7 +247,6 @@ const SearchBar = ({ onSearch = () => null }) => {
     onSearch({
       from: origin.city,
       to: destination.city,
-      page: 0,
       when: datetime.getTime(),
       ...value,
     });
@@ -265,7 +257,6 @@ const SearchBar = ({ onSearch = () => null }) => {
     const params = {
       from: origin.city,
       to: destination.city,
-      page,
       when: datetime.getTime(),
     };
     if (origin.position) {
