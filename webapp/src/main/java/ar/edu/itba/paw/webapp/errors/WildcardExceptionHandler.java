@@ -16,8 +16,15 @@ public class WildcardExceptionHandler implements ExceptionMapper<Exception> {
     @Override
     public Response toResponse(Exception e) {
         console.error("Uncaught exception {}", e.toString());
-        return Response.status(Status.INTERNAL_SERVER_ERROR)
-                .entity(new ErrorDTO(Status.INTERNAL_SERVER_ERROR.getStatusCode(), e.getCause().toString(), e.getMessage()))
+        String error = e.toString();
+        if (error.contains("404")) {
+        	return Response.status(Status.NOT_FOUND)
+                .entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "Endpoint non-existent", "Try accessing a valid endpoint"))
                 .build();
+        } else {
+        	return Response.status(Status.INTERNAL_SERVER_ERROR)
+                    .entity(new ErrorDTO(Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Uncaught error in the server", "Something wrong happend on our end. We're sorry."))
+                    .build();
+        }
     }
 }

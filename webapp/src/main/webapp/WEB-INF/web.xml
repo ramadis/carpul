@@ -36,7 +36,7 @@
     <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
     <init-param>
       <param-name>jersey.config.server.provider.packages</param-name>
-      <param-value>ar.edu.itba.paw.webapp.controllers</param-value>
+      <param-value>ar.edu.itba.paw.webapp.controllers,ar.edu.itba.paw.webapp.errors</param-value>
     </init-param>
     <init-param>
       <param-name>jersey.config.server.provider.classnames</param-name>
@@ -81,7 +81,7 @@
     <dispatcher>ERROR</dispatcher>
     <dispatcher>REQUEST</dispatcher>
   </filter-mapping>
-
+  <!-- 
   <filter>
     <filter-name>IndexRedirector</filter-name>
     <filter-class>ar.edu.itba.paw.webapp.config.IndexRedirector</filter-class>
@@ -90,7 +90,7 @@
   <filter-mapping>
     <filter-name>IndexRedirector</filter-name>
     <url-pattern>/*</url-pattern>
-  </filter-mapping>
+  </filter-mapping> -->
 
   <filter>
     <filter-name>springSecurityFilterChain</filter-name>
