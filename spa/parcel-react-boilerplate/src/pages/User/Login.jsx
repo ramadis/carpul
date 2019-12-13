@@ -52,7 +52,7 @@ const Login = ({ dispatch, user }) => {
   const isLogged = !!user;
 
   return isLogged ? (
-    <Redirect to={getPreviousPath(routes.profile(user.id))} />
+    <Redirect to={routes.profile(user.id)} />
   ) : (
     <div className="flex-center full-height">
       <form className="user-form">

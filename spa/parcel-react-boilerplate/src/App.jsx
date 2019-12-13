@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { NotificationContainer } from "react-notifications";
-import { Router, Route, Switch, Link, Redirect } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Link, Redirect } from "react-router-dom";
 import Navbar2 from "./components/Navbar2";
 import Home from "./pages/Home";
 import Review from "./pages/Review";
@@ -55,7 +55,7 @@ function App({ token, user, dispatch }) {
 
   loadSession();
   return (
-    <Router history={history}>
+    <BrowserRouter basename="/webapp">
       <React.Fragment>
         <Navbar2 />
         <Switch>
@@ -85,7 +85,7 @@ function App({ token, user, dispatch }) {
         </Switch>
         <NotificationContainer leaveTimeout={1000} />
       </React.Fragment>
-    </Router>
+    </BrowserRouter>
   );
 }
 
