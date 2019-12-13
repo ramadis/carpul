@@ -77,6 +77,13 @@ const translations = {
       departing: "Departing from {{0}}",
       arrive: "Arrive on {{0}} on {{1}} at {{2}}",
       unreserve: "Unreserve",
+      confirmation: {
+        delete: "Delete trip",
+        cancel: "Cancel",
+        title: "Are you sure you want to delete this trip?",
+        subtitle:
+          "Deleting this trip will cancel the reservation for all its passengers.",
+      },
     },
     trip_past: {
       review: "Review",

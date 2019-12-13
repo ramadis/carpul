@@ -134,7 +134,7 @@ const Reservation = ({ t, trip, editable }) => {
               </div>
             </a>
             {editable ? (
-              <Button onClick={askUnreserve}>
+              <Button disabled={requestLoading} onClick={askUnreserve}>
                 {requestLoading ? <MDSpinner size={16} /> : "Unreserve"}
               </Button>
             ) : null}

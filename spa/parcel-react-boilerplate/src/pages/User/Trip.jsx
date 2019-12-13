@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { confirmAlert } from "react-confirm-alert";
 import MDSpinner from "react-md-spinner";
+import { NotificationManager } from "react-notifications";
 
 import ConfirmationModal from "../../components/ConfirmationModal";
 import { routes } from "../../App";
@@ -70,10 +71,39 @@ const DeleteButton = styled.button`
 
 const DeleteTripButton = ({ tripId }) => {
   const { t } = useTranslation();
+  const [isLoading, setLoading] = useState(false);
+
+  const askDelete = () =>
+    confirmAlert({
+      customUI: ConfirmationModal([
+        {
+          danger: true,
+          label: t("user.trip.confirmation.delete"),
+          onClick: () => {
+            setLoading(true);
+            cancelTrip(tripId)
+              .then(() =>
+                NotificationManager.success(
+                  "All passengers have received an email letting them know",
+                  "Trip cancelled successfully"
+                )
+              )
+              .catch(requestCatch)
+              .finally(() => setLoading(false));
+          },
+        },
+        {
+          label: t("user.trip.confirmation.cancel"),
+          onClick: () => null,
+        },
+      ]),
+      title: t("user.trip.confirmation.title"),
+      message: t("user.trip.confirmation.subtitle"),
+    });
 
   return (
-    <Button onClick={() => cancelTrip(tripId).catch(requestCatch)}>
-      {t("user.trip.delete")}
+    <Button disabled={isLoading} onClick={askDelete}>
+      {isLoading ? <MDSpinner size={16} /> : t("user.trip.delete")}
     </Button>
   );
 };
@@ -88,7 +118,14 @@ const PassengerList = ({ trip }) => {
           danger: true,
           label: t("reservation.cancel.confirmation.unreserve"),
           onClick: () =>
-            cancelReservation(passenger.id, trip.id).catch(requestCatch),
+            cancelReservation(passenger.id, trip.id)
+              .then(() =>
+                NotificationManager.success(
+                  `${passenger.first_name} reservation was cancelled`,
+                  "Cancellation confirmed"
+                )
+              )
+              .catch(requestCatch),
         },
         {
           label: t("reservation.cancel.confirmation.cancel"),
