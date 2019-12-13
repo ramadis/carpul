@@ -57,7 +57,6 @@ public class WebConfig {
 		return new JpaTransactionManager(emf);
 	}
 	
-
     @Bean
     public Validator validator() {
         return Validation.byDefaultProvider().configure().buildValidatorFactory().getValidator();

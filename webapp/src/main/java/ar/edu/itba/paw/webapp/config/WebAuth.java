@@ -58,7 +58,6 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
 			.userDetailsService(userDetailsService)
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and().authorizeRequests()
 			.and().authorizeRequests()
 				.antMatchers(HttpMethod.POST, "/api/users").anonymous()    // Register
 	            .antMatchers(HttpMethod.POST, "/api/login").anonymous()    // Login
@@ -69,11 +68,7 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
 	            .antMatchers(HttpMethod.GET, "/api/users/{\\d+}/reviews").permitAll()
 	            .antMatchers(HttpMethod.GET, "/api/reviews/{\\d+}/image").permitAll()
 	            .antMatchers(HttpMethod.GET, "/api/trips/{\\d+}").permitAll()
-	            .antMatchers("/api/search/closest").permitAll()
-	            .antMatchers("/api/search/origin").permitAll()
-	            .antMatchers("/api/search/rest").permitAll()
 	            .antMatchers("/api/search**").permitAll()
-	            .antMatchers("/api/search/suggestions**").permitAll()
 				.antMatchers("/api/**").authenticated()
 			.and().formLogin()
                 .usernameParameter("username")

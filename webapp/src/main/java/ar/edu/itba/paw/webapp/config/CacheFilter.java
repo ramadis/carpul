@@ -14,11 +14,9 @@ public class CacheFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getRequestURI().matches(".*/static/.*") || request.getRequestURI().matches(".*/image") || request.getRequestURI().matches(".*/cover")) {
-           response.setHeader("Cache-Control", "max-age=31536000, public");
-        } else {
-           response.setHeader("Cache-Control", "no-cache");
-        }
+        Boolean shouldCache = request.getRequestURI().matches(".*/static/.*") || request.getRequestURI().matches(".*/image") || request.getRequestURI().matches(".*/cover");
+        if (shouldCache) response.setHeader("Cache-Control", "max-age=31536000, public");
+        else response.setHeader("Cache-Control", "no-cache");
         filterChain.doFilter(request,response);
     }
 }

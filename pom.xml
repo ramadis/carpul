@@ -18,6 +18,7 @@
     <org.hsqldb.version>2.3.1</org.hsqldb.version>
     <maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
     <maven.compiler.source>1.8</maven.compiler.source>
+    <maven-war-plugin.version>2.6</maven-war-plugin.version>
     <maven.compiler.target>1.8</maven.compiler.target>
     <org.hibernate.version>5.1.0.Final</org.hibernate.version>
     <org.hibernate.jpa.version>1.0.0.Final</org.hibernate.jpa.version>
@@ -57,6 +58,19 @@
           <downloadJavadocs>true</downloadJavadocs>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>${maven-war-plugin.version}</version>
+        <configuration>
+            <packagingExcludes>**/logback-test.xml</packagingExcludes>
+            <webResources>
+                <resource>
+                    <directory>frontend/dist/build</directory>
+                </resource>
+            </webResources>
+        </configuration>
+    </plugin>
     </plugins>
   </build>
   <dependencyManagement>
@@ -327,6 +341,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
   <repositories>
     <repository>
       <id>jersey-snapshot</id>
