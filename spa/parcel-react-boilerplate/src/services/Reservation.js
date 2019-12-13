@@ -1,28 +1,28 @@
 import { GETwithAuth, PUTwithAuth, DELETEwithAuth } from "./Utils";
 
 export const getReservationsByUser = async id => {
-  const reservations = await GETwithAuth(`/users/${id}/reservations`).then(
-    res => {
-      if (res.isRawResponse) {
-        const errors = {
-          404: {
-            title: "We can't find the user",
-            subtitle: "You sure you are trying to access the correct one?",
-          },
-          default: {
-            title: "Something went wrong",
-            subtitle: "And we don't know what it is, sorry :(.",
-          },
-        };
+  const reservations = await GETwithAuth(
+    `/users/${id}/reservations?exclude_reviewed=false`
+  ).then(res => {
+    if (res.isRawResponse) {
+      const errors = {
+        404: {
+          title: "We can't find the user",
+          subtitle: "You sure you are trying to access the correct one?",
+        },
+        default: {
+          title: "Something went wrong",
+          subtitle: "And we don't know what it is, sorry :(.",
+        },
+      };
 
-        throw {
-          message: errors[res.status] || errors.default,
-          code: res.status,
-        };
-      }
-      return res;
+      throw {
+        message: errors[res.status] || errors.default,
+        code: res.status,
+      };
     }
-  );
+    return res;
+  });
   return reservations;
 };
 

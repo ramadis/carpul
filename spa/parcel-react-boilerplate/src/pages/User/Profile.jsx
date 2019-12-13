@@ -288,7 +288,11 @@ const ReservationsSection = ({ reservations }) => {
         <List>
           {data.map(reservation =>
             reservation.expired ? (
-              <TripPast reservation={reservation} key={reservation.id} />
+              reservation.reviewed ? (
+                <Destiny trip={reservation} key={reservation.id} />
+              ) : (
+                <TripPast reservation={reservation} key={reservation.id} />
+              )
             ) : (
               <Destiny
                 trip={reservation}

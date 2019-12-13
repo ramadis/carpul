@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import MDSpinner from "react-md-spinner";
 import { confirmAlert } from "react-confirm-alert";
 import { NotificationManager } from "react-notifications";
+import styled from "styled-components";
 
 import { unreserveByTrip } from "../../services/Reservation";
 
@@ -18,6 +19,18 @@ import profileHeroCss from "../../styles/profile_hero";
 import poolListCss from "../../styles/pool_list";
 import profileCss from "../../styles/profile";
 import reviewItemCss from "../../styles/review_item";
+
+const DisabledOverlay = styled.div`
+  content: "";
+  position: absolute;
+  z-index: 9999;
+  height: 100%;
+  top: 0;
+  width: 100%;
+  background: rgba(204, 204, 204, 0.6);
+  left: 0;
+  border-radius: 5px;
+`;
 
 const Reservation = ({ t, trip, editable }) => {
   const fmtetddate = format(trip.etd, "DD/MM/YYYY");
@@ -67,6 +80,7 @@ const Reservation = ({ t, trip, editable }) => {
       <style jsx>{profileHeroCss}</style>
       <React.Fragment>
         <li className="destiny-item trip-item" style={{ width: "auto" }}>
+          {trip.expired && <DisabledOverlay />}
           <div className="inline-block no-margin">
             <span className="destiny-cost">
               {t("reservation.cost")}
