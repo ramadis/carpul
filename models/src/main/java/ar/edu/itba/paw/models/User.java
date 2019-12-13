@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.models;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
 	@Column(length = 100, nullable = false, unique = true)
 	private String username;
 	
@@ -40,12 +41,34 @@ public class User {
 	@Column
 	private Timestamp created;
 	
+	@Column
+	private byte[] profileImage;
+	
+	@Column
+	private byte[] coverImage;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_seq")
 	@SequenceGenerator(sequenceName = "users_id_seq", name = "users_id_seq", allocationSize = 1)
 	private Integer id;
 	
 	// METHODS
+	
+	public byte[] getProfileImage () {
+		return profileImage;
+	}
+	
+	public byte[] getCoverImage () {
+		return coverImage;
+	}
+	
+	public void setProfileImage(byte[] profileImage) {
+		this.profileImage = profileImage;
+	}
+	
+	public void setCoverImage(byte[] coverImage) {
+		this.coverImage = coverImage;
+	}
 	
 	public String getFirst_name() {
 		return first_name;
@@ -136,6 +159,8 @@ public class User {
 	public Integer getRating() {
 		Integer sum = 0;
 		Integer count = 0;
+		
+		if (this.getDrived_trips() == null) return 0;
 		
 		for (Trip trip: this.getDrived_trips()) {
 			for (Review review: trip.getReviews()) {

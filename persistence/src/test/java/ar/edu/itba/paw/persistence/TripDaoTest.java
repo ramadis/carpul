@@ -7,23 +7,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import ar.edu.itba.paw.interfaces.TripDao;
-import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 @RunWith( SpringJUnit4ClassRunner.class )
 @ContextConfiguration(classes = TestConfig.class)
 @Sql("classpath:schema.sql")
+@Transactional
 public class TripDaoTest {
 	@Autowired
 	private DataSource ds;
@@ -31,35 +35,29 @@ public class TripDaoTest {
 	@Autowired
 	private TripDao tripDao;
 	
-	@Autowired
-	private UserDao userDao;
-	
 	private JdbcTemplate jdbcTemplate;
-	private Trip testTrip;
+	
+	@PersistenceContext
+	private EntityManager em;
 	
 	@Before
 	public void setUp() {
-		testTrip = TestUtils.TripUtils.sampleTrip();
 		jdbcTemplate = new JdbcTemplate(ds);
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, "trips");
-		jdbcTemplate.execute("TRUNCATE TABLE trips RESTART IDENTITY;");
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
-		jdbcTemplate.execute("TRUNCATE TABLE users RESTART IDENTITY;");
-		JdbcTestUtils.deleteFromTables(jdbcTemplate, "trips_users");
-		jdbcTemplate.execute("TRUNCATE TABLE trips_users RESTART IDENTITY;");
-		
-		String[] sequences = {"users_id_seq", "trips_id_seq", "reviews_id_seq", "trips_users_id_seq"}; 
-		
-		for (String sequence : sequences) {
-		    jdbcTemplate.execute("DROP SEQUENCE " + sequence + " IF EXISTS");
-		    jdbcTemplate.execute("CREATE SEQUENCE " + sequence + " as INTEGER");
-		}
-		
-		userDao.create(TestUtils.UserUtils.sampleUser());
 	}
 	
-	public void assertTrip(Trip trip) {
+	@Test
+	public void testCreate() {
+		// Create helper objects
+		Trip trip = TestUtils.TripUtils.sampleTrip();
+		User user = new User();
+		user.setId(TestUtils.UserUtils.EXISTING_ID);
+
+		// Create trip
+		trip = tripDao.create(trip, user);
+		
+		// Asserts for trip
 		assertNotNull(trip);
+		assertNotNull(trip.getId());
 		assertEquals(TestUtils.TripUtils.TO_CITY, trip.getTo_city());
 		assertEquals(TestUtils.TripUtils.FROM_CITY, trip.getFrom_city());
 		assertEquals(TestUtils.TripUtils.SEATS, trip.getSeats());
@@ -73,91 +71,63 @@ public class TripDaoTest {
 		assertNotNull(trip.getCreated());
 	}
 	
-	private void createTrip() {
-		Trip trip = testTrip;
-		User user = userDao.getById(1);
-		tripDao.create(trip, user);
-	}
-	
-	private void reserveTrip() {
-		Trip trip = testTrip;
-		User user = userDao.getById(1);
-		
-		// Create trip
-		tripDao.create(trip, user);
-		
-		// Reserve trip
-		tripDao.reserveTrip(TestUtils.TripUtils.ID, user);
-		
-		// Get trip
-		tripDao.findById(TestUtils.TripUtils.ID);
-	}
-	
 	@Test
-	@Transactional
-	public void testCreate() {
-		Trip trip = testTrip;
-		User user = userDao.getById(1);
-
-		// Create trip
-		final Trip createdTrip = tripDao.create(trip, user);
-		
-		// Asserts for trip
-		assertTrip(createdTrip);
-	}
-	
-	@Test
-	@Transactional
 	public void testReserve() {
-		Trip trip = testTrip;
-		User user = userDao.getById(1);
+		// Create helper objects
+		User user = new User();
+		user.setId(TestUtils.TripUtils.NONEXISTING_PASSENGER_ID);
+		int reservedTripsAmount = 1;
 		
-		// Create trip
-		tripDao.create(trip, user);
+		// Reserve trip for a user
+		tripDao.reserveTrip(TestUtils.TripUtils.EXISTING_ID, user);
 		
-		// Reserve trip
-		tripDao.reserveTrip(1, user);
+		em.flush();
 		
-		// Get trip
-		Trip reservedTrip = tripDao.findById(1);
+		// Get reserved trips from the database
+		Object[] params = new Object[] { TestUtils.TripUtils.EXISTING_ID , user.getId() };
+		List<Map<String, Object>> results = jdbcTemplate.queryForList("SELECT * FROM trips_users WHERE trip_id = ? AND user_id = ?", params);
 		
-		// Assert trip
-		assertFalse(reservedTrip.getPassengers().contains(user));
+		assertEquals(reservedTripsAmount, results.size());
 	}
 	
 	@Test
-	@Transactional
 	public void testUnreserve() {
-		User user = userDao.getById(1);
-		
-		// Reserve trip
-		reserveTrip();
+		// Create helper objects
+		User user = new User();
+		user.setId(TestUtils.TripUtils.EXISTING_PASSENGER_ID);
+		int reservedTripsAmount = 0;
 		
 		// Unreserve trip
 		tripDao.unreserveTrip(TestUtils.TripUtils.ID, user);
 		
-		// Get trip
-		Trip reservedTrip = tripDao.findById(TestUtils.TripUtils.ID);
+		em.flush();
+		
+		// Get reserved trips from the database
+		Object[] params = new Object[] { TestUtils.TripUtils.EXISTING_ID , TestUtils.UserUtils.EXISTING_ID };
+		List<Map<String, Object>> results = jdbcTemplate.queryForList("SELECT * FROM trips_users WHERE trip_id = ? AND user_id = ?", params);
+
 		
 		// Assert trip
-		assertFalse(reservedTrip.getReserved());
+		assertEquals(reservedTripsAmount, results.size());
 	}
 	
 	@Test
-	@Transactional
 	public void testDelete() {
-		User user = userDao.getById(1);
+		// Create helper objects
+		User user = new User();
+		user.setId(TestUtils.TripUtils.EXISTING_DRIVER_ID);
+		int tripsAmount = 0;
+
+		// delete trip
+		tripDao.delete(TestUtils.TripUtils.EXISTING_ID, user);
 		
-		// Create trip
-		createTrip();
+		em.flush();
 		
-		// Delete trip
-		tripDao.delete(TestUtils.TripUtils.ID, user);
-		
-		// Get trip
-		Trip reservedTrip = tripDao.findById(TestUtils.TripUtils.ID);
+		// Get trips from the database
+		Object[] params = new Object[] { TestUtils.TripUtils.EXISTING_ID };
+		List<Map<String, Object>> results = jdbcTemplate.queryForList("SELECT * FROM trips WHERE id = ? AND DELETED=FALSE", params);
 		
 		// Assert trip
-		assertTrue(reservedTrip.getDeleted());
+		assertEquals(tripsAmount, results.size());
 	}
 }

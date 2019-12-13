@@ -1,4 +1,6 @@
 package ar.edu.itba.paw.webapp.controllers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 
@@ -6,26 +8,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import ar.edu.itba.paw.interfaces.UserService;
-import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.webapp.auth.Model;
+import ar.edu.itba.paw.models.User;
+
 
 @Controller
 public abstract class AuthController {
+    private final static Logger console = LoggerFactory.getLogger(AuthController.class);
 
 	@Autowired
 	private UserService us;
-
-	@ExceptionHandler(value = Exception.class)
-    public String redirectToErrorPage(Exception ex) {
-		// If an error happens, show internal error message.
-		ex.printStackTrace();
-		System.out.println(ex);
-        return "redirect:/error/500";
-      }
 
 	@ModelAttribute
 	public User user() {
@@ -38,15 +33,12 @@ public abstract class AuthController {
 
 		if (principal instanceof Model) return ((Model) principal).getUser();
 
-		if (principal instanceof UserDetails) {
-			username = ((UserDetails)principal).getUsername();
-		} else {
-			username = principal.toString();
-		}
+		username = principal instanceof UserDetails ? ((UserDetails) principal).getUsername() : principal.toString();
 
 		try {
 			return us.getByUsername(username);
 		} catch (IllegalStateException e) {
+			console.error(e.getMessage());
 			return null;
 		}
 	}

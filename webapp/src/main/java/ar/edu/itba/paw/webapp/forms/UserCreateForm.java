@@ -5,14 +5,13 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import ar.edu.itba.paw.models.User;
 
 public class UserCreateForm {
 	@NotBlank
 	@Email
+	@Size(min = 5)
 	private String username;
 	
 	@NotBlank
@@ -23,8 +22,8 @@ public class UserCreateForm {
 	@Pattern(regexp = "[\\p{L} ]+")
 	private String last_name;
 	
-	@Size(min = 6, max = 20)
-	@Pattern(regexp = "[0-9]+")
+	@Size(max = 20)
+	@Pattern(regexp = "[0-9]*")
 	private String phone_number;
 	
 	@Size(min = 6, max = 100)
@@ -72,14 +71,12 @@ public class UserCreateForm {
 	}
 	
 	public User getUser() {
-		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		
 		User user = new User();
 		user.setFirst_name(first_name);
 		user.setLast_name(last_name);
 		user.setPhone_number(phone_number);
 		user.setUsername(username);
-		user.setPassword(passwordEncoder.encode(password));
+		user.setPassword(password);
 		return user;
 	}
 }

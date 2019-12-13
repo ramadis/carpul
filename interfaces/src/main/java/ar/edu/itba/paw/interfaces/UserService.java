@@ -7,9 +7,12 @@ import ar.edu.itba.paw.models.User;
 
 public interface UserService {
 	User register(User user);
+	User update(User toUpdate, User user);
 	User getById(Integer id);
 	User getByUsername(String username);
 	User findById(Integer userId);
+	User uploadProfileImage(User user, byte[] image);
+	User uploadCoverImage(User user, byte[] image);
 	Boolean exists(User user);
 	List<User> getPassengers(Trip trip);
 }

@@ -15,10 +15,20 @@ public class Position {
 	public Double getLongitude() {
 		return longitude;
 	}
+	
+	public Boolean isValid () {
+		return latitude != null & longitude != null;
+	}
 
 	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
+	
+	public String toString() {
+		return "Lat: " + latitude + ", Lon: " + longitude;
+	}
+	
+	public Position() {};
 
 	public Position(Double latitude, Double longitude) {
 		super();

@@ -1,83 +1,76 @@
 package ar.edu.itba.paw.webapp.controllers;
 
-import java.sql.Timestamp;
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import javax.validation.Valid;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.stereotype.Component;
 
 import ar.edu.itba.paw.interfaces.TripService;
+import ar.edu.itba.paw.models.Pagination;
+import ar.edu.itba.paw.models.Position;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
+import ar.edu.itba.paw.webapp.DTO.UnauthTripDTO;
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.webapp.forms.SearchForm;
 
-@Controller
+@Path("search")
+@Component
 public class SearchController extends AuthController {
 
 	@Autowired
 	private TripService ts;
-
-	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	public ModelAndView searchAllView(@RequestParam("from") String from,
-									 @RequestParam("to") String to,
-									 @RequestParam("when") Long when) {
+	
+	@Context
+	private UriInfo uriInfo;
+	
+	@GET
+	@Path("/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response searchClosest(@DefaultValue("") @QueryParam("from") String from,
+						   @DefaultValue("") @QueryParam("to") String to,
+						   @QueryParam("arrLat") Double arrLat,
+						   @QueryParam("arrLon") Double arrLon,
+						   @QueryParam("depLat") Double depLat,
+						   @QueryParam("depLon") Double depLon,
+						   @DefaultValue("") @QueryParam("when") Long when,
+						   @DefaultValue("true") @QueryParam("exclude_driver") Boolean excludeDriver,
+						   @DefaultValue("0") @QueryParam("page") int page,
+						   @DefaultValue("5") @QueryParam("per_page") int perPage) {
+		
 		// Create a valid search model.
 		Search search = new Search();
-		search.setFrom(from.split(",")[0]);
-		search.setTo(to.split(",")[0]);
-		search.setWhen(when);
+		search.setFrom(from);
+		search.setTo(to);
+		search.setWhen(when == null ? System.currentTimeMillis() : Math.max(System.currentTimeMillis(), when));
+		search.setArrival(new Position(arrLat, arrLon));
+		search.setDeparture(new Position(depLat, depLon));
 		
 		// Get logged user
 		User user = user();
-
+		
 		// Get trips to this search
-		List<Trip> trips = user == null ? ts.findByRoute(search) : ts.findByRoute(user, search);
-		List<Trip> later_trips = user == null ? ts.findAfterDateByRoute(search) : ts.findAfterDateByRoute(user, search);
+		List<UnauthTripDTO> tripDTOs = new ArrayList<>();
+		List<Trip> trips = ts.searchTrips(search, new Pagination(page, perPage), excludeDriver ? user : null);
+		
+		// If no trips at all. It's empty.
+		if (trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 
-		// Expose view
-		final ModelAndView mav = new ModelAndView("search/search");
-		mav.addObject("trips", trips);
-		mav.addObject("later_trips", later_trips);
-		mav.addObject("search", search);
-		mav.addObject("user", user);
-		return mav;
-	}
-
-	@RequestMapping(value = "/search/{tripId}", method = RequestMethod.GET)
-	public ModelAndView searchAllView(@PathVariable("tripId") final Integer tripId,
-									 @RequestParam("from") String from,
-									 @RequestParam("to") String to,
-									 @RequestParam("when") Timestamp when) {
-		// Get trip by id
-		List<Trip> trips = new ArrayList<>();
-		trips.add(ts.findById(tripId));
-
-		// Expose view
-		final ModelAndView mav = new ModelAndView("trips/individual");
-		mav.addObject("trips", trips);
-		mav.addObject("is_searching", true);
-		return mav;
-	}
-
-	@RequestMapping(value = "/search", method = RequestMethod.POST)
-	public ModelAndView searchRedirect(@Valid @ModelAttribute("searchForm") final SearchForm form,
-								  	  BindingResult errors) {
-		// Check for errors
-		if (errors.hasErrors()) return new ModelAndView("home/index");
-
-		// Compose search URI
-		Search search = form.getSearch();
-		return new ModelAndView("redirect:search?from=" + search.getFrom() + "&to=" + search.getTo() + "&when=" + search.getWhen().getTime());
+		// Generate DTOs
+		final URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
+		for(Trip t: trips) tripDTOs.add(new UnauthTripDTO(t, user, userUri));
+		return Response.ok(tripDTOs).build();
 	}
 }

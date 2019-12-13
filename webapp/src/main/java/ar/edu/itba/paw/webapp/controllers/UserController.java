@@ -1,41 +1,67 @@
 package ar.edu.itba.paw.webapp.controllers;
 
-import javax.validation.Valid;
+import javax.validation.Validator;
+import javax.ws.rs.BeanParam;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.stereotype.Component;
 
 import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.HistoryService;
 import ar.edu.itba.paw.interfaces.ReviewService;
 import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.interfaces.UserService;
-import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.webapp.auth.Provider;
+import ar.edu.itba.paw.models.History;
+import ar.edu.itba.paw.models.Pagination;
+import ar.edu.itba.paw.models.Review;
+import ar.edu.itba.paw.models.Trip;
+import ar.edu.itba.paw.webapp.DTO.ReviewDTO;
+import ar.edu.itba.paw.webapp.DTO.ErrorDTO;
+import ar.edu.itba.paw.webapp.DTO.HistoryDTO;
+import ar.edu.itba.paw.webapp.DTO.UnauthTripDTO;
+import ar.edu.itba.paw.webapp.DTO.TripDTO;
+import ar.edu.itba.paw.webapp.DTO.UserDTO;
+import ar.edu.itba.paw.webapp.forms.ImageForm;
 import ar.edu.itba.paw.webapp.forms.UserCreateForm;
-import ar.edu.itba.paw.webapp.forms.UserLoginForm;
+import ar.edu.itba.paw.webapp.forms.UserUpdateForm;
+import ar.edu.itba.paw.models.User;
 
-@Controller
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Path("users")
+@Component
 public class UserController extends AuthController {
-
+	private final static Logger console = LoggerFactory.getLogger(UserController.class);
+	
 	@Autowired
 	private UserService us;
+	
+	@Context
+	private UriInfo uriInfo;
 
 	@Autowired
 	private TripService ts;
-
-	@Autowired
-	private Provider userAuthProvider;
 
 	@Autowired
 	private ReviewService rs;
@@ -45,86 +71,269 @@ public class UserController extends AuthController {
 
 	@Autowired
 	private HistoryService hs;
+	
+	@Autowired
+    private Validator validator;
 
-	@RequestMapping(value = "/user", method = RequestMethod.POST)
+	@POST
+	@Path("/")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response createUser(final UserCreateForm form) {
+		// Check if the user form is valid
+		if (form == null) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), "form", "form is null")).build();
+		}
+		
+		if (!validator.validate(form).isEmpty()) {
+			List<ErrorDTO> errors = validator.validate(form).stream().map(validation -> new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), validation.getPropertyPath() + "", validation.getMessage())).collect(Collectors.toList());
+			return Response.status(Status.BAD_REQUEST).entity(errors).build();
+		}
 
-	@Transactional
-	public ModelAndView registerUser(@Valid @ModelAttribute("userCreateForm") final UserCreateForm form,
-							  		final BindingResult errors) {
-		// Check for form errors
-		if (errors.hasErrors()) return registerUserView(form);
-
+		console.info("Controller: Start creating user {}", form.getUsername());
+		
 		// Get user from form
 		User user = form.getUser();
-
+		
 		// Check if user exists
 		if (us.exists(user)) {
-			ObjectError error = new ObjectError("username","An account already exists for this username");
-			errors.addError(error);
-			return registerUserView(form);
+			return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "username", "user already exists")).build();
 		}
 
 		// Register new user
-		us.register(user);
+		user = us.register(user);
 
 		// Send welcome email to user
 		es.sendRegistrationEmail(user);
-
-		// Login automatically
-		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-		userAuthProvider.authenticate(auth);
-		SecurityContextHolder.getContext().setAuthentication(auth);
-
-		// Redirect to login view
-		return new ModelAndView("redirect:/");
+		
+		final URI uri = uriInfo.getBaseUriBuilder().path("/users/{id}").build(user.getId());
+		return Response.created(uri).entity(new UserDTO(user, uri)).build();
 	}
-
-	@RequestMapping(value = "/user", method = RequestMethod.GET)
-	public ModelAndView registerUserView(@ModelAttribute("userCreateForm") final UserCreateForm form) {
-
-		// Expose view
-		final ModelAndView mav = new ModelAndView("user/register");
-		mav.addObject("registerUserURI", "user");
-		mav.addObject("loginUserURI", "login");
-		return mav;
+	
+	@GET
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getById(@PathParam("id") final int id) {
+		console.info("Controller: Getting user with id: {}", id);
+		final User user = us.getById(id);
+		
+		if (user != null) {
+			return Response.ok(new UserDTO(user, uriInfo.getBaseUriBuilder().path("/users/{id}").build(user.getId()))).build();
+		}
+		
+		return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "User not found")).build();
 	}
-
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ModelAndView loginView(@Valid @ModelAttribute("userForm") final UserLoginForm form) {
-
-		// Expose view
-		final ModelAndView mav = new ModelAndView("user/login");
-		mav.addObject("loginUserURI", "login");
-		mav.addObject("registerUserURI", "user");
-		return mav;
+	
+	@GET
+	@Path("/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCurrentUser() {
+		final User user = user();
+		return Response.ok(new UserDTO(user, uriInfo.getBaseUriBuilder().path("/users/{id}").build(user.getId()))).build();
 	}
+	
+	@GET
+	@Path("/{id}/trips")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getTrips(@PathParam("id") final int id,
+								@DefaultValue("0") @QueryParam("page") int page,
+								@DefaultValue("3") @QueryParam("per_page") int perPage) {
+		console.info("Controller: Getting trips for user with id: {}", id);
+		
+		final User user = us.getById(id);
+		final User loggedUser = user();
+		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "the user does not exist")).build();
+		
+		// Search trips belonging to a given user
+		List<Trip> trips = ts.getUserTrips(user, new Pagination(page, perPage));
+		if (trips == null || trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
+	
+		// Return trip DTOs
+		URI uri = uriInfo.getBaseUriBuilder().path("/users/").build();
+		if (loggedUser != null && loggedUser.getId().equals(id)) {			
+			List<TripDTO> tripDTOs = trips.stream().map(trip -> new TripDTO(trip, uri)).collect(Collectors.toList());
+			return Response.ok(tripDTOs).build();
+		} else {
+			final URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
+			List<UnauthTripDTO> tripDTOs = trips.stream().map(trip -> new UnauthTripDTO(trip, loggedUser, userUri)).collect(Collectors.toList());
+			return Response.ok(tripDTOs).build();
+		}
+	}
+	
+	@GET
+	@Path("/{id}/reviews")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getReviews(@PathParam("id") final int id,
+			@DefaultValue("0") @QueryParam("page") int page,
+			@DefaultValue("10") @QueryParam("per_page") int perPage) {
+		console.info("Controller: Getting reviews for user with id: {}", id);
+		
+		final User user = us.getById(id);
+		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "the user does not exist")).build();
+		
+		// Transform reviews to DTOs
+		List<ReviewDTO> reviewDTOs = new ArrayList<>();
+		List<Review> reviews = rs.getReviews(user, new Pagination(page, perPage));
+		if (reviews == null || reviews.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
+		
+		// Return reviews for a given user id
+		URI uri = uriInfo.getBaseUriBuilder().path("/users/").build();
+		UriBuilder reviewUri = uriInfo.getBaseUriBuilder().path("/reviews/{id}");
+		for (Review r: reviews) reviewDTOs.add(new ReviewDTO(r, reviewUri.build(r.getId()).toString(), uri));
+		return Response.ok(reviewDTOs).build();
+	}
+	
+	@GET
+	@Path("/{id}/history")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getHistory(@PathParam("id") final int id,
+			@DefaultValue("0") @QueryParam("page") int page,
+			@DefaultValue("10") @QueryParam("per_page") int perPage) {
+		console.info("Controller: Getting history for user with id: {}", id);
+		
+		final User user = us.getById(id);
+		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "the user does not exist")).build();
+		
+		List<History> histories = hs.getHistories(user, new Pagination(page, perPage));
+		if (histories == null || histories.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
 
-	@RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
-	public ModelAndView getUserView(@PathVariable("userId") final Integer userId) {
-		final ModelAndView mav = new ModelAndView("user/profile");
-		User user = us.getById(userId);
-		User loggedUser = user();
+		URI uri = uriInfo.getBaseUriBuilder().path("/users/").build();
+		List<HistoryDTO> historyDTOs = histories.stream().map(history -> new HistoryDTO(history, uri)).collect(Collectors.toList());
+		return Response.ok(historyDTOs).build();
+	}
+	
+	@GET
+	@Path("/{id}/reservations")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getReservations(@PathParam("id") final int id,
+			@DefaultValue("0") @QueryParam("page") int page,
+			@DefaultValue("true") @QueryParam("exclude_reviewed") Boolean excludeReviewed,
+			@DefaultValue("3") @QueryParam("per_page") int perPage) {
+		console.info("Controller: Getting reservations for user with id: {}", id);
+		
+		final User user = us.getById(id);
+		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "the user does not exist")).build();
+		
+		// Search trips belonging to a given user
+		List<Trip> trips = ts.getReservedTrips(user, new Pagination(page, perPage), excludeReviewed);
 
-		// If the user does not exist
-		if (user.getId() == null) return new ModelAndView("redirect:/error/404");
-
-		// Handle profile != to loggedUser
-		if (loggedUser == null || loggedUser.getId() != userId) {
-			final ModelAndView mav_other = new ModelAndView("unauth/profile");
-			mav_other.addObject("reviews", rs.getReviews(user));
-			mav_other.addObject("trips", ts.getUserTrips(user));
-
-			user.setId(loggedUser == null ? null : loggedUser.getId());
-			mav_other.addObject("user", user);
-			return mav_other;
+		if (trips == null || trips.isEmpty()) return Response.ok(Collections.EMPTY_LIST).build();
+		
+		// Return trips owned by the user with the param id
+		final URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
+		List<UnauthTripDTO> tripDTOs = trips.stream().map(trip -> new UnauthTripDTO(trip, user, userUri)).collect(Collectors.toList());
+		return Response.ok(tripDTOs).build();
+	}
+	
+	@PUT
+    @Path("/{id}/image")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadProfileImage(@PathParam("id") Integer id, @BeanParam final ImageForm form){
+		console.info("Controller: Updating profile image for user with id: {}", id);
+		
+		if (form == null) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), "form", "form is null")).build();
+		}
+		
+		if (!validator.validate(form).isEmpty()) {
+			List<ErrorDTO> errors = validator.validate(form).stream().map(validation -> new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), validation.getPropertyPath() + "", validation.getMessage())).collect(Collectors.toList());
+			return Response.status(Status.BAD_REQUEST).entity(errors).build();
 		}
 
-		// Load objects to view
-		mav.addObject("trips", ts.getUserTrips(loggedUser));
-		mav.addObject("reviews", rs.getReviews(user));
-		mav.addObject("reservations", ts.getReservedTrips(loggedUser));
-		mav.addObject("histories", hs.getHistories(loggedUser));
-		mav.addObject("user", loggedUser);
-		return mav;
+		User user = us.getById(id);
+		User loggedUser = user(); 
+		
+		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "the user does not exist")).build();
+		if (!user.getId().equals(loggedUser.getId())) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "id", "logged with wrong user")).build();
+		byte[] prevImage = user.getProfileImage();
+		
+		us.uploadProfileImage(user, form.getContent());
+		
+		final URI uri = uriInfo.getBaseUriBuilder().path("/users/{id}/image").build(user.getId());
+		if ( prevImage == null) return Response.created(uri).build();
+		return Response.status(Status.NO_CONTENT).build();
+
+    }
+	
+	@GET
+	@Path("/{id}/image")
+	@Produces({"image/jpg", "image/png", "image/gif", "image/jpeg"})
+	public Response getProfileImage(@PathParam("id") final int id) {
+		User user = us.getById(id);
+		console.info("Getting profile image for id {}", id);
+		if (user == null || user.getProfileImage() == null) return Response.status(Status.NOT_FOUND).build();
+		
+		return Response.ok(user.getProfileImage()).build();
+	}
+	
+	@PUT
+    @Path("/{id}/cover")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadCoverImage(@PathParam("id") Integer id, @BeanParam final ImageForm form){
+		console.info("Controller: Updating cover image to user {}", id);
+		if (form == null) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), "form", "form is null")).build();
+		}
+		
+		if (!validator.validate(form).isEmpty()) {
+			List<ErrorDTO> errors = validator.validate(form).stream().map(validation -> new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), validation.getPropertyPath() + "", validation.getMessage())).collect(Collectors.toList());
+			return Response.status(Status.BAD_REQUEST).entity(errors).build();
+		}
+		
+		User user = us.getById(id);
+		User loggedUser = user(); 
+		
+		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "the user does not exist")).build();
+		if (!user.getId().equals(loggedUser.getId())) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "id", "logged with wrong user")).build();
+		byte[] prevImage = user.getCoverImage();
+		
+		us.uploadCoverImage(user, form.getContent());
+		
+		final URI uri = uriInfo.getBaseUriBuilder().path("/users/{id}/cover").build(user.getId());
+		if ( prevImage == null) return Response.created(uri).build();
+		return Response.status(Status.NO_CONTENT).build();
+    }
+	
+	@PUT
+	@Path("/{id}/profile")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateUser(@PathParam("id") Integer id, final UserUpdateForm form) {
+		console.info("Controller: Start updating user {}", id);
+		
+		if (form == null) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), "form", "form is null")).build();
+		}
+		
+		if (!validator.validate(form).isEmpty()) {
+			List<ErrorDTO> errors = validator.validate(form).stream().map(validation -> new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), validation.getPropertyPath() + "", validation.getMessage())).collect(Collectors.toList());
+			return Response.status(Status.BAD_REQUEST).entity(errors).build();
+		}
+		
+		User toUpdate = us.getById(id);
+		User loggedUser = user();
+		
+		// Check if profile can be updated
+		if (toUpdate == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "the user does not exist")).build();
+		if (!toUpdate.getId().equals(loggedUser.getId())) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "id", "logged with wrong user")).build();
+		
+		// Get user from form
+		User user = form.getUser();
+		
+		// Update user fields
+		user = us.update(toUpdate, user);
+
+		return Response.ok().entity(new UserDTO(user, uriInfo.getBaseUriBuilder().path("/users/{id}").build(user.getId()))).build();
+	}
+	
+	@GET
+	@Path("/{id}/cover")
+	@Produces({"images/jpg", "images/png", "images/gif"})
+	public Response getCoverImage(@PathParam("id") final int id) {
+		User user = us.getById(id);
+		console.info("Getting cover image for id {}", id);
+		if (user == null || user.getCoverImage() == null) return Response.status(Status.NOT_FOUND).build();
+		
+		return Response.ok(user.getCoverImage()).build();
 	}
 }

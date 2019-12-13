@@ -1,25 +1,50 @@
 package ar.edu.itba.paw.webapp.controllers;
 
-import javax.validation.Valid;
+import java.net.URI;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.validation.Validator;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.Status;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.stereotype.Component;
 
 import ar.edu.itba.paw.interfaces.EventService;
+import ar.edu.itba.paw.interfaces.ReviewService;
 import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.models.Reservation;
+import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.webapp.DTO.ErrorDTO;
+import ar.edu.itba.paw.webapp.DTO.UnauthTripDTO;
+import ar.edu.itba.paw.webapp.DTO.ReviewDTO;
+import ar.edu.itba.paw.webapp.DTO.TripDTO;
+import ar.edu.itba.paw.webapp.forms.ReviewForm;
 import ar.edu.itba.paw.webapp.forms.TripCreateForm;
 
-@Controller
+@Path("trips")
+@Component
 public class TripController extends AuthController {
+    private final static Logger console = LoggerFactory.getLogger(TripController.class);
 
 	@Autowired
 	private TripService ts;
@@ -30,88 +55,223 @@ public class TripController extends AuthController {
 	@Autowired
 	private EventService es;
 	
-	@RequestMapping(value = "/trip", method = RequestMethod.GET)
-	public ModelAndView createTripView(@ModelAttribute("tripForm") final TripCreateForm form) {
-		// Expose view
-		final ModelAndView mav = new ModelAndView("trips/add");
-		return mav;
+	@Context
+	private UriInfo uriInfo;
+	
+	@Autowired
+	private ReviewService rs;
+	
+	@Autowired
+    private Validator validator;
+	
+	@GET
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getById(@PathParam("id") final int id) {
+		final Trip trip = ts.findById(id);
+		final User user = user();
+		if (trip != null) {
+			console.info("Controller: Gettingtrip from {} to {}", trip.getFrom_city(), trip.getTo_city());
+			if (user != null && trip.getDriver().equals(user)) {
+				URI uri = uriInfo.getBaseUriBuilder().path("/users/").build();
+				return Response.ok(new TripDTO(trip, uri)).build();
+			} else {
+				final URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
+				return Response.ok(new UnauthTripDTO(trip, user, userUri)).build();
+			}
+		} else {
+			return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "Trip not found")).build();
+		}
 	}
 	
-	@RequestMapping(value = "/trip/{tripId}/delete", method = RequestMethod.POST)
-	public ModelAndView deleteTrip(@PathVariable("tripId") final Integer tripId) {
+	@POST
+	@Path("/")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response createTrip(final TripCreateForm form) {
+		// Check if the trip form is valid
+		if (form == null) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), "form", "form is null")).build();
+		}
+		
+		if (!validator.validate(form).isEmpty()) {
+			List<ErrorDTO> errors = validator.validate(form).stream().map(validation -> new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), validation.getPropertyPath() + "", validation.getMessage())).collect(Collectors.toList());
+			return Response.status(Status.BAD_REQUEST).entity(errors).build();
+		}
+
+		console.info("Controller: Creating trip from {} to {}", form.getFrom_city(), form.getTo_city());
+		
+		User loggedUser = user();
+		
+		boolean isOverlapping = ts.areTimeConflicts(form.getTrip(), loggedUser);
+		if (isOverlapping) return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "times", "user has not available this time range")).build();
+			
+		// Create trip with logged user as a driver
+		Trip trip = ts.register(form.getTrip(), loggedUser);
+		
+		final URI uri = uriInfo.getBaseUriBuilder().path("/trips/{id}").build(trip.getId());
+		URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
+		return Response.created(uri).entity(new TripDTO(trip, userUri)).build();
+	}
+	
+	@POST
+	@Path("/{id}/reviews")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addReview(final ReviewForm form, @PathParam("id") final Integer tripId) {
+		User loggedUser = user();
+
+		// Validate review form is schema-compliant
+		if (form == null) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), "form", "form is null")).build();
+		}
+		
+		if (!validator.validate(form).isEmpty()) {
+			List<ErrorDTO> errors = validator.validate(form).stream().map(validation -> new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), validation.getPropertyPath() + "", validation.getMessage())).collect(Collectors.toList());
+			return Response.status(Status.BAD_REQUEST).entity(errors).build();
+		}
+		
+		console.info("Controller: Adding review for trip with id {}", tripId);
+		
+		// Check requirements for reviewing are passed
+		Trip trip = ts.findById(tripId);
+		
+		if (trip == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "Trip not found")).build();
+		boolean wasPassenger = trip.getPassengers().contains(loggedUser);
+		if(!wasPassenger) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "id", "logged with wrong user")).build();
+		if (!rs.canLeaveReview(trip, loggedUser)) return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "reviewed", "the user can't review this trip")).build();
+		
+		// Compose review
+		Review review = form.getReview();
+		review.setOwner(loggedUser);
+		review.setReviewedUser(trip.getDriver());
+		review.setTrip(trip);
+		
+		// Persist review
+		Review savedReview = rs.add(review);
+		
+		// Return new review with its id
+		final URI uri = uriInfo.getBaseUriBuilder().path("/reviews/{id}").build(savedReview.getId());
+		URI userUri = uriInfo.getBaseUriBuilder().path("/users/").build();
+		return Response.created(uri).entity(new ReviewDTO(savedReview, userUri)).build();
+		
+	}
+
+	@DELETE
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteTrip(@PathParam("id") final Integer tripId) {
+		console.info("Controller: Deleting trip with id {}", tripId);
+		User loggedUser = user();
 		
 		// Check you have control over the trip
 		Trip trip = ts.findById(tripId);
-		User loggedUser = user();
+		if (trip == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "Trip not found")).build();
+		if (!trip.getDriver().equals(loggedUser)) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "id", "logged with wrong user")).build();
+		if (trip.getDeleted())return Response.noContent().build();
 		
-		if (!trip.getDriver().equals(loggedUser)) return new ModelAndView("redirect:/404");
-
+		
+		
 		// Delete trip
 		ts.delete(tripId, loggedUser);
 		es.registerDelete(loggedUser, tripId);
 		
-		// Redirect to profile
-		return new ModelAndView("redirect:/user/" + loggedUser.getId());
+		// Return success
+		return Response.noContent().build();
 	}
 	
-	@RequestMapping(value = "/trip/{tripId}/reserve", method = RequestMethod.POST)
-	public ModelAndView reserveTrip(@PathVariable("tripId") final Integer tripId) {
-		// Reserve trip and register in log
+	@PUT
+	@Path("/{id}/reservation")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response reserveTrip(@PathParam("id") final Integer tripId) {
+		console.info("Controller: Reserving trip with id {}", tripId);
 		User loggedUser = user();
 		
-		ts.reserve(tripId, loggedUser);
+		// Check that trip exists
+		Trip trip = ts.findById(tripId);
+		if (trip == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "Trip not found")).build();
+		
+		// Make several checks to ensure the user can reserve the trip
+		Date date = new Date();
+		Timestamp now = new Timestamp(date.getTime());
+		
+		boolean isLate = now.after(trip.getEtd());
+		boolean isFull = trip.getAvailable_seats() < 1;
+		boolean isDriver = trip.getDriver().equals(loggedUser);
+		boolean hasReserved = us.getPassengers(trip).contains(loggedUser);
+		boolean isOverlapping = ts.areTimeConflicts(trip, loggedUser);
+		
+		if (isLate) return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "late", "the user can't reserve this trip")).build();
+		if (isFull) return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "full", "the user can't reserve this trip")).build();
+		if (isDriver) return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "driver", "the user can't reserve this trip")).build();
+		if (isOverlapping) return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "overlapping", "the user can't reserve this trip")).build();
+		if (hasReserved) return Response.noContent().build();
+		
+		// Reserve and register trip 
+		Reservation reservation = ts.reserve(tripId, loggedUser);
 		es.registerReserve(loggedUser, tripId);
 
-		// Redirect to profile
-		return new ModelAndView("redirect:/user/" + loggedUser.getId());
+		// Return success
+		final URI uri = uriInfo.getBaseUriBuilder().path("/reservation/{id}").build(reservation.getId());
+		return Response.created(uri).build();
 	}
 	
-	@RequestMapping(value = "/trip/{tripId}/unreserve", method = RequestMethod.POST)
-	public ModelAndView unreserveTrip(@PathVariable("tripId") final Integer tripId) {
-		// Unreserve trip and  register in log
+	@DELETE
+	@Path("/{id}/reservation")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response unreserveTrip(@PathParam("id") final Integer tripId) {
+		console.info("Controller: Unreserving trip with id {}", tripId);
 		User loggedUser = user();
+		
+		// Check that trip exists
+		Trip trip = ts.findById(tripId);
+		if (trip == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "Trip not found")).build();
+		
+		// Check that has permissions required
+		if (!trip.getPassengers().contains(loggedUser)) Response.noContent().build();
+
+		// Check if it's too late
+		Date date = new Date();
+		Timestamp now = new Timestamp(date.getTime());
+		boolean isLate = now.after(trip.getEtd());
+		if (isLate) return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "time", "too late to reserve")).build();
+		
+		// Unreserve trip and notify
 		ts.unreserve(tripId, loggedUser);
-		//hs.addHistory(loggedUser, tripId, "UNRESERVE");
 		es.registerUnreserve(loggedUser, tripId);
 		
-		// Redirect to profile
-		return new ModelAndView("redirect:/user/" + loggedUser.getId());
+		// Return success
+		return Response.noContent().build();
 	}
 	
-	@RequestMapping(value = "/trip/{tripId}/unreserve/{userId}", method = RequestMethod.POST)
-	public ModelAndView kickFromTrip(@PathVariable("tripId") final Integer tripId,
-									 @PathVariable("userId") final Integer userId) {
+	@DELETE
+	@Path("{id}/passengers/{userid}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response kickFromTrip(@PathParam("id") final Integer tripId, 
+								 @PathParam("userid") final Integer userId) {
+		console.info("Controller: Kicking passenger with id {} from trip with id {}", userId, tripId);
 		
-		// Check you have control over the trip
+		// Check logged user is authorized to edit the trip
 		Trip trip = ts.findById(tripId);
 		User loggedUser = user();
-		
-		if (!trip.getDriver().equals(loggedUser)) return new ModelAndView("redirect:/404");
+		if (trip == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "trip_id", "Trip not found")).build();
+		if (!trip.getDriver().equals(loggedUser)) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "id", "logged with wrong user")).build();
 		
 		// Find kicked user
 		User user = us.findById(userId);
+		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "user_id", "user not found")).build();
+		
+		// Check if it's too late
+		Date date = new Date();
+		Timestamp now = new Timestamp(date.getTime());
+		boolean isLate = now.after(trip.getEtd());
+		if (isLate) return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "time", "too late to delete")).build();
 		
 		// Unreserve trip for the kicked user
 		ts.unreserve(tripId, user);
 		es.registerKicked(user, tripId);
 		
-		// Redirect to profile
-		return new ModelAndView("redirect:/user/" + loggedUser.getId());
-	}
-	
-	
-	@RequestMapping(value = "/trip", method = RequestMethod.POST)
-	public ModelAndView createTrip(@Valid @ModelAttribute("tripForm") final TripCreateForm form,
-			  					  final BindingResult errors) {
-		// Check for form errors
-		if (errors.hasErrors()) return createTripView(form);
-		
-		// Register new user
-		User loggedUser = user();
-		System.out.println("CHECK 1");
-		ts.register(form.getTrip(), loggedUser);
-		System.out.println("CHECK 2");
-		// Redirect to profile view
-		return new ModelAndView("redirect:/user/" + loggedUser.getId());
+		// Return success
+		return Response.noContent().build();
 	}
 }

@@ -1,69 +1,97 @@
 package ar.edu.itba.paw.webapp.controllers;
 
-import javax.validation.Valid;
+import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.validation.Validator;
+import javax.ws.rs.BeanParam;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.Status;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.stereotype.Component;
 
 import ar.edu.itba.paw.interfaces.ReviewService;
-import ar.edu.itba.paw.interfaces.TripService;
 import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.Trip;
 import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.webapp.forms.ReviewForm;
+import ar.edu.itba.paw.webapp.DTO.ErrorDTO;
+import ar.edu.itba.paw.webapp.DTO.ReviewDTO;
+import ar.edu.itba.paw.webapp.forms.ImageForm;
 
-@Controller
+@Path("reviews")
+@Component
 public class ReviewController extends AuthController {
-
-	@Autowired
-	private TripService ts;
-
+	private final static Logger console = LoggerFactory.getLogger(TripController.class);
+	
 	@Autowired
 	private ReviewService rs;
+	
+	@Autowired
+    private Validator validator;
+	
+	@Context
+	private UriInfo uriInfo;
 
-	@RequestMapping(value = "/review/{tripId}", method = RequestMethod.GET)
-	public ModelAndView createReviewView(@ModelAttribute("reviewForm") final ReviewForm form,
-										@PathVariable("tripId") final Integer tripId) {
+	@GET
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getById(@PathParam("id") final int id) {
+		console.info("Controller: Getting review with id {}", id);
+		Review review = rs.getReviewById(id);
+		if (review == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "review not found")).build();
 
-		// 404 if user can not make a review
-		Trip trip = ts.findById(tripId);
-		User loggedUser = user();
-		if (trip == null || trip.getId() == null || !rs.canLeaveReview(trip, loggedUser)) return new ModelAndView("redirect:/404");
-
-		// Expose view
-		ModelAndView mav = new ModelAndView("review/add");
-		mav.addObject("reviewed", trip.getDriver());
-		mav.addObject("trip", trip);
-		mav.addObject("user", loggedUser);
-		return mav;
+		URI uri = uriInfo.getBaseUriBuilder().path("/users/").build();
+		return Response.ok(new ReviewDTO(review, uri)).build();
 	}
+	
+	@PUT
+    @Path("/{id}/image")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadImage(@PathParam("id") Integer id, @BeanParam final ImageForm form){
+		if (form == null) {
+			return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), "form", "form is null")).build();
+		}
+		
+		if (!validator.validate(form).isEmpty()) {
+			List<ErrorDTO> errors = validator.validate(form).stream().map(validation -> new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), validation.getPropertyPath() + "", validation.getMessage())).collect(Collectors.toList());
+			return Response.status(Status.BAD_REQUEST).entity(errors).build();
+		}
+		
+		Review review = rs.getReviewById(id);
+		User loggedUser = user(); 
+		
+		console.info("Controller: Uploading image to review {}", id);
+		if (review == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "review not found")).build();
+		if (!review.getOwner().getId().equals(loggedUser.getId())) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "id", "logged with wrong user")).build();
+		if (review.getImage() != null) return Response.status(Status.CONFLICT).entity(new ErrorDTO(Status.CONFLICT.getStatusCode(), "uploaded", "the image was already uploaded")).build();
+		
+		rs.uploadImage(review, form.getContent());
 
-	@RequestMapping(value = "/review/{tripId}", method = RequestMethod.POST)
-	public ModelAndView addReview(@Valid @ModelAttribute("reviewForm") final ReviewForm form,
-								 BindingResult errors,
-								 @PathVariable("tripId") final Integer tripId) {
-		// Check for errors
-		if (errors.hasErrors()) return createReviewView(form, tripId);
+		final URI uri = uriInfo.getBaseUriBuilder().path("/reviews/{id}/image").build(id);
+		return Response.created(uri).build();
 
-		// Compose review
-		User loggedUser = user();
-		Trip trip = ts.findById(tripId);
-		Review review = form.getReview();
-		review.setOwner(loggedUser);
-		review.setReviewedUser(trip.getDriver());
-		review.setTrip(trip);
-
-		// Persist review
-		rs.add(review);
-
-		// Redirect to profile
-		return new ModelAndView("redirect:/user/" + loggedUser.getId());
-
+    }
+	
+	@GET
+	@Path("/{id}/image")
+	@Produces({"image/jpg", "image/png", "image/gif", "image/jpeg"})
+	public Response getImageById(@PathParam("id") final int id) {
+		Review review = rs.getReviewById(id);
+		console.info("Controller: Getting image for id {}", id);
+		if (review == null || review.getImage() == null) return Response.status(Status.NOT_FOUND).build();
+		
+		return Response.ok(review.getImage()).build();
 	}
 }

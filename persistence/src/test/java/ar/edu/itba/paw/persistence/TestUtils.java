@@ -21,6 +21,11 @@ public class TestUtils {
 		public static final String PHONE_NUMBER = "phone";
 		public static final Timestamp NOW = new Timestamp(System.currentTimeMillis());
 		
+		public static final String EXISTING_USERNAME = "Username1";
+		public static final String NONEXISTING_USERNAME = "Username20";
+		public static final Integer EXISTING_ID = 1;
+		public static final Integer NONEXISTING_ID = 900;
+		
 		private UserUtils () {}
 		
 		public static User sampleUser() {
@@ -50,6 +55,11 @@ public class TestUtils {
 		public static final Double ARRIVAL_LAT = -34.609475;
 		public static final Double ARRIVAL_LON = -58.388214;
 		public static final Timestamp NOW = new Timestamp(System.currentTimeMillis());
+		
+		public static final Integer EXISTING_ID = 1;
+		public static final Integer EXISTING_DRIVER_ID = 2;
+		public static final Integer EXISTING_PASSENGER_ID = 3;
+		public static final Integer NONEXISTING_PASSENGER_ID = 1;
 	
 		private TripUtils () {}
 		
@@ -82,6 +92,12 @@ public class TestUtils {
 		public static final Integer STARS = 3;
 		public static final String MESSAGE = "Message";
 		public static final Timestamp NOW = new Timestamp(System.currentTimeMillis());
+		
+		public static final Integer EXISTING_ID = 2;
+		public static final Integer EXISTING_DRIVER_ID = 2;
+		public static final Integer EXISTING_TRIP_ID = 1;
+		public static final Integer EXISTING_PASSENGER_ID = 3;
+		public static final Integer NONEXISTING_PASSENGER_ID = 1;
 	
 		private ReviewUtils () {}
 		
@@ -105,6 +121,12 @@ public class TestUtils {
 		public static final Integer TRIP_ID = 1;
 		public static final String TYPE = "CREATED";
 		public static final Timestamp NOW = new Timestamp(System.currentTimeMillis());
+		
+		public static final Integer EXISTING_ID = 2;
+		public static final Integer EXISTING_DRIVER_ID = 2;
+		public static final Integer EXISTING_TRIP_ID = 1;
+		public static final Integer EXISTING_PASSENGER_ID = 3;
+		public static final Integer NONEXISTING_PASSENGER_ID = 1;
 	
 		private HistoryUtils () {}
 		

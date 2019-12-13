@@ -32,6 +32,26 @@ public class UserDaoHibernate implements UserDao {
 		} catch (Exception e) {
 		}
 	}
+	
+	public User update(User toUpdate, User user) {
+		if (user.getFirst_name() != null) toUpdate.setFirst_name(user.getFirst_name());
+		if (user.getLast_name() != null) toUpdate.setLast_name(user.getLast_name());
+		if (user.getPhone_number() != null) toUpdate.setPhone_number(user.getPhone_number());
+		em.merge(toUpdate);
+		return toUpdate;
+	}
+	
+	public User uploadProfileImage(User user, byte[] image) {
+		user.setProfileImage(image);
+		em.merge(user);
+		return user;
+	}
+	
+	public User uploadCoverImage(User user, byte[] image) {
+		user.setCoverImage(image);
+		em.merge(user);
+		return user;
+	}
 
 	public static void loadReducedResultIntoUser(ResultSet rs, User user) {
 		try {
@@ -51,18 +71,15 @@ public class UserDaoHibernate implements UserDao {
 	}
 
 	public User create(User user) {
-		// Add created timestamp
 		Timestamp now = new Timestamp(System.currentTimeMillis());
 		user.setCreated(now);
-		
 		em.persist(user);
-
 		return user;
 	}
 
 	@Override
 	public User getByUsername(final String username) {
-		String query = "from User as u WHERE u.username = :username";
+		String query = "FROM User u WHERE u.username = :username";
 		
 		List<User> users = em.createQuery(query, User.class)
 							 .setParameter("username", username)
@@ -82,10 +99,6 @@ public class UserDaoHibernate implements UserDao {
 
 	public List<User> getPassengers(Trip trip) {
 		List<User> passengers = trip.getReservations().stream().map((reservation) -> reservation.getUser()).collect(Collectors.toList());
-		
-		
 		return passengers == null ? new ArrayList<User>() : passengers;
 	}
-
-
 }

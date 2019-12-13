@@ -6,6 +6,8 @@ public class Search {
 	private String from;
 	private String to;
 	private Timestamp when;
+	private Position arrival;
+	private Position departure;
 	
 	public String getFrom() {
 		return from;
@@ -37,5 +39,17 @@ public class Search {
 		this.from = from;
 		this.to = to;
 		this.when = when;
+	}
+	public Position getArrival() {
+		return arrival;
+	}
+	public void setArrival(Position arrival) {
+		this.arrival = arrival;
+	}
+	public Position getDeparture() {
+		return departure;
+	}
+	public void setDeparture(Position departure) {
+		this.departure = departure;
 	}
 }
