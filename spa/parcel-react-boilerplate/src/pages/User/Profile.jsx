@@ -61,12 +61,13 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
 
   const translationPrefix = isOwnProfile ? "user.profile" : "user.profileOther";
 
-  const onUpdateTrip = (tripId, reason) => {
+  const onUpdateTrip = (trip, reason) => {
     if (reason === "unreserve") {
-      const tripIdx = trips.findIndex(t => t.id === tripId);
-      const updatedTrips = [...trips];
+      const { data: ts } = trips;
+      const tripIdx = ts.findIndex(t => t.id === trip.id);
+      const updatedTrips = [...ts];
       updatedTrips[tripIdx] = trip;
-      setTrips(updatedTrips);
+      setData(setTrips)(updatedTrips);
       return;
     } else if (reason === "delete") {
       setTrips(webDataInitial);

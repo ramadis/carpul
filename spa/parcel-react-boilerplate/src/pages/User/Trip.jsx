@@ -123,6 +123,7 @@ const DeleteTripButton = ({ tripId, onUpdate }) => {
 
 const PassengerList = ({ trip, onUpdate }) => {
   const { t } = useTranslation();
+  const [requestLoading, setLoading] = useState(false);
 
   const askCancel = passenger => () =>
     confirmAlert({
@@ -130,16 +131,26 @@ const PassengerList = ({ trip, onUpdate }) => {
         {
           danger: true,
           label: t("reservation.cancel.confirmation.unreserve"),
-          onClick: () =>
+          onClick: () => {
+            setLoading(true);
             cancelReservation(passenger.id, trip.id)
               .then(() => {
                 NotificationManager.success(
                   `${passenger.first_name} reservation was cancelled`,
                   "Cancellation confirmed"
                 );
-                onUpdate(trip.id, "unreserve");
+                const updatedTrip = {
+                  ...trip,
+                  passengers:
+                    trip.passengers && trip.passengers.length
+                      ? trip.passengers.filter(p => p.id !== passenger.id)
+                      : trip.passengers,
+                };
+                onUpdate(updatedTrip, "unreserve");
               })
-              .catch(requestCatch),
+              .catch(requestCatch)
+              .finally(() => setLoading(false));
+          },
         },
         {
           label: t("reservation.cancel.confirmation.cancel"),
@@ -184,9 +195,14 @@ const PassengerList = ({ trip, onUpdate }) => {
             <DeleteButton
               onClick={askCancel(passenger)}
               type="button"
+              disabled={requestLoading}
               className="kick-hitchhiker"
             >
-              <img src={imgDelete} height="20px" width="20px" alt="" />
+              {requestLoading ? (
+                <MDSpinner size={16} />
+              ) : (
+                <img src={imgDelete} height="20px" width="20px" alt="" />
+              )}
             </DeleteButton>
           </div>
         </div>
