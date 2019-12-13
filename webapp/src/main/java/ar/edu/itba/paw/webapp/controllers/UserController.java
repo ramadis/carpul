@@ -14,6 +14,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 
@@ -177,7 +178,8 @@ public class UserController extends AuthController {
 		
 		// Return reviews for a given user id
 		URI uri = uriInfo.getBaseUriBuilder().path("/users/").build();
-		for (Review r: reviews) reviewDTOs.add(new ReviewDTO(r, uriInfo.getAbsolutePathBuilder().path(String.valueOf(r.getId())).build().toString(), uri));
+		UriBuilder reviewUri = uriInfo.getBaseUriBuilder().path("/reviews/{id}");
+		for (Review r: reviews) reviewDTOs.add(new ReviewDTO(r, reviewUri.build(r.getId()).toString(), uri));
 		return Response.ok(reviewDTOs).build();
 	}
 	
