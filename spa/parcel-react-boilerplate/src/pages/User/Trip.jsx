@@ -69,7 +69,19 @@ const DeleteButton = styled.button`
   cursor: pointer;
 `;
 
-const DeleteTripButton = ({ tripId }) => {
+const DisabledOverlay = styled.div`
+  content: "";
+  position: absolute;
+  z-index: 9999;
+  height: 100%;
+  top: 0;
+  width: 100%;
+  background: rgba(204, 204, 204, 0.6);
+  left: 0;
+  border-radius: 5px;
+`;
+
+const DeleteTripButton = ({ tripId, onUpdate }) => {
   const { t } = useTranslation();
   const [isLoading, setLoading] = useState(false);
 
@@ -82,12 +94,13 @@ const DeleteTripButton = ({ tripId }) => {
           onClick: () => {
             setLoading(true);
             cancelTrip(tripId)
-              .then(() =>
+              .then(() => {
                 NotificationManager.success(
                   "All passengers have received an email letting them know",
                   "Trip cancelled successfully"
-                )
-              )
+                );
+                onUpdate(tripId, "delete");
+              })
               .catch(requestCatch)
               .finally(() => setLoading(false));
           },
@@ -108,7 +121,7 @@ const DeleteTripButton = ({ tripId }) => {
   );
 };
 
-const PassengerList = ({ trip }) => {
+const PassengerList = ({ trip, onUpdate }) => {
   const { t } = useTranslation();
 
   const askCancel = passenger => () =>
@@ -119,12 +132,13 @@ const PassengerList = ({ trip }) => {
           label: t("reservation.cancel.confirmation.unreserve"),
           onClick: () =>
             cancelReservation(passenger.id, trip.id)
-              .then(() =>
+              .then(() => {
                 NotificationManager.success(
                   `${passenger.first_name} reservation was cancelled`,
                   "Cancellation confirmed"
-                )
-              )
+                );
+                onUpdate(trip.id, "unreserve");
+              })
               .catch(requestCatch),
         },
         {
@@ -276,7 +290,7 @@ const ReserveButton = ({ trip }) => {
     </ReserveButtonStyle>
   );
 };
-const Trip = ({ trip, isOwner }) => {
+const Trip = ({ trip, isOwner, onUpdate = () => null }) => {
   const { t } = useTranslation();
   const fmtetddate = format(trip.etd, "DD/MM/YYYY");
   const fmtetdtime = format(trip.etd, "HH:mm");
@@ -291,6 +305,7 @@ const Trip = ({ trip, isOwner }) => {
       <style jsx>{profileHeroCss}</style>
       <React.Fragment>
         <li className="destiny-item trip-item">
+          {trip.etd < new Date() ? <DisabledOverlay /> : null}
           <div className="inline-block no-margin">
             {isOwner ? (
               <EarningSection trip={trip} />
@@ -331,8 +346,10 @@ const Trip = ({ trip, isOwner }) => {
                 <Link to={routes.trip(trip.id)}>Share</Link>
               </div>
             </div>
-            {isOwner && <DeleteTripButton tripId={trip.id} />}
-            {isOwner && <PassengerList trip={trip} />}
+            {isOwner && (
+              <DeleteTripButton onUpdate={onUpdate} tripId={trip.id} />
+            )}
+            {isOwner && <PassengerList onUpdate={onUpdate} trip={trip} />}
             {!isOwner && <ReserveButton trip={trip} />}
           </div>
         </li>

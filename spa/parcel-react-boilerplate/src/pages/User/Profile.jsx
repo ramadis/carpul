@@ -57,10 +57,24 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
   const isLogged = !!token;
   const isLoadingUser = user === null;
 
-  // Yeah, `userId` is a string........
   const isOwnProfile = loggedUser && userId === `${loggedUser.id}`;
 
   const translationPrefix = isOwnProfile ? "user.profile" : "user.profileOther";
+
+  const onUpdateTrip = (tripId, reason) => {
+    if (reason === "unreserve") {
+      const tripIdx = trips.findIndex(t => t.id === tripId);
+      const updatedTrips = [...trips];
+      updatedTrips[tripIdx] = trip;
+      setTrips(updatedTrips);
+      return;
+    } else if (reason === "delete") {
+      setTrips(webDataInitial);
+      getTripsByUser(userId)
+        .then(setData(setTrips))
+        .catch(requestCatch);
+    }
+  };
 
   const areAllEmpty =
     !reviews.loading &&
@@ -140,7 +154,11 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
               {isOwnProfile && (
                 <ReservationsSection reservations={reservations} />
               )}
-              <TripsSection isOwnProfile={isOwnProfile} trips={trips} />
+              <TripsSection
+                isOwnProfile={isOwnProfile}
+                trips={trips}
+                onUpdate={onUpdateTrip}
+              />
             </ProfileContainer>
           )}
         </React.Fragment>
@@ -285,7 +303,7 @@ const ReservationsSection = ({ reservations }) => {
   );
 };
 
-const TripsSection = ({ trips, isOwnProfile }) => {
+const TripsSection = ({ trips, isOwnProfile, onUpdate }) => {
   const { t } = useTranslation();
   const { data, loading } = trips;
 
@@ -307,7 +325,12 @@ const TripsSection = ({ trips, isOwnProfile }) => {
       ) : data.length > 0 ? (
         <TripList>
           {data.map(trip => (
-            <Trip trip={trip} key={trip.id} isOwner={isOwnProfile} />
+            <Trip
+              trip={trip}
+              key={trip.id}
+              isOwner={isOwnProfile}
+              onUpdate={onUpdate}
+            />
           ))}
         </TripList>
       ) : (

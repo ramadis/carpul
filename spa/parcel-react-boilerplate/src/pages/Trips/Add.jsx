@@ -30,6 +30,7 @@ function Add({ user }) {
   const [ETDdirty, setETDdirty] = useState(false);
   const [from, setFrom] = useState({});
   const [to, setTo] = useState({});
+  const [requestLoading, setLoading] = useState(false);
   const history = useHistory();
   const { handleSubmit, register, errors, triggerValidation } = useForm({
     mode: "onChange",
@@ -54,6 +55,7 @@ function Add({ user }) {
     };
 
     try {
+      setLoading(true);
       await createTrip(payload);
       history.push(routes.profile(user.id));
       setTimeout(
@@ -68,6 +70,7 @@ function Add({ user }) {
       console.error(error);
       NotificationManager.error(error.message.subtitle, error.message.title);
     }
+    setLoading(false);
   };
 
   const checkErrors = err => {
@@ -285,7 +288,9 @@ function Add({ user }) {
 
           <div className="actions" style={{ marginBottom: 10 }}>
             <button
-              disabled={!(isEmpty(checkErrors(errors)) && ETAdirty)}
+              disabled={
+                !(isEmpty(checkErrors(errors)) && ETAdirty && !requestLoading)
+              }
               type="submit"
               className="login-button"
             >
