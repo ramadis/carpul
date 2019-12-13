@@ -244,13 +244,13 @@ const translations = {
       to: "To",
       on: "On",
       trips:
-        "These are the options to travel from {{from}} to {{to}} on {{when}} at {{time}}",
+        "These are the options to travel from {{from}} to {{to}} after {{when}} at {{time}}",
       trips_no_to:
-        "These are some options to travel from {{from}} on {{when}} at {{time}}",
+        "These are some options to travel from {{from}} after {{when}} at {{time}}",
       trips_no_from:
-        "These are some options to travel to {{to}} on {{when}} at {{time}}",
+        "These are some options to travel to {{to}} after {{when}} at {{time}}",
       trips_no_to_no_from:
-        "These are some options to travel on {{when}} at {{time}}",
+        "These are some options to travel after {{when}} at {{time}}",
       no_trips: "Sorry, no adventures from {{from}} to {{to}} at this time :(",
       no_trips_no_to: "Sorry, no adventures from {{from}} at this time :(",
       no_trips_no_from: "Sorry, no adventures to {{to}} at this time :(",

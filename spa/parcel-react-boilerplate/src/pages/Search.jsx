@@ -10,6 +10,7 @@ import { debounce } from "lodash";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { confirmAlert } from "react-confirm-alert";
 import { NotificationManager } from "react-notifications";
+import { useInfiniteScroll } from "react-infinite-scroll-hook";
 import {
   BrowserRouter as Router,
   Route,
@@ -95,17 +96,23 @@ const Search = ({ user }) => {
   const rawParams = useQuery();
   const [params, setParams] = useState(rawParams);
   const [loading, setLoading] = useState(true);
+  const [hasNextPage, setHasNextPage] = useState(true);
   const history = useHistory();
   const { to, from, when, page = 0 } = params;
 
   const handleSearch = debounce(setParams, 1000);
 
-  useEffect(() => {
+  const loadResults = async () => {
     setLoading(true);
     search(params)
-      .then(setTrips)
+      .then(results => {
+        !results.length && setHasNextPage(false);
+        setTrips(trips.concat(results));
+      })
       .finally(() => setLoading(false));
-  }, [params]);
+  };
+
+  useEffect(loadResults, [params]);
 
   const whenDate = new Date(Number(when));
 
@@ -118,6 +125,12 @@ const Search = ({ user }) => {
     return null;
   }
 
+  const infiniteRef = useInfiniteScroll({
+    loading,
+    hasNextPage,
+    onLoadMore: loadResults,
+  });
+
   return (
     <div>
       <style jsx>{poolListCss}</style>
@@ -129,9 +142,12 @@ const Search = ({ user }) => {
         </Link>
       </HeaderContainer>
 
-      <div className="list-container" style={{ marginBottom: 20 }}>
-        {loading && <Spinner />}
-        {!loading && trips.length > 0 && (
+      <div
+        className="list-container"
+        style={{ marginBottom: 20 }}
+        ref={infiniteRef}
+      >
+        {trips.length > 0 && (
           <React.Fragment>
             <TripsSubtitle
               to={to}
@@ -147,6 +163,7 @@ const Search = ({ user }) => {
         {!loading && trips.length === 0 && (
           <NoTripsSubtitle to={to} from={from} />
         )}
+        {loading && <Spinner />}
       </div>
     </div>
   );
