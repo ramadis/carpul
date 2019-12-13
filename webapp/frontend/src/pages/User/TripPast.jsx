@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import profileCss from "../../styles/profile";
 import { useTranslation } from "react-i18next";
+import { routes } from "../../App.jsx";
 
 function TripPast({ reservation }) {
   const { t, i18n } = useTranslation();
@@ -12,7 +13,7 @@ function TripPast({ reservation }) {
           <div className="destiny-cost">{t("user.trip_past.message")}</div>
           <span className="destiny-name">{reservation.to_city}</span>
           <a
-            href={`/review/${reservation.id}`}
+            href={routes.review(reservation.id)}
             className="login-button review-button"
             name="button"
           >

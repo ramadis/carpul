@@ -19,6 +19,11 @@ import Single from "./pages/Trips/Single";
 import Unreserved from "./pages/Trips/Unreserved";
 import Reserved from "./pages/Trips/Reserved";
 
+import "../css/css.css";
+import "../css/home.css";
+import "../css/pool_list.css";
+import "../css/review_item.css";
+import "../css/profile.css";
 import "react-notifications/lib/notifications.css";
 
 import { getProfile } from "./services/User.js";
@@ -30,6 +35,7 @@ export const routes = {
   reservedTrip: tripId => `/trips/${tripId}/reserved`,
   trip: tripId => `/trips/${tripId}`,
   profile: userId => `/user/${userId}`,
+  review: tripId => `/review/${tripId}`,
   login: `/login`,
   register: `/register`,
   logOut: `/logout`,
