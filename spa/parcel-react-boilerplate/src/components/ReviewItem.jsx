@@ -16,6 +16,11 @@ const StarsContainer = styled.div`
   margin-bottom: 5px;
 `;
 
+const ImageContainer = styled.a`
+  margin: 5px 0;
+  display: inline-block;
+`;
+
 const Message = ({ review }) => {
   const maxDisplayLength = 50;
   const [full, setFull] = useState(false);
@@ -94,6 +99,11 @@ const Review = ({ review }) => {
               }
             />
           </StarsContainer>
+          {review.image ? (
+            <ImageContainer href={review.image}>
+              <img target="_blank" height={75} src={review.image} />
+            </ImageContainer>
+          ) : null}
           <Message review={review} />
           <span className="review-meta review-trip">
             {t("review.item.from")}
