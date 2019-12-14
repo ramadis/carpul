@@ -121,7 +121,7 @@ const Reservation = ({ t, trip, editable }) => {
               <Link to={routes.trip(trip.id)}>Share</Link>
             </div>
             <hr />
-            <a href={routes.profile(trip.driver.id)}>
+            <Link to={routes.profile(trip.driver.id)}>
               <div>
                 <div className="driver">
                   <div className="driver-item-data flex-center">
@@ -146,7 +146,7 @@ const Reservation = ({ t, trip, editable }) => {
                   </div>
                 </div>
               </div>
-            </a>
+            </Link>
             {editable ? (
               <Button disabled={requestLoading} onClick={askUnreserve}>
                 {requestLoading ? <MDSpinner size={16} /> : "Unreserve"}

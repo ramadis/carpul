@@ -12,13 +12,13 @@ function TripPast({ reservation }) {
         <div className="inline-block no-margin">
           <div className="destiny-cost">{t("user.trip_past.message")}</div>
           <span className="destiny-name">{reservation.to_city}</span>
-          <a
+          <Link
             href={routes.review(reservation.id)}
             className="login-button review-button"
             name="button"
           >
             {t("user.trip_past.review")}
-          </a>
+          </Link>
         </div>
       </li>
     </React.Fragment>

@@ -171,7 +171,7 @@ const PassengerList = ({ trip, onUpdate }) => {
         <div key={passenger.id}>
           <div className="driver">
             <div className="driver-item-data">
-              <a href={routes.profile(passenger.id)}>
+              <Link to={routes.profile(passenger.id)}>
                 <img
                   width="50"
                   height="50"
@@ -190,7 +190,7 @@ const PassengerList = ({ trip, onUpdate }) => {
                   </span>
                   <span>{passenger.phone_number}</span>
                 </div>
-              </a>
+              </Link>
             </div>
             <DeleteButton
               onClick={askCancel(passenger)}
