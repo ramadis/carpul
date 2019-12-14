@@ -38,9 +38,11 @@ export const unlogUser = async () => {
   const currentPath = window.location.pathname;
   const currentURI = window.location.href;
   const validURLs = ["/login", "/register"];
-
-  if (!validURLs.some(url => currentURI.includes(uri))) {
-    setTimeout(() => (window.location.href = `${currentPath}/#/login`));
+  console.log(currentPath, currentURI);
+  if (!validURLs.some(url => currentURI.includes(url))) {
+    console.log("REDIRECT");
+    console.log(`${currentPath}#/login`);
+    setTimeout(() => (window.location.href = `${currentPath}#/login`));
   }
 
   store.dispatch({ type: "LOGOUT" });
