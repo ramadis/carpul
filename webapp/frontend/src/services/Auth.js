@@ -35,11 +35,12 @@ export const loginUser = async (username, password) => {
 export const unlogUser = async () => {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
-  const currentURL = window.location.pathname;
+  const currentPath = window.location.pathname;
+  const currentURI = window.location.href;
   const validURLs = ["/login", "/register"];
-  console.log(currentURL);
-  if (!validURLs.includes(currentURL)) {
-    setTimeout(() => (window.location.href = "/#/login"));
+
+  if (!validURLs.some(url => currentURI.includes(uri))) {
+    setTimeout(() => (window.location.href = `${currentPath}/#/login`));
   }
 
   store.dispatch({ type: "LOGOUT" });
