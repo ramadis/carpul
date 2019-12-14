@@ -2,13 +2,14 @@ import { combineReducers } from 'redux'
 
 const hidrateUser = () => {
   try {
-    return JSON.parse(localStorage.getItem('user'))
+    return JSON.parse(window.localStorage.getItem('user'))
   } catch (e) {
     return null
   }
 }
-const initialState = {
-  token: localStorage.getItem('token'),
+
+export const initialState = {
+  token: window.localStorage.getItem('token'),
   user: hidrateUser(),
   reservations: null
 }
@@ -16,7 +17,6 @@ const initialState = {
 export const isLoggedIn = state => !!state.token
 
 const user = (state = initialState, action) => {
-  console.log('GOT:', action)
   switch (action.type) {
     case 'LOGIN': {
       return { ...state, token: action.token }

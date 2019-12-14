@@ -19,7 +19,7 @@ yarn build
 
 # Testing
 
-Uses Jest as test runner and react-testing-library to do the assertions.
+Uses Mocha as test runner and react-testing-library to do the assertions.
 
 ```
 yarn test
