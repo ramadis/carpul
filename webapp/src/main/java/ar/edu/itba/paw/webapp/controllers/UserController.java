@@ -127,6 +127,7 @@ public class UserController extends AuthController {
 	@GET
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
+	// TODO: Esto deberia devolverte la lista de los usuarios
 	public Response getCurrentUser() {
 		final User user = user();
 		return Response.ok(new UserDTO(user, uriInfo.getBaseUriBuilder().path("/users/{id}").build(user.getId()))).build();

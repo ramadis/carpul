@@ -27,7 +27,7 @@ export const getReservationsByUser = async id => {
 };
 
 export const reserveByTrip = async id => {
-  const reservation = await PUTwithAuth(`/trips/${id}/reservation`).then(
+  const reservation = await POSTwithAuth(`/trips/${id}/reservation`).then(
     res => {
       if (res.isRawResponse) {
         const errors = {

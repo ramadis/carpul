@@ -180,7 +180,7 @@ public class TripController extends AuthController {
 		return Response.noContent().build();
 	}
 	
-	@PUT
+	@POST
 	@Path("/{id}/reservation")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response reserveTrip(@PathParam("id") final Integer tripId) {

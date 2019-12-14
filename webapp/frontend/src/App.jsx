@@ -34,8 +34,8 @@ export const routes = {
   unreservedTrip: tripId => `/trips/${tripId}/unreserved`,
   reservedTrip: tripId => `/trips/${tripId}/reserved`,
   trip: tripId => `/trips/${tripId}`,
-  profile: userId => `/user/${userId}`,
-  review: tripId => `/review/${tripId}`,
+  profile: userId => `/users/${userId}`,
+  review: tripId => `/reviews/${tripId}`,
   login: `/login`,
   register: `/register`,
   logOut: `/logout`,
@@ -66,15 +66,15 @@ function App({ token, user, dispatch }) {
         <Navbar2 />
         <Switch>
           <Route exact path="/" component={Home} />
-          <SecureRoute path="/review/:id" component={Review} />
+          <SecureRoute path="/reviews/:id" component={Review} />
           <Route path="/error/:code" component={Error} />
           <Route path="/search" component={Search} />
           <Route path="/login" exact component={Login} />
           <Route path="/logout" exact component={Logout} />
           <Route path="/register" exact component={Register} />
-          <Route path="/user/trip_past" component={TripPast} />
-          <Route path="/user/:userId/trip" exact component={Trip} />
-          <Route path="/user/:userId" exact component={Profile} />
+          <Route path="/users/trip_past" component={TripPast} />
+          <Route path="/users/:userId/trip" exact component={Trip} />
+          <Route path="/users/:userId" exact component={Profile} />
           <SecureRoute path="/trips/add" exact component={Add} />
           <Route path="/trips/:tripId" exact component={Single} />
           <SecureRoute
