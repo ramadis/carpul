@@ -236,7 +236,6 @@ const encodeQueryParams = function(obj) {
 const SearchBar = ({ onSearch = () => null }) => {
   const { t, i18n } = useTranslation();
   const { to, from, when, arrLat, arrLon, depLat, depLon } = useQuery();
-
   const [origin, setOrigin] = useState({
     city: from,
     position: { latitude: depLat, longitude: depLon },
@@ -274,7 +273,7 @@ const SearchBar = ({ onSearch = () => null }) => {
       params.arrLon = destination.position.longitude;
     }
     const query = `?${encodeQueryParams(params)}`;
-    var newurl = `${protocol}//${host + pathname + query}`;
+    var newurl = `${protocol}//${host + pathname}#/search${query}`;
     window.history.pushState({ path: newurl }, "", newurl);
   }
 

@@ -6,6 +6,7 @@ import { isEmpty } from "lodash";
 import DatePicker from "react-datepicker";
 import MDSpinner from "react-md-spinner";
 import Masonry from "react-masonry-css";
+import { Link } from "react-router-dom";
 
 import { getCity, getLocation } from "../services/Places.js";
 import { getSuggestions } from "../services/Search.js";
@@ -145,21 +146,21 @@ const Home = ({ user }) => {
                 }
                 dateFormat={t("trip.add.timestamp")}
               />
-              <a
+              <Link
                 disabled={
                   !datetime && !isEmpty(origin) && !isEmpty(destination)
                 }
                 className="login-button searchbar-button"
                 name="button"
                 tabIndex="4"
-                href={routes.search({
+                to={routes.search({
                   from: origin,
                   to: destination,
                   date: datetime,
                 })}
               >
                 {t("home.index.submit")}
-              </a>
+              </Link>
             </div>
           </div>
         </div>
