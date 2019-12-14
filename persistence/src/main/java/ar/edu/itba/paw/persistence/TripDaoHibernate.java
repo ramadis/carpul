@@ -79,7 +79,7 @@ public class TripDaoHibernate implements TripDao {
 	
 	public Boolean areDrivingConflicts(Trip trip, User user) {
 		console.info("Persistence: Checking if there are any conflicts for the user {} creating a new trip", user.getId());
-		String query = "SELECT count(t.id) FROM Trip t WHERE t.driver = :user AND (:tripEtd >= t.etd  AND :tripEtd <= t.eta OR :tripEta >= t.etd AND :tripEta <= t.eta OR :tripEtd <= t.etd AND :tripEta >= t.eta)";
+		String query = "SELECT count(t.id) FROM Trip t WHERE t.driver = :user AND t.deleted = FALSE AND (:tripEtd >= t.etd  AND :tripEtd <= t.eta OR :tripEta >= t.etd AND :tripEta <= t.eta OR :tripEtd <= t.etd AND :tripEta >= t.eta)";
 		
 		Long count = em.createQuery(query, Long.class)
 							.setParameter("user", user)
