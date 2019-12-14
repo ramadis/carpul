@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import profileCss from "../../styles/profile";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { routes } from "../../App.jsx";
 
 function TripPast({ reservation }) {
@@ -13,7 +14,7 @@ function TripPast({ reservation }) {
           <div className="destiny-cost">{t("user.trip_past.message")}</div>
           <span className="destiny-name">{reservation.to_city}</span>
           <Link
-            href={routes.review(reservation.id)}
+            to={routes.review(reservation.id)}
             className="login-button review-button"
             name="button"
           >
