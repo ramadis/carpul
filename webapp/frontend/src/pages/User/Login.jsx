@@ -54,7 +54,7 @@ const Login = ({ dispatch, user }) => {
   return isLogged ? (
     <Redirect to={routes.profile(user.id)} />
   ) : (
-    <div className="flex-center full-height">
+    <div className="flex-center full-height" style={{ background: "#e36f4a" }}>
       <form className="user-form">
         <div className="top-border" />
         <div className="text-container">

@@ -26,7 +26,7 @@ const Register = ({ user }) => {
   const isLogged = !!user;
   if (isLogged) return <Redirect to={routes.profile(user.id)} />;
   return (
-    <div className="flex-center full-height">
+    <div className="flex-center full-height" style={{ background: "#e36f4a" }}>
       <form onSubmit={handleSubmit(onSubmit)} className="user-form">
         <div className="top-border" />
         <div className="text-container">
