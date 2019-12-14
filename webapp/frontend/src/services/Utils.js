@@ -1,6 +1,7 @@
 import { unlogUser } from "./Auth";
 import store from "../state/store";
 import { API_URL } from "../api";
+import { NotificationManager } from "react-notifications";
 
 const withAuth = async (params, contentType = "application/json") => {
   const state = store.getState();
@@ -33,21 +34,24 @@ module.exports = methods.reduce((pv, cv) => {
     );
     const isUnauthorized = res.status == 401;
 
-    let resok = res.ok;
     if (isUnauthorized) {
       console.log("IS UNAUTHORIZED");
       await unlogUser();
-      resok = false;
+      NotificationManager.error(
+        "Some actions require you to be a user of carpul",
+        "You have to login"
+      );
+      return "";
     }
 
-    if (resok && res.headers.get("Content-Type") === "application/json") {
+    if (res.ok && res.headers.get("Content-Type") === "application/json") {
       return await res.json();
     } else if (res.status === 204 || res.status === 201) {
       return "";
     }
 
     // TODO: { ...res } doesn't work: it returns {}
-    return { ok: resok, status: res.status, isRawResponse: true };
+    return { ok: res.ok, status: res.status, isRawResponse: true };
   };
 
   return { ...pv, [`${cv}withAuth`]: fn };
