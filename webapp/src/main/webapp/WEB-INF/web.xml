@@ -81,16 +81,6 @@
     <dispatcher>ERROR</dispatcher>
     <dispatcher>REQUEST</dispatcher>
   </filter-mapping>
-  <!-- 
-  <filter>
-    <filter-name>IndexRedirector</filter-name>
-    <filter-class>ar.edu.itba.paw.webapp.config.IndexRedirector</filter-class>
-  </filter>
-
-  <filter-mapping>
-    <filter-name>IndexRedirector</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping> -->
 
   <filter>
     <filter-name>springSecurityFilterChain</filter-name>
