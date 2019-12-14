@@ -37,10 +37,10 @@ export const unlogUser = async () => {
   localStorage.removeItem("user");
   const currentURL = window.location.pathname;
   const validURLs = ["/login", "/register"];
-
+  console.log(currentURL);
   if (!validURLs.includes(currentURL)) {
-    setTimeout(() => (window.location.href = "/login"));
+    setTimeout(() => (window.location.href = "/#/login"));
   }
 
-  store.dispatch("LOGOUT");
+  store.dispatch({ type: "LOGOUT" });
 };

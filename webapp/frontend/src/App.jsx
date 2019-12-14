@@ -45,7 +45,7 @@ export const routes = {
 // initialize history object and routes storage
 initializeHistory(window.location);
 
-const RedirectingRoute = ({ to = "/login" }) => {
+const RedirectingRoute = ({ to = "/#/login" }) => {
   return <Redirect to={to} />;
 };
 

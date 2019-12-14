@@ -33,20 +33,21 @@ module.exports = methods.reduce((pv, cv) => {
     );
     const isUnauthorized = res.status == 401;
 
+    let resok = res.ok;
     if (isUnauthorized) {
       console.log("IS UNAUTHORIZED");
       await unlogUser();
-      res.ok = false;
+      resok = false;
     }
 
-    if (res.ok && res.headers.get("Content-Type") === "application/json") {
+    if (resok && res.headers.get("Content-Type") === "application/json") {
       return await res.json();
     } else if (res.status === 204 || res.status === 201) {
       return "";
     }
 
     // TODO: { ...res } doesn't work: it returns {}
-    return { ok: res.ok, status: res.status, isRawResponse: true };
+    return { ok: resok, status: res.status, isRawResponse: true };
   };
 
   return { ...pv, [`${cv}withAuth`]: fn };
