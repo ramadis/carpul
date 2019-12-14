@@ -32,8 +32,8 @@ const LoginButton = styled.button`
 
 const Login = ({ dispatch, user }) => {
   const [t, i18n] = useTranslation();
-  const [username, setUsername] = useState("rolivera+carpul@itba.edu.ar");
-  const [password, setPassword] = useState("carpulcarpul");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const login = async () => {

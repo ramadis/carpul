@@ -294,7 +294,7 @@ function Add({ user }) {
               type="submit"
               className="login-button"
             >
-              {t("trip.add.submit")}
+              {requestLoading ? <MDSpinner size={16} /> : t("trip.add.submit")}
             </button>
           </div>
         </form>

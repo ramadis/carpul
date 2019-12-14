@@ -1,10 +1,10 @@
 import css from "styled-jsx/css";
-
+import imgHomeHero from "../../images/home-hero.jpg";
 export default css`
   .home-hero-container {
     position: relative;
     width: 100%;
-    background-image: url("http://pawserver.it.itba.edu.ar/paw-2017b-6/static/images/home-hero.jpg");
+    background-image: url("${imgHomeHero}");
     background-size: cover;
     height: 500px;
     background-color: #00c4ff;

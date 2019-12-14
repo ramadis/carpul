@@ -51,6 +51,7 @@ export const autocompletePlaces = async search => {
 };
 
 export const getCity = place => {
+  if (!place || !place.address) return "";
   return (
     place.address.city || place.address.town || place.address.city_district
   );
