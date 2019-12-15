@@ -65,7 +65,13 @@ const Page = styled.span`
   margin: 0 5px;
 `
 
-const PagePicker = ({ isLastPage, page, onPreviousPage, onNextPage }) => {
+const PagePicker = ({
+  loading,
+  isLastPage,
+  page,
+  onPreviousPage,
+  onNextPage
+}) => {
   return (
     <PagePickerContainer>
       <PagePickerButton
