@@ -42,6 +42,8 @@ import ar.edu.itba.paw.webapp.forms.ReviewForm;
 import ar.edu.itba.paw.webapp.forms.TripCreateForm;
 
 @Path("trips")
+@Consumes({MediaType.APPLICATION_JSON, "application/vnd.carpul.v1+json"})
+@Produces({MediaType.APPLICATION_JSON, "application/vnd.carpul.v1+json"})
 @Component
 public class TripController extends AuthController {
     private final static Logger console = LoggerFactory.getLogger(TripController.class);
@@ -66,7 +68,6 @@ public class TripController extends AuthController {
 	
 	@GET
 	@Path("/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("id") final int id) {
 		final Trip trip = ts.findById(id);
 		final User user = user();
@@ -86,8 +87,6 @@ public class TripController extends AuthController {
 	
 	@POST
 	@Path("/")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response createTrip(final TripCreateForm form) {
 		// Check if the trip form is valid
 		if (form == null) {
@@ -116,8 +115,6 @@ public class TripController extends AuthController {
 	
 	@POST
 	@Path("/{id}/reviews")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response addReview(final ReviewForm form, @PathParam("id") final Integer tripId) {
 		User loggedUser = user();
 
@@ -159,7 +156,6 @@ public class TripController extends AuthController {
 
 	@DELETE
 	@Path("/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response deleteTrip(@PathParam("id") final Integer tripId) {
 		console.info("Controller: Deleting trip with id {}", tripId);
 		User loggedUser = user();
@@ -182,7 +178,6 @@ public class TripController extends AuthController {
 	
 	@POST
 	@Path("/{id}/reservation")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response reserveTrip(@PathParam("id") final Integer tripId) {
 		console.info("Controller: Reserving trip with id {}", tripId);
 		User loggedUser = user();
@@ -218,7 +213,6 @@ public class TripController extends AuthController {
 	
 	@DELETE
 	@Path("/{id}/reservation")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response unreserveTrip(@PathParam("id") final Integer tripId) {
 		console.info("Controller: Unreserving trip with id {}", tripId);
 		User loggedUser = user();
@@ -246,7 +240,6 @@ public class TripController extends AuthController {
 	
 	@DELETE
 	@Path("{id}/users/{userid}")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response kickFromTrip(@PathParam("id") final Integer tripId, 
 								 @PathParam("userid") final Integer userId) {
 		console.info("Controller: Kicking passenger with id {} from trip with id {}", userId, tripId);

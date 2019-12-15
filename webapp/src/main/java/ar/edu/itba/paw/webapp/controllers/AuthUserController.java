@@ -28,9 +28,11 @@ import ar.edu.itba.paw.webapp.DTO.UserDTO;
 import ar.edu.itba.paw.webapp.forms.UserUpdateForm;
 
 @Path("user")
+@Consumes({MediaType.APPLICATION_JSON, "application/vnd.carpul.v1+json"})
+@Produces({MediaType.APPLICATION_JSON, "application/vnd.carpul.v1+json"})
 @Component
 public class AuthUserController extends AuthController {
-	private final static Logger console = LoggerFactory.getLogger(TripController.class);
+	private final static Logger console = LoggerFactory.getLogger(AuthController.class);
 	
 	@Context
 	private UriInfo uriInfo;
@@ -43,16 +45,14 @@ public class AuthUserController extends AuthController {
 	
 	@GET
 	@Path("/")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response getCurrentUser() {
 		final User user = user();
+		console.info("Controller: Getting info for user {}", user);
 		return Response.ok(new UserDTO(user, uriInfo.getBaseUriBuilder().path("/users/{id}").build(user.getId()))).build();
 	}
 	
 	@PUT
 	@Path("/")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response updateUser(@PathParam("id") Integer id, final UserUpdateForm form) {
 		console.info("Controller: Start updating user {}", id);
 		

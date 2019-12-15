@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -27,6 +28,8 @@ import ar.edu.itba.paw.webapp.DTO.UnauthTripDTO;
 import ar.edu.itba.paw.models.User;
 
 @Path("search")
+@Consumes({MediaType.APPLICATION_JSON, "application/vnd.carpul.v1+json"})
+@Produces({MediaType.APPLICATION_JSON, "application/vnd.carpul.v1+json"})
 @Component
 public class SearchController extends AuthController {
 
@@ -38,7 +41,6 @@ public class SearchController extends AuthController {
 	
 	@GET
 	@Path("/")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response searchClosest(@DefaultValue("") @QueryParam("from") String from,
 						   @DefaultValue("") @QueryParam("to") String to,
 						   @QueryParam("arrLat") Double arrLat,

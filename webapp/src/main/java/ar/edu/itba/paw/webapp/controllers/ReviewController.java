@@ -31,9 +31,11 @@ import ar.edu.itba.paw.webapp.DTO.ReviewDTO;
 import ar.edu.itba.paw.webapp.forms.ImageForm;
 
 @Path("reviews")
+@Consumes({MediaType.APPLICATION_JSON, "application/vnd.carpul.v1+json"})
+@Produces({MediaType.APPLICATION_JSON, "application/vnd.carpul.v1+json"})
 @Component
 public class ReviewController extends AuthController {
-	private final static Logger console = LoggerFactory.getLogger(TripController.class);
+	private final static Logger console = LoggerFactory.getLogger(ReviewController.class);
 	
 	@Autowired
 	private ReviewService rs;
@@ -46,7 +48,6 @@ public class ReviewController extends AuthController {
 
 	@GET
 	@Path("/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("id") final int id) {
 		console.info("Controller: Getting review with id {}", id);
 		Review review = rs.getReviewById(id);
