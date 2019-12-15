@@ -59,6 +59,7 @@ const Hero = ({ user, hero_message, editable, onUserUpdate }) => {
   };
 
   const onImageLoaded = callback => (imageURL, imageRAW, file) => {
+    if (!file) return;
     const image = new Image();
     image.src = imageURL;
     image.onload = async () => {

@@ -33,7 +33,7 @@ export const getProfileById = async id => {
 };
 
 export const getProfile = async () => {
-  const user = await GETwithAuth("/users").then(res => {
+  const user = await GETwithAuth("/user").then(res => {
     if (res.isRawResponse) return;
     return res;
   });
@@ -170,10 +170,7 @@ export const signupUser = async profile => {
 };
 
 export const updateProfile = async profile => {
-  const updatedUser = await POSTwithAuth(
-    `/users/${userid()}/profile`,
-    profile
-  ).then(res => {
+  const updatedUser = await POSTwithAuth(`/user`, profile).then(res => {
     if (res.isRawResponse) return;
     return res;
   });

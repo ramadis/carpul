@@ -245,7 +245,7 @@ public class TripController extends AuthController {
 	}
 	
 	@DELETE
-	@Path("{id}/passengers/{userid}")
+	@Path("{id}/users/{userid}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response kickFromTrip(@PathParam("id") final Integer tripId, 
 								 @PathParam("userid") final Integer userId) {

@@ -40,7 +40,6 @@ import ar.edu.itba.paw.webapp.DTO.TripDTO;
 import ar.edu.itba.paw.webapp.DTO.UserDTO;
 import ar.edu.itba.paw.webapp.forms.ImageForm;
 import ar.edu.itba.paw.webapp.forms.UserCreateForm;
-import ar.edu.itba.paw.webapp.forms.UserUpdateForm;
 import ar.edu.itba.paw.models.User;
 
 import java.net.URI;
@@ -50,6 +49,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Path("users")
+@Consumes({MediaType.APPLICATION_JSON, "application/vnd.carpul.v1+json"})
+@Produces({MediaType.APPLICATION_JSON, "application/vnd.carpul.v1+json"})
 @Component
 public class UserController extends AuthController {
 	private final static Logger console = LoggerFactory.getLogger(UserController.class);
@@ -77,8 +78,6 @@ public class UserController extends AuthController {
 
 	@POST
 	@Path("/")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response createUser(final UserCreateForm form) {
 		// Check if the user form is valid
 		if (form == null) {
@@ -112,7 +111,6 @@ public class UserController extends AuthController {
 	
 	@GET
 	@Path("/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("id") final int id) {
 		console.info("Controller: Getting user with id: {}", id);
 		final User user = us.getById(id);
@@ -125,17 +123,7 @@ public class UserController extends AuthController {
 	}
 	
 	@GET
-	@Path("/")
-	@Produces(MediaType.APPLICATION_JSON)
-	// TODO: Esto deberia devolverte la lista de los usuarios
-	public Response getCurrentUser() {
-		final User user = user();
-		return Response.ok(new UserDTO(user, uriInfo.getBaseUriBuilder().path("/users/{id}").build(user.getId()))).build();
-	}
-	
-	@GET
 	@Path("/{id}/trips")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response getTrips(@PathParam("id") final int id,
 								@DefaultValue("0") @QueryParam("page") int page,
 								@DefaultValue("3") @QueryParam("per_page") int perPage) {
@@ -163,7 +151,6 @@ public class UserController extends AuthController {
 	
 	@GET
 	@Path("/{id}/reviews")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response getReviews(@PathParam("id") final int id,
 			@DefaultValue("0") @QueryParam("page") int page,
 			@DefaultValue("10") @QueryParam("per_page") int perPage) {
@@ -186,7 +173,6 @@ public class UserController extends AuthController {
 	
 	@GET
 	@Path("/{id}/history")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response getHistory(@PathParam("id") final int id,
 			@DefaultValue("0") @QueryParam("page") int page,
 			@DefaultValue("10") @QueryParam("per_page") int perPage) {
@@ -205,7 +191,6 @@ public class UserController extends AuthController {
 	
 	@GET
 	@Path("/{id}/reservations")
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response getReservations(@PathParam("id") final int id,
 			@DefaultValue("0") @QueryParam("page") int page,
 			@DefaultValue("true") @QueryParam("exclude_reviewed") Boolean excludeReviewed,
@@ -294,38 +279,6 @@ public class UserController extends AuthController {
 		if ( prevImage == null) return Response.created(uri).build();
 		return Response.status(Status.NO_CONTENT).build();
     }
-	
-	@PUT
-	@Path("/{id}/profile")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response updateUser(@PathParam("id") Integer id, final UserUpdateForm form) {
-		console.info("Controller: Start updating user {}", id);
-		
-		if (form == null) {
-			return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), "form", "form is null")).build();
-		}
-		
-		if (!validator.validate(form).isEmpty()) {
-			List<ErrorDTO> errors = validator.validate(form).stream().map(validation -> new ErrorDTO(Status.BAD_REQUEST.getStatusCode(), validation.getPropertyPath() + "", validation.getMessage())).collect(Collectors.toList());
-			return Response.status(Status.BAD_REQUEST).entity(errors).build();
-		}
-		
-		User toUpdate = us.getById(id);
-		User loggedUser = user();
-		
-		// Check if profile can be updated
-		if (toUpdate == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "the user does not exist")).build();
-		if (!toUpdate.getId().equals(loggedUser.getId())) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "id", "logged with wrong user")).build();
-		
-		// Get user from form
-		User user = form.getUser();
-		
-		// Update user fields
-		user = us.update(toUpdate, user);
-
-		return Response.ok().entity(new UserDTO(user, uriInfo.getBaseUriBuilder().path("/users/{id}").build(user.getId()))).build();
-	}
 	
 	@GET
 	@Path("/{id}/cover")

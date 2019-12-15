@@ -89,7 +89,7 @@ export const unreserveByTrip = async id => {
 
 export const cancelReservation = async (passenger, trip) => {
   const reservation = await DELETEwithAuth(
-    `/trips/${trip}/passengers/${passenger}`
+    `/trips/${trip}/users/${passenger}`
   ).then(res => {
     if (res.isRawResponse) {
       const errors = {
