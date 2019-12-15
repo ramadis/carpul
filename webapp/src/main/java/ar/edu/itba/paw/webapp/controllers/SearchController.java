@@ -15,6 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.Status;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,7 @@ import ar.edu.itba.paw.models.Pagination;
 import ar.edu.itba.paw.models.Position;
 import ar.edu.itba.paw.models.Search;
 import ar.edu.itba.paw.models.Trip;
+import ar.edu.itba.paw.webapp.DTO.ErrorDTO;
 import ar.edu.itba.paw.webapp.DTO.UnauthTripDTO;
 import ar.edu.itba.paw.models.User;
 
@@ -51,6 +53,8 @@ public class SearchController extends AuthController {
 						   @DefaultValue("true") @QueryParam("exclude_driver") Boolean excludeDriver,
 						   @DefaultValue("0") @QueryParam("page") int page,
 						   @DefaultValue("5") @QueryParam("per_page") int perPage) {
+		
+		if (page < 0 || page > 100 || perPage < 1 || perPage > 100) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "pagination", "page or per_page query params are invalid")).build();
 		
 		// Create a valid search model.
 		Search search = new Search();

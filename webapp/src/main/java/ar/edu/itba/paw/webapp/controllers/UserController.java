@@ -129,6 +129,8 @@ public class UserController extends AuthController {
 								@DefaultValue("3") @QueryParam("per_page") int perPage) {
 		console.info("Controller: Getting trips for user with id: {}", id);
 		
+		if (page < 0 || page > 100 || perPage < 1 || perPage > 100) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "pagination", "page or per_page query params are invalid")).build();
+		
 		final User user = us.getById(id);
 		final User loggedUser = user();
 		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "the user does not exist")).build();
@@ -156,6 +158,8 @@ public class UserController extends AuthController {
 			@DefaultValue("10") @QueryParam("per_page") int perPage) {
 		console.info("Controller: Getting reviews for user with id: {}", id);
 		
+		if (page < 0 || page > 100 || perPage < 1 || perPage > 100) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "pagination", "page or per_page query params are invalid")).build();
+		
 		final User user = us.getById(id);
 		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "the user does not exist")).build();
 		
@@ -178,6 +182,8 @@ public class UserController extends AuthController {
 			@DefaultValue("10") @QueryParam("per_page") int perPage) {
 		console.info("Controller: Getting history for user with id: {}", id);
 		
+		if (page < 0 || page > 100 || perPage < 1 || perPage > 100) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "pagination", "page or per_page query params are invalid")).build();
+		
 		final User user = us.getById(id);
 		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "the user does not exist")).build();
 		
@@ -196,6 +202,8 @@ public class UserController extends AuthController {
 			@DefaultValue("true") @QueryParam("exclude_reviewed") Boolean excludeReviewed,
 			@DefaultValue("3") @QueryParam("per_page") int perPage) {
 		console.info("Controller: Getting reservations for user with id: {}", id);
+		
+		if (page < 0 || page > 100 || perPage < 1 || perPage > 100) return Response.status(Status.FORBIDDEN).entity(new ErrorDTO(Status.FORBIDDEN.getStatusCode(), "pagination", "page or per_page query params are invalid")).build();
 		
 		final User user = us.getById(id);
 		if (user == null) return Response.status(Status.NOT_FOUND).entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "id", "the user does not exist")).build();
