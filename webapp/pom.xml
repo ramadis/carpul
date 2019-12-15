@@ -123,6 +123,20 @@
             <artifactId>jose4j</artifactId>
         </dependency>
 
+        <!-- MAILING -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>javax.mail-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+        </dependency>
+
         <!-- Work around bug where jersey-spring3 pulls in asm-all-repackaged:jar:2.5.0-b36, which is compiled for JDK9. -->
         <dependency>
             <groupId>org.glassfish.hk2.external</groupId>

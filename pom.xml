@@ -22,9 +22,12 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <org.hibernate.version>5.1.0.Final</org.hibernate.version>
     <org.hibernate.jpa.version>1.0.0.Final</org.hibernate.jpa.version>
+    <javax.mail-api.version>1.5.5</javax.mail-api.version>
+    <javax.mail.version>1.4.7</javax.mail.version>
     <org.springframework.version>4.2.5.RELEASE</org.springframework.version>
     <org.postgresql>9.4-1200-jdbc41</org.postgresql>
     <org.slf4j.version>1.7.5</org.slf4j.version>
+    <spring.context-support.version>4.2.5.RELEASE</spring.context-support.version>
     <logback.version>1.1.2</logback.version>
     <logback-ext-spring.version>0.1.1</logback-ext-spring.version>
     <spring.security.version>4.0.4.RELEASE</spring.security.version>
@@ -63,14 +66,14 @@
         <artifactId>maven-war-plugin</artifactId>
         <version>${maven-war-plugin.version}</version>
         <configuration>
-            <packagingExcludes>**/logback-test.xml</packagingExcludes>
-            <webResources>
-                <resource>
-                    <directory>frontend/dist/build</directory>
-                </resource>
-            </webResources>
+          <packagingExcludes>**/logback-test.xml</packagingExcludes>
+          <webResources>
+            <resource>
+              <directory>frontend/dist/build</directory>
+            </resource>
+          </webResources>
         </configuration>
-    </plugin>
+      </plugin>
     </plugins>
   </build>
   <dependencyManagement>
@@ -98,11 +101,31 @@
         <version>${org.springframework.version}</version>
       </dependency>
 
+      <!-- <MAILING> -->
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context-support</artifactId>
+        <version>${spring.context-support.version}</version>
+      </dependency>
+
       <dependency>
         <groupId>com.sendgrid</groupId>
         <artifactId>sendgrid-java</artifactId>
         <version>${sendgrid.version}</version>
       </dependency>
+
+      <dependency>
+        <groupId>javax.mail</groupId>
+        <artifactId>javax.mail-api</artifactId>
+        <version>${javax.mail-api.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>javax.mail</groupId>
+        <artifactId>mail</artifactId>
+        <version>${javax.mail.version}</version>
+      </dependency>
+      <!-- </MAILING> -->
 
       <dependency>
         <groupId>org.springframework</groupId>

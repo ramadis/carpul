@@ -7,13 +7,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-
 import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
@@ -68,6 +69,25 @@ public class WebConfig {
         int maxUploadSize = 5 * 1024 * 1024; // 5MB
         multipartResolver.setMaxUploadSize(maxUploadSize);
         return multipartResolver;
+    }
+    
+    @Bean
+    public JavaMailSender getMailSender() {
+        JavaMailSenderImpl sender = new JavaMailSenderImpl();
+
+        sender.setHost("smtp.gmail.com");
+        sender.setPort(587);
+        sender.setUsername("noreply.carpul");
+        sender.setPassword("paw2017b");
+
+        Properties props = new Properties();
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.debug", "false");
+        sender.setJavaMailProperties(props);
+        
+        return sender;
     }
 
 	@Bean
