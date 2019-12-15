@@ -352,7 +352,7 @@ const HistoriesSection = ({ histories, setPage }) => {
   // const [page, setPage] = useState(0)
   const { t } = useTranslation()
   const webdata = histories
-  const { page } = histories
+  const { page, loading } = histories
 
   return (
     <ProfileSection>
