@@ -128,18 +128,9 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
     }
   }
 
-  const areAllEmpty =
-    // !reviews.loading &&
-    // !trips.loading &&
-    // !reservations.loading &&
-    // !histories.loading &&
-    // reviews.data.length === 0 &&
-    // trips.data.length === 0 &&
-    // reservations.data.length === 0 &&
-    // histories.data.length === 0
-    [reviews, trips, histories, reservations].every(
-      ({ data, loading, page }) => !loading && data.length === 0 && page === 0
-    )
+  const areAllEmpty = [reviews, trips, histories, reservations].every(
+    ({ data, loading, page }) => !loading && data.length === 0 && page === 0
+  )
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -171,30 +162,34 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
   }, [userId])
 
   useEffect(() => {
+    if (!user) return
     getReviewsByUser(userId, reviews.page)
       .then(setData(setReviews, reviews))
       .catch(requestCatch)
-  }, [userId, reviews.page])
+  }, [userId, reviews.page, user])
 
   useEffect(() => {
+    if (!user) return
     isOwnProfile &&
       getHistoryByUser(userId)
         .then(setData(setHistories, histories))
         .catch(requestCatch)
-  }, [userId, histories.page])
+  }, [userId, histories.page, user])
 
   useEffect(() => {
+    if (!user) return
     isOwnProfile &&
       getReservationsByUser(userId, reservations.page)
         .then(setData(setReservations, reservations))
         .catch(requestCatch)
-  }, [userId, reservations.page])
+  }, [userId, reservations.page, user])
 
   useEffect(() => {
+    if (!user) return
     getTripsByUser(userId, trips.page)
       .then(setData(setTrips, trips))
       .catch(requestCatch)
-  }, [userId, trips.page])
+  }, [userId, trips.page, user])
 
   useEffect(() => {
     if (user) {
