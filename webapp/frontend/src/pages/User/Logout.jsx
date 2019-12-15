@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 const Logout = ({ dispatch }) => {
   useEffect(() => {
     localStorage.removeItem('token')
+    localStorage.removeItem('user')
     dispatch({ type: 'LOGOUT' })
   }, [])
 
