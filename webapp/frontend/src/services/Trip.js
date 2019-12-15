@@ -1,33 +1,34 @@
-import { GETwithAuth, DELETEwithAuth, POSTwithAuth } from "./Utils";
+import { GETwithAuth, DELETEwithAuth, POSTwithAuth } from './Utils'
+import { query } from '../utils/fetch'
 
 export const createTrip = async trip => {
   const trips = await POSTwithAuth(`/trips`, trip).then(res => {
     if (res.isRawResponse) {
       const errors = {
         400: {
-          title: "The trip content has some problems",
-          subtitle: "Try fixing the errors and submitting it again.",
+          title: 'The trip content has some problems',
+          subtitle: 'Try fixing the errors and submitting it again.'
         },
         409: {
           title: "You can't create a trip if you have other plans",
           subtitle:
-            "It seems like you have another trip or a reservation overlapping with this time range.",
+            'It seems like you have another trip or a reservation overlapping with this time range.'
         },
         default: {
-          title: "Something went wrong",
-          subtitle: "And we don't know what it is, sorry :(.",
-        },
-      };
+          title: 'Something went wrong',
+          subtitle: "And we don't know what it is, sorry :(."
+        }
+      }
 
       throw {
         message: errors[res.status] || errors.default,
-        code: res.status,
-      };
+        code: res.status
+      }
     }
-    return res;
-  });
-  return trips;
-};
+    return res
+  })
+  return trips
+}
 
 export const getTripById = async id => {
   const trips = await GETwithAuth(`/trips/${id}`).then(res => {
@@ -35,50 +36,59 @@ export const getTripById = async id => {
       const errors = {
         404: {
           title: "We can't find the trip",
-          subtitle: "You sure you are trying to access an existing trip?",
+          subtitle: 'You sure you are trying to access an existing trip?'
         },
         default: {
-          title: "Something went wrong",
-          subtitle: "And we don't know what it is, sorry :(.",
-        },
-      };
+          title: 'Something went wrong',
+          subtitle: "And we don't know what it is, sorry :(."
+        }
+      }
 
       throw {
-        origin: "getTripById",
+        origin: 'getTripById',
         message: errors[res.status] || errors.default,
-        code: res.status,
-      };
-      return;
+        code: res.status
+      }
+      return
     }
-    return res;
-  });
-  return trips;
-};
+    return res
+  })
+  return trips
+}
 
-export const getTripsByUser = async id => {
-  const trips = await GETwithAuth(`/users/${id}/trips`).then(res => {
+export const getTripsByUser = async (id, page) => {
+  const res = await getTripsByUserInternal(id, page)
+  const nextPage = await getTripsByUserInternal(id, page + 1)
+
+  return { data: res, isLastPage: nextPage ? nextPage.length === 0 : true }
+}
+
+export const getTripsByUserInternal = async (id, page) => {
+  const trips = await GETwithAuth(
+    `/users/${id}/trips${query({ page, per_page: 5 })}`
+  ).then(res => {
     if (res.isRawResponse) {
       const errors = {
         404: {
           title: "We can't find the user",
-          subtitle: "You sure you are trying to access an existing user?",
+          subtitle: 'You sure you are trying to access an existing user?'
         },
         default: {
-          title: "Something went wrong",
-          subtitle: "And we don't know what it is, sorry :(.",
-        },
-      };
+          title: 'Something went wrong',
+          subtitle: "And we don't know what it is, sorry :(."
+        }
+      }
 
       throw {
-        origin: "getTripsByUser",
+        origin: 'getTripsByUser',
         message: errors[res.status] || errors.default,
-        code: res.status,
-      };
+        code: res.status
+      }
     }
-    return res;
-  });
-  return trips;
-};
+    return res
+  })
+  return trips
+}
 
 export const cancelTrip = async id => {
   const trip = await DELETEwithAuth(`/trips/${id}`).then(res => {
@@ -86,25 +96,25 @@ export const cancelTrip = async id => {
       const errors = {
         403: {
           title: "You can't cancel the trip",
-          subtitle: "Only the driver of this trip can, sorry",
+          subtitle: 'Only the driver of this trip can, sorry'
         },
         404: {
           title: "We can't find the trip",
-          subtitle: "You sure you are trying to delete an existing trip?",
+          subtitle: 'You sure you are trying to delete an existing trip?'
         },
         default: {
-          title: "Something went wrong",
-          subtitle: "And we don't know what it is, sorry :(.",
-        },
-      };
+          title: 'Something went wrong',
+          subtitle: "And we don't know what it is, sorry :(."
+        }
+      }
 
       throw {
-        origin: "cancel-trip",
+        origin: 'cancel-trip',
         message: errors[res.status] || errors.default,
-        code: res.status,
-      };
+        code: res.status
+      }
     }
-    return res;
-  });
-  return trip;
-};
+    return res
+  })
+  return trip
+}
