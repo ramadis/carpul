@@ -1,13 +1,14 @@
-import { NotificationManager } from "react-notifications";
+import { NotificationManager } from 'react-notifications'
+import { isNumber } from 'util'
 
 export const query = params =>
-  "?" +
-    Object.keys(params)
-      .filter(key => params[key])
-      .map(key => key + "=" + params[key])
-      .join("&") || "";
+  '?' +
+    Object.entries(params)
+      .filter(([_, val]) => typeof val === 'number' || val) // Keep `0` but filter null/undefined
+      .map(([key, value]) => key + '=' + value)
+      .join('&') || ''
 
 export const requestCatch = error => {
-  console.error(error);
-  NotificationManager.error(error.message.subtitle, error.message.title);
-};
+  console.error(error)
+  NotificationManager.error(error.message.subtitle, error.message.title)
+}
