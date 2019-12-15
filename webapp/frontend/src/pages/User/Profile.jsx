@@ -1,45 +1,45 @@
-import React, { useEffect, useState, Fragment } from 'react'
+import React, { useEffect, useState, Fragment } from "react";
 import {
   BrowserRouter as Router,
   Route,
   Link,
   Redirect,
-  useParams
-} from 'react-router-dom'
-import styled from 'styled-components'
-import { useTranslation } from 'react-i18next'
-import { connect } from 'react-redux'
-import MDSpinner from 'react-md-spinner'
-import { NotificationManager } from 'react-notifications'
+  useParams,
+} from "react-router-dom";
+import styled from "styled-components";
+import { useTranslation } from "react-i18next";
+import { connect } from "react-redux";
+import MDSpinner from "react-md-spinner";
+import { NotificationManager } from "react-notifications";
 
-import profileHeroCss from '../../styles/profile_hero'
-import poolListCss from '../../styles/pool_list'
-import profileCss from '../../styles/profile'
-import reviewItemCss from '../../styles/review_item'
+import profileHeroCss from "../../styles/profile_hero";
+import poolListCss from "../../styles/pool_list";
+import profileCss from "../../styles/profile";
+import reviewItemCss from "../../styles/review_item";
 
-import Hero from '../../components/Hero'
-import ReviewItem from '../../components/ReviewItem'
-import HistoryItem from '../../components/HistoryItem'
-import Loading from '../../components/Loading'
+import Hero from "../../components/Hero";
+import ReviewItem from "../../components/ReviewItem";
+import HistoryItem from "../../components/HistoryItem";
+import Loading from "../../components/Loading";
 
-import { routes } from '../../App'
-import TripPast from './TripPast'
-import Trip from './Trip'
-import Destiny from './Reservation'
+import { routes } from "../../App";
+import TripPast from "./TripPast";
+import Trip from "./Trip";
+import Destiny from "./Reservation";
 
-import { getProfileById } from '../../services/User'
-import { getReservationsByUser } from '../../services/Reservation'
-import { getHistoryByUser } from '../../services/History'
-import { getReviewsByUser } from '../../services/Review'
-import { getTripsByUser } from '../../services/Trip'
+import { getProfileById } from "../../services/User";
+import { getReservationsByUser } from "../../services/Reservation";
+import { getHistoryByUser } from "../../services/History";
+import { getReviewsByUser } from "../../services/Review";
+import { getTripsByUser } from "../../services/Trip";
 
-import { requestCatch } from '../../utils/fetch'
+import { requestCatch } from "../../utils/fetch";
 
 const ProfileContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-around;
-`
+`;
 
 const PagePickerContainer = styled.div`
   display: inline-flex;
@@ -48,7 +48,7 @@ const PagePickerContainer = styled.div`
   justify-content: space-around;
   padding: 10px;
   border-radius: 4px;
-`
+`;
 
 const PagePickerButton = styled.a`
   cursor: pointer;
@@ -59,18 +59,18 @@ const PagePickerButton = styled.a`
   cursor: not-allowed;
   color: darkgray;
   `}
-`
+`;
 
 const Page = styled.span`
   margin: 0 5px;
-`
+`;
 
 const PagePicker = ({
   loading,
   isLastPage,
   page,
   onPreviousPage,
-  onNextPage
+  onNextPage,
 }) => {
   return (
     <PagePickerContainer>
@@ -78,65 +78,65 @@ const PagePicker = ({
         disabled={loading || page === 0}
         onClick={onPreviousPage}
       >
-        {'<Prev'}
+        {"<Prev"}
       </PagePickerButton>
       <Page> {page} </Page>
       <PagePickerButton disabled={loading || isLastPage} onClick={onNextPage}>
-        {'Next>'}
+        {"Next>"}
       </PagePickerButton>
     </PagePickerContainer>
-  )
-}
+  );
+};
 
 const setData = (setter, current) => ({ data, isLastPage }) =>
-  setter({ ...current, data, loading: false, isLastPage })
+  setter({ ...current, data, loading: false, isLastPage });
 
-const webDataInitial = { data: [], loading: true, page: 0 }
+const webDataInitial = { data: [], loading: true, page: 0 };
 
 const setPage = (obj, setter) => newPage =>
-  setter({ ...obj, loading: true, page: newPage })
+  setter({ ...obj, loading: true, page: newPage });
 
 const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
-  const { t } = useTranslation()
-  const [reviews, setReviews] = useState(webDataInitial)
-  const [trips, setTrips] = useState(webDataInitial)
-  const [reservations, setReservations] = useState(webDataInitial)
-  const [histories, setHistories] = useState(webDataInitial)
-  const [user, setUser] = useState(null)
-  const { userId } = useParams()
+  const { t } = useTranslation();
+  const [reviews, setReviews] = useState(webDataInitial);
+  const [trips, setTrips] = useState(webDataInitial);
+  const [reservations, setReservations] = useState(webDataInitial);
+  const [histories, setHistories] = useState(webDataInitial);
+  const [user, setUser] = useState(null);
+  const { userId } = useParams();
 
-  const isLogged = !!token
-  const isLoadingUser = user === null
+  const isLogged = !!token;
+  const isLoadingUser = user === null;
 
-  const isOwnProfile = loggedUser && userId === `${loggedUser.id}`
+  const isOwnProfile = loggedUser && userId === `${loggedUser.id}`;
 
-  const translationPrefix = isOwnProfile ? 'user.profile' : 'user.profileOther'
+  const translationPrefix = isOwnProfile ? "user.profile" : "user.profileOther";
 
   const onUpdateTrip = (trip, reason) => {
-    if (reason === 'unreserve') {
-      const { data: ts } = trips
-      const tripIdx = ts.findIndex(t => t.id === trip.id)
-      const updatedTrips = [...ts]
-      updatedTrips[tripIdx] = trip
-      setData(setTrips, trips)(updatedTrips)
-      return
-    } else if (reason === 'delete') {
-      setTrips(webDataInitial)
+    if (reason === "unreserve") {
+      const { data: ts } = trips;
+      const tripIdx = ts.findIndex(t => t.id === trip.id);
+      const updatedTrips = [...ts];
+      updatedTrips[tripIdx] = trip;
+      setData(setTrips, trips)(updatedTrips);
+      return;
+    } else if (reason === "delete") {
+      setTrips(webDataInitial);
       getTripsByUser(userId)
         .then(setData(setTrips))
-        .catch(requestCatch)
+        .catch(requestCatch);
     }
-  }
+  };
 
   const areAllEmpty = [reviews, trips, histories, reservations].every(
     ({ data, loading, page }) => !loading && data.length === 0 && page === 0
-  )
+  );
 
   useEffect(() => {
     const fetchUsers = async () => {
       getProfileById(userId)
         .then(setUser)
-        .catch(requestCatch)
+        .catch(requestCatch);
       // isOwnProfile &&
       //   getReservationsByUser(userId, reservations.page)
       //     .then(setData(setReservations, reservations))
@@ -151,53 +151,55 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
       // getTripsByUser(userId, trips.page)
       //   .then(setData(setTrips, trips))
       //   .catch(requestCatch)
-    }
+    };
 
-    setUser(null)
-    setReservations(webDataInitial)
-    setHistories(webDataInitial)
-    setReviews(webDataInitial)
-    setTrips(webDataInitial)
-    fetchUsers()
-  }, [userId])
+    setUser(null);
+    setReservations(webDataInitial);
+    setHistories(webDataInitial);
+    setReviews(webDataInitial);
+    setTrips(webDataInitial);
+    fetchUsers();
+  }, [userId]);
 
   useEffect(() => {
-    if (!user) return
-    getReviewsByUser(userId, reviews.page)
+    if (!user) return;
+    getReviewsByUser(user.id, reviews.page)
       .then(setData(setReviews, reviews))
-      .catch(requestCatch)
-  }, [userId, reviews.page, user])
+      .catch(requestCatch);
+  }, [reviews.page, user]);
 
   useEffect(() => {
-    if (!user) return
+    if (!user) return;
     isOwnProfile &&
-      getHistoryByUser(userId)
+      getHistoryByUser(user.id)
         .then(setData(setHistories, histories))
-        .catch(requestCatch)
-  }, [userId, histories.page, user])
+        .catch(requestCatch);
+  }, [histories.page, user]);
 
   useEffect(() => {
-    if (!user) return
+    if (!user) return;
     isOwnProfile &&
-      getReservationsByUser(userId, reservations.page)
+      getReservationsByUser(user.id, reservations.page)
         .then(setData(setReservations, reservations))
-        .catch(requestCatch)
-  }, [userId, reservations.page, user])
+        .catch(requestCatch);
+  }, [reservations.page, user]);
 
   useEffect(() => {
-    if (!user) return
-    getTripsByUser(userId, trips.page)
+    if (!user) return;
+    getTripsByUser(user.id, trips.page)
       .then(setData(setTrips, trips))
-      .catch(requestCatch)
-  }, [userId, trips.page, user])
+      .catch(requestCatch);
+  }, [trips.page, user]);
 
   useEffect(() => {
     if (user) {
-      window.document.title = `Carpul | ${user.first_name} ${user.last_name} is awesome`
+      window.document.title = `Carpul | ${user.first_name} ${
+        user.last_name
+      } is awesome`;
     } else {
-      window.document.title = `Carpul | Loading user...`
+      window.document.title = `Carpul | Loading user...`;
     }
-  }, [user])
+  }, [user]);
 
   return (
     <React.Fragment>
@@ -206,7 +208,7 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
       <style jsx>{reviewItemCss}</style>
       <style jsx>{profileHeroCss}</style>
       {isLoadingUser ? (
-        <div className='flex-center spinner-class'>
+        <div className="flex-center spinner-class">
           <MDSpinner size={36} />
         </div>
       ) : (
@@ -215,7 +217,7 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
             user={user}
             onUserUpdate={setUser}
             hero_message={t(`${translationPrefix}.hero`, {
-              user: user.first_name
+              user: user.first_name,
             })}
             editable={isOwnProfile}
           />
@@ -247,15 +249,15 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
         </React.Fragment>
       )}
     </React.Fragment>
-  )
-}
+  );
+};
 
 const ProfileSection = styled.section`
   box-sizing: border-box;
   min-width: 370px;
   padding: 20px;
   padding-top: 40px;
-`
+`;
 
 const SectionHeader = styled.h3`
   font-size: 25px;
@@ -269,13 +271,13 @@ const SectionHeader = styled.h3`
     `margin-top: 30px;
 	font-size: 20px;
   color: #a0a0a0;`}
-`
+`;
 
 const List = styled.ul`
   list-style-type: none;
   padding: 0;
   margin-top: 40px;
-`
+`;
 
 const TripsList = styled.ul`
   list-style-type: none;
@@ -283,37 +285,37 @@ const TripsList = styled.ul`
   margin-top: 40px;
   display: flex;
   flex-wrap: wrap;
-`
+`;
 
 const SpinnerContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 200px;
-`
+`;
 
 const ProfileSpinner = () => {
   return (
     <SpinnerContainer>
       <MDSpinner size={36} />
     </SpinnerContainer>
-  )
-}
+  );
+};
 
-const isLastPage = webdata => webdata.isLastPage // ({ loading, data }) => !loading && data.length === 0
+const isLastPage = webdata => webdata.isLastPage; // ({ loading, data }) => !loading && data.length === 0
 
 const onNext = (webdata, page, setPage) => () =>
-  !isLastPage(webdata) && setPage(page + 1)
+  !isLastPage(webdata) && setPage(page + 1);
 
-const onPrev = (page, setPage) => () => page - 1 >= 0 && setPage(page - 1)
+const onPrev = (page, setPage) => () => page - 1 >= 0 && setPage(page - 1);
 
 const ReviewsSection = ({ reviews, isOwnProfile }) => {
-  const [page, setPage] = useState(0)
-  const { t } = useTranslation()
-  const { data, loading } = reviews
-  const webdata = reviews
+  const [page, setPage] = useState(0);
+  const { t } = useTranslation();
+  const { data, loading } = reviews;
+  const webdata = reviews;
 
-  const translationPrefix = isOwnProfile ? 'user.profile' : 'user.profileOther'
+  const translationPrefix = isOwnProfile ? "user.profile" : "user.profileOther";
 
   return (
     <ProfileSection>
@@ -340,23 +342,23 @@ const ReviewsSection = ({ reviews, isOwnProfile }) => {
         onPreviousPage={onPrev(page, setPage)}
       />
     </ProfileSection>
-  )
-}
+  );
+};
 
 const HistoriesSection = ({ histories, setPage }) => {
   // const [page, setPage] = useState(0)
-  const { t } = useTranslation()
-  const webdata = histories
-  const { page, loading } = histories
+  const { t } = useTranslation();
+  const webdata = histories;
+  const { page, loading } = histories;
 
   return (
     <ProfileSection>
-      <SectionHeader>{t('user.profile.history')}</SectionHeader>
+      <SectionHeader>{t("user.profile.history")}</SectionHeader>
 
       {histories.loading ? (
         <ProfileSpinner />
       ) : histories.data.length === 0 ? (
-        <SectionHeader empty>{t('user.profile.empty_histories')}</SectionHeader>
+        <SectionHeader empty>{t("user.profile.empty_histories")}</SectionHeader>
       ) : (
         <List>
           {histories.data.map(history => (
@@ -372,27 +374,27 @@ const HistoriesSection = ({ histories, setPage }) => {
         onPreviousPage={onPrev(page, setPage)}
       />
     </ProfileSection>
-  )
-}
+  );
+};
 
 const ReservationsSection = ({ reservations, setPage }) => {
-  const { t } = useTranslation()
-  const { data, loading, page } = reservations
-  const webdata = reservations
+  const { t } = useTranslation();
+  const { data, loading, page } = reservations;
+  const webdata = reservations;
 
   return (
     <ProfileSection>
-      <SectionHeader>{t('user.profile.next')}</SectionHeader>
+      <SectionHeader>{t("user.profile.next")}</SectionHeader>
 
-      <Link className='no-margin login-button' to='/'>
-        {t('user.profile.find')}
+      <Link className="no-margin login-button" to="/">
+        {t("user.profile.find")}
       </Link>
 
       {loading ? (
         <ProfileSpinner />
       ) : data.length === 0 ? (
         <SectionHeader empty>
-          {t('user.profile.empty_reservations')}
+          {t("user.profile.empty_reservations")}
         </SectionHeader>
       ) : (
         <List>
@@ -421,24 +423,24 @@ const ReservationsSection = ({ reservations, setPage }) => {
         onPreviousPage={onPrev(page, setPage)}
       />
     </ProfileSection>
-  )
-}
+  );
+};
 
 const TripsSection = ({ trips, isOwnProfile, onUpdate, setPage }) => {
-  const { t } = useTranslation()
-  const { data, loading, page } = trips
-  const webdata = trips
+  const { t } = useTranslation();
+  const { data, loading, page } = trips;
+  const webdata = trips;
 
-  const translationPrefix = isOwnProfile ? 'user.profile' : 'user.profileOther'
-  const TripList = isOwnProfile ? List : TripsList
+  const translationPrefix = isOwnProfile ? "user.profile" : "user.profileOther";
+  const TripList = isOwnProfile ? List : TripsList;
 
   return (
     <ProfileSection>
       <SectionHeader>{t(`${translationPrefix}.trips`)}</SectionHeader>
 
       {isOwnProfile && (
-        <Link className='no-margin login-button' to={routes.addTrip}>
-          {t('user.profile.new')}
+        <Link className="no-margin login-button" to={routes.addTrip}>
+          {t("user.profile.new")}
         </Link>
       )}
 
@@ -468,19 +470,19 @@ const TripsSection = ({ trips, isOwnProfile, onUpdate, setPage }) => {
         onPreviousPage={onPrev(page, setPage)}
       />
     </ProfileSection>
-  )
-}
+  );
+};
 
 const EmptyProfileContainer = styled.div`
   text-align: center;
   width: 100%;
   margin-top: 20px;
-`
+`;
 
 const EmptyProfile = ({ isOwnProfile }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
-  const translationPrefix = isOwnProfile ? 'user.profile' : 'user.profileOther'
+  const translationPrefix = isOwnProfile ? "user.profile" : "user.profileOther";
 
   return (
     <ProfileContainer>
@@ -488,23 +490,23 @@ const EmptyProfile = ({ isOwnProfile }) => {
         <SectionHeader empty>
           {t(`${translationPrefix}.empty_title`)}
         </SectionHeader>
-        <h4 className='empty-subtitle'>
+        <h4 className="empty-subtitle">
           {t(`${translationPrefix}.empty_subtitle`)}
         </h4>
         {isOwnProfile && (
-          <Link className='login-button empty-button' to={routes.addTrip}>
+          <Link className="login-button empty-button" to={routes.addTrip}>
             {t(`${translationPrefix}.empty_new`)}
           </Link>
         )}
-        <Link className='login-button empty-button' to='/'>
+        <Link className="login-button empty-button" to="/">
           {t(`${translationPrefix}.empty_find`)}
         </Link>
       </EmptyProfileContainer>
     </ProfileContainer>
-  )
-}
+  );
+};
 export default connect(({ user, reservations, token }) => ({
   loggedUser: user,
   reservations,
-  token
-}))(Profile)
+  token,
+}))(Profile);
