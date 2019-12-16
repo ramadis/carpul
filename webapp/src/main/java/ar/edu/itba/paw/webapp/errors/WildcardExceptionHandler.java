@@ -17,13 +17,20 @@ public class WildcardExceptionHandler implements ExceptionMapper<Exception> {
     public Response toResponse(Exception e) {
         console.error("Uncaught exception {}", e.toString());
         String error = e.toString();
-        if (error.contains("404")) {
-        	return Response.status(Status.NOT_FOUND)
-                .entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "Endpoint non-existent", "Try accessing a valid endpoint"))
-                .build();
-        } else {
+        try {
+	        Integer errorCode = Integer.parseInt(error.replaceAll("\\D+",""));
+	        if (error.contains("404")) {
+	        	return Response.status(Status.NOT_FOUND)
+	                .entity(new ErrorDTO(Status.NOT_FOUND.getStatusCode(), "Endpoint non-existent", "Try accessing a valid endpoint"))
+	                .build();
+	        } else {
+	        	return Response.status(errorCode)
+	                    .entity(new ErrorDTO(errorCode, "Uncaught error in the server", error))
+	                    .build();
+	        }
+        } catch(Exception err) {
         	return Response.status(Status.INTERNAL_SERVER_ERROR)
-                    .entity(new ErrorDTO(Status.INTERNAL_SERVER_ERROR.getStatusCode(), "Uncaught error in the server", "Something wrong happend on our end. We're sorry."))
+                    .entity(new ErrorDTO(Status.INTERNAL_SERVER_ERROR.getStatusCode() , "Uncaught error in the server", error))
                     .build();
         }
     }
