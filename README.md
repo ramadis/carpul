@@ -1,7 +1,3 @@
-# TODO
-
-## FRONT
-
 ![logo](http://pawserver.it.itba.edu.ar/paw-2017b-6/logo.52b8927a.png)
 
 ### A cheap carpooling service focused on traveling far away.
