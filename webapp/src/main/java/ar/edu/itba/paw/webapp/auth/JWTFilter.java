@@ -76,7 +76,8 @@ public class JWTFilter extends GenericFilterBean {
 	        	JwtClaims jwtClaims = jwtConsumer.processToClaims(jwt.replace("Bearer ", ""));
 	        	String username = jwtClaims.getSubject();
 	        	UserDetails details = detailsService.loadUserByUsername(username);
-	            return new UsernamePasswordAuthenticationToken(details.getUsername(), details.getPassword());
+	        	UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(details.getUsername(), details.getPassword(), details.getAuthorities());
+	        	return token;
         	} catch (Throwable e) {
         		console.error(e.getMessage());
         	}

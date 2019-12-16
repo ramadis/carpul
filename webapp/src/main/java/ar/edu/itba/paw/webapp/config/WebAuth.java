@@ -55,7 +55,6 @@ public class WebAuth extends WebSecurityConfigurerAdapter {
 	protected void configure(final HttpSecurity http) throws Exception {
 
 		http
-			.userDetailsService(userDetailsService)
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and().authorizeRequests()

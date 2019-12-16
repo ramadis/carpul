@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { connect } from "react-redux";
@@ -35,6 +35,10 @@ const Login = ({ dispatch, user }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(false);
+  }, [user]);
 
   const login = async () => {
     setLoading(true);
