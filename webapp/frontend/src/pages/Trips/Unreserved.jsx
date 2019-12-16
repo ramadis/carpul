@@ -44,6 +44,10 @@ function Unreserved({ user }) {
           to: trip.to_city,
           from: trip.from_city,
           when: trip.etd,
+          depLat: trip.departure_lat,
+          depLon: trip.departure_lon,
+          arrLat: trip.arrival_lat,
+          arrLon: trip.arrival_lon,
           per_page: 6,
         }).then(trips => setSuggestions(trips.filter(t => t.id !== trip.id)));
         setLoading(false);

@@ -1,3 +1,3 @@
-const auth = () => localStorage.getItem('token')
+const auth = () => localStorage.getItem("token");
 
-export const API_URL = 'http://247b9023.ngrok.io/api'
+export const API_URL = "http://localhost:8090/api";
