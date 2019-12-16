@@ -33,13 +33,17 @@ public class EmailServiceImpl implements EmailService {
 		String driveURL = "http://pawserver.it.itba.edu.ar/paw-2017b-6/#/trips/add";
 		String subject = "🚗 " + user.getFirst_name() + ", welcome to carpul";
 		String content = loadFromTemplate("/mails/registration.html");
+		String plaintextContent = "Hi there {USERNAME}," + System.lineSeparator() + "Welcome to a new life of adventures. Are you ready to ride? 🚙" + System.lineSeparator() + System.lineSeparator() + "Find somewhere to go by going to {SEARCH_URL}" + System.lineSeparator() + "Or get paid for driving by going to {DRIVE_URL}";
 		
 		// replace local variables
 		content = content.replace("{USERNAME}", user.getFirst_name());
 		content = content.replace("{SEARCH_URL}", searchURL);
 		content = content.replace("{DRIVE_URL}", driveURL);
+		plaintextContent = plaintextContent.replace("{USERNAME}", user.getFirst_name());
+		plaintextContent = plaintextContent.replace("{SEARCH_URL}", searchURL);
+		plaintextContent = plaintextContent.replace("{DRIVE_URL}", driveURL);
 		
-		MimeMessagePreparator email = createEmail(from, subject, user.getUsername(), content);
+		MimeMessagePreparator email = createEmail(from, subject, user.getUsername(), content, plaintextContent);
 		sendEmail(email);
 	}
 	
@@ -48,14 +52,19 @@ public class EmailServiceImpl implements EmailService {
 		String subject = "🙋 Hey " + trip.getDriver().getFirst_name() + ", you have a new reservation!";
 		String content = loadFromTemplate("/mails/reservation.html");
 		String carpulURL = "http://pawserver.it.itba.edu.ar/paw-2017b-6/#/users/" + user.getId();
+		String plaintextContent = "Hi there {USERNAME}," + System.lineSeparator() + "Great news! {PASSENGER} just reserved your trip to {DESTINATION}. Someone else to share your adventure!" + System.lineSeparator() + System.lineSeparator() + "Check the details by going to {URL}";
 		
 		// replace local variables
 		content = content.replace("{USERNAME}", trip.getDriver().getFirst_name());
 		content = content.replace("{DESTINATION}", trip.getTo_city());
 		content = content.replace("{PASSENGER}", user.getFirst_name());
 		content = content.replace("{URL}", carpulURL);
+		plaintextContent = plaintextContent.replace("{USERNAME}", trip.getDriver().getFirst_name());
+		plaintextContent = plaintextContent.replace("{DESTINATION}", trip.getTo_city());
+		plaintextContent = plaintextContent.replace("{PASSENGER}", user.getFirst_name());
+		plaintextContent = plaintextContent.replace("{URL}", carpulURL);
 		
-		MimeMessagePreparator email = createEmail(from, subject, trip.getDriver().getUsername(), content);
+		MimeMessagePreparator email = createEmail(from, subject, trip.getDriver().getUsername(), content, plaintextContent);
 		sendEmail(email);
 	}
 	
@@ -63,13 +72,17 @@ public class EmailServiceImpl implements EmailService {
 		console.info("Trying to send unreserve email to {}", user.getUsername());
 		String subject = "😞 Hey " + trip.getDriver().getFirst_name() + ", someone just dropped their reservation";
 		String content = loadFromTemplate("/mails/unreservation.html");
-		
+		String plaintextContent = "Hi there {USERNAME}," + System.lineSeparator() + "We have some bad news. {PASSENGER} just dropped their reservation for your trip to {DESTINATION}. Don't worry though, there's still time and room for more people to join!";
+				
 		// replace local variables
 		content = content.replace("{USERNAME}", trip.getDriver().getFirst_name());
 		content = content.replace("{DESTINATION}", trip.getTo_city());
 		content = content.replace("{PASSENGER}", user.getFirst_name());
+		plaintextContent = plaintextContent.replace("{USERNAME}", trip.getDriver().getFirst_name());
+		plaintextContent = plaintextContent.replace("{DESTINATION}", trip.getTo_city());
+		plaintextContent = plaintextContent.replace("{PASSENGER}", user.getFirst_name());
 		
-		MimeMessagePreparator email = createEmail(from, subject, trip.getDriver().getUsername(), content);
+		MimeMessagePreparator email = createEmail(from, subject, trip.getDriver().getUsername(), content, plaintextContent);
 		sendEmail(email);
 	}
 	
@@ -79,14 +92,20 @@ public class EmailServiceImpl implements EmailService {
 		String carpulURL = "http://pawserver.it.itba.edu.ar/paw-2017b-6/#/search?from=" + trip.getFrom_city() + " &to=" + trip.getTo_city() + "&arrLat=" + trip.getArrival_lat() + "&arrLon=" + trip.getArrival_lon() + "&when=" + trip.getEtd();
 		String subject = "🚨 Alert " + u.getFirst_name() + ": Your trip to " + trip.getTo_city() + " was cancelled";
 	    String content = loadFromTemplate("/mails/deletion.html");
+	    String plaintextContent = "Hi there {USERNAME}," + System.lineSeparator() + "We hate this, but we have bad news about your trip to {DESTINATION}: {DRIVER}'s trip is cancelled." + System.lineSeparator() + "We know this sucks, but why don't you try finding a new trip to {DESTINATION}." + System.lineSeparator() + System.lineSeparator() + "Find more trips to {DESTINATION} by going to {URL}";  
 	    
 		// replace local variables
 		content = content.replace("{DRIVER}", trip.getDriver().getFirst_name());
 		content = content.replace("{DESTINATION}", trip.getTo_city());
 		content = content.replace("{USERNAME}", user.getFirst_name());
 		content = content.replace("{URL}", carpulURL);
+		plaintextContent = plaintextContent.replace("{DRIVER}", trip.getDriver().getFirst_name());
+		plaintextContent = plaintextContent.replace("{DESTINATION}", trip.getTo_city());
+		plaintextContent = plaintextContent.replace("{USERNAME}", user.getFirst_name());
+		plaintextContent = plaintextContent.replace("{URL}", carpulURL);
 		
-		MimeMessagePreparator email = createEmail(from, subject, u.getUsername(), content);
+		
+		MimeMessagePreparator email = createEmail(from, subject, u.getUsername(), content, plaintextContent);
 		sendEmail(email);
 	}
 	
@@ -112,7 +131,7 @@ public class EmailServiceImpl implements EmailService {
         return content;
 	}
 	
-	private MimeMessagePreparator createEmail(String from, String subject, String to, String content) {
+	private MimeMessagePreparator createEmail(String from, String subject, String to, String content, String plaintextContent) {
 		if (!from.contains("@")) return null;
 		
 		MimeMessagePreparator email = mimeMessage -> {
@@ -120,7 +139,7 @@ public class EmailServiceImpl implements EmailService {
             helper.setSubject(subject);
             helper.setFrom(from);
             helper.setTo(to);
-            helper.setText(content, true);
+            helper.setText(plaintextContent, content);
         };
         
         return email;
