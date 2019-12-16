@@ -53,6 +53,7 @@
   <filter>
     <filter-name>CacheFilter</filter-name>
     <filter-class>ar.edu.itba.paw.webapp.config.CacheFilter</filter-class>
+    <async-supported>true</async-supported>
   </filter>
 
   <filter>
@@ -73,11 +74,17 @@
     <filter-name>encoding-filter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+ 
 
 
   <filter-mapping>
     <filter-name>CacheFilter</filter-name>
-    <url-pattern>/*</url-pattern>
+    	<url-pattern>*.css</url-pattern>
+		<url-pattern>*.gif</url-pattern>
+		<url-pattern>*.ico</url-pattern>
+		<url-pattern>*.jpg</url-pattern>
+		<url-pattern>*.js</url-pattern>
+		<url-pattern>*.png</url-pattern>
     <dispatcher>ERROR</dispatcher>
     <dispatcher>REQUEST</dispatcher>
   </filter-mapping>
