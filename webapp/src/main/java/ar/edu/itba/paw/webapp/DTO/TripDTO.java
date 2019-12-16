@@ -1,16 +1,12 @@
 package ar.edu.itba.paw.webapp.DTO;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.ws.rs.core.UriInfo;
-
 import ar.edu.itba.paw.models.Position;
 import ar.edu.itba.paw.models.Trip;
-import ar.edu.itba.paw.models.User;
 
 public class TripDTO {
 	private Integer id;
