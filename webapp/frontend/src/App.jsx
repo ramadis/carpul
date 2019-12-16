@@ -31,8 +31,6 @@ import { getProfile } from './services/User.js'
 import history, { initializeHistory } from './utils/routes'
 
 const Footer = styled.footer`
-  position: absolute;
-  bottom: 0;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -41,6 +39,7 @@ const Footer = styled.footer`
   padding: 20px 0;
   background: white;
   border-top: 3px solid #e36f4a;
+  margin-top: auto;
 `
 
 export const routes = {

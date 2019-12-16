@@ -10,5 +10,11 @@ export const query = params =>
 
 export const requestCatch = error => {
   console.error(error)
-  NotificationManager.error(error.message.subtitle, error.message.title)
+  const title =
+    (error.message && error.message.title) || 'Something bad happened'
+  const subtitle =
+    (error.message && error.message.subtitle) ||
+    "Unfortunately, we don't know more at this time. Please try again later"
+
+  NotificationManager.error(subtitle, title)
 }

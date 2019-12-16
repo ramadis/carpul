@@ -39,6 +39,7 @@ const ProfileContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-around;
+  margin-bottom: 50px;
 `
 
 const PagePickerContainer = styled.div`
