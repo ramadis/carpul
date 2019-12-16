@@ -192,18 +192,20 @@ const PassengerList = ({ trip, onUpdate, isDisabled }) => {
                 </div>
               </Link>
             </div>
-            <DeleteButton
-              onClick={askCancel(passenger)}
-              type="button"
-              disabled={requestLoading}
-              className="kick-hitchhiker"
-            >
-              {requestLoading ? (
-                <MDSpinner size={16} />
-              ) : (
-                <img src={imgDelete} height="20px" width="20px" alt="" />
-              )}
-            </DeleteButton>
+            {!isDisabled && (
+              <DeleteButton
+                onClick={askCancel(passenger)}
+                type="button"
+                disabled={requestLoading}
+                className="kick-hitchhiker"
+              >
+                {requestLoading ? (
+                  <MDSpinner size={16} />
+                ) : (
+                  <img src={imgDelete} height="20px" width="20px" alt="" />
+                )}
+              </DeleteButton>
+            )}
           </div>
         </div>
       ))}
@@ -323,7 +325,9 @@ const Trip = ({ trip, isOwner, onUpdate = () => null }) => {
       <style jsx>{profileHeroCss}</style>
       <React.Fragment>
         <li className="destiny-item trip-item">
-          {isDisabled ? <DisabledOverlay /> : null}
+          {(!isOwner && isDisabled) || trip.expired ? (
+            <DisabledOverlay />
+          ) : null}
           <div className="inline-block no-margin">
             {isOwner ? (
               <EarningSection trip={trip} />
@@ -378,7 +382,7 @@ const Trip = ({ trip, isOwner, onUpdate = () => null }) => {
                 isDisabled={isDisabled}
               />
             )}
-            {!isOwner && <ReserveButton trip={trip} />}
+            {!isOwner && !isDisabled && <ReserveButton trip={trip} />}
           </div>
         </li>
       </React.Fragment>

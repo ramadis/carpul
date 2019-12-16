@@ -82,7 +82,7 @@ const Reservation = ({ t, trip, editable }) => {
       <style jsx>{profileHeroCss}</style>
       <React.Fragment>
         <li className="destiny-item trip-item" style={{ width: "auto" }}>
-          {isDisabled && <DisabledOverlay />}
+          {trip.expired && <DisabledOverlay />}
           <div className="inline-block no-margin">
             <span className="destiny-cost">
               {t("reservation.cost")}
