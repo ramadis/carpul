@@ -72,6 +72,8 @@ const Reservation = ({ t, trip, editable }) => {
       message: t("reservation.unreserve.confirmation.subtitle"),
     });
 
+  const isDisabled = trip.etd < new Date();
+
   return (
     <React.Fragment>
       <style jsx>{poolListCss}</style>
@@ -80,7 +82,7 @@ const Reservation = ({ t, trip, editable }) => {
       <style jsx>{profileHeroCss}</style>
       <React.Fragment>
         <li className="destiny-item trip-item" style={{ width: "auto" }}>
-          {trip.expired && <DisabledOverlay />}
+          {isDisabled && <DisabledOverlay />}
           <div className="inline-block no-margin">
             <span className="destiny-cost">
               {t("reservation.cost")}
@@ -106,19 +108,21 @@ const Reservation = ({ t, trip, editable }) => {
                 <div className="destiny-time-span">{fmtetatime}</div>
               </div>
             </div>
-            <a
-              className="destiny-time map-trigger"
-              target="iframe"
-              href={`https://www.google.com/maps/embed/v1/directions?key=AIzaSyCNS1Xx_AGiNgyperC3ovLBiTdsMlwnuZU&origin=${
-                trip.departure.latitude
-              }, ${trip.departure.longitude}&destination=${
-                trip.arrival.latitude
-              }, ${trip.arrival.longitude}`}
-            >
-              {t("user.trip.map")}
-            </a>
+            {!isDisabled && (
+              <a
+                className="destiny-time map-trigger"
+                target="iframe"
+                href={`https://www.google.com/maps/embed/v1/directions?key=AIzaSyCNS1Xx_AGiNgyperC3ovLBiTdsMlwnuZU&origin=${
+                  trip.departure.latitude
+                }, ${trip.departure.longitude}&destination=${
+                  trip.arrival.latitude
+                }, ${trip.arrival.longitude}`}
+              >
+                {t("user.trip.map")}
+              </a>
+            )}
             <div className="flex-center destiny-time map-trigger">
-              <Link to={routes.trip(trip.id)}>Share</Link>
+              {!isDisabled && <Link to={routes.trip(trip.id)}>Share</Link>}
             </div>
             <hr />
             <Link to={routes.profile(trip.driver.id)}>
@@ -147,7 +151,7 @@ const Reservation = ({ t, trip, editable }) => {
                 </div>
               </div>
             </Link>
-            {editable ? (
+            {editable && !isDisabled ? (
               <Button disabled={requestLoading} onClick={askUnreserve}>
                 {requestLoading ? <MDSpinner size={16} /> : "Unreserve"}
               </Button>

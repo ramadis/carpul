@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { withTranslation } from "react-i18next";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { format } from "date-fns";
@@ -121,7 +121,7 @@ const DeleteTripButton = ({ tripId, onUpdate }) => {
   );
 };
 
-const PassengerList = ({ trip, onUpdate }) => {
+const PassengerList = ({ trip, onUpdate, isDisabled }) => {
   const { t } = useTranslation();
   const [requestLoading, setLoading] = useState(false);
 
@@ -349,25 +349,35 @@ const Trip = ({ trip, isOwner, onUpdate = () => null }) => {
               </div>
             </div>
             <div>
-              <a
-                className="destiny-time map-trigger"
-                target="iframe"
-                href={`https://www.google.com/maps/embed/v1/directions?key=AIzaSyCNS1Xx_AGiNgyperC3ovLBiTdsMlwnuZU&origin=${
-                  trip.departure.latitude
-                }, ${trip.departure.longitude}&destination=${
-                  trip.arrival.latitude
-                }, ${trip.arrival.longitude}`}
-              >
-                {t("user.trip.map")}
-              </a>
-              <div className="flex-center destiny-time map-trigger">
-                <Link to={routes.trip(trip.id)}>Share</Link>
-              </div>
+              {!isDisabled && (
+                <Fragment>
+                  <a
+                    className="destiny-time map-trigger"
+                    target="iframe"
+                    href={`https://www.google.com/maps/embed/v1/directions?key=AIzaSyCNS1Xx_AGiNgyperC3ovLBiTdsMlwnuZU&origin=${
+                      trip.departure.latitude
+                    }, ${trip.departure.longitude}&destination=${
+                      trip.arrival.latitude
+                    }, ${trip.arrival.longitude}`}
+                  >
+                    {t("user.trip.map")}
+                  </a>
+                  <div className="flex-center destiny-time map-trigger">
+                    <Link to={routes.trip(trip.id)}>Share</Link>
+                  </div>
+                </Fragment>
+              )}
             </div>
             {isOwner && !isDisabled && (
               <DeleteTripButton onUpdate={onUpdate} tripId={trip.id} />
             )}
-            {isOwner && <PassengerList onUpdate={onUpdate} trip={trip} />}
+            {isOwner && (
+              <PassengerList
+                onUpdate={onUpdate}
+                trip={trip}
+                isDisabled={isDisabled}
+              />
+            )}
             {!isOwner && <ReserveButton trip={trip} />}
           </div>
         </li>
