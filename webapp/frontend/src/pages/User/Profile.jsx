@@ -551,6 +551,7 @@ const EmptyProfileContainer = styled.div`
   text-align: center;
   width: 100%;
   margin-top: 20px;
+  margin-bottom: 50px;
 `
 
 const EmptyProfile = ({ isOwnProfile }) => {

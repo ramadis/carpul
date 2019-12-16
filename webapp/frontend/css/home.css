@@ -1,7 +1,7 @@
 .home-hero-container {
   position: relative;
   width: 100%;
-  background-image: url("../images/home-hero.jpg");
+  background-image: url('../images/home-hero.jpg');
   background-size: cover;
   height: 500px;
   background-color: #00c4ff;
@@ -76,6 +76,7 @@ input[readonly].searchbar-input {
   width: 80%;
   margin: 0 auto;
   text-align: center;
+  min-height: 400px;
 }
 
 .trips-recommendations-container h1 {

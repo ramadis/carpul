@@ -30,6 +30,19 @@ import { getProfile } from './services/User.js'
 
 import history, { initializeHistory } from './utils/routes'
 
+const Footer = styled.footer`
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  color: grey;
+  align-items: center;
+  padding: 20px 0;
+  background: white;
+  border-top: 3px solid #e36f4a;
+`
+
 export const routes = {
   unreservedTrip: tripId => `/trips/${tripId}/unreserved`,
   reservedTrip: tripId => `/trips/${tripId}/reserved`,
@@ -89,6 +102,9 @@ function App ({ token, user, dispatch }) {
           />
           <Route component={() => <Redirect to='/error/404' />} />
         </Switch>
+        <Footer>
+          <p>Copyright &copy; 2019 to Carpul&trade;</p>
+        </Footer>
         <NotificationContainer leaveTimeout={1000} />
       </React.Fragment>
     </HashRouter>
