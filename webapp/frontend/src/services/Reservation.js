@@ -1,4 +1,4 @@
-import { GETwithAuth, PUTwithAuth, DELETEwithAuth } from './Utils'
+import { GETwithAuth, PUTwithAuth, POSTwithAuth, DELETEwithAuth } from './Utils'
 import { query } from '../utils/fetch'
 
 export const getReservationsByUser = async (id, page) => {

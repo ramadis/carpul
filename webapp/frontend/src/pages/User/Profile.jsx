@@ -101,8 +101,8 @@ const PagePicker = ({
   )
 }
 
-const setData = (setter, current) => ({ data, isLastPage }) =>
-  setter({ ...current, data, loading: false, isLastPage })
+const setData = setter => ({ data, isLastPage }) =>
+  setter(current => ({ ...current, data, loading: false, isLastPage }))
 
 const webDataInitial = { data: [], loading: true, page: 0 }
 
@@ -138,7 +138,7 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
       const tripIdx = ts.findIndex(t => t.id === trip.id)
       const updatedTrips = [...ts]
       updatedTrips[tripIdx] = trip
-      setData(setTrips, trips)(updatedTrips)
+      setData(setTrips)(updatedTrips)
       return
     } else if (reason === 'delete') {
       setTrips(webDataInitial)
@@ -148,15 +148,20 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
     }
   }
 
+  // Only reload trips on delete. Keep same page
+  const onUpdateTrip2 = () => {
+    setTrips({ ...webDataInitial, page: trips.page })
+    getTripsByUser(userId, trips.page)
+      .then(setData(setTrips))
+      .catch(requestCatch)
+  }
+
   const areAllEmpty = [
     ...(isOwnProfile ? [histories, reservations] : []),
     reviews,
     trips
-  ].every(
-    ({ data, loading, page }) => !loading && data.length === 0 && page === 0
-  )
+  ].every(({ data, loading, page }) => data.length === 0 && page === 0)
 
-  console.log(firstLoadInfo)
   useEffect(() => {
     const fetchUsers = async () => {
       getProfileById(userId)
@@ -181,9 +186,8 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
   useEffect(() => {
     if (!user) return
     getReviewsByUser(user.id, reviews.page)
-      .then(setData(setReviews, reviews))
+      .then(setData(setReviews))
       .then(() => {
-        console.log('setting reviews...')
         setFirstLoadInfo(firstLoadInfo => ({
           ...firstLoadInfo,
           reviews: false
@@ -196,7 +200,7 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
     if (!user) return
     isOwnProfile &&
       getHistoryByUser(user.id, histories.page)
-        .then(setData(setHistories, histories))
+        .then(setData(setHistories))
         .then(
           setFirstLoadInfo(firstLoadInfo => ({
             ...firstLoadInfo,
@@ -210,7 +214,7 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
     if (!user) return
     isOwnProfile &&
       getReservationsByUser(user.id, reservations.page)
-        .then(setData(setReservations, reservations))
+        .then(setData(setReservations))
         .then(
           setFirstLoadInfo(firstLoadInfo => ({
             ...firstLoadInfo,
@@ -223,7 +227,7 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
   useEffect(() => {
     if (!user) return
     getTripsByUser(user.id, trips.page)
-      .then(setData(setTrips, trips))
+      .then(setData(setTrips))
       .then(
         setFirstLoadInfo(firstLoadInfo => ({ ...firstLoadInfo, trips: false }))
       )
@@ -258,7 +262,11 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
             })}
             editable={isOwnProfile}
           />
-          {areAllEmpty ? (
+          {isLoadingFirstTime(firstLoadInfo, isOwnProfile) ? (
+            <div className='flex-center spinner-class'>
+              <MDSpinner size={36} />
+            </div>
+          ) : areAllEmpty ? (
             <EmptyProfile isOwnProfile={isOwnProfile} />
           ) : (
             <ProfileContainer>
@@ -285,7 +293,7 @@ const Profile = ({ token, hero_message, loggedUser, dispatch }) => {
                 isFirstLoad={isLoadingFirstTime(firstLoadInfo, isOwnProfile)}
                 isOwnProfile={isOwnProfile}
                 trips={trips}
-                onUpdate={onUpdateTrip}
+                onUpdate={onUpdateTrip2}
                 setPage={setPage(trips, setTrips)}
               />
             </ProfileContainer>
